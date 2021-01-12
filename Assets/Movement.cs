@@ -10,12 +10,16 @@ public class Movement : MonoBehaviour
 
     public int extraJump;
     public int extraJumpValue;
-    public bool isGrounded;
+    private bool isGrounded;
     public float jumpForce;
 
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask whatIsGround;
+
+    bool facingRight;
+
+    private bool isStopAdd;
 
     // Start is called before the first frame update
     void Start()
@@ -29,13 +33,21 @@ public class Movement : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         input = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(speed * input, rb.velocity.y);
-
+        
         if (isGrounded == true)
         {
             extraJump = extraJumpValue;
 
         }
 
+        if (facingRight == false && input > 0)
+        {
+            Flip(0);
+        }
+        else if (facingRight == true && input < 0)
+        {
+            Flip(1);
+        }
 
         if (Input.GetKeyDown(KeyCode.Space) && extraJump > 0)
         {
@@ -50,10 +62,15 @@ public class Movement : MonoBehaviour
         {
             rb.velocity = Vector2.up * jumpForce;
 
-
-
-            //animator.SetBool("takeOff", true);
-
         }
+
+        
+    }
+    void Flip(int right)
+    {
+        facingRight = !facingRight;
+
+        transform.eulerAngles = new Vector3(0, right * 180);
+
     }
 }
