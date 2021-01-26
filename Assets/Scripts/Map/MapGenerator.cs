@@ -15,7 +15,7 @@ public class MapGenerator : MonoBehaviour
             foreach(char bit in row)
             {
                 Debug.Log(bit);
-                CMap.AddCollsionTile(new Vector2Int(colCount, rowCount), (int)char.GetNumericValue(bit));
+                CMap.AddCollsionTile(new Vector2Int(colCount, -rowCount), (int)char.GetNumericValue(bit));
                 colCount += 1;
             }
             rowCount += 1;
