@@ -161,6 +161,10 @@ MonoBehaviour:
   BottomRight: {fileID: 11400000, guid: 121da2b17abc24eb5acf225bff546d47, type: 2}
   TopLeft: {fileID: 11400000, guid: 2d1eeac323d724f879fd2657458a100a, type: 2}
   BottomLeft: {fileID: 11400000, guid: 8422dc786ce3d4a8e8367983572ed8af, type: 2}
+  LinkerTopRight: {fileID: 0}
+  LinkerBottomRight: {fileID: 0}
+  LinkerTopLeft: {fileID: 0}
+  LinkersBottomLeft: {fileID: 0}
   tilemap: {fileID: 151439278}
 --- !u!4 &76890017
 Transform:
@@ -203,7 +207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151439274}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.5, y: -4.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 645124288}
@@ -5734,7 +5738,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Generator: {fileID: 231321408}
-  Bitmap: 
+  Bitmap: '1100
+
+    1111
+
+    000
+
+    1111'
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
