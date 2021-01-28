@@ -14,7 +14,7 @@ public class MapGenerator : MonoBehaviour
             int colCount = 0;
             foreach (char bit in row)
             {
-                CMap.AddCollisionTiles(new Vector2Int(-colCount, rowCount), (int) char.GetNumericValue(bit));
+                CMap.AddCollisionTiles(new Vector2Int(colCount, -rowCount), (int) char.GetNumericValue(bit));
                 colCount += 1;
             }
             rowCount += 1;

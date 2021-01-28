@@ -25,7 +25,11 @@ public class CollisionMap : MonoBehaviour
     {
         foreach (CollisionTile tile in map)
         {
-            if (pos == tile.pos) return true;
+            if (pos == tile.pos && tile.type > 0)
+            {
+                //print(pos + " " + tile.pos);
+                return true;
+            }
         }
         return false;
     }
@@ -78,6 +82,7 @@ public class CollisionMap : MonoBehaviour
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Up);
                 else if (neighbors[7] == 0)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Down);
+
             }
             else if (tile.type == 2)
             {
