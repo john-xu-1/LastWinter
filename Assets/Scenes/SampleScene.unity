@@ -161,9 +161,9 @@ MonoBehaviour:
   BottomRight: {fileID: 11400000, guid: 121da2b17abc24eb5acf225bff546d47, type: 2}
   TopLeft: {fileID: 11400000, guid: 2d1eeac323d724f879fd2657458a100a, type: 2}
   BottomLeft: {fileID: 11400000, guid: 8422dc786ce3d4a8e8367983572ed8af, type: 2}
-  LinkerTopRight: {fileID: 0}
-  LinkerBottomRight: {fileID: 0}
-  LinkerTopLeft: {fileID: 0}
+  LinkerTopRight: {fileID: 11400000, guid: 428b60c441c614cf680bf8378e6883dd, type: 2}
+  LinkerBottomRight: {fileID: 11400000, guid: a579b8cfed81a474fab95b3348f93246, type: 2}
+  LinkerTopLeft: {fileID: 11400000, guid: 2d1eeac323d724f879fd2657458a100a, type: 2}
   LinkersBottomLeft: {fileID: 0}
   tilemap: {fileID: 151439278}
 --- !u!4 &76890017
