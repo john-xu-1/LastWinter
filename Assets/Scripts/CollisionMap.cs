@@ -23,7 +23,7 @@ public class CollisionMap : MonoBehaviour
     {
         foreach (CollisionTile tile in map)
         {
-            if (pos == tile.pos) return true;
+            if (pos == tile.pos && tile.type > 0) return true;
         }
         return false;
     }
