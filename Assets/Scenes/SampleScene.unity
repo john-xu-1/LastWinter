@@ -161,6 +161,10 @@ MonoBehaviour:
   BottomRight: {fileID: 11400000, guid: 121da2b17abc24eb5acf225bff546d47, type: 2}
   TopLeft: {fileID: 11400000, guid: 2d1eeac323d724f879fd2657458a100a, type: 2}
   BottomLeft: {fileID: 11400000, guid: 8422dc786ce3d4a8e8367983572ed8af, type: 2}
+  LinkersTopRight: {fileID: 11400000, guid: 428b60c441c614cf680bf8378e6883dd, type: 2}
+  LinkersBottomRight: {fileID: 11400000, guid: 3c39478d5f1f048a3a81b2166eefb769, type: 2}
+  LinkersTopLeft: {fileID: 11400000, guid: 2d1eeac323d724f879fd2657458a100a, type: 2}
+  LinkersBottomLeft: {fileID: 11400000, guid: 0b781efa53f0e4e82b746796253fd081, type: 2}
   tilemap: {fileID: 151439278}
 --- !u!4 &76890017
 Transform:
@@ -203,7 +207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151439274}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.5, y: -4.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 645124288}
@@ -5734,7 +5738,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Generator: {fileID: 231321408}
-  Bitmap: 
+  Bitmap: '111
+
+    111
+
+    111'
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
@@ -6952,7 +6960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1681644034
 Transform:
   m_ObjectHideFlags: 0
