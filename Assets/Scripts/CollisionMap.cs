@@ -43,10 +43,12 @@ public class CollisionMap : MonoBehaviour
                 if (pos != startpos && FindNeighbor(pos))
                 {
                     neighbors[index] = 1;
+                    //print(index + " " + pos + " " + startpos + " " + true);
                 }
-                else
+                else 
                 {
                     neighbors[index] = 0;
+                    //print(index + " " + pos + " " + startpos + " " + false);
                 }
             }
         }
@@ -58,35 +60,91 @@ public class CollisionMap : MonoBehaviour
     {
         foreach (CollisionTile tile in map)
         {
-            if(tile.type == 1)
+            if(tile.type > 0)
             {
                 int[] neighbors = FindNeighbors(tile.pos);
-                if (neighbors[1]  == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[7] ==1)
+                if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Center);
-                else if (neighbors[5] == 0)
+                    print("C placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //RIGHT
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[3] == 1 && neighbors[5] == 0 && neighbors[6] == 1 && neighbors[7] == 1 )
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Right);
-                else if (neighbors[3] == 0)
+                    print("R placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //LEFT
+                else if ( neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 0 && neighbors[5] == 1  && neighbors[7] == 1 && neighbors[8] == 1)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Left);
-                else if (neighbors[1] == 0)
+                    print("L placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //UP
+                else if (neighbors[1] == 0 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Up);
-                else if (neighbors[7] == 0)
+                    print("U placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //DOWN
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1  && neighbors[7] == 0 )
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Down);
-                else if (neighbors[1] == 1 && neighbors[5] == 1)
+                    print("D placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //TOP RIGHT
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 0 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, TopRight);
-                else if (neighbors[3] == 1 && neighbors[1] == 1)
+                    print("TR placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //TOP LEFT
+                else if (neighbors[0] == 0 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, TopLeft);
-                else if (neighbors[7] == 1 && neighbors[5] == 1)
+                    print("TL placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }//BOTTOM RIGHT
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 0)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, BottomRight);
-                else if (neighbors[7] == 1 && neighbors[3] == 1)
+                    print("BR placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //bottom left
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 0 && neighbors[7] == 1 && neighbors[8] == 1)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, BottomLeft);
-                else if (neighbors[1] == 0 && neighbors[5] == 0)
+                    print("BL placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //Linker top Right
+                else if ( neighbors[1] == 0 && neighbors[2] == 0 && neighbors[3] == 1 && neighbors[5] == 0 && neighbors[6] == 1 && neighbors[7] == 1)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersTopRight);
-                else if (neighbors[3] == 0 && neighbors[1] == 0)
+                    print("LTR placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //Likner top left
+                else if (neighbors[0] == 0 && neighbors[1] == 0 && neighbors[3] == 0 && neighbors[5] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersTopLeft);
-                else if (neighbors[7] == 0 && neighbors[5] == 0)
+                    print("LTL placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
+                //linker bottom right
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[3] == 1 && neighbors[5] == 0 && neighbors[7] == 0 && neighbors[8] == 0)
+                {
+                    print("LBR placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersBottomRight);
-                else if (neighbors[7] == 0 && neighbors[3] == 0)
+                }
+                //linker bottom left
+                else if (neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 0 && neighbors[5] == 1 && neighbors[6] == 0 && neighbors[7] == 0)
+                {
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersBottomLeft);
+                    print("LBL placed at: " + tile.pos + " " + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+
+                }
+                //missing
+                else
+                {
+                    print("missing tile at: " + tile.pos + neighbors[0] + ", " + neighbors[1] + ", " + neighbors[2] + ", " + neighbors[3] + ", " + neighbors[4] + ", " + neighbors[5] + ", " + neighbors[6] + ", " + neighbors[7] + ", " + neighbors[8]);
+                }
 
             }
             else if (tile.type == 2)
