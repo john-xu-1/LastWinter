@@ -62,6 +62,7 @@ public class CollisionMap : MonoBehaviour
         {
             if(tile.type > 0)
             {
+                //CENTER
                 int[] neighbors = FindNeighbors(tile.pos);
                 if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
                 {
