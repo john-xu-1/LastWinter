@@ -61,31 +61,31 @@ public class CollisionMap : MonoBehaviour
             if(tile.type == 1)
             {
                 int[] neighbors = FindNeighbors(tile.pos);
-                if (neighbors[1]  == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[7] ==1)
+                if (neighbors[0] == 1 && neighbors[1]  == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] ==1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Center);
-                else if (neighbors[5] == 0)
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 0 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Right);
-                else if (neighbors[3] == 0)
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 0 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Left);
-                else if (neighbors[1] == 0)
+                else if (neighbors[0] == 1 && neighbors[1] == 0 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Up);
-                else if (neighbors[7] == 0)
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 0 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Down);
-                else if (neighbors[1] == 1 && neighbors[5] == 1)
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 0 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, TopRight);
-                else if (neighbors[3] == 1 && neighbors[1] == 1)
+                else if (neighbors[0] == 0 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, TopLeft);
-                else if (neighbors[7] == 1 && neighbors[5] == 1)
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 0)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, BottomRight);
-                else if (neighbors[7] == 1 && neighbors[3] == 1)
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[6] == 0 && neighbors[7] == 1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, BottomLeft);
-                else if (neighbors[1] == 0 && neighbors[5] == 0)
+                else if (neighbors[0] == 1 && neighbors[1] == 0 && neighbors[2] == 0 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 0 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersTopRight);
-                else if (neighbors[3] == 0 && neighbors[1] == 0)
+                else if (neighbors[0] == 0 && neighbors[1] == 0 && neighbors[3] == 0 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersTopLeft);
-                else if (neighbors[7] == 0 && neighbors[5] == 0)
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[4] == 1 && neighbors[5] == 0 && neighbors[6] == 1 && neighbors[7] == 0 && neighbors[8] == 0)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersBottomRight);
-                else if (neighbors[7] == 0 && neighbors[3] == 0)
+                else if (neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 0 && neighbors[4] == 1 && neighbors[5] == 1 && neighbors[6] == 0 && neighbors[7] == 0)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersBottomLeft);
 
             }
