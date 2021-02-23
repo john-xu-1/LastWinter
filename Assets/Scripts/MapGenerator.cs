@@ -5,6 +5,7 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     public CollisionMap CMap;
+    public Transform Centroid;
     public void ConvertMap(string bitmap)
     {
         string[] rows = bitmap.Split('\n');
@@ -27,10 +28,13 @@ public class MapGenerator : MonoBehaviour
     {
         foreach (NewTile tile in newMap.area)
         {
-            print(tile.x + ", " + -tile.y + ", " + tile.type);
+            //print(tile.x + ", " + -tile.y + ", " + tile.type);
             CMap.AddCollisionTiles(new Vector2Int(tile.x, -tile.y), tile.type);
         }
         CMap.DebugPlaceTiles();
+        Vector2 centroid = CMap.CalculateCentroid();
+        print(centroid);
+        if (Centroid)Centroid.position = centroid;
     }
 
 
