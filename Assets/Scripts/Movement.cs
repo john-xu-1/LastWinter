@@ -19,6 +19,8 @@ public class Movement : MonoBehaviour
 
     bool facingRight;
 
+
+
     private bool isStopAdd;
 
     // Start is called before the first frame update
@@ -66,7 +68,7 @@ public class Movement : MonoBehaviour
 
         
     }
-    void Flip(int right)
+    public void Flip(int right)
     {
         facingRight = !facingRight;
 
