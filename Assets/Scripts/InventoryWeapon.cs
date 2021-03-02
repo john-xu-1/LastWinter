@@ -20,4 +20,6 @@ public class InventoryWeapon : InventoryObjects
     public float coolDown;
 
     public float destroyAfterTime;
+
+    public int CDIndex;
 }

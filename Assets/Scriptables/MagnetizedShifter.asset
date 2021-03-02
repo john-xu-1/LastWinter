@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e258a7e84aad4b33b0034cf0658152f, type: 3}
-  m_Name: RainyDay
+  m_Name: MagnetizedShifter
   m_EditorClassIdentifier: 
   itemType: 1
-  itemSprite: {fileID: 21300000, guid: ebf9f7933e2c44667a7c990cefe2f26b, type: 3}
-  itemName: Rainy Day
+  itemSprite: {fileID: 21300000, guid: 33734601b5e024d16b88e005613daec3, type: 3}
+  itemName: MagnetizedShifter
   itemRare: A
-  weaponType: 4
-  spawnedPrefab: {fileID: 166805943583265557, guid: 066f4d952ee4c457fbe32c0bfacdae5f, type: 3}
-  coolDown: 0.25
-  destroyAfterTime: 4
-  CDIndex: 1
+  weaponType: 1
+  spawnedPrefab: {fileID: 7906242082141884506, guid: ff32f0005fa554bf9bf55ad4dd085686, type: 3}
+  coolDown: 3
+  destroyAfterTime: 10

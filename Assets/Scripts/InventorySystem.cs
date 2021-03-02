@@ -11,7 +11,7 @@ public class InventorySystem : MonoBehaviour
 
     public InventoryWeapon iw;
     private float fireRate;
-    private float nextAttackTime;
+    public float[] nextAttackTimes;
 
     InventoryWeapon weapon;
 
@@ -64,10 +64,10 @@ public class InventorySystem : MonoBehaviour
 
                 if (Input.GetButton("Fire1"))
                 {
-                    if (Time.time >= nextAttackTime)
+                    if (Time.time >= nextAttackTimes[weapon.CDIndex])
                     {
                         bulletInstance = Instantiate(weapon.spawnedPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
-                        nextAttackTime = Time.time + fireRate;
+                        nextAttackTimes[weapon.CDIndex] = Time.time + fireRate;
                     }
 
                 }
