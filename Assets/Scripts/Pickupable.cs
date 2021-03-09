@@ -15,10 +15,14 @@ public class Pickupable : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.CompareTag("Player"))
+        if (FindObjectOfType<InventorySystem>().index <= FindObjectOfType<InventorySystem>().items.Length - 1)
         {
-            FindObjectOfType<InventorySystem>().AddItem(item);
-            Destroy(gameObject);
+            if (collision.transform.CompareTag("Player"))
+            {
+                FindObjectOfType<InventorySystem>().AddItem(item);
+                Destroy(gameObject);
+            }
         }
+        
     }
 }

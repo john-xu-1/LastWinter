@@ -7,7 +7,7 @@ public class InventoryWeapon : InventoryObjects
 {
     public enum WeaponTypes
     {
-        Mechanica_Arms,
+        Vol,
         Magnetized_Shifter,
         Drone_Controller,
         Gaeas_Touch,
@@ -16,10 +16,15 @@ public class InventoryWeapon : InventoryObjects
         Bottle
     }
     public WeaponTypes weaponType;
-    public GameObject spawnedPrefab;
+
+    public GameObject spawnedPrefab1;
+    public GameObject spawnedPrefab2;
     public float coolDown;
 
     public float destroyAfterTime;
 
     public int CDIndex;
+
+    public bool isWeaponSwitchBullet;
+    
 }

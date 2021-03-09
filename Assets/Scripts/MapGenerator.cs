@@ -21,6 +21,18 @@ public class MapGenerator : MonoBehaviour
         }
 
         CMap.DebugPlaceTiles();
-    }   
-    
+    }
+
+    public void ConvertMap(Map map)
+    {
+        foreach (Tile tile in map.area)
+        {
+            CMap.AddCollisionTiles(new Vector2Int(tile.x, -tile.y), tile.type);
+        }
+
+        CMap.DebugPlaceTiles();
+
+
+    }
+
 }

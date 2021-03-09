@@ -13,9 +13,14 @@ public class InventorySystem : MonoBehaviour
     private float fireRate;
     public float[] nextAttackTimes;
 
-    InventoryWeapon weapon;
+    public InventoryWeapon weapon;
 
     GameObject bulletInstance;
+
+    GameObject spawnedTargetPrefab;
+
+    float Zfactor;
+
     public void AddItem(InventoryObjects item)
     {
         if (index <= items.Length - 1)
@@ -35,22 +40,27 @@ public class InventorySystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             selectedItem = items[0];
+            spawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             selectedItem = items[1];
+            spawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             selectedItem = items[2];
+            spawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             selectedItem = items[3];
+            spawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             selectedItem = items[4];
+            spawnedTargetPrefab = null;
         }
 
         if (selectedItem)
@@ -66,7 +76,7 @@ public class InventorySystem : MonoBehaviour
                 {
                     if (Time.time >= nextAttackTimes[weapon.CDIndex])
                     {
-                        bulletInstance = Instantiate(weapon.spawnedPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
+                        bulletInstance = Instantiate(spawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
                         nextAttackTimes[weapon.CDIndex] = Time.time + fireRate;
                     }
 
@@ -74,6 +84,8 @@ public class InventorySystem : MonoBehaviour
 
                 
             }
+
+            bulletSwitch(weapon.spawnedPrefab1, weapon.spawnedPrefab2, weapon.isWeaponSwitchBullet);
 
         }
         else
@@ -93,7 +105,6 @@ public class InventorySystem : MonoBehaviour
 
         float Zangle = Mathf.Atan2(target.x, target.y) * Mathf.Rad2Deg;
 
-        float Zfactor;
         if(transform.rotation.y >= 0)
         {
             Zfactor = -1;
@@ -105,10 +116,38 @@ public class InventorySystem : MonoBehaviour
             GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = false;
         }
         GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90*Zfactor)));
-        Debug.Log(Mathf.Abs(GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation.y));
+        
         
     }
 
 
+
+    public void bulletSwitch(GameObject a, GameObject b, bool isSwitch)
+    {
+        if (isSwitch)
+        {
+            if (!spawnedTargetPrefab) spawnedTargetPrefab = a;
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (spawnedTargetPrefab == a)
+                {
+                    spawnedTargetPrefab = b;
+                }
+                else if (spawnedTargetPrefab == b)
+                {
+                    spawnedTargetPrefab = a;
+                }
+                else
+                {
+                    Debug.Log("Something Went Wrong");
+                }
+            }
+        }
+        else
+        {
+            if (!spawnedTargetPrefab) spawnedTargetPrefab = a;
+        }
+
+    }
 
 }

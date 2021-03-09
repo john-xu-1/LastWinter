@@ -5,41 +5,64 @@ using UnityEngine;
 public class BulletBase: MonoBehaviour
 {
     public float speed;
-    private Rigidbody2D rb;
     public InventoryWeapon weapon;
     public GameObject ExplosionPrefab;
-    void Setup(Rigidbody2D rb, Transform t)
-    {
-        Vector3 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (target - t.position).normalized;
-        
-        if (weapon.weaponType == InventoryWeapon.WeaponTypes.Rainy_Day)
-        {
-            rb.velocity = new Vector2(direction.x * speed, direction.y * speed);
-            transform.right = rb.velocity;
-        }
-        if (weapon.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
-        {
-            rb.AddForce(new Vector2(direction.x * speed, direction.y * speed), ForceMode2D.Impulse);
-        }
-       
-    }
+
+   
 
     private void Start()
     {
         weapon = (InventoryWeapon)FindObjectOfType<InventorySystem>().selectedItem;
-        rb = GetComponent<Rigidbody2D>();
-        Setup(rb, transform);
+        setUp();
     }
 
     private void Update()
     {
-        if (weapon.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
-        {
-            rb.drag += Time.deltaTime * (1/speed);
-        }
+        
+        updateBehavior();
 
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+
+        triggerEnterBehavior(collision);
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        
+        triggerExitBehavior(collision);
+
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        collideEnterBehavior(collision);
+    }
+
+    public virtual void triggerEnterBehavior(Collider2D collision)
+    {
+
+    }
+
+    public virtual void triggerExitBehavior(Collider2D collision)
+    {
+
+    }
+
+    public virtual void updateBehavior()
+    {
+
+    }
+
+    public virtual void setUp()
+    {
+
+    }
+
+    public virtual void collideEnterBehavior(Collision2D collision)
+    {
+
+    }
 
 }
