@@ -60,7 +60,7 @@ public class CollisionMap : MonoBehaviour
         {
             if(tile.type == 1)
             {
-                Debug.Log("INSIDE DA LOOP");
+                //Debug.Log("INSIDE DA LOOP");
                 int[] neighbors = FindNeighbors(tile.pos);
                 if (neighbors[0] == 1 && neighbors[1]  == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] ==1 && neighbors[8] == 1)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Center);
@@ -100,6 +100,10 @@ public class CollisionMap : MonoBehaviour
                 //LBL
                 else if (neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 0 && neighbors[5] == 1 && neighbors[6] == 0 && neighbors[7] == 0)
                     UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersBottomLeft);
+                else
+                {
+                    print("Tile arrangment missing");
+                }
 
             }
             else if (tile.type == 2)

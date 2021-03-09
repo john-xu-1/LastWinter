@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class DebugMap : MonoBehaviour
 {
@@ -10,8 +11,24 @@ public class DebugMap : MonoBehaviour
     [TextArea(5, 10)]
     public string Bitmap;
 
+    public string JsonMapName = "test2.txt";
+    
     private void Start()
     {
-        if (Generator) Generator.ConvertMap(Bitmap); 
+        StreamReader reader = new StreamReader("Assets/Resources/" + JsonMapName);
+        string jsonStr = reader.ReadToEnd();
+        Map map = JsonUtility.FromJson<Map>(jsonStr);
+        Generator.ConvertMap(map);
+        //if (Generator) Generator.ConvertMap(Bitmap); 
+
+ 
+        //while (line != "")
+        //{
+        //    print(line);
+        //    line = reader.ReadLine();
+        //}
+        
+        
     }
 }
+

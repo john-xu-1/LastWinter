@@ -105,7 +105,7 @@ public class InventorySystem : MonoBehaviour
             GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = false;
         }
         GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90*Zfactor)));
-        Debug.Log(Mathf.Abs(GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation.y));
+        //Debug.Log(Mathf.Abs(GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation.y));
         
     }
 
