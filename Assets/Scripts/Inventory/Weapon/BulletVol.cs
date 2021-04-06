@@ -9,12 +9,20 @@ public class BulletVol : BulletBase
     int hasJumpedTimes;
     public List<GameObject> hasCollided;
     public GameObject subBullet;
-
+    private GameObject player;
     public bool isSub;
+    public float KB;
     public override void setUp()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+        Vector3 tar = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 dir = (tar - transform.position).normalized;
+        player.GetComponent<Rigidbody2D>().AddForce(-dir * KB, ForceMode2D.Impulse);
+
         if(!isSub)
         {
+            GameObject Instance = Instantiate(FireExplosionPrefab, new Vector3(tar.x, tar.y, 0), Quaternion.identity);
+            Destroy(Instance, 3);
             Vector3 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 direction = (target - transform.position).normalized;
             int ranInt = Random.Range(JumptRange.x, JumptRange.y);

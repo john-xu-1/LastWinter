@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9649387312ba3483c8e4741fa0a5a24d, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8254717, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -138,11 +138,13 @@ MonoBehaviour:
   speed: 10
   weapon: {fileID: 0}
   ExplosionPrefab: {fileID: 0}
+  FireExplosionPrefab: {fileID: 0}
   jumpTimes: 0
   JumptRange: {x: 0, y: 0}
   hasCollided: []
   subBullet: {fileID: 0}
   isSub: 1
+  KB: 0
 --- !u!1 &4645427219326990119
 GameObject:
   m_ObjectHideFlags: 0

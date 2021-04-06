@@ -7,6 +7,7 @@ public class BulletBase: MonoBehaviour
     public float speed;
     public InventoryWeapon weapon;
     public GameObject ExplosionPrefab;
+    public GameObject FireExplosionPrefab;
 
    
 

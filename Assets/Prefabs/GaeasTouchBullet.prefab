@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1011377624895968875}
   - component: {fileID: 1011377624895968874}
   - component: {fileID: -986912954411374796}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: GaeasTouchBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
