@@ -19,7 +19,11 @@ public class Movement : MonoBehaviour
 
     bool facingRight;
 
+    public float sprintSpeed = 15;
+    private float normSpeed;
 
+
+    
 
     private bool isStopAdd;
 
@@ -27,6 +31,7 @@ public class Movement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        normSpeed = speed;
     }
 
     // Update is called once per frame
@@ -64,6 +69,15 @@ public class Movement : MonoBehaviour
         {
             rb.velocity = Vector2.up * jumpForce;
 
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            speed = sprintSpeed;
+        }
+        else
+        {
+            speed = normSpeed;
         }
 
         

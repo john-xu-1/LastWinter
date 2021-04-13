@@ -12,8 +12,14 @@ public class BulletVol : BulletBase
     private GameObject player;
     public bool isSub;
     public float KB;
+
+
+
+
+    
     public override void setUp()
     {
+        
         player = GameObject.FindGameObjectWithTag("Player");
         Vector3 tar = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = (tar - transform.position).normalized;
@@ -111,5 +117,9 @@ public class BulletVol : BulletBase
         }
             
     }
+
+    
+
+
 
 }
