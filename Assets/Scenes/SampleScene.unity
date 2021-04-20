@@ -1624,13 +1624,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   extraJump: 0
-  extraJumpValue: 1
+  extraJumpValue: 0
   jumpForce: 5
   groundCheck: {fileID: 420989821}
   checkRadius: 1
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
+  sprintSpeed: 15
 --- !u!50 &731867794
 Rigidbody2D:
   serializedVersion: 4
@@ -3946,8 +3947,8 @@ MonoBehaviour:
   angerRange: 7
   speed: 5
   bulletPrefab: {fileID: 64387565851223267, guid: e066623fe5cd143c5b3485f1b6eb6b48, type: 3}
-  amountOfBullets: 3
   fireCD: 3
+  amountOfBullets: 3
   minMax: {x: -0.25, y: 0.25}
   bulletSpeed: 7.5
   instances:
