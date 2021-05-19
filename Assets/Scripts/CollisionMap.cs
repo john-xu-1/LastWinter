@@ -24,8 +24,9 @@ public class CollisionMap : MonoBehaviour
         foreach (CollisionTile tile in map)
         {
             if (pos == tile.pos && tile.type > 0) return true;
+            if (pos == tile.pos && tile.type == 0) return false;
         }
-        return false;
+        return true;
     }
     public int[] FindNeighbors(Vector2Int startpos)
     {

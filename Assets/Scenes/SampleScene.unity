@@ -3632,7 +3632,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 12.36
+  m_PointLightOuterRadius: 15
   m_PointLightDistance: 3
   m_PointLightQuality: 1
   m_ShapeLightParametricSides: 5
@@ -4525,9 +4525,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LightType: 1
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.543
-  m_Color: {r: 1, g: 0.48051947, b: 0, a: 1}
-  m_Intensity: 1.33
+  m_FalloffIntensity: 0.235
+  m_Color: {r: 1, g: 0.17356366, b: 0, a: 1}
+  m_Intensity: 4.81
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
@@ -4545,7 +4545,7 @@ MonoBehaviour:
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
-  m_ShapeLightFalloffSize: 1.26
+  m_ShapeLightFalloffSize: 0.71
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
   - {x: -0.598052, y: -0.92489374, z: 0}
@@ -4733,6 +4733,41 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 2}
   m_EdgeRadius: 0
+--- !u!1 &2084049423 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
+  m_PrefabInstance: {fileID: 6154040031860930411}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2084049424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084049423}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1503eeafbb134f14b80ecc787e26a82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravityModifer: 1
+  minGroundNormY: 0.65
+--- !u!114 &2084049425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084049423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41ca39915b8904351ab4a0829612f7ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravityModifer: 1
+  minGroundNormY: 0.65
+  takeOffSpeed: 7
+  maxSpeed: 7
 --- !u!1 &2127740320
 GameObject:
   m_ObjectHideFlags: 0
@@ -4867,13 +4902,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6154040031498853881, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154040031498853881, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_UseFullKinematicContacts
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154040031498853882, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6154040031498853887, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.65
+      value: -7.12
       objectReference: {fileID: 0}
     - target: {fileID: 6154040031498853887, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.3
+      value: 1.82
       objectReference: {fileID: 0}
     - target: {fileID: 6154040031498853887, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_LocalPosition.z
