@@ -45,6 +45,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: CameraForeground
+    uniqueID: 1627818095
+    locked: 0
   - name: Items
     uniqueID: 2792662775
     locked: 0
