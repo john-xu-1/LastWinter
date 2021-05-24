@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PlatformerController : PhysicsObject
 {
+    
     public float takeOffSpeed = 7;
 
     public float maxSpeed = 7;
 
-    void Start()
-    {
-        
-    }
+   
+
 
     protected override void ComputeVelocity()
     {
@@ -33,4 +32,9 @@ public class PlatformerController : PhysicsObject
 
         targetVelocity = horInput * maxSpeed;
     }
+
+    
+
+
+
 }

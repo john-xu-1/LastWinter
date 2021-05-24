@@ -29,12 +29,15 @@ public class PhysicsObject : MonoBehaviour
     protected const float padding = 0.01f;
 
 
-    
-
 
     void Start()
     {
-        
+
+        doOnStart();
+    }
+
+    public virtual void doOnStart()
+    {
         rb = GetComponent<Rigidbody2D>();
 
         cf.useTriggers = false;
@@ -71,13 +74,18 @@ public class PhysicsObject : MonoBehaviour
 
     private void Update()
     {
+        doOnUpdate();
+    }
+
+    protected virtual void doOnUpdate()
+    {
         targetVelocity = Vector2.zero;
         ComputeVelocity();
     }
 
     protected virtual void ComputeVelocity()
     {
-        Debug.Log("Base function");
+        
     }
 
     void Movement (Vector2 mov, bool yMovement)
@@ -123,6 +131,8 @@ public class PhysicsObject : MonoBehaviour
 
         }
 
-        rb.position = rb.position + mov.normalized * distance;
+        rb.position += mov.normalized * distance;
+
+        
     }
 }
