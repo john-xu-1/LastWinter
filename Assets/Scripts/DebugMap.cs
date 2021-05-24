@@ -15,9 +15,7 @@ public class DebugMap : MonoBehaviour
 
     private void Start()
     {
-        //StreamReader reader = new StreamReader("Assets/Resources/" + JsonMapName);
-        //string jsonStr = reader.ReadToEnd();
-        //Object file = Resources.Load(JsonMapName) as TextAsset;
+        
         TextAsset jsonFile = Resources.Load<TextAsset>(JsonMapName);
         print(jsonFile);
         string jsonStr = jsonFile.text;

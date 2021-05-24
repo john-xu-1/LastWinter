@@ -5,16 +5,28 @@ using UnityEngine.Tilemaps;
 
 public class CollisionMap : MonoBehaviour
 {
+    private CollisionTile[,] mapGrid;
     private List<CollisionTile> map = new List<CollisionTile>();
     public TileBase Center, Right, Left, Up, Down, TopRight, BottomRight, TopLeft, BottomLeft, LinkersTopRight, LinkersBottomRight, LinkersTopLeft, LinkersBottomLeft;
     public Tilemap tilemap;
 
+    private int worldWidth, worldHeight;
+
+    public void newCollisionMap(int worldWidth, int worldHeight)
+    {
+        this.worldHeight = worldHeight;
+        this.worldWidth = worldWidth;
+        mapGrid = new CollisionTile[worldWidth,worldHeight];
+    }
+
     public void AddCollisionTiles(Vector2Int pos, int type)
     {
         CollisionTile tile = new CollisionTile(pos, type);
+        
+        mapGrid[pos.x-1, -pos.y-1] = tile;
         map.Add(tile);
     }
-    public void BuilMap()
+    public void BuildMap()
     {
 
     }
@@ -26,6 +38,16 @@ public class CollisionMap : MonoBehaviour
             if (pos == tile.pos && tile.type > 0) return true;
             if (pos == tile.pos && tile.type == 0) return false;
         }
+        //int y = -pos.y;
+        //int x = pos.x;
+        //print(y);
+        //if (y < worldHeight && y > 0 &&x < worldWidth && x > 0)
+        //{
+        //    if (mapGrid[x, y].type > 0) return true;
+        //    else return false;
+        //}
+        //else return true;
+
         return true;
     }
     public int[] FindNeighbors(Vector2Int startpos)

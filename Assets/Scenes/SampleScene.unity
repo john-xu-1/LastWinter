@@ -1490,7 +1490,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 645124286}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4570c80337ec14378915f7c336b5823e, type: 3}
   m_Name: 
@@ -1961,7 +1961,7 @@ MonoBehaviour:
     1111111111
 
     1111111111'
-  JsonMapName: directionalTest4x4world20x20rooms
+  JsonMapName: directionalTest5x5world20x20rooms
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
@@ -4945,7 +4945,7 @@ PrefabInstance:
     - target: {fileID: 6154040031498853887, guid: d021e07fd68584ae184f35db76284713,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 48.5
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6154040031498853887, guid: d021e07fd68584ae184f35db76284713,
         type: 3}
