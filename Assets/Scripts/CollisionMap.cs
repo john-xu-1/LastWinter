@@ -33,30 +33,30 @@ public class CollisionMap : MonoBehaviour
 
     public bool FindNeighbor(Vector2Int pos)
     {
-        foreach (CollisionTile tile in map)
-        {
-            if (pos == tile.pos && tile.type > 0) return true;
-            if (pos == tile.pos && tile.type == 0) return false;
-        }
-        //int y = -pos.y;
-        //int x = pos.x;
-        //print(y);
-        //if (y < worldHeight && y > 0 &&x < worldWidth && x > 0)
+        //foreach (CollisionTile tile in map)
         //{
-        //    if (mapGrid[x, y].type > 0) return true;
-        //    else return false;
+        //    if (pos == tile.pos && tile.type > 0) return true;
+        //    if (pos == tile.pos && tile.type == 0) return false;
         //}
-        //else return true;
+        int y = -pos.y -1;
+        int x = pos.x - 1;
+        //print(y);
+        if (y < worldHeight && y >= 0 && x < worldWidth && x >= 0)
+        {
+            if (mapGrid[x, y].type > 0) return true;
+            else return false;
+        }
+        else return true;
 
-        return true;
+        
     }
     public int[] FindNeighbors(Vector2Int startpos)
     {
         int[] neighbors = new int[9];
         neighbors[4] = 1;
-        for (int i = -1; i < 2;  i += 1)
+        for (int i = -1; i <= 1;  i += 1)
         {
-            for (int j = -1; j < 2; j += 1)
+            for (int j = -1; j <= 1; j += 1)
             {
                 Vector2Int pos = new Vector2Int(startpos.x + i, startpos.y + j);
                 int x = i + 1;

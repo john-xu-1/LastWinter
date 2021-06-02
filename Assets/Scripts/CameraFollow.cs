@@ -14,7 +14,7 @@ public class CameraFollow : MonoBehaviour
 
     private void Start()
     {
-        target_Offset = transform.position - target.position;
+        //target_Offset = transform.position - target.position;
         origin = transform.position;
         Camera camera = GetComponent<Camera>();
         float height = camera.orthographicSize * 2;
@@ -47,6 +47,11 @@ public class CameraFollow : MonoBehaviour
         
     }
 
-    
+    public void Setup(Transform target, Vector2 gridSize, Vector2 origin)
+    {
+        this.target = target;
+        this.gridSize = gridSize;
+        this.origin = origin;
+    }
 
 }

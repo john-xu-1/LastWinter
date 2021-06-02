@@ -20,6 +20,7 @@ public class DebugMap : MonoBehaviour
         print(jsonFile);
         string jsonStr = jsonFile.text;
         Map map = JsonUtility.FromJson<Map>(jsonStr);
+        print(map.dimensions.room_count_height);
         Generator.ConvertMap(map); 
     }
 }
