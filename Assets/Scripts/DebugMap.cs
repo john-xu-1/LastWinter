@@ -11,12 +11,13 @@ public class DebugMap : MonoBehaviour
     [TextArea(5, 10)]
     public string Bitmap;
 
-    public string JsonMapName = "test2.txt";
+    public string JsonMapName = "test2";
 
     private void Start()
     {
-        StreamReader reader = new StreamReader("Assets/Resources/" + JsonMapName);
-        string jsonStr = reader.ReadToEnd();
+        TextAsset jsonFile = Resources.Load<TextAsset>(JsonMapName);
+        string jsonStr = jsonFile.text;
+
         Map map = JsonUtility.FromJson<Map>(jsonStr);
         Generator.ConvertMap(map); 
     }
