@@ -172,7 +172,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6154040031498853860}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
@@ -239,7 +239,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 2.043688}
+  m_Size: {x: 1, y: 1.95}
   m_EdgeRadius: 0
 --- !u!114 &2084049425
 MonoBehaviour:
@@ -255,7 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravityModifer: 1
   minGroundNormY: 0.65
-  takeOffSpeed: 7
+  takeOffSpeed: 8
   maxSpeed: 7
 --- !u!61 &6154040031860930417
 BoxCollider2D:
@@ -281,7 +281,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 2.043688}
+  m_Size: {x: 1, y: 1.95}
   m_EdgeRadius: 0
 --- !u!114 &6154040031860930413
 MonoBehaviour:
