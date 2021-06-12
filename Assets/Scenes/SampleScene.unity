@@ -383,8 +383,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1422436381
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -793,7 +793,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1627818095
-  m_SortingLayer: 1
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0744a1a49bc4a02488aca523c59b5a67, type: 3}
   m_Color: {r: 0, g: 0.088050365, b: 0.13207549, a: 1}
@@ -1373,7 +1373,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0.000012398, y: 44.21924}
+  m_AnchoredPosition: {x: 0.000012398, y: 44.21875}
   m_SizeDelta: {x: 1080.7456, y: 88.43736}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &520297626
@@ -2257,7 +2257,18 @@ MonoBehaviour:
   BuildOnStart: 1
   Solver: {fileID: 121999444}
   WorldBuilder: {fileID: 11400000, guid: 4477f1631e85c4baa9fc93d1f25c59ec, type: 2}
-  MapSource: 0
+  connections: 0101010101010101
+  RoomSize: {x: 20, y: 20}
+  headroom: 2
+  shoulderroom: 3
+  minCeilingHeight: 3
+  nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
+  edgePrefab: {fileID: 4894238030931249867, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}
+  worldWidth: 7
+  worldHeight: 6
+  keyTypeCount: 3
+  maxGatePerKey: 2
+  MapSource: 2
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
@@ -3710,7 +3721,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1627818095
-  m_SortingLayer: 1
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0744a1a49bc4a02488aca523c59b5a67, type: 3}
   m_Color: {r: 0, g: 0.088050365, b: 0.13207549, a: 1}
@@ -3792,7 +3803,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1627818095
-  m_SortingLayer: 1
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0744a1a49bc4a02488aca523c59b5a67, type: 3}
   m_Color: {r: 0, g: 0.088050365, b: 0.13207549, a: 1}
@@ -4552,7 +4563,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1502304521
-  m_SortingLayer: 2
+  m_SortingLayer: -4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: bdabb4ee8fecd40a996540895867f32e, type: 3}
   m_Color: {r: 0.28746462, g: 1, b: 0, a: 1}
@@ -5063,7 +5074,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1627818095
-  m_SortingLayer: 1
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0744a1a49bc4a02488aca523c59b5a67, type: 3}
   m_Color: {r: 0, g: 0.088050365, b: 0.13207549, a: 1}
@@ -5327,6 +5338,18 @@ PrefabInstance:
     - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: numOfSolutionsWanted
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
+      propertyPath: aspFilePath
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
+      propertyPath: clingoExecutablePathMacOS
+      value: DataFiles/Clingo/clingo
+      objectReference: {fileID: 0}
+    - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
+      propertyPath: maxDuration
+      value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 4243523052385139477, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: m_Name
@@ -5692,6 +5715,14 @@ PrefabInstance:
     - target: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154040031498853881, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154040031498853881, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6154040031498853882, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: checkRadius

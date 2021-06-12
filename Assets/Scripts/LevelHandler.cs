@@ -27,6 +27,7 @@ public class LevelHandler : MonoBehaviour
     {
         this.StartTile = StartTile;
         Player.position = StartTile + new Vector2(0, 2);
+        Player.transform.GetComponent<Rigidbody2D>().isKinematic = false;
     }
 
     public void Setup(Vector2 StartTile, float RoomWidth, float RoomHeight)

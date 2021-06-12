@@ -14,6 +14,6 @@ public class RandomMap : MonoBehaviour
     {
         rbm = GetComponent<RandomBitmap>();
         Bitmap = rbm.myString;
-        if (Generator) Generator.ConvertMap(Bitmap);
+        //if (Generator) Generator.ConvertMap(Bitmap);
     }
 }

@@ -1,25 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
 using ClingoHelperJSON;
-using Unity.Collections;
-using UnityEditor;
 using UnityEngine;
-//q: [2 12 ][1 7 ][6 10 ][8 11 ][4 6 ][7 8 ][3 3 ][11 9 ][5 2 ][9 4 ][12 5 ][10 1 ]
 
 public delegate void solverCallback(string clingoOutput);
 
 public class ClingoSolver : MonoBehaviour
 {
+    public enum Status { ERROR, SATISFIABLE, UNSATISFIABLE, TIMEDOUT, RUNNING, UNINITIATED, READY, CLINGONOTFOUND, ASPFILENOTFOUND }
 
-    public TextAsset aspFile;
-    public string clingoExecutablePathMacOS = "Assets/ASP/ClingoBinaries/MacOS/clingo";
+    //public Fil aspFile = new File();
+    public string aspFilePath = "DataFiles/ASPFiles/queens.txt";
+    public string clingoExecutablePathMacOS = "DataFiles/Clingo/clingo";
+    public string AdditionalArguments = "";
     public int maxDuration = 10; // in seconds
-    public bool multipleSolution = false;
+    public bool FindMultipleSolutions = false;
     public int numOfSolutionsWanted = 1; // set to 0 for all possible solution
+    public Dictionary<string, List<List<string>>> answerSet = new Dictionary<string, List<List<string>>>();
 
 
     // Read Only
@@ -31,6 +31,8 @@ public class ClingoSolver : MonoBehaviour
     private string solutionOutput;
     private string clingoConsoleOutput;
     private string clingoConsoleError;
+    private Status status = Status.UNINITIATED;
+
 
     public int Seed { get { return randomSeed; } }
     public bool MoreSolutions { get { return moreSolutions; } }
@@ -40,72 +42,51 @@ public class ClingoSolver : MonoBehaviour
     public string SolutionOutput { get { return solutionOutput; } }
     public string ClingoConsoleOutput { get { return clingoConsoleOutput; } }
     public string ClingoConsoleError { get { return clingoConsoleError; } }
-
+    public Status SolverStatus { get { return status; } }
     // Private
     // The path has to be set in the main thread
-    private string aspFilePath;
-    private Thread thread;
+    public Thread clingoThread;
     private static string[] trueArray = { "true" };
-
-    public Dictionary<string, List<List<string>>> answerSet = new Dictionary<string, List<List<string>>>();
-    public bool isSolved;
-
-    // Call this before you call solve
-    // This will kill the thread if you have one running;
-    // There might be a better way to handle the thread than just aborting it and making a new one.
-    // Returns false if aspfile or clingo are missing.
-    public bool Reset() {
-        if (thread != null)
-        {
-            thread.Abort();
-        }
-        if (aspFile == null) { print("aspFile is missing");  return false;  }
-        if (!File.Exists(clingoExecutablePathMacOS)) { print("Clingo is missing"); return false; }
+    private Process clingoProcess;
 
 
-        thread = new Thread(MyThread);
-        isSolverRunning = false;
 
-        if (maxDuration < 1)
-        {
-            maxDuration = 10; // 10 sec
-        }
-        if (numOfSolutionsWanted < 0)
-        {
-            numOfSolutionsWanted = 1;
-        }
-        solutionOutput = "";
-        clingoConsoleOutput = "";
-        clingoConsoleError = "";
-        duration = 0;
-        totalSolutionsFound = -1;
-        aspFilePath = AssetDatabase.GetAssetPath(aspFile);
-
-        return true;
-    }
-
-
-    public void solveUsingThread()
+    public void Solve()
     {
-        if (!Reset()) { return; }
-        if (!thread.IsAlive)
+        SetUpProcess();
+
+        if (status == Status.READY)
         {
-            randomSeed = Random.Range(0, 1 << 30);
-            thread.Start();
-            isSolverRunning = true;
-            UnityEngine.Debug.Log("Solver is running.");
-        }
-        else
-        {
-            UnityEngine.Debug.LogWarning("Solver is already running.");
+            status = Status.RUNNING;
+            clingoThread.Start();
         }
     }
 
-    public void MyThread()
+    public void Solve(string aspfilepath, string clingoArguments)
     {
-        SolveNoReturn();
-        solutionOutput = AnswerSetToString();
+        this.AdditionalArguments = clingoArguments;
+        this.aspFilePath = aspfilepath;
+        Solve();
     }
+
+    public void Solve(string aspfilepath)
+    {
+        this.aspFilePath = aspfilepath;
+        this.AdditionalArguments = "";
+        Solve();
+    }
+
+    private void MyThread()
+    {
+        SolveHelper();
+        if(status == Status.SATISFIABLE)
+        {
+            solutionOutput = AnswerSetToString();
+        }
+    }
+
+
+
 
     public string AnswerSetToString()
     {
@@ -132,85 +113,222 @@ public class ClingoSolver : MonoBehaviour
 
 
 
-    public void SolveNoReturn()
+
+    private void SolveHelper()
     {
-        answerSet.Clear();
-        if (File.Exists(clingoExecutablePathMacOS))
+        clingoProcess.Start();
+
+        if(clingoProcess.WaitForExit(maxDuration * 1000))
         {
-            string arguments = " --outf=2 ";
-            arguments += aspFilePath + " ";
-            if (multipleSolution)
+            //print("finished in time");
+        }
+        else
+        {
+            clingoProcess.Kill();
+            status = Status.TIMEDOUT;
+            UnityEngine.Debug.LogWarning("Clingo Timedout.");
+        }
+
+        if (status == Status.TIMEDOUT) { return; }
+
+        clingoConsoleOutput = clingoProcess.StandardOutput.ReadToEnd();
+        clingoConsoleError = clingoProcess.StandardError.ReadToEnd();
+
+        //print(clingoConsoleOutput);
+
+        ClingoRoot clingoOutput = JsonUtility.FromJson<ClingoRoot>(clingoConsoleOutput);
+
+        if(clingoOutput == null)
+        {
+            status = Status.ERROR;
+        }
+        else
+        {
+            if (clingoOutput.Result == "SATISFIABLE")
             {
-                arguments += numOfSolutionsWanted.ToString() + " "; // 0 to show all answers
+                status = Status.SATISFIABLE;
             }
-            arguments += "--sign-def=rnd --seed=" + randomSeed;
+            else if (clingoOutput.Result == "UNSATISFIABLE")
+            {
+                status = Status.UNSATISFIABLE;
+            }
+            else if (clingoOutput.Result == "UNKNOWN")
+            {
+                status = Status.ERROR;
+            }
 
-            Process process = new Process();
-
-
-            process.StartInfo.FileName = clingoExecutablePathMacOS;
-            process.StartInfo.Arguments = arguments;
-
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-
-            process.Start();
-
-            process.WaitForExit(maxDuration * 1000);
+            if (status == Status.SATISFIABLE)
+            {
+                var values = clingoOutput.Call[0].Witnesses[0].Value;
 
 
-            clingoConsoleOutput = process.StandardOutput.ReadToEnd();
-            clingoConsoleError = process.StandardError.ReadToEnd();
+                foreach (string value in values)
+                {
+                    int start = value.IndexOf('(');
+                    int end = value.IndexOf(')');
 
-            print(clingoConsoleOutput);
+                    if (start < 0 || end < 0)
+                    {
+                        string key = value;
+                        if (!answerSet.ContainsKey(key))
+                        {
+                            answerSet.Add(key, new List<List<string>>());
+                        }
 
-            ClingoRoot clingoOutput = JsonUtility.FromJson<ClingoRoot>(clingoConsoleOutput);
-            var values = clingoOutput.Call[0].Witnesses[0].Value;
+                        answerSet[key].Add(new List<string>(trueArray));
+                    }
+                    else
+                    {
+                        string key = value.Substring(0, start);
+                        string keyValue = value.Substring(start + 1, end - start - 1);
 
+                        if (!answerSet.ContainsKey(key))
+                        {
+                            answerSet.Add(key, new List<List<string>>());
+                        }
+
+                        string[] body = keyValue.Split(',');
+                        answerSet[key].Add(new List<string>(body));
+
+                    }
+                }
+            }
 
             totalSolutionsFound = clingoOutput.Models.Number;
             moreSolutions = !clingoOutput.Models.More.Equals("no");
             duration = clingoOutput.Time.Total;
-
-
-            foreach (string value in values)
-            {
-                int start = value.IndexOf('(');
-                int end = value.IndexOf(')');
-
-                if (start < 0 || end < 0)
-                {
-                    string key = value;
-                    if (!answerSet.ContainsKey(key))
-                    {
-                        answerSet.Add(key, new List<List<string>>());
-                    }
-
-                    answerSet[key].Add(new List<string>(trueArray));
-                }
-                else
-                {
-                    string key = value.Substring(0, start);
-                    string keyValue = value.Substring(start + 1, end - start - 1);
-
-                    if (!answerSet.ContainsKey(key))
-                    {
-                        answerSet.Add(key, new List<List<string>>());
-                    }
-
-                    string[] body = keyValue.Split(',');
-                    answerSet[key].Add(new List<string>(body));
-
-                }
-            }
-            isSolved = true;
         }
         isSolverRunning = false;
         UnityEngine.Debug.Log("Solver is Done.");
+    }
 
+    //public void StopSolver()
+    //{
+    //    if (clingoThread != null && clingoThread.IsAlive)
+    //    {
+    //        if (clingoProcess != null)
+    //        {
+    //            clingoProcess.Kill();
+    //        }
+    //    }
+    //}
+
+    private bool SetUpProcess()
+    {
+        if(status == Status.RUNNING)
+        {
+            UnityEngine.Debug.LogWarning("The Solver is already running.");
+            return false;
+        }
+
+        status = Status.UNINITIATED;
+
+        randomSeed = Random.Range(0, 1 << 30);
+
+        if (aspFilePath == string.Empty) {
+            UnityEngine.Debug.LogError("No ASP File.");
+            status = Status.ASPFILENOTFOUND;
+            return false;
+        }
+
+        //string path = Path.Combine(Application.dataPath, clingoExecutablePathMacOS);
+        string clingopath = "";
+
+        if (Application.isEditor)
+        {
+            clingopath = Path.Combine(System.Environment.CurrentDirectory, "Assets",clingoExecutablePathMacOS);
+        }
+        else
+        {
+            clingopath = Path.Combine(System.Environment.CurrentDirectory, clingoExecutablePathMacOS);
+        }
+
+        //outputclingopath = clingopath;
+
+        if (!File.Exists(clingopath)) {
+            UnityEngine.Debug.LogError("Clingo is missing.");
+            status = Status.CLINGONOTFOUND;
+            print(clingopath);
+            return false;
+        }
+
+        //aspFilePath = AssetDatabase.GetAssetPath(aspFile);
+
+        if (clingoThread == null) { clingoThread = new Thread(MyThread); }
+        else if(clingoThread.IsAlive){
+            UnityEngine.Debug.LogWarning("Thread State while Alive: " + clingoThread.ThreadState.ToString());
+            clingoThread = new Thread(MyThread);
+        }
+        else
+        {
+            clingoThread = new Thread(MyThread);
+        }
+
+
+
+
+        if (clingoProcess == null) { clingoProcess = new Process(); }
+        clingoProcess.StartInfo.FileName = clingopath;
+        UpdateClingoASPArguments();
+        clingoProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        clingoProcess.StartInfo.UseShellExecute = false;
+        clingoProcess.StartInfo.CreateNoWindow = true;
+        clingoProcess.StartInfo.RedirectStandardOutput = true;
+        clingoProcess.StartInfo.RedirectStandardError = true;
+
+
+
+        if (maxDuration < 1){ maxDuration = 10; } // 10 sec
+        if (numOfSolutionsWanted < 0) { numOfSolutionsWanted = 1; }
+
+        solutionOutput = "";
+        clingoConsoleOutput = "";
+        clingoConsoleError = "";
+        duration = 0;
+        totalSolutionsFound = -1;
+        answerSet.Clear();
+
+
+        status = Status.READY;
+        return true;
+    }
+
+    private void UpdateClingoASPArguments()
+    {
+        string arguments = " --outf=2 ";
+
+        string filepath = "";
+
+        if (Application.isEditor)
+        {
+            filepath = Path.Combine(System.Environment.CurrentDirectory, "Assets", aspFilePath);
+        }
+        else
+        {
+            filepath = Path.Combine(System.Environment.CurrentDirectory, aspFilePath);
+        }
+
+        //outputasppath = filepath;
+
+        //string clingopath = Path.Combine(System.Environment.CurrentDirectory, "DataFiles/Clingo/clingo");
+
+
+        //string path = Path.Combine(Application.dataPath, aspFilePath);
+
+        //arguments += aspFilePath + " ";
+        arguments += "\"" + filepath + "\" ";
+
+        if (FindMultipleSolutions)
+        {
+            arguments += numOfSolutionsWanted.ToString() + " "; // 0 to show all answers
+        }
+        arguments += "--sign-def=rnd --seed=" + randomSeed;
+        arguments += " " + AdditionalArguments;
+
+
+        //outputarguments = arguments;
+
+        clingoProcess.StartInfo.Arguments = arguments;
     }
 
 }

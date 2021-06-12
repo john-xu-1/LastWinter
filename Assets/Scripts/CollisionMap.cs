@@ -5,52 +5,58 @@ using UnityEngine.Tilemaps;
 
 public class CollisionMap : MonoBehaviour
 {
-    private CollisionTile[,] mapGrid;
-    private List<CollisionTile> map = new List<CollisionTile>();
+    
+    private List<Room> rooms = new List<Room>();
     public TileBase Center, Right, Left, Up, Down, TopRight, BottomRight, TopLeft, BottomLeft, LinkersTopRight, LinkersBottomRight, LinkersTopLeft, LinkersBottomLeft;
     public Tilemap tilemap;
 
-    private int worldWidth, worldHeight;
+    //private int worldWidth, worldHeight;
 
-    public void newCollisionMap(int worldWidth, int worldHeight)
-    {
-        this.worldHeight = worldHeight;
-        this.worldWidth = worldWidth;
-        mapGrid = new CollisionTile[worldWidth,worldHeight];
-    }
+    //public void newCollisionMap(int worldWidth, int worldHeight)
+    //{
+    //    this.worldHeight = worldHeight;
+    //    this.worldWidth = worldWidth;
+    //    mapGrid = new CollisionTile[worldWidth,worldHeight];
+    //}
 
-    public void AddCollisionTiles(Vector2Int pos, int type)
+    
+
+    public CollisionTile AddCollisionTiles(Vector2Int pos, int type, Room room)
     {
-        CollisionTile tile = new CollisionTile(pos, type);
+        Vector2Int offsetPos = new Vector2Int(pos.x + room.pos.x * room.map.dimensions.room_width, pos.y - room.pos.y * room.map.dimensions.room_height);
+        CollisionTile tile = new CollisionTile(offsetPos, type);
         
-        mapGrid[pos.x-1, -pos.y-1] = tile;
-        map.Add(tile);
+        room.mapGrid[pos.x-1, -pos.y-1] = tile;
+        //room.tiles.Add(tile);
+        return tile;
     }
     public void BuildMap()
     {
 
     }
 
-    public bool FindNeighbor(Vector2Int pos)
+    public bool FindNeighbor(Vector2Int pos, Room room)
     {
         //foreach (CollisionTile tile in map)
         //{
         //    if (pos == tile.pos && tile.type > 0) return true;
         //    if (pos == tile.pos && tile.type == 0) return false;
         //}
-        int y = -pos.y -1;
-        int x = pos.x - 1;
+        int worldHeight = room.map.dimensions.room_height;
+        int worldWidth = room.map.dimensions.room_width;
+        int y = -pos.y -1 + room.pos.y*worldHeight;
+        int x = pos.x - 1 - room.pos.x*worldWidth;
         //print(y);
         if (y < worldHeight && y >= 0 && x < worldWidth && x >= 0)
         {
-            if (mapGrid[x, y].type > 0) return true;
+            if (room.mapGrid[x, y].type > 0) return true;
             else return false;
         }
         else return true;
 
         
     }
-    public int[] FindNeighbors(Vector2Int startpos)
+    public int[] FindNeighbors(Vector2Int startpos, Room room)
     {
         int[] neighbors = new int[9];
         neighbors[4] = 1;
@@ -63,7 +69,7 @@ public class CollisionMap : MonoBehaviour
                 int y = -j + 1;
                 int index = x + 3 * y;
                 
-                if (pos != startpos && FindNeighbor(pos))
+                if (pos != startpos && FindNeighbor(pos, room))
                 {
                     neighbors[index] = 1;
                 }
@@ -77,52 +83,52 @@ public class CollisionMap : MonoBehaviour
     }
 
 
-    public void DebugPlaceTiles()
+    public void DebugPlaceTiles(Room room)
     {
-        foreach (CollisionTile tile in map)
+        foreach (CollisionTile tile in room.tiles)
         {
             if(tile.type == 1)
             {
                 
-                int[] neighbors = FindNeighbors(tile.pos);
+                int[] neighbors = FindNeighbors(tile.pos, room);
                 if (neighbors[0] == 1 && neighbors[1]  == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] ==1 && neighbors[8] == 1)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Center);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, Center);
                 //RIGHT
                 else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[3] == 1 && neighbors[5] == 0 && neighbors[6] == 1 && neighbors[7] == 1)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Right);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, Right);
                 //LEFT
                 else if (neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 0 && neighbors[5] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Left);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, Left);
                 //UP
                 else if (neighbors[1] == 0 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Up);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, Up);
                 //DOWN
                 else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[7] == 0)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Down);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, Down);
                 //TR
                 else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 0 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, TopRight);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, TopRight);
                 //TL
                 else if (neighbors[0] == 0 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, TopLeft);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, TopLeft);
                 //BR
                 else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 0)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, BottomRight);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, BottomRight);
                 //BL
                 else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 0 && neighbors[7] == 1 && neighbors[8] == 1)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, BottomLeft);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, BottomLeft);
                 //LTR
                 else if (neighbors[1] == 0 && neighbors[2] == 0 && neighbors[3] == 1 && neighbors[5] == 0 && neighbors[6] == 1 && neighbors[7] == 1)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersTopRight);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersTopRight);
                 //LTL
                 else if (neighbors[0] == 0 && neighbors[1] == 0 && neighbors[3] == 0 && neighbors[5] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersTopLeft);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersTopLeft);
                 //LBR
                 else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[3] == 1 && neighbors[5] == 0 && neighbors[7] == 0 && neighbors[8] == 0)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersBottomRight);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersBottomRight);
                 //LBL
                 else if (neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 0 && neighbors[5] == 1 && neighbors[6] == 0 && neighbors[7] == 0)
-                    UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersBottomLeft);
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, LinkersBottomLeft);
                 else
                 {
                     print(tile.pos + "Tile placement is missing");
@@ -139,6 +145,11 @@ public class CollisionMap : MonoBehaviour
 
 
         }
+    }
+
+    void PlaceTile(Tilemap tilemap, Vector3Int pos, TileBase tileType)
+    {
+        UtilityTilemap.PlaceTile(tilemap, pos, tileType);
     }
 
 }

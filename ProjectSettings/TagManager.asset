@@ -42,15 +42,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
-  - name: CameraForeground
-    uniqueID: 1627818095
-    locked: 0
   - name: Items
     uniqueID: 2792662775
     locked: 0
   - name: Projectiles
     uniqueID: 2550090881
+    locked: 0
+  - name: CollisionTile
+    uniqueID: 2872530915
+    locked: 0
+  - name: CameraForeground
+    uniqueID: 1627818095
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0

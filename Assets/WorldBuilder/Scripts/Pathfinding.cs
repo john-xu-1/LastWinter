@@ -124,4 +124,46 @@ public class Pathfinding
       %:- floor(XX,YY), path(XX,YY,Type1), path(XX,YY,Type2), Type1 != Type2.
 
     ";
+
+    public static string set_openings(bool[] connections)
+    {
+        string connection_rules = @"
+            :- {path(XX,YY,middle,middle): width(XX), height(YY)} == 0.
+        ";
+        connection_rules += set_opening(connections[0], connections[1], "top");
+        connection_rules += set_opening(connections[2], connections[3], "right");
+        connection_rules += set_opening(connections[4], connections[5], "bottom");
+        connection_rules += set_opening(connections[6], connections[7], "left");
+
+
+        return connection_rules;
+    }
+
+    private static string set_opening(bool egress, bool ingress, string side)
+    {
+        string connection_rules = "";
+        if (egress || ingress)
+        {
+            connection_rules += $" :- {{path(XX,YY,{side}): width(XX), height(YY)}} == 0. \n";
+            if (egress && !ingress)
+            {
+                connection_rules += $@"
+                    :-path(XX, YY, middle, middle), path(XX, YY, {side}).
+                    :-path(XX, YY, {side}, {side}), not path(XX, YY, middle).
+                ";
+            }
+            else
+            {
+                connection_rules += $@"
+                    :- path(XX,YY,middle,middle), not path(XX,YY,{side}).
+                    :- path(XX,YY,{side},{side}), not path(XX,YY,middle).
+                ";
+            }
+        }
+        else
+        {
+            connection_rules += $" :- path(XX,YY,{side}), width(XX), height(YY).\n";
+        }
+        return connection_rules;
+    }
 }
