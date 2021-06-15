@@ -11,7 +11,16 @@ public class PlatformerController : PhysicsObject
 
     public float SpeedTest;
    
+    public enum EffectorStates
+    {
+        None,
+        Water,
+        WaterPartial,
+        Lava,
+        LavaPartial
+    }
 
+    public EffectorStates EffectorState;
 
     protected override void ComputeVelocity()
     {

@@ -28,5 +28,11 @@ public static class UtilityTilemap
         }
     }
 
+    public static TileBase GetTile(Tilemap tilemap, Vector2 pos)
+    {
+        Vector3Int tilePos = tilemap.WorldToCell(pos);
+        return tilemap.GetTile(tilePos);
+    }
+
 
 }
