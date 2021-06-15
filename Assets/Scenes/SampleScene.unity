@@ -5074,6 +5074,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2084049425, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: gravityModifer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084049425, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: TakeOffSpeedNormal
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084049425, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: EffectorAcceleration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084049425, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: WaterModifier
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084049425, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: LavaModifier
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084049425, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: EffectorAccelerationPartial
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084049425, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: SinkWater
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2084049425, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: EffectorAccelerationSubmerged
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_Name
       value: Player
@@ -5138,5 +5170,6 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: 0.978156
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6154040031498853880, guid: d021e07fd68584ae184f35db76284713, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d021e07fd68584ae184f35db76284713, type: 3}
