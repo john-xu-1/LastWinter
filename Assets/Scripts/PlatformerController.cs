@@ -9,6 +9,7 @@ public class PlatformerController : PhysicsObject
 
     public float maxSpeed = 7;
 
+    public float SpeedTest;
    
 
 
@@ -31,6 +32,8 @@ public class PlatformerController : PhysicsObject
         }
 
         targetVelocity = horInput * maxSpeed;
+
+        SpeedTest = rb.velocity.x;
     }
 
     
