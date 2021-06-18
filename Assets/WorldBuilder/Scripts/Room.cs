@@ -3,67 +3,109 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Room
+namespace WorldBuilder
 {
-    public Vector2Int pos;
-    public Dictionary<string, List<List<string>>> rawMap;
-    public Map map;
-    public bool isDestroyed;
-    public CollisionTile[,] mapGrid;
-    public List<CollisionTile> tiles = new List<CollisionTile>();
+    [System.Serializable]
+    public class Room
+    {
+        public Vector2Int pos;
+        public Dictionary<string, List<List<string>>> rawMap;
+        public Map map;
+        //public List<Map> destroyedMaps = new List<Map>();
+        public bool isDestroyed;
+        public CollisionTile[,] mapGrid;
+        public List<CollisionTile> tiles = new List<CollisionTile>();
+        public Vector2Int upExit, downExit, rightExit, leftExit;
 
-    public Room(Vector2Int pos, Dictionary<string, List<List<string>>> rawMap)
-    {
-        this.pos = pos;
-        SetupRoom(rawMap);
-        Debug.Log("mapGrid size: " + map.dimensions.room_width +", " + map.dimensions.room_height);
-        mapGrid = new CollisionTile[map.dimensions.room_width, map.dimensions.room_height];
-    }
-    public void SetupRoom(Dictionary<string, List<List<string>>> rawMap)
-    {
-        this.rawMap = rawMap;
-        map = ConvertMap(rawMap);
-    }
-    public void BuildRoom(Tilemap tilemap)
-    {
-
-    }
-
-    public void DestroyRoom(Tilemap tilemap)
-    {
-        foreach (Tile tile in map.area)
+        public Room(Vector2Int pos)
         {
-            int x = tile.x + pos.x * map.dimensions.room_width - 1;
-            int y = -tile.y - pos.y * map.dimensions.room_height - 1;
-            UtilityTilemap.DestroyTile(tilemap, new Vector3Int(x, y, 0));
+            this.pos = pos;
+            
+            
         }
-    }
-
-    public Map ConvertMap(Dictionary<string, List<List<string>>> dict)
-    {
-        Map map = new Map();
-        map.dimensions = UtilityBuildWorld.GetDimensions(dict);
-        int width = map.dimensions.room_count_width * map.dimensions.room_width;
-        int height = map.dimensions.room_count_height * map.dimensions.room_height;
-        Debug.Log(width + "x" + height);
-
-        map.area = UtilityBuildWorld.GetTiles(dict);
-
-
-
-
-        foreach (List<string> path in dict["path"])
+        public void SetupRoom(Dictionary<string, List<List<string>>> rawMap)
         {
-            if (path.Count == 4 && path[3] == "middle")
+            isDestroyed = false;
+            this.rawMap = new Dictionary<string, List<List<string>>>(rawMap);
+            map = ConvertMap(this.rawMap);
+            foreach(Path path in map.pathStarts)
             {
-                float x = float.Parse(path[0]);
-                float y = float.Parse(path[1]);
-                map.start = new Vector2(x, y);
+                if (path.type == "up") upExit = new Vector2Int(path.x, path.y);
+                if (path.type == "down") downExit = new Vector2Int(path.x, path.y);
+                if (path.type == "right") rightExit = new Vector2Int(path.x, path.y);
+                if (path.type == "left") leftExit = new Vector2Int(path.x, path.y);
+            }
+
+            Debug.Log("mapGrid size: " + map.dimensions.room_width + ", " + map.dimensions.room_height);
+            mapGrid = new CollisionTile[map.dimensions.room_width, map.dimensions.room_height];
+        }
+        public void BuildRoom(Tilemap tilemap)
+        {
+
+        }
+
+        public void DestroyRoom(Tilemap tilemap)
+        {
+            foreach (CollisionTile tile in tiles)
+            {
+                //int x = tile.x + pos.x * map.dimensions.room_width - 1;
+                //int y = -tile.y - pos.y * map.dimensions.room_height - 1;
+                Debug.Log("Remove tile: " + tile.pos);
+                UtilityTilemap.DestroyTile(tilemap, (Vector3Int)tile.pos);
             }
         }
 
-        return map;
-    }
+        public Map ConvertMap(Dictionary<string, List<List<string>>> dict)
+        {
+            Map map = new Map();
+            map.dimensions = Utility.GetDimensions(dict);
+            int width = map.dimensions.room_count_width * map.dimensions.room_width;
+            int height = map.dimensions.room_count_height * map.dimensions.room_height;
+            Debug.Log(width + "x" + height);
 
-    
+            map.area = Utility.GetTiles(dict);
+
+
+
+            List<Path> paths = new List<Path>();
+            List<PathStart> pathStarts = new List<PathStart>();
+            foreach (List<string> path in dict["path"])
+            {
+                if (path.Count == 4 && path[3] == "middle")
+                {
+                    float x = float.Parse(path[0]);
+                    float y = float.Parse(path[1]);
+                    map.start = new Vector2(x, y);
+                }
+
+                if(path.Count == 4)
+                {
+                    PathStart pathStart = new PathStart();
+                    pathStart.x = int.Parse(path[0]);
+                    pathStart.y = int.Parse(path[1]);
+                    pathStart.type = path[2];
+                    pathStarts.Add(pathStart);
+                }
+
+                if (path.Count == 3)
+                {
+                    Path newpath = new Path();
+                    newpath.x = int.Parse(path[0]);
+                    newpath.y = int.Parse(path[1]);
+                    newpath.type = path[2];
+                    paths.Add(newpath);
+                }
+            }
+            map.paths = Utility.GetArray(paths);
+            map.pathStarts = Utility.GetArray(pathStarts);
+
+            
+
+
+
+            return map;
+        }
+
+
+    }
 }

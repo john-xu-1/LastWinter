@@ -287,6 +287,7 @@ public class ClingoSolver : MonoBehaviour
         duration = 0;
         totalSolutionsFound = -1;
         answerSet.Clear();
+        //answerSet = new Dictionary<string, List<List<string>>>();
 
 
         status = Status.READY;

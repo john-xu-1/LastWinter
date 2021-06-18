@@ -2,171 +2,236 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldMap 
+namespace WorldBuilder
 {
-    public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab)
+    public class WorldMap
     {
-        int worldWidth = UtilityBuildWorld.Max(world["width"]);
-        int worldHeight = UtilityBuildWorld.Max(world["height"]);
-        node[,] worldGrid = new node[worldWidth, worldHeight];
-        foreach (List<string> room in world["room"])
+        public static Graph ConvertGraph(Dictionary<string, List<List<string>>> world)
         {
-            int roomID = int.Parse(room[0]);
-            Vector2Int index = UtilityBuildWorld.roomID_to_index(roomID, worldWidth, worldHeight);
-            node node = GameObject.Instantiate(nodePrefab,new Vector3(index.x+1, worldHeight - index.y, 0),Quaternion.identity).GetComponent<node>();
-            node.SetText(roomID);
-            worldGrid[index.x, index.y] = node;
+            Graph graph = new Graph();
+            //Door[] doors;
+            //Key[] keys;
+            //Gate[] gates;
+            //int startRoomID;
+            //int width;
+            //int height;
+
+            graph.startRoomID = int.Parse(world["start"][0][0]);
+            graph.width = Utility.Max(world["width"]);
+            graph.height = Utility.Max(world["height"]);
+
+            List<Door> doors = new List<Door>();
+            foreach(List<string> door in world["door"])
+            {
+                Door newDoor = new Door();
+                newDoor.name = door[0] + "->" + door[1];
+                newDoor.source = int.Parse(door[0]);
+                newDoor.destination = int.Parse(door[1]);
+                doors.Add(newDoor);
+            }
+            graph.doors = Utility.GetArray(doors);
+
+            List<Key> keys = new List<Key>();
+            foreach (List<string> key in world["key"])
+            {
+                Key newKey = new Key();
+                newKey.type = int.Parse(key[0]);
+                newKey.roomID = int.Parse(key[1]);
+                keys.Add(newKey);
+            }
+            graph.keys = Utility.GetArray(keys);
+
+            List<Gate> gates = new List<Gate>();
+            foreach(List<string> gate in world["gate"])
+            {
+                Gate newGate = new Gate();
+                newGate.type = int.Parse(gate[0]);
+                newGate.source = int.Parse(gate[1]);
+                newGate.destination = int.Parse(gate[2]);
+                gates.Add(newGate);
+            }
+            graph.gates = Utility.GetArray(gates);
+            return graph;
+        }
+        public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab)
+        {
+            int worldWidth = Utility.Max(world["width"]);
+            int worldHeight = Utility.Max(world["height"]);
+            node[,] worldGrid = new node[worldWidth, worldHeight];
+            foreach (List<string> room in world["room"])
+            {
+                int roomID = int.Parse(room[0]);
+                Vector2Int index = Utility.roomID_to_index(roomID, worldWidth, worldHeight);
+                node node = GameObject.Instantiate(nodePrefab, new Vector3(index.x + 1, worldHeight - index.y, 0), Quaternion.identity).GetComponent<node>();
+                node.SetText(roomID);
+                worldGrid[index.x, index.y] = node;
+            }
+
+            foreach (List<string> door in world["door"])
+            {
+                Vector2Int sourceIndex = Utility.roomID_to_index(int.Parse(door[0]), worldWidth, worldHeight);
+                Vector2Int destinationIndex = Utility.roomID_to_index(int.Parse(door[1]), worldWidth, worldHeight);
+
+                if (destinationIndex.x > sourceIndex.x)
+                {
+                    edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1.5f, worldHeight - sourceIndex.y), Quaternion.identity).GetComponent<edge>();
+                    edge.SetDirection(0);
+                    worldGrid[sourceIndex.x, sourceIndex.y].rightExit = edge;
+                }
+                else if (destinationIndex.x < sourceIndex.x)
+                {
+                    edge edge = GameObject.Instantiate(edgePrefab, new Vector3(destinationIndex.x + 1.5f, worldHeight - sourceIndex.y), Quaternion.identity).GetComponent<edge>();
+                    edge.SetDirection(180);
+                    worldGrid[sourceIndex.x, sourceIndex.y].leftExit = edge;
+                }
+                else if (destinationIndex.y < sourceIndex.y)
+                {
+                    edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1f, worldHeight - destinationIndex.y - 0.5f), Quaternion.identity).GetComponent<edge>();
+                    edge.SetDirection(90);
+                    worldGrid[sourceIndex.x, sourceIndex.y].upExit = edge;
+                }
+                else if (destinationIndex.y > sourceIndex.y)
+                {
+                    edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1f, worldHeight - sourceIndex.y - 0.5f), Quaternion.identity).GetComponent<edge>();
+                    edge.SetDirection(270);
+                    worldGrid[sourceIndex.x, sourceIndex.y].downExit = edge;
+                }
+            }
+            foreach (List<string> gate in world["gate"])
+            {
+                int key = int.Parse(gate[0]);
+                int source = int.Parse(gate[1]);
+                int destination = int.Parse(gate[2]);
+                Color gateColor = Color.magenta;
+                if (key == 1) gateColor = Color.blue;
+                else if (key == 2) gateColor = Color.red;
+                else if (key == 3) gateColor = Color.yellow;
+                Vector2Int sourceIndex = Utility.roomID_to_index(source, worldWidth, worldHeight);
+                worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
+                if (destination == source + 1)
+                {
+                    worldGrid[sourceIndex.x, sourceIndex.y].rightExit.SetColor(gateColor);
+                }
+                else if (destination == source - 1)
+                {
+                    worldGrid[sourceIndex.x, sourceIndex.y].leftExit.SetColor(gateColor);
+                }
+                else if (destination > source)
+                {
+                    worldGrid[sourceIndex.x, sourceIndex.y].downExit.SetColor(gateColor);
+                }
+                else if (destination < source)
+                {
+                    worldGrid[sourceIndex.x, sourceIndex.y].upExit.SetColor(gateColor);
+                }
+            }
+
+        }
+        public static bool[] GetConnections(RoomConnections connection)
+        {
+            bool[] boolConnection = new bool[8];
+            boolConnection[0] = connection.upEgress;
+            boolConnection[1] = connection.upIngress;
+            boolConnection[2] = connection.rightEgress;
+            boolConnection[3] = connection.rightIngress;
+            boolConnection[4] = connection.downEgress;
+            boolConnection[5] = connection.downIngress;
+            boolConnection[6] = connection.leftEgress;
+            boolConnection[7] = connection.leftIngress;
+            return boolConnection;
         }
 
-        foreach(List<string> door in world["door"])
+        public static RoomConnections[] get_room_connections(Dictionary<string, List<List<string>>> world_graph)
         {
-            Vector2Int sourceIndex = UtilityBuildWorld.roomID_to_index(int.Parse(door[0]), worldWidth, worldHeight);
-            Vector2Int destinationIndex = UtilityBuildWorld.roomID_to_index(int.Parse(door[1]), worldWidth, worldHeight);
+            int height = Utility.Max(world_graph["height"]);
+            int width = Utility.Max(world_graph["width"]);
+            RoomConnections[] connections = RoomConnections.GetRoomConnectionsArray(height * width + 1);
+            foreach (List<string> door in world_graph["door"])
+            {
+                int source = int.Parse(door[0]);
+                int destination = int.Parse(door[1]);
+                if (destination == source + 1) //right
+                {
+                    connections[source].rightEgress = true;
+                    connections[destination].leftIngress = true;
+                }
+                else if (destination == source - 1)//left
+                {
+                    connections[source].leftEgress = true;
+                    connections[destination].rightIngress = true;
+                }
+                else if (destination < source) //up
+                {
+                    connections[source].upEgress = true;
+                    connections[destination].downIngress = true;
+                }
+                else if (destination > source)//down
+                {
+                    connections[source].downEgress = true;
+                    connections[destination].upIngress = true;
+                }
 
-            if(destinationIndex.x > sourceIndex.x)
-            {
-                edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1.5f, worldHeight - sourceIndex.y), Quaternion.identity).GetComponent<edge>();
-                edge.SetDirection(0);
-                worldGrid[sourceIndex.x, sourceIndex.y].rightExit = edge;
-            }else if (destinationIndex.x < sourceIndex.x)
-            {
-                edge edge = GameObject.Instantiate(edgePrefab, new Vector3(destinationIndex.x + 1.5f, worldHeight - sourceIndex.y), Quaternion.identity).GetComponent<edge>();
-                edge.SetDirection(180);
-                worldGrid[sourceIndex.x, sourceIndex.y].leftExit = edge;
             }
-            else if (destinationIndex.y < sourceIndex.y)
-            {
-                edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1f, worldHeight - destinationIndex.y - 0.5f), Quaternion.identity).GetComponent<edge>();
-                edge.SetDirection(90);
-                worldGrid[sourceIndex.x, sourceIndex.y].upExit = edge;
-            }
-            else if (destinationIndex.y > sourceIndex.y)
-            {
-                edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1f, worldHeight -  sourceIndex.y - 0.5f), Quaternion.identity).GetComponent<edge>();
-                edge.SetDirection(270);
-                worldGrid[sourceIndex.x, sourceIndex.y].downExit = edge;
-            }
-        }
-        foreach (List<string> gate in world["gate"])
-        {
-            int key = int.Parse(gate[0]);
-            int source = int.Parse(gate[1]);
-            int destination = int.Parse(gate[2]);
-            Color gateColor = Color.magenta;
-            if (key == 1) gateColor = Color.blue;
-            else if (key == 2) gateColor = Color.red;
-            else if (key == 3) gateColor = Color.yellow;
-            Vector2Int sourceIndex = UtilityBuildWorld.roomID_to_index(source, worldWidth, worldHeight);
-            worldGrid[sourceIndex.x,sourceIndex.y].SetColor(gateColor);
-            if (destination == source + 1)
-            {
-                worldGrid[sourceIndex.x, sourceIndex.y].rightExit.SetColor(gateColor);
-            }else if(destination == source - 1)
-            {
-                worldGrid[sourceIndex.x, sourceIndex.y].leftExit.SetColor(gateColor);
-            }else if(destination > source)
-            {
-                worldGrid[sourceIndex.x, sourceIndex.y].downExit.SetColor(gateColor);
-            }
-            else if (destination < source)
-            {
-                worldGrid[sourceIndex.x, sourceIndex.y].upExit.SetColor(gateColor);
-            }
+            return connections;
         }
 
-    }
-
-    public static RoomConnections[] get_room_connections(Dictionary<string,List<List<string>>> world_graph)
-    {
-        int height = UtilityBuildWorld.Max(world_graph["height"]);
-        int width = UtilityBuildWorld.Max(world_graph["width"]);
-        RoomConnections[] connections = RoomConnections.GetRoomConnectionsArray(height * width + 1); 
-        foreach(List<string> door in world_graph["door"])
+        public static List<string> get_path_start(string path, List<List<string>> map)
         {
-            int source = int.Parse(door[0]);
-            int destination = int.Parse(door[1]);
-            if (destination == source + 1) //right
+            foreach (List<string> node in map)
             {
-                connections[source].rightEgress = true;
-                connections[destination].leftIngress = true;
+                if (node.Count == 4 && node[3] == path)
+                {
+                    return node;
+                }
             }
-            else if (destination == source - 1)//left
-            {
-                connections[source].leftEgress = true;
-                connections[destination].rightIngress = true;
-            }
-            else if (destination < source) //up
-            {
-                connections[source].upEgress = true;
-                connections[destination].downIngress = true;
-            }
-            else if (destination > source)//down
-            {
-                connections[source].downEgress = true;
-                connections[destination].upIngress = true;
-            }
-
+            return null;
         }
-        return connections;
-    }
-
-    public static List<string> get_path_start(string path, List<List<string>> map)
-    {
-        foreach(List<string> node in map)
+        public static string get_path_start_rules(string path, List<List<string>> map)
         {
-            if(node.Count == 4 && node[3] == path)
+            string rule = "";
+            string inversePath = "";
+
+            if (path == "top")
             {
-                return node;
-            }
-        }
-        return null;
-    }
-    public static string get_path_start_rules(string path, List<List<string>> map)
-    {
-        string rule = "";
-        string inversePath = "";
-
-        if (path == "top")
-        {
-            inversePath = "bottom";
-            List<string> node = get_path_start(inversePath, map);
-            rule += $@"
+                inversePath = "bottom";
+                List<string> node = get_path_start(inversePath, map);
+                rule += $@"
                 bottom_node :- path({node[0]} -1,_,top,top).
                 bottom_node :- path({node[0]} +1,_,top,top).
                 :- not bottom_node.
             ";
-        }
-        else if (path == "bottom")
-        {
-            inversePath = "top";
-            List<string> node = get_path_start(inversePath, map);
-            rule += $@"
+            }
+            else if (path == "bottom")
+            {
+                inversePath = "top";
+                List<string> node = get_path_start(inversePath, map);
+                rule += $@"
                 top_node :- path({node[0]} -1, _, bottom,bottom).
                 top_node :- path({node[0]} +1, _, bottom,bottom).
                 :- not top_node.
             ";
-        }
-        else if (path == "right")
-        {
-            inversePath = "left";
-            List<string> node = get_path_start(inversePath, map);
-            rule += $@"
+            }
+            else if (path == "right")
+            {
+                inversePath = "left";
+                List<string> node = get_path_start(inversePath, map);
+                rule += $@"
                 :- not path(_, {node[1]}, right,right).
             ";
-        }
-        else if (path == "left")
-        {
-            inversePath = "right";
-            List<string> node = get_path_start(inversePath, map);
-            rule += $@"
+            }
+            else if (path == "left")
+            {
+                inversePath = "right";
+                List<string> node = get_path_start(inversePath, map);
+                rule += $@"
                 :- not path(_, {node[1]}, left,left).
             ";
+            }
+
+            return rule;
         }
 
-        return rule;
-    }
-
-    public static string test_text = @"
+        public static string test_text = @"
         #const max_width = 4.
         #const max_height = 3.
 
@@ -193,7 +258,7 @@ public class WorldMap
 
     ";
 
-    public static string bidirectional_rules = @"
+        public static string bidirectional_rules = @"
 
         door_east_exit(RoomID) :- door(RoomID, NeighboorID), room_grid(XX, YY, RoomID), room_grid(XX + 1, YY, NeighboorID). 
         door_west_exit(RoomID) :- door(RoomID, NeighboorID), room_grid(XX, YY, RoomID), room_grid(XX - 1, YY, NeighboorID).
@@ -245,7 +310,7 @@ public class WorldMap
 
     ";
 
-    public static string gate_key_rules = @"
+        public static string gate_key_rules = @"
         #const key_count = 3.
         #const max_gate_type_count = 2.
 
@@ -285,4 +350,5 @@ public class WorldMap
         %have_key(KeyID, RoomID, T+1) :- door(RoomSourceID, RoomID), have_key(KeyID, RoomSourceID, T).
 
     ";
+    }
 }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pathfinding 
+namespace WorldBuilder
 {
-    public static string movement_rules = @"
+    public class Pathfinding
+    {
+        public static string movement_rules = @"
       path_type(right; left; top; bottom; middle).
       %path_type( top; bottom).
   
@@ -65,7 +67,7 @@ public class Pathfinding
       #show path/3.
     ";
 
-    public static string platform_rules = @"
+        public static string platform_rules = @"
       #show platform/3.
 
       horizontal(-1; 1).
@@ -79,7 +81,7 @@ public class Pathfinding
       :- platform(XX,YY, Type1), platform(XX, YY, Type2), Type1 != Type2.
     ";
 
-    public static string path_rules = @"
+        public static string path_rules = @"
 
     %each corner has a tile, makes sure opening occur on the correct side
       :- not state(1,1,one).
@@ -125,45 +127,91 @@ public class Pathfinding
 
     ";
 
-    public static string set_openings(bool[] connections)
-    {
-        string connection_rules = @"
+        public static string set_openings(bool[] connections)
+        {
+            string connection_rules = @"
             :- {path(XX,YY,middle,middle): width(XX), height(YY)} == 0.
         ";
-        connection_rules += set_opening(connections[0], connections[1], "top");
-        connection_rules += set_opening(connections[2], connections[3], "right");
-        connection_rules += set_opening(connections[4], connections[5], "bottom");
-        connection_rules += set_opening(connections[6], connections[7], "left");
+            connection_rules += set_opening(connections[0], connections[1], "top");
+            connection_rules += set_opening(connections[2], connections[3], "right");
+            connection_rules += set_opening(connections[4], connections[5], "bottom");
+            connection_rules += set_opening(connections[6], connections[7], "left");
 
 
-        return connection_rules;
-    }
+            return connection_rules;
+        }
 
-    private static string set_opening(bool egress, bool ingress, string side)
-    {
-        string connection_rules = "";
-        if (egress || ingress)
+        private static string set_opening(bool egress, bool ingress, string side)
         {
-            connection_rules += $" :- {{path(XX,YY,{side}): width(XX), height(YY)}} == 0. \n";
-            if (egress && !ingress)
+            string connection_rules = "";
+            if (egress || ingress)
             {
-                connection_rules += $@"
+                connection_rules += $" :- {{path(XX,YY,{side}): width(XX), height(YY)}} == 0. \n";
+                if (egress && !ingress)
+                {
+                    connection_rules += $@"
                     :-path(XX, YY, middle, middle), path(XX, YY, {side}).
                     :-path(XX, YY, {side}, {side}), not path(XX, YY, middle).
                 ";
-            }
-            else
-            {
-                connection_rules += $@"
+                }
+                else
+                {
+                    connection_rules += $@"
                     :- path(XX,YY,middle,middle), not path(XX,YY,{side}).
                     :- path(XX,YY,{side},{side}), not path(XX,YY,middle).
                 ";
+                }
             }
+            else
+            {
+                connection_rules += $" :- path(XX,YY,{side}), width(XX), height(YY).\n";
+            }
+            return connection_rules;
         }
-        else
+
+        public static string get_path_start_rules(string path, Dictionary<string, List<List<string>>> map)
         {
-            connection_rules += $" :- path(XX,YY,{side}), width(XX), height(YY).\n";
+            string rule = "";
+            return rule;
         }
-        return connection_rules;
+        
+        public static string getPathStartRules(string path, Room room)
+        {
+            string rule = "";
+            if(path == "top")
+            {
+                Vector2Int node = room.downExit;
+                rule += $@"
+                    bottom_node :- path({node.x} -1,_,top,top).
+                    bottom_node :- path({node.x} +1,_,top,top).
+                    :- not bottom_node.
+                ";
+            }else if(path == "bottom")
+            {
+                Vector2Int node = room.upExit;
+                rule += $@"
+                    top_node :- path({node.x} -1, _, bottom,bottom).
+                    top_node :- path({node.x} +1, _, bottom,bottom).
+                    :- not top_node.
+                ";
+            }
+            else if (path == "right")
+            {
+                Vector2Int node = room.leftExit;
+                rule += $@"
+                    :- not path(_, {node.y}, right,right).
+                ";
+            }
+            else if (path == "left")
+            {
+                Vector2Int node = room.rightExit;
+                rule += $@"
+                    :- not path(_, {node.y}, left,left).
+                ";
+            }
+            return rule;
+        }
+        
+        
     }
 }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gates 
+namespace WorldBuilder
 {
-    public static string water_rules = @"
+    public class Gates
+    {
+        public static string water_rules = @"
       #const max_water_depth = 3.
       #const min_water_depth = 3.
 
@@ -34,7 +36,7 @@ public class Gates
       #show water_depth/3.
     ";
 
-    public static string doors_rules = @"
+        public static string doors_rules = @"
 
       #const max_door_width = 1.
       #const max_door_height = 3.
@@ -65,7 +67,7 @@ public class Gates
       #show door_bottom/2.
     ";
 
-    public static string lava_rules = @"
+        public static string lava_rules = @"
       #const max_lava_depth = 3.
       #const min_lava_depth = 3.
 
@@ -94,4 +96,5 @@ public class Gates
       #show lava_surface/3.
       #show lava_depth/3.
     ";
+    }
 }
