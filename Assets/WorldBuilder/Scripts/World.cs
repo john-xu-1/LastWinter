@@ -33,6 +33,11 @@ namespace WorldBuilder
             RoomsArray = new Room[width * height];
         }
 
+        public Room[] GetRooms()
+        {
+            return RoomsArray;
+        }
+
         public Room GetRoom(int x, int y)
         {
             if(Rooms[x,y] != null)
@@ -79,11 +84,17 @@ namespace WorldBuilder
         public Room GetRandomNeighbor(int roomID)
         {
             Neighbors neighbors = GetNeighbors(roomID);
-            List<Room> rooms = neighbors.Rooms;
-
-
-            int index = Random.Range(0, neighbors.Count);
-            return rooms[index];
+            if(neighbors.Count <= 0)
+            {
+                return null;
+            }
+            else
+            {
+                List<Room> rooms = neighbors.Rooms;
+                int index = Random.Range(0, neighbors.Count);
+                return rooms[index];
+            }
+            
         }
     }
 

@@ -30,13 +30,17 @@ namespace WorldBuilder
             map = ConvertMap(this.rawMap);
             foreach(Path path in map.pathStarts)
             {
-                if (path.type == "up") upExit = new Vector2Int(path.x, path.y);
-                if (path.type == "down") downExit = new Vector2Int(path.x, path.y);
+                if (path.type == "top") upExit = new Vector2Int(path.x, path.y);
+                if (path.type == "bottom") downExit = new Vector2Int(path.x, path.y);
                 if (path.type == "right") rightExit = new Vector2Int(path.x, path.y);
                 if (path.type == "left") leftExit = new Vector2Int(path.x, path.y);
             }
 
             Debug.Log("mapGrid size: " + map.dimensions.room_width + ", " + map.dimensions.room_height);
+            mapGrid = new CollisionTile[map.dimensions.room_width, map.dimensions.room_height];
+        }
+        public void SetupRoom()
+        {
             mapGrid = new CollisionTile[map.dimensions.room_width, map.dimensions.room_height];
         }
         public void BuildRoom(Tilemap tilemap)
@@ -50,7 +54,7 @@ namespace WorldBuilder
             {
                 //int x = tile.x + pos.x * map.dimensions.room_width - 1;
                 //int y = -tile.y - pos.y * map.dimensions.room_height - 1;
-                Debug.Log("Remove tile: " + tile.pos);
+                //Debug.Log("Remove tile: " + tile.pos);
                 UtilityTilemap.DestroyTile(tilemap, (Vector3Int)tile.pos);
             }
         }

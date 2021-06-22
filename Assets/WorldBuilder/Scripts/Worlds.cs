@@ -33,22 +33,26 @@ namespace WorldBuilder
 
             aspCode += Pathfinding.set_openings(connections.boolArray) + WorldStructure.GetDoorRules(neighbors);
 
-            //if((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
-            //{
-            //    aspCode += Pathfinding.getPathStartRules("left", neighbors.left);
-            //}
-            //if ((connections.rightEgress || connections.rightIngress) && neighbors.right != null && !neighbors.right.isDestroyed)
-            //{
-            //    aspCode += Pathfinding.getPathStartRules("right", neighbors.right);
-            //}
-            //if ((connections.upEgress || connections.upIngress) && neighbors.up != null && !neighbors.up.isDestroyed)
-            //{
-            //    aspCode += Pathfinding.getPathStartRules("top", neighbors.up);
-            //}
-            //if ((connections.downEgress || connections.downIngress) && neighbors.down != null && !neighbors.down.isDestroyed)
-            //{
-            //    aspCode += Pathfinding.getPathStartRules("bottom", neighbors.down);
-            //}
+            if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
+            {
+                Debug.Log(Pathfinding.getPathStartRules("left", neighbors.left));
+                aspCode += Pathfinding.getPathStartRules("left", neighbors.left);
+            }
+            if ((connections.rightEgress || connections.rightIngress) && neighbors.right != null && !neighbors.right.isDestroyed)
+            {
+                Debug.Log(Pathfinding.getPathStartRules("right", neighbors.right));
+                aspCode += Pathfinding.getPathStartRules("right", neighbors.right);
+            }
+            if ((connections.upEgress || connections.upIngress) && neighbors.up != null && !neighbors.up.isDestroyed)
+            {
+                Debug.Log(Pathfinding.getPathStartRules("top", neighbors.up));
+                aspCode += Pathfinding.getPathStartRules("top", neighbors.up);
+            }
+            if ((connections.downEgress || connections.downIngress) && neighbors.down != null && !neighbors.down.isDestroyed)
+            {
+                Debug.Log(Pathfinding.getPathStartRules("bottom", neighbors.down));
+                aspCode += Pathfinding.getPathStartRules("bottom", neighbors.down);
+            }
             ClingoSolver solver = FindObjectOfType<ClingoSolver>();
 
             string path = ClingoUtil.CreateFile(aspCode);

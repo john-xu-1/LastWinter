@@ -26,6 +26,7 @@ public class DebugMap : MonoBehaviour
 
     public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2;
     public int jumpHeadroom = 3, timeout = 600;
+    public int BuiltWorldIndex;
     public enum MapSources
     {
         None,
@@ -51,42 +52,42 @@ public class DebugMap : MonoBehaviour
     {
         if(Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !isBuilt)
         {
-            if(MapSource == MapSources.Solver)
-            {
-                //WorldBuilder.AddWorld(Solver.answerSet);
+            //if(MapSource == MapSources.Solver)
+            //{
+            //    //WorldBuilder.AddWorld(Solver.answerSet);
                 
 
 
-                if (xTest < worldWidth && yTest < worldHeight)
-                {
-                    lastRoom = world.GetRoom(xTest, yTest);
-                    lastRoom.SetupRoom(Solver.answerSet);
-                    Generator.ConvertMap(lastRoom);
-                    xTest += 1;
-                    if (xTest >= worldWidth)
-                    {
-                        xTest = 0;
-                        yTest += 1;
-                    }
-                    if (xTest < worldWidth && yTest < worldHeight)
-                    {
-                        Neighbors neighbors = world.GetNeighbors(xTest, yTest);
-                        Debug.Log(xTest + ", " + yTest + " " + neighbors);
-                        buildMap(neighbors);
-                    }
+            //    if (xTest < worldWidth && yTest < worldHeight)
+            //    {
+            //        lastRoom = world.GetRoom(xTest, yTest);
+            //        lastRoom.SetupRoom(Solver.answerSet);
+            //        Generator.ConvertMap(lastRoom);
+            //        xTest += 1;
+            //        if (xTest >= worldWidth)
+            //        {
+            //            xTest = 0;
+            //            yTest += 1;
+            //        }
+            //        if (xTest < worldWidth && yTest < worldHeight)
+            //        {
+            //            Neighbors neighbors = world.GetNeighbors(xTest, yTest);
+            //            Debug.Log(xTest + ", " + yTest + " " + neighbors);
+            //            buildMap(neighbors);
+            //        }
                     
                     
 
-                }
-                else
-                {
-                    isBuilt = true;
-                    WorldBuilder.AddWorld(world);
-                }
+            //    }
+            //    else
+            //    {
+            //        isBuilt = true;
+            //        WorldBuilder.AddWorld(world);
+            //    }
                     
 
                 
-            }
+            //}
             //else if(MapSource == MapSources.World)
             //{
             //    WorldMap.DisplayGraph(Solver.answerSet, nodePrefab, edgePrefab);
@@ -115,13 +116,18 @@ public class DebugMap : MonoBehaviour
         }else if(MapSource == MapSources.Solver)
         {
             //Generator.ConvertMap(Solver.answerSet);
-            world = new World(worldWidth, worldHeight);
-            WorldBuilder.BuildRoom(RoomSize, headroom,shoulderroom,minCeilingHeight, connections, new Neighbors());
+            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout);
         }
         else if (MapSource == MapSources.World)
         {
             //WorldBuilder.BuildWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, 3, Solver.maxDuration - 10);
-            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, RoomSize.x, RoomSize.y, headroom, shoulderroom,jumpHeadroom,timeout);
+            World world = WorldBuilder.BuiltWorlds[BuiltWorldIndex];
+            //WorldMap.ConvertGraph()
+            foreach(Room room in world.GetRooms())
+            {
+                room.SetupRoom();
+                Generator.ConvertMap(room);
+            }
         }
 
 

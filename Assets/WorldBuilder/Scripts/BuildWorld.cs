@@ -176,12 +176,21 @@ namespace WorldBuilder
             else if (Solver.SolverStatus == ClingoSolver.Status.TIMEDOUT)
             {
                 Room killRoom = world.GetRandomNeighbor(roomID);
-                killRoom.isDestroyed = true;
-                if (display) Generator.RemoveMap(killRoom);
-                BuildQueue.Insert(0, killRoom.pos);
+                if(killRoom != null)
+                {
+                    killRoom.isDestroyed = true;
+                    if (display) Generator.RemoveMap(killRoom);
+                    BuildQueue.Insert(0, killRoom.pos);
+                    Debug.Log(Solver.SolverStatus + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
+                }
+                else
+                {
+                    Debug.Log(Solver.SolverStatus + ": has no neighbors");
+                }
+                
                 BuildQueue.Insert(0, currentRoom);
                 BuildState = BuildStates.roomBuilding;
-                Debug.Log(Solver.SolverStatus + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
+                
             }
             else
             {
