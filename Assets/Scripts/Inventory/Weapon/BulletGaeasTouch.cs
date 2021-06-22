@@ -6,6 +6,10 @@ public class BulletGaeasTouch : BulletBase
 {
     bool isAir = true;
     bool isGrow;
+
+    public float bounceForce = 5;
+
+
     public override void setUp()
     {
         Vector3 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -35,6 +39,8 @@ public class BulletGaeasTouch : BulletBase
             isAir = false;
             transform.eulerAngles = Vector3.zero;
         }
+        
+        
     }
 
 }

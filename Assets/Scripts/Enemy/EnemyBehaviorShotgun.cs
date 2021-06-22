@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyBehaviorShotgun : EnemyBehaviorBase
 {
     public GameObject bulletPrefab;
-    private float nextAttackTime;
+    private float nextShootTime;
     
     public float fireCD;
 
@@ -22,7 +22,7 @@ public class EnemyBehaviorShotgun : EnemyBehaviorBase
 
         if (getDistX(p.transform, transform) <= angerRange)
         {
-            if (Time.time >= nextAttackTime)
+            if (Time.time >= nextShootTime)
             {
                 for(int i = 0; i < amountOfBullets; i += 1)
                 {
@@ -39,8 +39,13 @@ public class EnemyBehaviorShotgun : EnemyBehaviorBase
                     Destroy(instance, 5);
                 }
                 
-                nextAttackTime = Time.time + fireCD;
+                nextShootTime = Time.time + fireCD;
             }
         }
+    }
+
+    public override void inflictDamage()
+    {
+        
     }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 64387565851223264}
   - component: {fileID: 64387565851223270}
   - component: {fileID: 64387565851223271}
+  - component: {fileID: 2602266503938622737}
   m_Layer: 0
   m_Name: EnemyShotgunBullet
   m_TagString: Untagged
@@ -122,6 +123,24 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.75
+--- !u!114 &2602266503938622737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64387565851223267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbc84a7b27c742bb939db05a7eb4778, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  p: {fileID: 0}
+  damage: 5
+  attackRange: 0.5
+  whichcanhit:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &8239615047545196172
 GameObject:
   m_ObjectHideFlags: 0
