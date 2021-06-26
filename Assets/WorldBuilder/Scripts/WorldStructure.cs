@@ -191,7 +191,7 @@ namespace WorldBuilder
                 foreach (Tile tile in exitWall)
                 {
                     Tile newTile = new Tile();
-                    newTile.x = height;
+                    newTile.x = width;
                     newTile.y = tile.y;
                     newTile.type = tile.type;
                     wall.Add(newTile);
@@ -216,10 +216,14 @@ namespace WorldBuilder
         public static string GetDoorRules(Neighbors neighbors)
         {
             List<Tile> walls = new List<Tile>();
-            if (neighbors.left != null) walls.AddRange(get_entrances(neighbors.left.map.dimensions.room_width, neighbors.left.map.dimensions.room_width, neighbors.left.rawMap, "left"));
-            if (neighbors.right != null) walls.AddRange(get_entrances(neighbors.right.map.dimensions.room_width, neighbors.right.map.dimensions.room_width, neighbors.right.rawMap, "right"));
-            if (neighbors.up != null) walls.AddRange(get_entrances(neighbors.up.map.dimensions.room_width, neighbors.up.map.dimensions.room_width, neighbors.up.rawMap, "up"));
-            if (neighbors.down != null) walls.AddRange(get_entrances(neighbors.down.map.dimensions.room_width, neighbors.down.map.dimensions.room_width, neighbors.down.rawMap, "down"));
+            if (neighbors.left != null) walls.AddRange(get_entrances(neighbors.left.map.dimensions.room_width, neighbors.left.map.dimensions.room_height, neighbors.left.rawMap, "left"));
+            if (neighbors.right != null) walls.AddRange(get_entrances(neighbors.right.map.dimensions.room_width, neighbors.right.map.dimensions.room_height, neighbors.right.rawMap, "right"));
+            if (neighbors.up != null)
+            {
+                walls.AddRange(get_entrances(neighbors.up.map.dimensions.room_width, neighbors.up.map.dimensions.room_height, neighbors.up.rawMap, "up"));
+                //Debug.Log(get_door_rules(get_entrances(neighbors.up.map.dimensions.room_width, neighbors.up.map.dimensions.room_height, neighbors.up.rawMap, "up")));
+            }
+            if (neighbors.down != null) walls.AddRange(get_entrances(neighbors.down.map.dimensions.room_width, neighbors.down.map.dimensions.room_height, neighbors.down.rawMap, "down"));
 
             return get_door_rules(walls);
         }

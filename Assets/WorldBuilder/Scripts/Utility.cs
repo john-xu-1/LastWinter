@@ -25,6 +25,19 @@ namespace WorldBuilder
             return false;
         }
 
+        public static bool hasOpening(Map map, string side)
+        {
+            int height = map.dimensions.room_height;
+            int width = map.dimensions.room_width;
+            foreach(Tile tile in map.area)
+            {
+                int x = tile.x;
+                int y = tile.y;
+                if(tile.type == 0 && (side == "up" && y == 1 || side == "down" && y == height || side == "left" && x == 1 || side == "right" && x == width)) return true;
+            }
+            return false;
+        }
+
         public static Vector2Int roomID_to_index(int roomID, int width, int height)
         {
             roomID -= 1;

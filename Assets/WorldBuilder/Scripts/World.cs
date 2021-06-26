@@ -81,9 +81,20 @@ namespace WorldBuilder
             return neighbors;
         }
 
-        public Room GetRandomNeighbor(int roomID)
+        public Neighbors GetNeighborsWithOpening(int roomID)
         {
             Neighbors neighbors = GetNeighbors(roomID);
+            if (neighbors.left != null && !Utility.hasOpening(neighbors.left.map, "right")) neighbors.left = null;
+            if (neighbors.right != null && !Utility.hasOpening(neighbors.right.map, "left")) neighbors.right = null;
+            if (neighbors.up != null && !Utility.hasOpening(neighbors.up.map, "down")) neighbors.up = null;
+            if (neighbors.down != null && !Utility.hasOpening(neighbors.down.map, "up")) neighbors.down = null;
+
+            return neighbors;
+        }
+
+        public Room GetRandomNeighbor(int roomID)
+        {
+            Neighbors neighbors = GetNeighborsWithOpening(roomID);
             if(neighbors.Count <= 0)
             {
                 return null;

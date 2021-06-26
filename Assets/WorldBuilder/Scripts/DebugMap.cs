@@ -50,57 +50,7 @@ public class DebugMap : MonoBehaviour
     Room lastRoom;
     private void Update()
     {
-        if(Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !isBuilt)
-        {
-            //if(MapSource == MapSources.Solver)
-            //{
-            //    //WorldBuilder.AddWorld(Solver.answerSet);
-                
-
-
-            //    if (xTest < worldWidth && yTest < worldHeight)
-            //    {
-            //        lastRoom = world.GetRoom(xTest, yTest);
-            //        lastRoom.SetupRoom(Solver.answerSet);
-            //        Generator.ConvertMap(lastRoom);
-            //        xTest += 1;
-            //        if (xTest >= worldWidth)
-            //        {
-            //            xTest = 0;
-            //            yTest += 1;
-            //        }
-            //        if (xTest < worldWidth && yTest < worldHeight)
-            //        {
-            //            Neighbors neighbors = world.GetNeighbors(xTest, yTest);
-            //            Debug.Log(xTest + ", " + yTest + " " + neighbors);
-            //            buildMap(neighbors);
-            //        }
-                    
-                    
-
-            //    }
-            //    else
-            //    {
-            //        isBuilt = true;
-            //        WorldBuilder.AddWorld(world);
-            //    }
-                    
-
-                
-            //}
-            //else if(MapSource == MapSources.World)
-            //{
-            //    WorldMap.DisplayGraph(Solver.answerSet, nodePrefab, edgePrefab);
-            //    RoomConnections[] connections = WorldMap.get_room_connections(Solver.answerSet);
-            //    for(int i = 0; i < connections.Length; i += 1)
-            //    {
-            //        Debug.Log(i + " " + connections[i]);
-            //    }
-            //    isBuilt = true;
-            //}
-            
-            
-        }
+        
     }
 
     private void buildMap()
@@ -132,10 +82,7 @@ public class DebugMap : MonoBehaviour
 
 
     }
-    private void buildMap(Neighbors neighbors)
-    {
-        WorldBuilder.BuildRoom(RoomSize, headroom, shoulderroom, minCeilingHeight, connections, neighbors);
-    }
+    
     
 }
 

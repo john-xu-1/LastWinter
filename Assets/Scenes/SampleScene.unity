@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Generator: {fileID: 231321408}
-  WorldBuilder: {fileID: 11400000, guid: 4477f1631e85c4baa9fc93d1f25c59ec, type: 2}
+  Worlds: {fileID: 0}
   world:
     name: 
     worldGraph:
@@ -356,6 +356,7 @@ MonoBehaviour:
   shoulderroom: 0
   jumpHeadroom: 0
   timeout: 0
+  MiniMap: {fileID: 2025187512}
   BuildState: 0
   display: 1
 --- !u!4 &141901542
@@ -1391,6 +1392,7 @@ Transform:
   - {fileID: 2035683154}
   - {fileID: 37891780}
   - {fileID: 958191859}
+  - {fileID: 2025187513}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2335,20 +2337,20 @@ MonoBehaviour:
   Solver: {fileID: 121999444}
   WorldBuilder: {fileID: 11400000, guid: 4477f1631e85c4baa9fc93d1f25c59ec, type: 2}
   connection: 0101000000000000
-  RoomSize: {x: 20, y: 20}
+  RoomSize: {x: 15, y: 15}
   headroom: 2
   shoulderroom: 3
   minCeilingHeight: 3
   nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
   edgePrefab: {fileID: 4894238030931249867, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}
-  worldWidth: 4
-  worldHeight: 4
+  worldWidth: 5
+  worldHeight: 5
   keyTypeCount: 3
   maxGatePerKey: 2
   jumpHeadroom: 3
   timeout: 600
-  BuiltWorldIndex: 0
-  MapSource: 3
+  BuiltWorldIndex: 2
+  MapSource: 2
   world:
     name: 
     worldGraph:
@@ -5413,6 +5415,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2025187512
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2025187513}
+  m_Layer: 0
+  m_Name: MiniMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2025187513
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025187512}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10, y: 0, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 519420032}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2035683153
 GameObject:
   m_ObjectHideFlags: 0
@@ -5473,7 +5505,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: maxDuration
-      value: 300
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 4243523052385139477, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: m_Name

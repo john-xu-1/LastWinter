@@ -53,7 +53,7 @@ namespace WorldBuilder
             graph.gates = Utility.GetArray(gates);
             return graph;
         }
-        public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab)
+        public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
         {
             int worldWidth = Utility.Max(world["width"]);
             int worldHeight = Utility.Max(world["height"]);
@@ -63,6 +63,8 @@ namespace WorldBuilder
                 int roomID = int.Parse(room[0]);
                 Vector2Int index = Utility.roomID_to_index(roomID, worldWidth, worldHeight);
                 node node = GameObject.Instantiate(nodePrefab, new Vector3(index.x + 1, worldHeight - index.y, 0), Quaternion.identity).GetComponent<node>();
+                node.transform.parent = miniMap;
+                node.transform.localPosition = new Vector3(index.x + 1, worldHeight - index.y, 0);
                 node.SetText(roomID);
                 worldGrid[index.x, index.y] = node;
             }
@@ -76,24 +78,32 @@ namespace WorldBuilder
                 {
                     edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1.5f, worldHeight - sourceIndex.y), Quaternion.identity).GetComponent<edge>();
                     edge.SetDirection(0);
+                    edge.transform.parent = miniMap;
+                    edge.transform.localPosition = new Vector3(sourceIndex.x + 1.5f, worldHeight - sourceIndex.y);
                     worldGrid[sourceIndex.x, sourceIndex.y].rightExit = edge;
                 }
                 else if (destinationIndex.x < sourceIndex.x)
                 {
                     edge edge = GameObject.Instantiate(edgePrefab, new Vector3(destinationIndex.x + 1.5f, worldHeight - sourceIndex.y), Quaternion.identity).GetComponent<edge>();
                     edge.SetDirection(180);
+                    edge.transform.parent = miniMap;
+                    edge.transform.localPosition = new Vector3(destinationIndex.x + 1.5f, worldHeight - sourceIndex.y);
                     worldGrid[sourceIndex.x, sourceIndex.y].leftExit = edge;
                 }
                 else if (destinationIndex.y < sourceIndex.y)
                 {
                     edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1f, worldHeight - destinationIndex.y - 0.5f), Quaternion.identity).GetComponent<edge>();
                     edge.SetDirection(90);
+                    edge.transform.parent = miniMap;
+                    edge.transform.localPosition = new Vector3(sourceIndex.x + 1f, worldHeight - destinationIndex.y - 0.5f);
                     worldGrid[sourceIndex.x, sourceIndex.y].upExit = edge;
                 }
                 else if (destinationIndex.y > sourceIndex.y)
                 {
                     edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1f, worldHeight - sourceIndex.y - 0.5f), Quaternion.identity).GetComponent<edge>();
                     edge.SetDirection(270);
+                    edge.transform.parent = miniMap;
+                    edge.transform.localPosition = new Vector3(sourceIndex.x + 1f, worldHeight - sourceIndex.y - 0.5f);
                     worldGrid[sourceIndex.x, sourceIndex.y].downExit = edge;
                 }
             }
