@@ -14,12 +14,16 @@ public class InventorySystem : MonoBehaviour
     public float[] nextAttackTimes;
 
     public InventoryWeapon weapon;
+    public InventoryAccessory acs;
 
     GameObject bulletInstance;
 
-    GameObject spawnedTargetPrefab;
+    GameObject weaponSpawnedTargetPrefab;
+    GameObject acsSpawnedTargetPrefab;
 
     float Zfactor;
+
+    bool isAcsSpawned;
 
     public void AddItem(InventoryObjects item)
     {
@@ -40,27 +44,27 @@ public class InventorySystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             selectedItem = items[0];
-            spawnedTargetPrefab = null;
+            weaponSpawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             selectedItem = items[1];
-            spawnedTargetPrefab = null;
+            weaponSpawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             selectedItem = items[2];
-            spawnedTargetPrefab = null;
+            weaponSpawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             selectedItem = items[3];
-            spawnedTargetPrefab = null;
+            weaponSpawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             selectedItem = items[4];
-            spawnedTargetPrefab = null;
+            weaponSpawnedTargetPrefab = null;
         }
 
         if (selectedItem)
@@ -76,16 +80,33 @@ public class InventorySystem : MonoBehaviour
                 {
                     if (Time.time >= nextAttackTimes[weapon.CDIndex])
                     {
-                        bulletInstance = Instantiate(spawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
+                        bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
                         nextAttackTimes[weapon.CDIndex] = Time.time + fireRate;
                     }
 
                 }
 
+                bulletSwitch(weapon.spawnedPrefab1, weapon.spawnedPrefab2, weapon.isWeaponSwitchBullet);
+            }
+            if (selectedItem.itemType == InventoryObjects.ItemTypes.Accesory)
+            {
                 
+                acs = (InventoryAccessory) selectedItem;
+                setAcsPrefab(acs.spawnPrefab);
+
+                if (isAcsSpawned == false)
+                {
+                    if (Input.GetButton("Fire1"))
+                    {
+                        Instantiate(acs.spawnPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, Quaternion.identity);
+                        isAcsSpawned = true;
+                    }
+                    
+                }
+
             }
 
-            bulletSwitch(weapon.spawnedPrefab1, weapon.spawnedPrefab2, weapon.isWeaponSwitchBullet);
+            
 
         }
         else
@@ -120,22 +141,25 @@ public class InventorySystem : MonoBehaviour
         
     }
 
-
+    public void setAcsPrefab(GameObject prefab)
+    {
+        if (!acsSpawnedTargetPrefab) acsSpawnedTargetPrefab = prefab;
+    }
 
     public void bulletSwitch(GameObject a, GameObject b, bool isSwitch)
     {
         if (isSwitch)
         {
-            if (!spawnedTargetPrefab) spawnedTargetPrefab = a;
+            if (!weaponSpawnedTargetPrefab) weaponSpawnedTargetPrefab = a;
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if (spawnedTargetPrefab == a)
+                if (weaponSpawnedTargetPrefab == a)
                 {
-                    spawnedTargetPrefab = b;
+                    weaponSpawnedTargetPrefab = b;
                 }
-                else if (spawnedTargetPrefab == b)
+                else if (weaponSpawnedTargetPrefab == b)
                 {
-                    spawnedTargetPrefab = a;
+                    weaponSpawnedTargetPrefab = a;
                 }
                 else
                 {
@@ -145,9 +169,13 @@ public class InventorySystem : MonoBehaviour
         }
         else
         {
-            if (!spawnedTargetPrefab) spawnedTargetPrefab = a;
+            if (!weaponSpawnedTargetPrefab) weaponSpawnedTargetPrefab = a;
         }
 
+        
+
     }
+
+    
 
 }

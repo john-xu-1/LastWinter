@@ -217,3 +217,4 @@ MonoBehaviour:
   subBullet: {fileID: 1264778190397573501, guid: dbf98894ba9fd44f6941e751653dad25, type: 3}
   isSub: 0
   KB: 25
+  recoil: 15

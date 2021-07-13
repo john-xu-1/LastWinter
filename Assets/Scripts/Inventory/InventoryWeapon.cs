@@ -13,7 +13,8 @@ public class InventoryWeapon : InventoryObjects
         Gaeas_Touch,
         Rainy_Day,
         Flash_Light,
-        Bottle
+        Bottle,
+        Old_Shotgun
     }
     public WeaponTypes weaponType;
 

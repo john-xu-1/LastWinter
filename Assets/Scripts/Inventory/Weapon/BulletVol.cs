@@ -13,6 +13,8 @@ public class BulletVol : BulletBase
     public bool isSub;
     public float KB;
 
+    public float recoil;
+
 
 
 
@@ -34,6 +36,8 @@ public class BulletVol : BulletBase
             jumpTimes = ranInt;
             GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x * speed, direction.y * speed);
             transform.right = GetComponent<Rigidbody2D>().velocity;
+
+            
         }
         else
         {
@@ -114,7 +118,7 @@ public class BulletVol : BulletBase
                 Destroy(Instance, weapon.destroyAfterTime);
             }
         }
-            
+           
     }
 
     

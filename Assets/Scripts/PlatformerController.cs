@@ -5,80 +5,73 @@ using UnityEngine;
 public class PlatformerController : PhysicsObject
 {
 
-    public float takeOffSpeed {
-        get {
-            if (EffectorState == EffectorStates.None) return takeoffSpeedNormal;
-            else if (EffectorState == EffectorStates.LavaPartial) return takeoffSpeedLava;
-            else if (EffectorState == EffectorStates.Lava) return takeoffSpeedLava * lavaModifier;
-            else if (EffectorState == EffectorStates.WaterPartial) return takeoffSpeedWater;
-            else if (EffectorState == EffectorStates.Water) return takeoffSpeedWater * waterModifier;
-            else return takeoffSpeedNormal;
-        }
-    }
-            
-
-    public float maxSpeed {
-        get
-        {
-            if (EffectorState == EffectorStates.None) return maxSpeedNormal;
-            else if (EffectorState == EffectorStates.LavaPartial) return MaxSpeedLava;
-            else if (EffectorState == EffectorStates.Lava) return MaxSpeedLava;
-            else if (EffectorState == EffectorStates.WaterPartial) return MaxSpeedWater;
-            else if (EffectorState == EffectorStates.Water) return MaxSpeedWater;
-            else return maxSpeedNormal;
-        }
-    }
-
-
-
-    public float SpeedTest;
-
-    public float maxSpeedNormal = 7;
-
-    public float takeoffSpeedNormal = 8;
-
-    public float waterModifier = 0.8f;
-    public float lavaModifier = 0.8f;
-
-    public float MaxSpeedWater = 3;
-
-    public float takeoffSpeedWater = 3;
-
-    public float MaxSpeedLava = 2;
-
-    public float takeoffSpeedLava = 2;
-
-
-    public float gravityModifierNormal = 1;
-    public float gravitymodifierwater;
-    public float gravitymodiferlava;
-
-    float elapsedTime;
-
-    public float lavaPressIncrement = 0.03f;
-
-    public float waterPressIncrement = 0.01f;
-
-
-    public float pressIncrement
+    public float takeOffSpeed
     {
         get
         {
-            if (EffectorState == EffectorStates.None) return 0;
-            else if (EffectorState == EffectorStates.LavaPartial) return lavaPressIncrement;
-            else if (EffectorState == EffectorStates.Lava) return lavaPressIncrement;
-            else if (EffectorState == EffectorStates.WaterPartial) return waterPressIncrement;
-            else if (EffectorState == EffectorStates.Water) return waterPressIncrement;
-            else return 0.01f;
+            if (EffectorState == EffectorStates.None) return TakeOffSpeedNormal;
+            else if (EffectorState == EffectorStates.LavaPartial) return TakeOffSpeedLava * LavaModifier;
+            else if (EffectorState == EffectorStates.Lava) return TakeOffSpeedLava;
+            else if (EffectorState == EffectorStates.WaterPartial) return TakeOffSpeedWater * WaterModifier;
+            else if (EffectorState == EffectorStates.Water) return TakeOffSpeedWater;
+            else return TakeOffSpeedNormal;
         }
     }
 
-    public float maxYSwimVel = 10;
+    public float maxSpeed
+    {
+        get
+        {
+            if (EffectorState == EffectorStates.None) return MaxSpeedNormal;
+            else if (EffectorState == EffectorStates.LavaPartial || EffectorState == EffectorStates.Lava) return MaxSpeedLava;
+            else if (EffectorState == EffectorStates.WaterPartial || EffectorState == EffectorStates.Water) return MaxSpeedWater;
+            else return TakeOffSpeedNormal;
+        }
+    }
 
+    public float MaxSpeedNormal = 7;
+    public float TakeOffSpeedNormal = 10;
+
+    public float WaterModifier = 2.5f;
+    public float MaxSpeedWater = 3;
+    public float TakeOffSpeedWater = 3;
+    public float SinkWater = 2;
+
+    public float LavaModifier = 3;
+    public float MaxSpeedLava = 2;
+    public float TakeOffSpeedLava = 2;
+    public float SinkLava = 2;
+
+    public bool isModifyGravity = true;
 
     
 
-    public float graphSteepness = 2;
+    private float SinkEffector
+    {
+        get
+        {
+            if (EffectorState == EffectorStates.Lava || EffectorState == EffectorStates.LavaPartial) return SinkLava;
+            else return SinkWater;
+        }
+    }
+
+    private float gravityModifierNormal;
+    public float gravityModifierWater;
+    public float gravityModifierLava;
+
+    public float EffectorAcceleration
+    {
+        get
+        {
+            if (EffectorState == EffectorStates.Lava || EffectorState == EffectorStates.Water || velocity.y < 0) return EffectorAccelerationSubmerged;
+            else return EffectorAccelerationPartial;
+
+        }
+    }
+    public float EffectorAccelerationPartial = 250;
+    public float EffectorAccelerationSubmerged = 5;
+
+    
 
     public enum EffectorStates
     {
@@ -91,65 +84,77 @@ public class PlatformerController : PhysicsObject
 
     public EffectorStates EffectorState;
 
+    public float specialYForce;
+
+    public float specialXForce;
+
+    private void Awake()
+    {
+        gravityModifierNormal = gravityModifer;
+    }
+
     protected override void ComputeVelocity()
     {
-        if (EffectorState == EffectorStates.None) gravityModifer = gravityModifierNormal;
-        else if (EffectorState == EffectorStates.LavaPartial) gravityModifer = gravityModifierNormal;
-        else if (EffectorState == EffectorStates.Lava) gravityModifer = gravitymodiferlava;
-        else if (EffectorState == EffectorStates.WaterPartial) gravityModifer = gravityModifierNormal;
-        else if (EffectorState == EffectorStates.Water) gravityModifer = gravitymodifierwater;
-        else gravityModifer = gravityModifierNormal;
-
         Vector2 horInput = Vector2.zero;
 
         horInput.x = Input.GetAxis("Horizontal");
 
-        
-
-        if (Input.GetButton("Jump"))
+        if (EffectorState == EffectorStates.None)
         {
-            if (EffectorState == EffectorStates.Lava || EffectorState == EffectorStates.Water)
+            gravityModifer = gravityModifierNormal;
+            if (Input.GetButtonDown("Jump") && isGrounded)
             {
-                elapsedTime += pressIncrement;
-                velocity.y = Mathf.Clamp(bouyancyCurve(takeOffSpeed + elapsedTime, graphSteepness), Mathf.NegativeInfinity, maxYSwimVel);
-
-                Debug.Log(velocity.y);
+                velocity.y = takeOffSpeed;
+            }
+            else if (Input.GetButtonUp("Jump"))
+            {
+                if (velocity.y > 0)
+                {
+                    velocity.y *= 0.5f;
+                }
+            }
+        }
+        else
+        {
+            if (EffectorState == EffectorStates.Lava || EffectorState == EffectorStates.LavaPartial) gravityModifer = gravityModifierLava;
+            else gravityModifer = gravityModifierWater;
+            if (Input.GetButton("Jump"))
+            {
+                velocity.y = Mathf.Clamp(velocity.y + EffectorAcceleration * Time.deltaTime, -SinkEffector, takeOffSpeed);
             }
             else
             {
-                if (isGrounded)
-                {
-                    velocity.y = takeOffSpeed;
-                }
-                
+                velocity.y = -SinkEffector;
             }
             
         }
-        else if (Input.GetButtonUp("Jump"))
-        {
-            if (velocity.y > 0)
-            {
-                velocity.y *= 0.5f;
-            }
-            elapsedTime = 0;
-        }
+
+        velocity.y += specialYForce;
+        velocity.x += specialXForce;
+
 
         targetVelocity = horInput * maxSpeed;
 
-        SpeedTest = rb.velocity.x;
+        
+
     }
 
+    /*
 
-    public float bouyancyCurve (float x, float a)
+    public float SpecialForce = 2;
+
+    private void OnCollisionStay2D(Collision2D collision)
     {
-        float y;
-
-        y = Mathf.Pow(a, x);
-
-        return y;
+        if (transform.transform.GetComponent<BulletGaeasTouch>())
+        {
+            
+        }
     }
-    
+    */
+
+
 
 
 
 }
+

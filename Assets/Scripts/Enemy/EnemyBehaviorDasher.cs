@@ -6,7 +6,7 @@ public class EnemyBehaviorDasher : EnemyBehaviorBase
 {
     public float dashSpeed = 20;
 
-    private float nextAttackTime;
+    private float nextDashTime;
     public float fireCD;
     public BoxCollider2D cld;
 
@@ -22,14 +22,14 @@ public class EnemyBehaviorDasher : EnemyBehaviorBase
             Vector3 target = p.transform.position;
             Vector2 direction = (target - transform.position).normalized;
 
-            if (Time.time >= nextAttackTime)
+            if (Time.time >= nextDashTime)
             {
                 rb.drag = 5;
                 cld.enabled = false;
                 rb.AddForce(new Vector2(direction.x * dashSpeed, rb.velocity.y), ForceMode2D.Impulse);
 
 
-                nextAttackTime = Time.time + fireCD;
+                nextDashTime = Time.time + fireCD;
             }
             else
             {

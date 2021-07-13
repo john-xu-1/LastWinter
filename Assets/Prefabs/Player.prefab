@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 6154040031498853883}
   - component: {fileID: 2084049425}
   - component: {fileID: 6154040031860930413}
+  - component: {fileID: 1288998866}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -213,7 +214,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &6154040031498853886
 MonoBehaviour:
@@ -244,6 +245,7 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  - 0
   weapon: {fileID: 0}
 --- !u!61 &6154040031498853883
 BoxCollider2D:
@@ -258,7 +260,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.9929043}
+  m_Offset: {x: 0, y: 0.9645926}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -269,7 +271,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.9794967}
+  m_Size: {x: 1, y: 1.9228733}
   m_EdgeRadius: 0
 --- !u!114 &2084049425
 MonoBehaviour:
@@ -283,21 +285,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41ca39915b8904351ab4a0829612f7ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityModifer: 1
+  velocity: {x: 0, y: 0}
+  gravityModifer: 2
   minGroundNormY: 0.65
-  SpeedTest: 0
-  maxSpeedNormal: 7
-  takeoffSpeedNormal: 8
-  waterModifier: 0.8
-  lavaModifier: 0.8
+  MaxSpeedNormal: 7
+  TakeOffSpeedNormal: 10
+  WaterModifier: 2.5
   MaxSpeedWater: 3
-  takeoffSpeedWater: 3
+  TakeOffSpeedWater: 3
+  SinkWater: 2
+  LavaModifier: 3
   MaxSpeedLava: 2
-  takeoffSpeedLava: 2
-  gravityModifierNormal: 0
-  gravitymodifierwater: 0
-  gravitymodiferlava: 0
+  TakeOffSpeedLava: 2
+  SinkLava: 2
+  isModifyGravity: 1
+  gravityModifierWater: 0
+  gravityModifierLava: 0
+  EffectorAccelerationPartial: 250
+  EffectorAccelerationSubmerged: 5
   EffectorState: 0
+  specialYForce: 0
+  specialXForce: 0
 --- !u!114 &6154040031860930413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,6 +318,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae986da6c90b748b5b003650ed0a546b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1288998866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6154040031498853860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95c9ae9fc94f545638670a2b009ae43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 20
 --- !u!1 &6154040031742622743
 GameObject:
   m_ObjectHideFlags: 0

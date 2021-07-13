@@ -16,7 +16,7 @@ public class Pickupable : MonoBehaviour
 
     public float attractionSpeed = 5;
 
-    public float torque;
+    public float torque = 5;
 
     bool startChase;
     Collider2D targ;
