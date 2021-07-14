@@ -2587,7 +2587,7 @@ MonoBehaviour:
   Solver: {fileID: 121999444}
   WorldBuilder: {fileID: 11400000, guid: 4477f1631e85c4baa9fc93d1f25c59ec, type: 2}
   connection: 0101000000000000
-  RoomSize: {x: 15, y: 25}
+  RoomSize: {x: 25, y: 15}
   headroom: 2
   shoulderroom: 3
   minCeilingHeight: 3
@@ -2599,8 +2599,8 @@ MonoBehaviour:
   maxGatePerKey: 2
   jumpHeadroom: 3
   timeout: 600
-  BuiltWorldIndex: 4
-  MapSource: 4
+  BuiltWorldIndex: 6
+  MapSource: 2
   world:
     name: 
     worldGraph:
