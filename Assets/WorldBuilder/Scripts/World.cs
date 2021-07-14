@@ -25,12 +25,27 @@ namespace WorldBuilder
         }
         public WorldStates WorldState;
 
+        public WorldHistory WorldHistory;
+
+        public int Width { get { return width; } }
+        public int Height { get { return height; } }
+
         public World(int width, int height)
         {
             this.height = height;
             this.width = width;
             Rooms = new Room[width, height];
             RoomsArray = new Room[width * height];
+            WorldHistory = new WorldHistory();
+        }
+
+        public void WorldHistoryAdd(int roomID, Map map, float buildTime)
+        {
+            WorldHistory.AddRoom(roomID, map, buildTime);
+        }
+        public void WorldHistoryRemove(int roomID, Map map, float destroyTime, int destroyedByID)
+        {
+            WorldHistory.DestroyRoom(roomID, map, destroyTime, destroyedByID);
         }
 
         public Room[] GetRooms()

@@ -6,6 +6,7 @@ namespace WorldBuilder
 {
     public static class Utility
     {
+        
         public static bool has_opening(Dictionary<string, List<List<string>>> map, string side)
         {
             int height = 0;

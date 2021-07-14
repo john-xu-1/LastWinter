@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Utility : MonoBehaviour
+public static class Utility 
 {
-    // Start is called before the first frame update
-    void Start()
+    public static string FormatTime(float seconds)
     {
-        
-    }
+        string timeString = "";
+        int hours = (int)(seconds / 3600);
+        int minutes = (int)((seconds - hours * 3600) / 60);
+        seconds = (int)(seconds - hours * 3600 - minutes * 60);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (hours > 0) timeString += hours + ":";
+        if (minutes > 0 || hours > 0) timeString += minutes + ":";
+        timeString += (int)seconds;
+        return timeString;
     }
 }

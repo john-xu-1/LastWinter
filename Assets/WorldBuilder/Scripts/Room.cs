@@ -28,7 +28,12 @@ namespace WorldBuilder
             isDestroyed = false;
             this.rawMap = new Dictionary<string, List<List<string>>>(rawMap);
             map = ConvertMap(this.rawMap);
-            foreach(Path path in map.pathStarts)
+            SetupRoom(map);
+        }
+        public void SetupRoom(Map map)
+        {
+            this.map = map;
+            foreach (Path path in map.pathStarts)
             {
                 if (path.type == "top") upExit = new Vector2Int(path.x, path.y);
                 if (path.type == "bottom") downExit = new Vector2Int(path.x, path.y);
@@ -47,14 +52,16 @@ namespace WorldBuilder
         {
 
         }
+        //public void DestroyRoom(int destroyer)
+        //{
+        //    isDestroyed = true;
+        //    destroyedMaps.Add(map);
+        //}
 
         public void DestroyRoom(Tilemap tilemap)
         {
             foreach (CollisionTile tile in tiles)
             {
-                //int x = tile.x + pos.x * map.dimensions.room_width - 1;
-                //int y = -tile.y - pos.y * map.dimensions.room_height - 1;
-                //Debug.Log("Remove tile: " + tile.pos);
                 UtilityTilemap.DestroyTile(tilemap, (Vector3Int)tile.pos);
             }
         }

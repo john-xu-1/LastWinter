@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.UI;
 
 using WorldBuilder;
 
 public class DebugMap : MonoBehaviour
 {
+    public Text RoomID;
+    public Text TotalTime;
+    public Text BuildTime;
+    public Text RunNum;
+
     public MapGenerator Generator;
     public int[][] MyMap;
 
@@ -32,7 +38,8 @@ public class DebugMap : MonoBehaviour
         None,
         Json,
         Solver,
-        World
+        World,
+        History
     }
     public MapSources MapSource;
     public World world;
@@ -40,17 +47,66 @@ public class DebugMap : MonoBehaviour
     private void Start()
     {
 
-        
 
+        
         if (BuildOnStart) buildMap();
     }
     bool isBuilt = false;
     int xTest = 0;
     int yTest = 0;
     Room lastRoom;
+    World historySource;
+    World worldHistory;
+    int historyIndex = 0;
     private void Update()
     {
-        
+        if(MapSource == MapSources.History)
+        {
+            
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                historyIndex += 1;
+                RoomHistory rh = historySource.WorldHistory.GetRoom(historyIndex);
+                Room room = worldHistory.GetRoom(rh.roomID);
+                if (rh.destroyed)
+                {
+                    Debug.Log("RemoveMap");
+                    Generator.RemoveMap(room);
+                }
+                else
+                {
+                    room.SetupRoom(rh.map);
+                    Generator.ConvertMap(room);
+                }
+                RoomID.text = rh.roomID.ToString();
+                BuildTime.text = Utility.FormatTime(rh.buildTime);
+                RunNum.text = (historyIndex + 1).ToString();
+
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                
+                RoomHistory rh = historySource.WorldHistory.GetRoom(historyIndex);
+                if (!rh.destroyed)
+                {
+                    Room room = worldHistory.GetRoom(rh.roomID);
+                    Debug.Log("RemoveMap");
+                    Generator.RemoveMap(room);
+                }else 
+                {
+                    Room room = worldHistory.GetRoom(rh.roomID);
+                    Generator.ConvertMap(room);
+                }
+
+                historyIndex -= 1;
+
+                RoomID.text = historySource.WorldHistory.GetRoom(historyIndex).roomID.ToString();
+                BuildTime.text = Utility.FormatTime(historySource.WorldHistory.GetRoom(historyIndex).buildTime);
+                RunNum.text = (historyIndex + 1).ToString();
+
+            }
+            
+        }
     }
 
     private void buildMap()
@@ -78,6 +134,27 @@ public class DebugMap : MonoBehaviour
                 room.SetupRoom();
                 Generator.ConvertMap(room);
             }
+        }else if(MapSource == MapSources.History)
+        {
+
+
+            historySource = WorldBuilder.BuiltWorlds[BuiltWorldIndex];
+
+            
+
+            worldHistory = new World(historySource.Width, historySource.Height);
+            historyIndex = 0;
+            RoomHistory rh = historySource.WorldHistory.GetRoom(historyIndex);
+            Room room = worldHistory.GetRoom(rh.roomID);
+            room.SetupRoom(rh.map);
+            Generator.ConvertMap(room);
+
+            TotalTime.text = Utility.FormatTime(historySource.WorldHistory.GetTotalTime());
+            RoomID.text = rh.roomID.ToString();
+            BuildTime.text = ((int)rh.buildTime).ToString();
+            RunNum.text = (historyIndex + 1).ToString();
+
+            historySource.WorldHistory.GetRoomHistoryAnalysis();
         }
 
 
