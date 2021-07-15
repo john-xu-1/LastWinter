@@ -2599,7 +2599,7 @@ MonoBehaviour:
   maxGatePerKey: 2
   jumpHeadroom: 3
   timeout: 600
-  BuiltWorldIndex: 6
+  BuiltWorldIndex: 8
   MapSource: 4
   world:
     name: 

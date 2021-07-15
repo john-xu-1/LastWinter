@@ -117,17 +117,22 @@ namespace WorldBuilder
       :- path(XX, YY, right, right), not YY > 1.
 
       :- path(XX, YY, top, top), not YY == 3.
+        top_step :- path(XX,YY,top,top), state(XX-1,YY-2,one).
+        top_step :- path(XX,YY,top,top), state(XX+1, YY-2, one).
+        :- not top_step, path(_,_,top,top).
         
       :- path(XX,YY, bottom, bottom), {state(XX+H,YY, zero): horizontal(H)} < 1.
       :- path(XX, YY, bottom, bottom), not YY == max_height.
 
       :- path(XX,YY,middle,middle), YY < 3.
 
-        :- path(XX,YY, top, top), XX > max_width - 2.
-        :- path(XX,YY, top, top), XX <  3.
+      :- path(XX,YY, top, top), XX > max_width - 2.
+      :- path(XX,YY, top, top), XX <  3.
+        
+        
 
-        :- path(XX,YY, bottom, bottom), XX > max_width - 2.
-        :- path(XX,YY, bottom, bottom), XX <  3.
+      :- path(XX,YY, bottom, bottom), XX > max_width - 2.
+      :- path(XX,YY, bottom, bottom), XX <  3.
 
     %connected chambers
       %:- floor(XX,YY), path(XX,YY,Type1), path(XX,YY,Type2), Type1 != Type2.
