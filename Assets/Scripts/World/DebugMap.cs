@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine.UI;
 
 using WorldBuilder;
+using Clingo;
 
 public class DebugMap : MonoBehaviour
 {

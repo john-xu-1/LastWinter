@@ -1382,10 +1382,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aspFilePath: DataFiles/temp/20210608171639487.txt
   clingoExecutablePathMacOS: DataFiles/Clingo/clingo
-  AdditionalArguments: 
-  maxDuration: 30
+  AdditionalArguments: -c n=8 --parallel-mode 7
+  maxDuration: 15
   FindMultipleSolutions: 0
-  numOfSolutionsWanted: 0
+  numOfSolutionsWanted: 400
+  seed: 875532435
+  useRandomSeed: 0
 --- !u!4 &1953376943
 Transform:
   m_ObjectHideFlags: 0

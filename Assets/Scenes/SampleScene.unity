@@ -2600,7 +2600,7 @@ MonoBehaviour:
   jumpHeadroom: 3
   timeout: 600
   BuiltWorldIndex: 8
-  MapSource: 4
+  MapSource: 2
   world:
     name: 
     worldGraph:

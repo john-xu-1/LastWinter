@@ -5,35 +5,44 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 
-public class ClingoUtil
+namespace Clingo
 {
 
-    public static string DataFilePath = @"DataFiles/temp";
-
-    public static string CreateFile(string content)
+    public class ClingoUtil
     {
-        string FileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".txt";
-        return CreateFile(content, FileName);
+        public static string DataFilePath = @"DataFiles/temp";
+
+        public static string CreateFile(string content)
+        {
+            string FileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".txt";
+            return CreateFile(content, FileName);
+        }
+
+        public static string CreateFile(string content, string filename)
+        {
+            string relativePath;
+            if (Application.isEditor)
+            {
+                if (!Directory.Exists(Path.Combine("Assets", DataFilePath)))
+                {
+                    Directory.CreateDirectory(Path.Combine("Assets", DataFilePath));
+                }
+                relativePath = Path.Combine("Assets", DataFilePath, filename);
+            }
+            else
+            {
+                if (!Directory.Exists(DataFilePath))
+                {
+                    Directory.CreateDirectory(DataFilePath);
+                }
+                relativePath = Path.Combine(DataFilePath, filename);
+            }
+
+            using (StreamWriter streamWriter = File.CreateText(relativePath))
+            {
+                streamWriter.Write(content);
+            }
+            return Path.Combine(DataFilePath, filename);
+        }
     }
-
-    public static string CreateFile(string content, string filename)
-    {
-        string relativePath;
-        if (Application.isEditor)
-        {
-            relativePath = Path.Combine("Assets", DataFilePath, filename);
-        }
-        else
-        {
-            relativePath = Path.Combine(DataFilePath, filename);
-        }
-
-        using (StreamWriter streamWriter = File.CreateText(relativePath))
-        {
-            streamWriter.Write(content);
-        }
-        return Path.Combine(DataFilePath, filename);
-    }
-
-
 }

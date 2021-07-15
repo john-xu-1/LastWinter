@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using Clingo;
 
 [CustomEditor(typeof(ClingoSolver))]
 public class ClingoSolverEditor : Editor
