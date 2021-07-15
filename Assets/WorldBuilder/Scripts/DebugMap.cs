@@ -58,6 +58,7 @@ public class DebugMap : MonoBehaviour
     World historySource;
     World worldHistory;
     int historyIndex = 0;
+    public GameObject MiniMap;
     private void Update()
     {
         if(MapSource == MapSources.History)
@@ -140,7 +141,7 @@ public class DebugMap : MonoBehaviour
 
             historySource = WorldBuilder.BuiltWorlds[BuiltWorldIndex];
 
-            
+            WorldMap.DisplayGraph(historySource.worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
 
             worldHistory = new World(historySource.Width, historySource.Height);
             historyIndex = 0;

@@ -2600,7 +2600,7 @@ MonoBehaviour:
   jumpHeadroom: 3
   timeout: 600
   BuiltWorldIndex: 6
-  MapSource: 2
+  MapSource: 4
   world:
     name: 
     worldGraph:
@@ -2618,6 +2618,7 @@ MonoBehaviour:
     WorldHistory:
       roomHistories: []
       roomHistoryAnalysis: []
+  MiniMap: {fileID: 2025187512}
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0

@@ -53,6 +53,89 @@ namespace WorldBuilder
             graph.gates = Utility.GetArray(gates);
             return graph;
         }
+        public static void DisplayGraph(Graph world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
+        {
+            int worldWidth = world.width;
+            int worldHeight = world.height;
+            node[,] worldGrid = new node[worldWidth, worldHeight];
+            for (int roomID = 1; roomID <= worldWidth * worldHeight; roomID += 1)
+            {
+                Vector2Int index = Utility.roomID_to_index(roomID, worldWidth, worldHeight);
+                node node = GameObject.Instantiate(nodePrefab, new Vector3(index.x + 1, worldHeight - index.y, 0), Quaternion.identity).GetComponent<node>();
+                node.transform.parent = miniMap;
+                node.transform.localPosition = new Vector3(index.x + 1, worldHeight - index.y, 0);
+                node.SetText(roomID);
+                worldGrid[index.x, index.y] = node;
+            }
+
+            foreach (Door door in world.doors)
+            {
+
+                Vector2Int sourceIndex = Utility.roomID_to_index(door.source, worldWidth, worldHeight);
+                Vector2Int destinationIndex = Utility.roomID_to_index(door.destination, worldWidth, worldHeight);
+
+                if (destinationIndex.x > sourceIndex.x)
+                {
+                    edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1.5f, worldHeight - sourceIndex.y), Quaternion.identity).GetComponent<edge>();
+                    edge.SetDirection(0);
+                    edge.transform.parent = miniMap;
+                    edge.transform.localPosition = new Vector3(sourceIndex.x + 1.5f, worldHeight - sourceIndex.y);
+                    worldGrid[sourceIndex.x, sourceIndex.y].rightExit = edge;
+                }
+                else if (destinationIndex.x < sourceIndex.x)
+                {
+                    edge edge = GameObject.Instantiate(edgePrefab, new Vector3(destinationIndex.x + 1.5f, worldHeight - sourceIndex.y), Quaternion.identity).GetComponent<edge>();
+                    edge.SetDirection(180);
+                    edge.transform.parent = miniMap;
+                    edge.transform.localPosition = new Vector3(destinationIndex.x + 1.5f, worldHeight - sourceIndex.y);
+                    worldGrid[sourceIndex.x, sourceIndex.y].leftExit = edge;
+                }
+                else if (destinationIndex.y < sourceIndex.y)
+                {
+                    edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1f, worldHeight - destinationIndex.y - 0.5f), Quaternion.identity).GetComponent<edge>();
+                    edge.SetDirection(90);
+                    edge.transform.parent = miniMap;
+                    edge.transform.localPosition = new Vector3(sourceIndex.x + 1f, worldHeight - destinationIndex.y - 0.5f);
+                    worldGrid[sourceIndex.x, sourceIndex.y].upExit = edge;
+                }
+                else if (destinationIndex.y > sourceIndex.y)
+                {
+                    edge edge = GameObject.Instantiate(edgePrefab, new Vector3(sourceIndex.x + 1f, worldHeight - sourceIndex.y - 0.5f), Quaternion.identity).GetComponent<edge>();
+                    edge.SetDirection(270);
+                    edge.transform.parent = miniMap;
+                    edge.transform.localPosition = new Vector3(sourceIndex.x + 1f, worldHeight - sourceIndex.y - 0.5f);
+                    worldGrid[sourceIndex.x, sourceIndex.y].downExit = edge;
+                }
+            }
+            foreach (Gate gate in world.gates)
+            {
+                int key = gate.type;
+                int source = gate.source;
+                int destination = gate.destination;
+                Color gateColor = Color.magenta;
+                if (key == 1) gateColor = Color.blue;
+                else if (key == 2) gateColor = Color.red;
+                else if (key == 3) gateColor = Color.yellow;
+                Vector2Int sourceIndex = Utility.roomID_to_index(source, worldWidth, worldHeight);
+                worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
+                if (destination == source + 1)
+                {
+                    worldGrid[sourceIndex.x, sourceIndex.y].rightExit.SetColor(gateColor);
+                }
+                else if (destination == source - 1)
+                {
+                    worldGrid[sourceIndex.x, sourceIndex.y].leftExit.SetColor(gateColor);
+                }
+                else if (destination > source)
+                {
+                    worldGrid[sourceIndex.x, sourceIndex.y].downExit.SetColor(gateColor);
+                }
+                else if (destination < source)
+                {
+                    worldGrid[sourceIndex.x, sourceIndex.y].upExit.SetColor(gateColor);
+                }
+            }
+        }
         public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
         {
             int worldWidth = Utility.Max(world["width"]);
