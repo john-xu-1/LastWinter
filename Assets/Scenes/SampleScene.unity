@@ -345,6 +345,7 @@ MonoBehaviour:
     WorldHistory:
       roomHistories: []
       roomHistoryAnalysis: []
+      history: []
   Solver: {fileID: 121999444}
   SolvingWorld: 0
   nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
@@ -2598,8 +2599,9 @@ MonoBehaviour:
   keyTypeCount: 3
   maxGatePerKey: 2
   jumpHeadroom: 3
-  timeout: 600
-  BuiltWorldIndex: 8
+  timeout: 200
+  BuiltWorldIndex: 17
+  indices: 010000000200000003000000
   MapSource: 2
   world:
     name: 
@@ -2618,6 +2620,7 @@ MonoBehaviour:
     WorldHistory:
       roomHistories: []
       roomHistoryAnalysis: []
+      history: []
   MiniMap: {fileID: 2025187512}
 --- !u!4 &837976641
 Transform:

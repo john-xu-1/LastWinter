@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using WorldBuilder;
 using Clingo;
 
+
 public class DebugMap : MonoBehaviour
 {
     public Text RoomID;
@@ -34,6 +35,8 @@ public class DebugMap : MonoBehaviour
     public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2;
     public int jumpHeadroom = 3, timeout = 600;
     public int BuiltWorldIndex;
+    public int[] indices = { 1, 2, 3, 4 };
+    public List<List<int>> permutations;
     public enum MapSources
     {
         None,
@@ -47,9 +50,41 @@ public class DebugMap : MonoBehaviour
 
     private void Start()
     {
+        //Debug.Log(Clingo.ClingoSolver.Status.SATISFIABLE);
+        //Clingo.ClingoSolver.Status status = "SATISFIABLE";
+        //if("SATISFIABLE" == Clingo.ClingoSolver.Status.SATISFIABLE.ToString())
+        //{
+
+        //}
+        //permutations = global::WorldBuilder.Utility.GetPermutations( indices);
+        //foreach (List<int> permutation in permutations)
+        //{
+        //    string line = "";
+        //    foreach (int index in permutation)
+        //    {
+        //        line += index;
+        //    }
+        //    Debug.Log(line);
+        //}
+        //int count = permutations.Count;
+        //for(int i = 0; i < count; i += 1)
+        //{
 
 
-        
+        //    List<int> removed = global::WorldBuilder.Utility.GetSmallestRandomPermutation(permutations, true);
+        //    string line2 = "";
+        //    foreach (int index in removed)
+        //    {
+        //        line2 += index;
+        //    }
+        //    Debug.Log("Removed: " + line2);
+        //}
+
+        //for (int i = 0; i < 8; i += 1)
+        //{
+        //    WorldBuilder.BuiltWorlds.RemoveAt(0);
+        //}
+
         if (BuildOnStart) buildMap();
     }
     bool isBuilt = false;

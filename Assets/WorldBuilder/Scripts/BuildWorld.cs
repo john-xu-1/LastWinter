@@ -162,45 +162,91 @@ namespace WorldBuilder
             int roomID = Utility.index_to_roomID(currentRoom, worldWidth, worldHeight);
             if (Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE)
             {
-                float buildTime = Time.fixedTime - buildTimeStart;
-                Debug.Log(roomID);
+                double buildTime = Solver.Duration;//Time.fixedTime - buildTimeStart;
+                //Debug.Log(roomID);
                 Room newRoom = world.GetRoom(roomID);
                 newRoom.SetupRoom(Solver.answerSet);
-                if (history) world.WorldHistoryAdd(roomID, newRoom.map, buildTime);
+
+                //remove correct permutation
+                if(newRoom.buidStatus == ClingoSolver.Status.UNSATISFIABLE)
+                {
+                    List<int> killRooms = newRoom.removedNeighbors;
+                    foreach(int killID in killRooms)
+                    {
+                        Room killRoom = world.GetRoom(killID);
+                        DestroyRoom(killRoom,newRoom.lastBuildTime, roomID, ClingoSolver.Status.UNSATISFIABLE);
+                    }
+                }
+
+                if (history) world.WorldHistoryAdd(roomID, newRoom.map, buildTime, Solver.SolverStatus);
                 if (display) Generator.ConvertMap(newRoom);
+
+                newRoom.buidStatus = ClingoSolver.Status.SATISFIABLE;
                 BuildState = BuildStates.roomBuilding;
             }else if(Solver.SolverStatus == ClingoSolver.Status.UNSATISFIABLE)
             {
-                float destroyTime = Time.fixedTime - buildTimeStart;
-                Room killRoom = world.GetRandomNeighbor(roomID);
-                killRoom.isDestroyed = true;
-                if (history) {
-                    int killRoomID = Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight);
-                    world.WorldHistoryRemove(killRoomID, killRoom.map, destroyTime, roomID);
+                double destroyTime = Solver.Duration; // Time.fixedTime - buildTimeStart;
 
+                Room room = world.GetRoom(roomID);
+
+                if(room.buidStatus != ClingoSolver.Status.UNSATISFIABLE)
+                {
+                    List<List<int>> indices = Utility.GetPermutations(world.GetNeighborIDs(roomID));
+                    room.neighborPermutations = indices;
+                    room.removedNeighbors = Utility.GetSmallestRandomPermutation(indices, true);
                 }
-                if (display) Generator.RemoveMap(killRoom);
-                BuildQueue.Insert(0, killRoom.pos);
+                else
+                {
+                    room.removedNeighbors = Utility.GetSmallestRandomPermutation(room.neighborPermutations, true);
+                    
+                }
+
+                //Room killRoom = world.GetRandomNeighbor(roomID);
+                //killRoom.isDestroyed = true;
+                //if (history) {
+                //    int killRoomID = Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight);
+                //    world.WorldHistoryRemove(killRoomID, killRoom.map, destroyTime, roomID, Solver.SolverStatus);
+
+                //}
+                //if (display) Generator.RemoveMap(killRoom);
+                //BuildQueue.Insert(0, killRoom.pos);
                 BuildQueue.Insert(0, currentRoom);
+
+                if(room.buidStatus != ClingoSolver.Status.UNSATISFIABLE)
+                {
+                    room.buidStatus = ClingoSolver.Status.UNSATISFIABLE;
+                    room.lastBuildTime = destroyTime;
+                }
+
+                string list = "";
+                foreach(int id in room.removedNeighbors)
+                {
+                    list += $"roomID: {id} ";
+                }
+                Debug.Log($"{Solver.SolverStatus}: Checking {list} for SATIFIABILITY");
+
                 BuildState = BuildStates.roomBuilding;
-                Debug.Log(Solver.SolverStatus + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
+                //Debug.Log(Solver.SolverStatus + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
             }
             else if (Solver.SolverStatus == ClingoSolver.Status.TIMEDOUT)
             {
+
                 Room killRoom = world.GetRandomNeighbor(roomID);
                 if(killRoom != null)
                 {
-                    killRoom.isDestroyed = true;
-                    if (history)
-                    {
-                        float destroyTime = Time.fixedTime - buildTimeStart;
-                        int killRoomID = Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight);
-                        world.WorldHistoryRemove(killRoomID, killRoom.map, destroyTime, roomID);
+                    double destroyTime = Solver.Duration;// Time.fixedTime - buildTimeStart;
+                    //killRoom.isDestroyed = true;
+                    //if (history)
+                    //{
+                    //    float destroyTime = Time.fixedTime - buildTimeStart;
+                    //    int killRoomID = Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight);
+                    //    world.WorldHistoryRemove(killRoomID, killRoom.map, destroyTime, roomID, Solver.SolverStatus);
 
-                    }
-                    if (display) Generator.RemoveMap(killRoom);
-                    BuildQueue.Insert(0, killRoom.pos);
-                    Debug.Log(Solver.SolverStatus + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
+                    //}
+                    //if (display) Generator.RemoveMap(killRoom);
+                    DestroyRoom(killRoom, destroyTime, roomID, Solver.SolverStatus);
+                    //BuildQueue.Insert(0, killRoom.pos);
+                    //Debug.Log(Solver.SolverStatus + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
                 }
                 else
                 {
@@ -208,6 +254,8 @@ namespace WorldBuilder
                 }
                 
                 BuildQueue.Insert(0, currentRoom);
+
+                world.GetRoom(roomID).buidStatus = ClingoSolver.Status.TIMEDOUT;
                 BuildState = BuildStates.roomBuilding;
                 
             }
@@ -216,6 +264,14 @@ namespace WorldBuilder
                 BuildState = BuildStates.solved;
                 Debug.LogWarning("Unhandled ClingoSolver.Status");
             }
+        }
+        void DestroyRoom(Room killRoom, double destroyTime, int destoryerID, Clingo.ClingoSolver.Status status)
+        {
+            killRoom.isDestroyed = true;
+            if (history) world.WorldHistoryRemove(killRoom, destroyTime, destoryerID, status);
+            if(display) Generator.RemoveMap(killRoom);
+            BuildQueue.Insert(0, killRoom.pos);
+            Debug.Log(status + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
         }
 
         void BuildGraph(int worldWidth, int worldHeight, int gateKeyCount, int maxGatePerKey, int startRoom, int timeout)
@@ -237,22 +293,22 @@ namespace WorldBuilder
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
             {
-                Debug.Log(Pathfinding.getPathStartRules("left", neighbors.left));
+                //Debug.Log(Pathfinding.getPathStartRules("left", neighbors.left));
                 aspCode += Pathfinding.getPathStartRules("left", neighbors.left);
             }
             if ((connections.rightEgress || connections.rightIngress) && neighbors.right != null && !neighbors.right.isDestroyed)
             {
-                Debug.Log(Pathfinding.getPathStartRules("right", neighbors.right));
+                //Debug.Log(Pathfinding.getPathStartRules("right", neighbors.right));
                 aspCode += Pathfinding.getPathStartRules("right", neighbors.right);
             }
             if ((connections.upEgress || connections.upIngress) && neighbors.up != null && !neighbors.up.isDestroyed)
             {
-                Debug.Log(Pathfinding.getPathStartRules("top", neighbors.up));
+                //Debug.Log(Pathfinding.getPathStartRules("top", neighbors.up));
                 aspCode += Pathfinding.getPathStartRules("top", neighbors.up);
             }
             if ((connections.downEgress || connections.downIngress) && neighbors.down != null && !neighbors.down.isDestroyed)
             {
-                Debug.Log(Pathfinding.getPathStartRules("bottom", neighbors.down));
+                //Debug.Log(Pathfinding.getPathStartRules("bottom", neighbors.down));
                 aspCode += Pathfinding.getPathStartRules("bottom", neighbors.down);
             }
             ClingoSolver solver = FindObjectOfType<ClingoSolver>();

@@ -16,6 +16,11 @@ namespace WorldBuilder
         public CollisionTile[,] mapGrid;
         public List<CollisionTile> tiles = new List<CollisionTile>();
         public Vector2Int upExit, downExit, rightExit, leftExit;
+        public Clingo.ClingoSolver.Status buidStatus;
+        public List<List<int>> neighborPermutations;
+        public List<int> removedNeighbors;
+        public double lastBuildTime;
+        
 
         public Room(Vector2Int pos)
         {
@@ -41,7 +46,7 @@ namespace WorldBuilder
                 if (path.type == "left") leftExit = new Vector2Int(path.x, path.y);
             }
 
-            Debug.Log("mapGrid size: " + map.dimensions.room_width + ", " + map.dimensions.room_height);
+            //Debug.Log("mapGrid size: " + map.dimensions.room_width + ", " + map.dimensions.room_height);
             mapGrid = new CollisionTile[map.dimensions.room_width, map.dimensions.room_height];
         }
         public void SetupRoom()
@@ -72,7 +77,7 @@ namespace WorldBuilder
             map.dimensions = Utility.GetDimensions(dict);
             int width = map.dimensions.room_count_width * map.dimensions.room_width;
             int height = map.dimensions.room_count_height * map.dimensions.room_height;
-            Debug.Log(width + "x" + height);
+            //Debug.Log(width + "x" + height);
 
             map.area = Utility.GetTiles(dict);
 

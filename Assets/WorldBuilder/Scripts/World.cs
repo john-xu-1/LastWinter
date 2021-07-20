@@ -39,13 +39,18 @@ namespace WorldBuilder
             WorldHistory = new WorldHistory();
         }
 
-        public void WorldHistoryAdd(int roomID, Map map, float buildTime)
+        public void WorldHistoryAdd(int roomID, Map map, double buildTime, Clingo.ClingoSolver.Status status)
         {
-            WorldHistory.AddRoom(roomID, map, buildTime);
+            WorldHistory.AddRoom(roomID, map, buildTime, status);
         }
-        public void WorldHistoryRemove(int roomID, Map map, float destroyTime, int destroyedByID)
+        public void WorldHistoryRemove(int roomID, Map map, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
         {
-            WorldHistory.DestroyRoom(roomID, map, destroyTime, destroyedByID);
+            WorldHistory.DestroyRoom(roomID, map, destroyTime, destroyedByID, status);
+        }
+        public void WorldHistoryRemove(Room room, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
+        {
+            int roomID = Utility.index_to_roomID(room.pos, width, height);
+            WorldHistory.DestroyRoom(roomID, room.map, destroyTime, destroyedByID, status);
         }
 
         public Room[] GetRooms()
@@ -70,7 +75,16 @@ namespace WorldBuilder
             Vector2Int index = Utility.roomID_to_index(roomID, width, height);
             return GetRoom(index.x, index.y);
         }
-
+        public List<int> GetNeighborIDs(int roomID)
+        {
+            Neighbors neighbors = GetNeighbors(roomID);
+            List<int> indices = new List<int>();
+            if (neighbors.left != null && !neighbors.left.isDestroyed) indices.Add(Utility.index_to_roomID(neighbors.left.pos, width, height));
+            if (neighbors.right != null && !neighbors.right.isDestroyed) indices.Add(Utility.index_to_roomID(neighbors.right.pos, width, height));
+            if (neighbors.up != null && !neighbors.up.isDestroyed) indices.Add(Utility.index_to_roomID(neighbors.up.pos, width, height));
+            if (neighbors.down != null && !neighbors.down.isDestroyed) indices.Add(Utility.index_to_roomID(neighbors.down.pos, width, height));
+            return indices;
+        }
         public Neighbors GetNeighbors(int roomID)
         {
             Vector2Int index = Utility.roomID_to_index(roomID, width, height);
@@ -88,11 +102,23 @@ namespace WorldBuilder
 
         public Neighbors GetNeighbors(int x, int y)
         {
+
             Neighbors neighbors = new Neighbors();
             if (x > 0 && Rooms[x - 1, y] != null && !Rooms[x - 1, y].isDestroyed) neighbors.left = Rooms[x - 1, y];
             if (x < width - 1 && Rooms[x + 1, y] != null && !Rooms[x + 1, y].isDestroyed) neighbors.right = Rooms[x + 1, y];
             if (y > 0 && Rooms[x, y - 1] != null && !Rooms[x, y - 1].isDestroyed) neighbors.up = Rooms[x, y - 1];
             if (y < height - 1 && Rooms[x, y + 1] != null && !Rooms[x, y + 1].isDestroyed) neighbors.down = Rooms[x, y + 1];
+
+            Room room = GetRoom(x, y);
+            if(room != null && room.buidStatus == Clingo.ClingoSolver.Status.UNSATISFIABLE)
+            {
+                List<int> removed = room.removedNeighbors;
+                if (neighbors.left != null && removed.Contains(Utility.index_to_roomID(neighbors.left.pos, width, height))) neighbors.left = null;
+                if (neighbors.right != null && removed.Contains(Utility.index_to_roomID(neighbors.right.pos, width, height))) neighbors.right = null;
+                if (neighbors.up != null && removed.Contains(Utility.index_to_roomID(neighbors.up.pos, width, height))) neighbors.up = null;
+                if (neighbors.down != null && removed.Contains(Utility.index_to_roomID(neighbors.down.pos, width, height))) neighbors.down = null;
+            }
+
             return neighbors;
         }
 

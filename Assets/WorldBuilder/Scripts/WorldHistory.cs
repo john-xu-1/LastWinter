@@ -10,11 +10,12 @@ namespace WorldBuilder
 
         [SerializeField] private List<RoomHistory> roomHistories = new List<RoomHistory>();
         [SerializeField] private RoomHistoryAnalysis[] roomHistoryAnalysis;
-        public void AddRoom(int roomID, Map map, float buildTime)
+        public RoomHistory[] history;
+        public void AddRoom(int roomID, Map map, double buildTime, Clingo.ClingoSolver.Status status)
         {
-            roomHistories.Add(new RoomHistory(roomID, map, buildTime));
+            roomHistories.Add(new RoomHistory(roomID, map, buildTime, status));
         }
-        public void DestroyRoom(int roomID, Map map, float destroyTime, int destroyedByID)
+        public void DestroyRoom(int roomID, Map map, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
         {
             Map destroyedMap = new Map();
             destroyedMap.dimensions =  map.dimensions;
@@ -31,16 +32,17 @@ namespace WorldBuilder
                 destroyedMap.area[i].type = 0;
 
             }
-            roomHistories.Add(new RoomHistory(roomID, map, destroyTime, destroyedByID));
+            roomHistories.Add(new RoomHistory(roomID, map, destroyTime, destroyedByID, status));
         }
         public RoomHistory GetRoom(int index)
         {
-            return roomHistories[index];
+            if (history.Length > 0) return history[index];
+            else return roomHistories[index];
         }
 
-        public float GetTotalTime()
+        public double GetTotalTime()
         {
-            float totalTime = 0;
+            double totalTime = 0;
             foreach(RoomHistory roomHistory in roomHistories)
             {
                 totalTime += roomHistory.buildTime;
@@ -58,7 +60,7 @@ namespace WorldBuilder
             roomHistoryAnalysis = new RoomHistoryAnalysis[roomCount];
             for (int roomID = 1; roomID <= roomCount; roomID += 1)
             {
-                float totalTime = 0;
+                double totalTime = 0;
                 int buildCount = 0;
                 foreach (RoomHistory roomHistory in roomHistories)
                 {
@@ -84,24 +86,28 @@ namespace WorldBuilder
         public string roomName;
         public int roomID;
         public Map map;
-        public float buildTime;
+        public double buildTime;
         public bool destroyed;
         public int destroyedByID;
+        public Clingo.ClingoSolver.Status buildStatus;
 
-        public RoomHistory(int roomID, Map map, float buildTime)
+        public RoomHistory(int roomID, Map map, double buildTime, Clingo.ClingoSolver.Status status)
         {
             this.roomID = roomID;
             this.map = map;
             this.buildTime = buildTime;
             roomName = "Room " + roomID.ToString() + " BuildTime: " + buildTime.ToString();
+            buildStatus = status;
         }
-        public RoomHistory(int roomID, Map map, float destroyTime, int destroyedByID)
+        public RoomHistory(int roomID, Map map, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
         {
             buildTime = destroyTime;
             this.roomID = roomID;
             this.map = map;
+            buildStatus = status;
             DestroyRoom(destroyedByID);
-            roomName = "Destroyed Room " + roomID.ToString();
+            roomName = "Destroyed Room " + roomID.ToString() + " " + status;
+            
         }
 
         public void DestroyRoom(int destroyedByID)
@@ -117,7 +123,7 @@ namespace WorldBuilder
     public class RoomHistoryAnalysis
     {
         public string roomID;
-        public float averageBuildTime;
+        public double averageBuildTime;
         public int buildCount;
     }
 }
