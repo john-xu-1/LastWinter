@@ -15,6 +15,7 @@ namespace Clingo
         public enum Status { ERROR, SATISFIABLE, UNSATISFIABLE, TIMEDOUT, RUNNING, UNINITIATED, READY, CLINGONOTFOUND, ASPFILENOTFOUND }
 
         //public Fil aspFile = new File();
+        public ProcessPriorityClass threadPriority = ProcessPriorityClass.Normal;
         public string aspFilePath = "DataFiles/ASPFiles/queens.txt";
         public string clingoExecutablePathMacOS = "DataFiles/Clingo/clingo";
         public string clingoExecutablePathWin = "DataFiles/Clingo/clingo.exe";
@@ -116,15 +117,27 @@ namespace Clingo
         }
 
 
-
+        private bool startedOutPutReading = false;
 
         private void SolveHelper()
         {
             clingoProcess.Start();
 
+            clingoProcess.PriorityClass = threadPriority;
+
+
+            if (!startedOutPutReading)
+            {
+                startedOutPutReading = true;
+            }
+            clingoProcess.BeginOutputReadLine();
+
+
+
+            print("Wating");
             if (clingoProcess.WaitForExit(maxDuration * 1000))
             {
-                //print("finished in time");
+                print("finished in time");
             }
             else
             {
@@ -133,12 +146,19 @@ namespace Clingo
                 UnityEngine.Debug.LogWarning("Clingo Timedout.");
             }
 
+
             if (status == Status.TIMEDOUT) { return; }
 
-            clingoConsoleOutput = clingoProcess.StandardOutput.ReadToEnd();
+
+
+            //            clingoConsoleOutput = clingoProcess.StandardOutput.ReadToEnd();
             clingoConsoleError = clingoProcess.StandardError.ReadToEnd();
 
-            //print(clingoConsoleOutput);
+            clingoProcess.OutputDataReceived -= OutputDataReceived;
+            clingoProcess.CancelOutputRead();
+            clingoProcess.Close();
+
+
 
             ClingoRoot clingoOutput = JsonUtility.FromJson<ClingoRoot>(clingoConsoleOutput);
 
@@ -217,7 +237,14 @@ namespace Clingo
         //    }
         //}
 
-        private bool SetUpProcess()
+
+        void OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            clingoConsoleOutput += e.Data + "\n";
+        }
+
+
+    private bool SetUpProcess()
         {
             if (status == Status.RUNNING)
             {
@@ -295,6 +322,13 @@ namespace Clingo
             clingoProcess.StartInfo.CreateNoWindow = true;
             clingoProcess.StartInfo.RedirectStandardOutput = true;
             clingoProcess.StartInfo.RedirectStandardError = true;
+
+            //clingoProcess.OutputDataReceived += ((sender, e) =>
+            //{
+            //    clingoConsoleOutput += e.Data + "\n";
+            //});
+
+            clingoProcess.OutputDataReceived += OutputDataReceived;
 
 
 

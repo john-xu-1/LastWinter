@@ -2588,19 +2588,19 @@ MonoBehaviour:
   Solver: {fileID: 121999444}
   WorldBuilder: {fileID: 11400000, guid: 4477f1631e85c4baa9fc93d1f25c59ec, type: 2}
   connection: 0101000000000000
-  RoomSize: {x: 25, y: 15}
+  RoomSize: {x: 20, y: 20}
   headroom: 2
   shoulderroom: 3
   minCeilingHeight: 3
   nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
   edgePrefab: {fileID: 4894238030931249867, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}
-  worldWidth: 4
-  worldHeight: 4
+  worldWidth: 7
+  worldHeight: 7
   keyTypeCount: 3
   maxGatePerKey: 2
   jumpHeadroom: 3
   timeout: 200
-  BuiltWorldIndex: 17
+  BuiltWorldIndex: 14
   indices: 010000000200000003000000
   MapSource: 2
   world:
@@ -6236,7 +6236,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: maxDuration
-      value: 600
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
+      propertyPath: useRandomSeed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4243523052385139477, guid: 966846d471b1243b686278851e4dfb17, type: 3}
       propertyPath: m_Name

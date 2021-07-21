@@ -38,12 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_LightingSettings: {fileID: 984302949}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -118,6 +118,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -179,6 +181,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &56129048
 Canvas:
   m_ObjectHideFlags: 0
@@ -275,6 +278,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -418,6 +423,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -496,6 +503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -526,6 +534,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 517537246}
+        m_TargetAssemblyTypeName: 
         m_MethodName: solve
         m_Mode: 1
         m_Arguments:
@@ -551,6 +560,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -604,21 +615,126 @@ MonoBehaviour:
   text: {fileID: 396877704}
   solver: {fileID: 1953376942}
   inputField: {fileID: 1661144626}
-  aspcode: '#const n = 8.
-
-
-    % n-Queens encoding
-
-
-    { q(I,1..n) } == 1 :- I
-    = 1..n.
-
-    { q(1..n,J) } == 1 :- J = 1..n.
-
-    :- { q(D-J,J) } >= 2, D =  
-    2..2*n.
-
-    :- { q(D+J,J) } >= 2, D = 1-n..n-1.'
+  aspcode: "\r\n%world_gen-----------------------------------------------------------------------------------------------------------------------------\r\n\r\n#const
+    max_width = 20.\r\n#const max_height = 20.\r\n\r\n  width(1..max_width). % ->
+    width(1), width(2),..., width(max_width)\r\n  height(1..max_height).\r\n\r\n 
+    tile_type(empty; filled).\r\n  \r\n  %border_type(filled; red_gate).\r\n\r\n 
+    states(zero; one).\r\n  %check_tile(XX, YY, COUNT) :- COUNT = {XX < 1; XX > max_width;
+    YY < 1; YY > max_height; TYPE == empty}, tile(XX,YY,TYPE).\r\n  check_tile(XX,
+    YY, COUNT) :- COUNT = {XX < 1; XX > max_width; YY < 1; YY > max_height; TYPE
+    != filled}, tile(XX,YY,TYPE).\r\n  state(XX,YY,STATE) :- COUNT > 0, STATE ==
+    zero, states(STATE), check_tile(XX,YY,COUNT).\r\n  state(XX,YY,STATE) :- COUNT
+    < 1, STATE == one, states(STATE), check_tile(XX,YY,COUNT).\r\n\r\n  1{tile(XX,YY,
+    TYPE): tile_type(TYPE)}1 :- width(XX), height(YY).\r\n  %1{enemy(XX,YY,Enemy):
+    enemies(Enemy)}5 :- width(XX), height(YY).\r\n\r\n  \r\n\r\n  %:- tile(XX,YY,TYPE)
+    , TYPE == red_gate.\r\n\r\n  #show width/1.\r\n  #show height/1.\r\n  #show tile/3.\r\n\r\n%tile_rules-----------------------------------------------------------------------------------------------------------------------------\r\n\r\n#show
+    state/3.\r\n\r\n  %tiles must have a neighbor\r\n  :- state(XX,YY, one), state(XX-1,
+    YY, zero), state(XX+1, YY, zero).\r\n  :- state(XX,YY, one), state(XX, YY-1,
+    zero), state(XX, YY+1, zero).\r\n\r\n  %:- state(XX,YY, one), state(XX-1, YY,
+    zero), XX == max_width.\r\n  %:- state(XX,YY, one), XX == 1, state(XX+1, YY,
+    zero).\r\n  %:- state(XX,YY, one), state(XX, YY-1, zero), YY == max_height.\r\n 
+    %:- state(XX,YY, one), YY == 1, state(XX, YY+1, zero).\r\n\r\n\r\n  %no empty
+    diagonals with adjencent filled diagonals (no checkers pattern)\r\n  :- state(XX,
+    YY, zero), state(XX+1, YY + 1, zero), state(XX, YY +1, one), state(XX+1, YY,
+    one).\r\n  :- state(XX, YY, zero), state(XX+1, YY - 1, zero), state(XX+1, YY,
+    one), state(XX, YY-1, one).\r\n\r\n  %no knight move from empty to empty\r\n 
+    :- state(XX,YY,one), state(XX-1, YY, zero), state(XX, YY+1, one), state(XX +1,
+    YY+1, zero).\r\n  :- state(XX,YY,one), state(XX-1, YY, one), state(XX, YY -1,
+    zero), state(XX-1,YY +1, zero).\r\n  :- state(XX,YY,one), state(XX,YY-1, one),
+    state(XX+1, YY, zero), state(XX-1, YY-1, zero).\r\n  :- state(XX,YY,one), state(XX+1,YY,
+    one), state(XX, YY+1, zero), state(XX+1, YY-1, zero).\r\n\r\n  :- state(XX,YY,one),
+    state(XX-1, YY, zero), state(XX, YY-1, one), state(XX +1, YY-1, zero).\r\n  :-
+    state(XX,YY,one), state(XX+1, YY, one), state(XX, YY -1, zero), state(XX+1,YY
+    +1, zero).\r\n  :- state(XX,YY,one), state(XX,YY+1, one), state(XX+1, YY, zero),
+    state(XX-1, YY+1, zero).\r\n  :- state(XX,YY,one), state(XX-1,YY, one), state(XX,
+    YY+1, zero), state(XX-1, YY-1, zero).\r\n\r\n  % no 2 empty diagonals on a filled
+    tile\r\n  %:- state(XX,YY, one), state(XX+1, YY-1, zero), state(XX-1, YY+1, zero).\r\n 
+    %:- state(XX,YY, one), state(XX-1, YY-1, zero), state(XX+1, YY+1, zero).\r\n 
+    :- state(XX,YY, one), state(XX+1, YY-1, zero), state(XX-1, YY+1, zero), state(XX,
+    YY-1, one), state(XX,YY+1,one), state(XX+1,YY,one), state(XX-1,YY,one).\r\n 
+    :- state(XX,YY, one), state(XX-1, YY-1, zero), state(XX+1, YY+1, zero), state(XX,
+    YY-1, one), state(XX,YY+1,one), state(XX+1,YY,one), state(XX-1,YY,one).\r\n\r\n\r\n%floor_rule-----------------------------------------------------------------------------------------------------------------------------\r\n\r\n#const
+    headroom = 3.\r\n  #const shoulderroom = 3.\r\n\r\n  %headroom_offset(1..headroom).\r\n 
+    floor(XX,YY) :- state(XX,YY, one), state(XX, YY-1, zero).\r\n\r\n%chamber_rules-----------------------------------------------------------------------------------------------------------------------------\r\n\r\n%#const
+    headroom = 3.\r\n  %#const shoulderroom = 3.\r\n  #const min_ceiling_height =
+    3.\r\n\r\n  headroom_offset(1..min_ceiling_height).\r\n  floor(XX,YY) :- state(XX,YY,
+    one), state(XX, YY-1, zero).\r\n  :- floor(XX,YY), state(XX, YY - H, one), headroom_offset(H).\r\n\r\n 
+    shoulderroom_offset(1..shoulderroom).\r\n  left_wall(XX,YY) :- state(XX,YY,one),
+    state(XX+1,YY, zero).\r\n  :- left_wall(XX,YY), state(XX+S,YY,one), shoulderroom_offset(S).\r\n\r\n 
+    left_step(XX,YY) :- floor(XX,YY), state(XX-1, YY, zero).\r\n  right_step(XX,YY)
+    :- floor(XX,YY), state(XX+1, YY, zero).\r\n  :- left_step(XX,YY), state(XX -
+    S, YY-H, one), headroom_offset(H), shoulderroom_offset(S).\r\n  :- right_step(XX,YY),
+    state(XX + S, YY - H, one), headroom_offset(H), shoulderroom_offset(S).\r\n\r\n%movement_rules-----------------------------------------------------------------------------------------------------------------------------\r\n\r\npath_type(right;
+    left; top; bottom; middle).\r\n  %path_type( top; bottom).\r\n  \r\n\r\n%Create
+    destination points (nodes)\r\n  %Count {path(XX,YY, Type, Type): floor(XX,YY),
+    height(YY), width(XX), path_type(Type)} Count :- Count = {path_type(_)}.\r\n 
+    %1 {path(XX,YY, Type, Type): floor(XX,YY), height(YY), width(XX)} 1 :- path_type(Type).\r\n 
+    {path(XX,YY, Type, Type): floor(XX,YY), height(YY), width(XX), path_type(Type)}.\r\n\r\n 
+    %One node of each type?\r\n  :- path(XX,YY, Type1, Type1), path(XX,YY, Type2,
+    Type2), Type1 != Type2.\r\n  :- path(X1, Y1, Type,Type), path(X2,Y2, Type, Type),
+    X1 != X2.\r\n  :- path(X1, Y1, Type,Type), path(X2,Y2, Type, Type), Y1 != Y2.\r\n\r\n\r\n%add
+    each node type to its path type\r\n  %path(XX,YY, end) :- path(XX,YY,end,end).\r\n 
+    %path(XX,YY, start) :- path(XX,YY,start,start).\r\n  %path(XX,YY, top) :- path(XX,YY,top,top).\r\n 
+    %path(XX,YY, bottom) :- path(XX,YY,bottom,bottom).\r\n  path(XX,YY, Type) :-
+    path(XX,YY,Type, Type), path_type(Type).\r\n\r\n\r\n\r\n%ensures every point
+    on path has headroom\r\n  :- path(XX,YY, Type), floor(XX,YY), state(XX, YY-H,
+    one), headroom_offset(H), path_type(Type).\r\n\r\n\r\n\r\n%sets neighboring floor
+    tiles on path\r\n  %path(XX,YY, Type) :- floor(XX,YY), path(XX-1, YY, Type),
+    floor(XX-1,YY), path_type(Type).\r\n  %path(XX,YY, Type) :- floor(XX,YY), path(XX+1,
+    YY, Type), floor(XX+1,YY), path_type(Type).\r\n  path(XX,YY, Type) :- state(XX,YY,
+    zero), path(XX-1, YY, Type), floor(XX-1,YY), path_type(Type).\r\n  path(XX,YY,
+    Type) :- state(XX,YY, zero), path(XX+1, YY, Type), floor(XX+1,YY), path_type(Type).\r\n 
+    path(XX,YY,Type) :- floor(XX,YY), path(XX+H, YY+V,Type), floor(XX+H, YY+V), horizontal(H),
+    vertical(V), path_type(Type).\r\n  \r\n\r\n%jumping\r\n  lmr_offset(-1..1).\r\n\r\n 
+    jump_headroom_offset(1..headroom).\r\n  has_headroom(XX,YY) :- { state(XX,YY-H,
+    one): jump_headroom_offset(H)} == 0, width(XX), height(YY).\r\n\r\n  path(XX,
+    YY, Type) :- floor(XX+L,YY+1), path(XX+L, YY+1, Type), state(XX,YY, zero), path_type(Type),
+    lmr_offset(L), has_headroom(XX,YY).\r\n  path(XX, YY, Type) :- floor(XX +L*2,YY+2),
+    path(XX +L*2, YY+2, Type), state(XX +L,YY+1, zero), state(XX,YY, zero), path_type(Type),
+    lmr_offset(L), has_headroom(XX,YY).\r\n  path(XX, YY, Type) :- floor(XX +L*3,YY+3),
+    path(XX +L*3, YY+3, Type), state(XX +L,YY+1, zero), state(XX +L*2,YY+2, zero),
+    state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY).\r\n 
+    \r\n  %path(XX,YY-1,Type) :- floor(XX,YY), path(XX, YY-2, Type), state(XX,YY-1,zero),
+    path_type(Type), lmr_offset(L), width(XX), height(YY-1).\r\n  %path(XX,YY-2,Type)
+    :- floor(XX,YY), path(XX, YY-3, Type), state(XX,YY-2,zero), path_type(Type),
+    lmr_offset(L), width(XX), height(YY-2).\r\n\r\n%falling \r\n  path(XX,YY,Type)
+    :- path(XX + LMR,YY-1,Type), state(XX,YY,zero), path_type(Type), lmr_offset(LMR),
+    has_headroom(XX,YY), width(XX), height(YY).\r\n  path(XX,YY,Type) :- path(XX
+    + LMR,YY-1,Type), floor(XX,YY), path_type(Type), lmr_offset(LMR), width(XX),
+    height(YY).\r\n\r\n\r\n\r\n  #show path/4.\r\n  #show path/3.\r\n\r\n%platform_rules-----------------------------------------------------------------------------------------------------------------------------\r\n\r\n\r\n#show
+    platform/3.\r\n\r\n  horizontal(-1; 1).\r\n  vertical(-3..3).\r\n  platform(XX,YY,Type)
+    :- platform(XX+H, YY+V,Type), floor(XX,YY), horizontal(H), vertical(V), path_type(Type).\r\n 
+    %platform(XX,YY,Type) :- \r\n  \r\n  :- floor(XX,YY), not platform(XX,YY,_).\r\n 
+    platform(XX,YY, Type) :- path(XX,YY,Type, Type), path_type(Type).\r\n\r\n  :-
+    platform(XX,YY, Type1), platform(XX, YY, Type2), Type1 != Type2.\r\n\r\n%path_rules-----------------------------------------------------------------------------------------------------------------------------\r\n\r\n%each
+    corner has a tile, makes sure opening occur on the correct side\r\n  :- not state(1,1,one).\r\n 
+    :- not state(1,max_height,one).\r\n  :- not state(max_width,1,one).\r\n  :- not
+    state(max_width,max_height,one).\r\n\r\n  exit_up(XX,YY, Type) :- YY == 1, path(XX,YY,Type),
+    path_type(Type).\r\n  exit_down(XX,YY, Type) :- YY == max_height, path(XX,YY,Type),
+    path_type(Type).\r\n  exit_right(XX,YY, Type) :- XX == max_width, path(XX,YY,Type),
+    path_type(Type).\r\n  exit_left(XX,YY, Type) :- XX == 1, path(XX,YY,Type), path_type(Type).\r\n\r\n 
+    has_exit_down(Type) :- {exit_down(XX,YY, Type): width(XX), height(YY), path(XX,YY,bottom)}
+    > 0, path_type(Type).\r\n  has_exit_up(Type) :- {exit_up(XX,YY, Type): width(XX),
+    height(YY), path(XX,YY,top)} > 0, path_type(Type).\r\n  has_exit_right(Type)
+    :- {exit_right(XX,YY, Type): path(XX,YY,right)} > 0, path_type(Type).\r\n  has_exit_left(Type)
+    :- {exit_left(XX,YY, Type): width(XX), height(YY), path(XX,YY,left)} > 0, path_type(Type).\r\n\r\n 
+    invalid_exit_right(StartType, EndType) :- {exit_right(XX,YY, StartType): not
+    path(XX,YY,EndType)} > 0, path_type(StartType), path_type(EndType).\r\n  invalid_exit_left(StartType,
+    EndType) :- {exit_left(XX,YY, StartType): not path(XX,YY,EndType)} > 0, path_type(StartType),
+    path_type(EndType).\r\n  invalid_exit_up(StartType, EndType) :- {exit_up(XX,YY,
+    StartType): not path(XX,YY,EndType)} > 0, path_type(StartType), path_type(EndType).\r\n 
+    invalid_exit_down(StartType, EndType) :- {exit_down(XX,YY, StartType): not path(XX,YY,EndType)}
+    > 0, path_type(StartType), path_type(EndType).\r\n\r\n  :- invalid_exit_right(Type,
+    right), path_type(Type).\r\n  :- invalid_exit_left(Type, left), path_type(Type).\r\n 
+    :- invalid_exit_up(Type, top), path_type(Type).\r\n  :- invalid_exit_down(Type,
+    bottom), path_type(Type).\r\n\r\n%Set node's location\r\n  :- path(XX, YY, left,
+    left), not XX == 1.\r\n  :- path(XX, YY, right, right), not XX == max_width.\r\n\r\n 
+    :- path(XX, YY, left, left), not YY > 1.\r\n  :- path(XX, YY, right, right),
+    not YY > 1.\r\n\r\n  :- path(XX, YY, top, top), not YY == 3.\r\n  :- path(XX,YY,
+    bottom, bottom), {state(XX+H,YY, zero): horizontal(H)} < 1.\r\n  :- path(XX,
+    YY, bottom, bottom), not YY == max_height.\r\n\r\n  :- path(XX,YY,middle,middle),
+    YY < 3.\r\n\r\n%connected chambers\r\n  %:- floor(XX,YY), path(XX,YY,Type1),
+    path(XX,YY,Type2), Type1 != Type2."
 --- !u!4 &517537247
 Transform:
   m_ObjectHideFlags: 0
@@ -681,6 +797,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -705,6 +822,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &561963264
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -853,6 +971,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &705507995
@@ -916,6 +1035,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -940,6 +1060,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &749544897
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1014,6 +1135,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1122,6 +1245,67 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!850595691 &984302949
+LightingSettings:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Settings.lighting
+  serializedVersion: 3
+  m_GIWorkflowMode: 1
+  m_EnableBakedLightmaps: 1
+  m_EnableRealtimeLightmaps: 0
+  m_RealtimeEnvironmentLighting: 1
+  m_BounceScale: 1
+  m_AlbedoBoost: 1
+  m_IndirectOutputScale: 1
+  m_UsingShadowmask: 1
+  m_BakeBackend: 1
+  m_LightmapMaxSize: 1024
+  m_BakeResolution: 40
+  m_Padding: 2
+  m_TextureCompression: 1
+  m_AO: 0
+  m_AOMaxDistance: 1
+  m_CompAOExponent: 1
+  m_CompAOExponentDirect: 0
+  m_ExtractAO: 0
+  m_MixedBakeMode: 2
+  m_LightmapsBakeMode: 1
+  m_FilterMode: 1
+  m_LightmapParameters: {fileID: 15204, guid: 0000000000000000f000000000000000, type: 0}
+  m_ExportTrainingData: 0
+  m_TrainingDataDestination: TrainingData
+  m_RealtimeResolution: 2
+  m_ForceWhiteAlbedo: 0
+  m_ForceUpdates: 0
+  m_FinalGather: 0
+  m_FinalGatherRayCount: 256
+  m_FinalGatherFiltering: 1
+  m_PVRCulling: 1
+  m_PVRSampling: 1
+  m_PVRDirectSampleCount: 32
+  m_PVRSampleCount: 500
+  m_PVREnvironmentSampleCount: 500
+  m_PVREnvironmentReferencePointCount: 2048
+  m_LightProbeSampleCountMultiplier: 4
+  m_PVRBounces: 2
+  m_PVRMinBounces: 2
+  m_PVREnvironmentMIS: 0
+  m_PVRFilteringMode: 2
+  m_PVRDenoiserTypeDirect: 0
+  m_PVRDenoiserTypeIndirect: 0
+  m_PVRDenoiserTypeAO: 0
+  m_PVRFilterTypeDirect: 0
+  m_PVRFilterTypeIndirect: 0
+  m_PVRFilterTypeAO: 0
+  m_PVRFilteringGaussRadiusDirect: 1
+  m_PVRFilteringGaussRadiusIndirect: 5
+  m_PVRFilteringGaussRadiusAO: 2
+  m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+  m_PVRFilteringAtrousPositionSigmaIndirect: 2
+  m_PVRFilteringAtrousPositionSigmaAO: 1
 --- !u!1 &1661144624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1176,6 +1360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -1219,6 +1404,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 517537246}
+        m_TargetAssemblyTypeName: 
         m_MethodName: set_ASPcode
         m_Mode: 0
         m_Arguments:
@@ -1236,6 +1422,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &1661144627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1251,6 +1438,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 0}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1324,6 +1513,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1382,8 +1573,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aspFilePath: DataFiles/temp/20210608171639487.txt
   clingoExecutablePathMacOS: DataFiles/Clingo/clingo
+  clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
   AdditionalArguments: -c n=8 --parallel-mode 7
-  maxDuration: 15
+  maxDuration: 120
   FindMultipleSolutions: 0
   numOfSolutionsWanted: 400
   seed: 875532435
@@ -1454,6 +1646,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1526,6 +1720,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1550,6 +1745,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2069681789
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1619,6 +1815,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1643,6 +1840,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2076485402
 MeshFilter:
   m_ObjectHideFlags: 0
