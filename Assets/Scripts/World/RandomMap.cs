@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomMap : MonoBehaviour
+namespace WorldBuilder
 {
-    RandomBitmap rbm;
-    public MapGenerator Generator;
-
-    [TextArea(5, 10)]
-    public string Bitmap;
-
-    private void Start()
+    public class RandomMap : MonoBehaviour
     {
-        rbm = GetComponent<RandomBitmap>();
-        Bitmap = rbm.myString;
-        if (Generator) Generator.ConvertMap(Bitmap);
+        RandomBitmap rbm;
+        public MapGenerator Generator;
+
+        [TextArea(5, 10)]
+        public string Bitmap;
+
+        private void Start()
+        {
+            rbm = GetComponent<RandomBitmap>();
+            Bitmap = rbm.myString;
+            //if (Generator) Generator.ConvertMap(Bitmap);
+        }
     }
 }
