@@ -118,6 +118,8 @@ namespace WorldBuilder
                 else if (key == 3) gateColor = Color.yellow;
                 Vector2Int sourceIndex = Utility.roomID_to_index(source, worldWidth, worldHeight);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
+                worldGrid[sourceIndex.x, sourceIndex.y].SetType("gate");
+
                 if (destination == source + 1)
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].rightExit.SetColor(gateColor);
@@ -134,7 +136,26 @@ namespace WorldBuilder
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].upExit.SetColor(gateColor);
                 }
+
             }
+
+            foreach(Key key in world.keys)
+            {
+                Debug.Log(key.roomID + " " + key.type);
+                int keyType = key.type;
+                int roomID = key.roomID;
+                Color gateColor = Color.magenta;
+                if (keyType == 1) gateColor = Color.blue;
+                else if (keyType == 2) gateColor = Color.red;
+                else if (keyType == 3) gateColor = Color.yellow;
+                Vector2Int sourceIndex = Utility.roomID_to_index(roomID, worldWidth, worldHeight);
+                worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
+                worldGrid[sourceIndex.x, sourceIndex.y].SetType("key");
+            }
+
+            int startRoomID = world.startRoomID;
+            Vector2Int startIndex = Utility.roomID_to_index(startRoomID, worldWidth, worldHeight);
+            worldGrid[startIndex.x, startIndex.y].SetColor(Color.green);
         }
         public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
         {

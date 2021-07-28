@@ -315,7 +315,7 @@ namespace WorldBuilder
 
             string path = ClingoUtil.CreateFile(aspCode);
             buildTimeStart = Time.fixedTime;
-            solver.Solve(path, " -t 4 ");
+            solver.Solve(path, " --parallel-mode 4 ");
         }
     }
 }

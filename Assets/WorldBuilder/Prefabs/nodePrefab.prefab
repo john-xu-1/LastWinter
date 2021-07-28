@@ -197,3 +197,5 @@ MonoBehaviour:
   downExit: {fileID: 0}
   rightExit: {fileID: 0}
   leftExit: {fileID: 0}
+  gate: {fileID: 21300000, guid: 0744a1a49bc4a02488aca523c59b5a67, type: 3}
+  key: {fileID: 21300000, guid: 7c91862c62cb84b72ab93495e5a16e7d, type: 3}
