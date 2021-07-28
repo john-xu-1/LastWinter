@@ -25,7 +25,7 @@ public class DebugMap : MonoBehaviour
     public TextAsset jsonFile;
     public bool BuildOnStart;
     public ClingoSolver Solver;
-    public Worlds WorldBuilder;
+    public Worlds worlds;
     public bool[] connection = { true, true, false, false, false, false, false, false };
     public RoomConnections connections;
     public Vector2Int RoomSize = new Vector2Int(20, 20);
@@ -57,7 +57,16 @@ public class DebugMap : MonoBehaviour
         //    WorldBuilder.BuiltWorlds.RemoveAt(0);
         //}
 
+        //Map map = worlds.BuiltWorlds[0].GetRoom(1).map;
+        Map map = new Map();
+        map.area = new Tile[5];
+
+        string json = JsonUtility.ToJson(map, true);
+        print(json);
+        WorldBuilder.Utility.CreateFile(json, "test2.txt");
+
         if (BuildOnStart) buildMap();
+
     }
     //bool isBuilt = false;
     //int xTest = 0;
@@ -138,7 +147,7 @@ public class DebugMap : MonoBehaviour
         else if (MapSource == MapSources.World)
         {
             //WorldBuilder.BuildWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, 3, Solver.maxDuration - 10);
-            World world = WorldBuilder.BuiltWorlds[BuiltWorldIndex];
+            World world = worlds.BuiltWorlds[BuiltWorldIndex];
             //WorldMap.ConvertGraph()
             foreach (Room room in world.GetRooms())
             {
@@ -150,7 +159,7 @@ public class DebugMap : MonoBehaviour
         {
 
 
-            historySource = WorldBuilder.BuiltWorlds[BuiltWorldIndex];
+            historySource = worlds.BuiltWorlds[BuiltWorldIndex];
 
             WorldMap.DisplayGraph(historySource.worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
 

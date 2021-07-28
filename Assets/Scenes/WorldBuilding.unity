@@ -1203,7 +1203,7 @@ MonoBehaviour:
   maxGatePerKey: 2
   jumpHeadroom: 3
   timeout: 600
-  BuiltWorldIndex: 0
+  BuiltWorldIndex: 1
   indices: 01000000020000000300000004000000
   MapSource: 2
   world:

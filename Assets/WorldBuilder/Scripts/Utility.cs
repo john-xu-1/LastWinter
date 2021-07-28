@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System.IO;
+//using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +8,34 @@ namespace WorldBuilder
 {
     public static class Utility
     {
+        public static string DataFilePath = @"WorldBuilder/WorldsJson";
+        public static string CreateFile(string content, string filename)
+        {
+            string relativePath;
+            if (Application.isEditor)
+            {
+                if (!Directory.Exists(System.IO.Path.Combine("Assets", DataFilePath)))
+                {
+                    Directory.CreateDirectory(System.IO.Path.Combine("Assets", DataFilePath));
+                }
+                relativePath = System.IO.Path.Combine("Assets", DataFilePath, filename);
+            }
+            else
+            {
+                if (!Directory.Exists(DataFilePath))
+                {
+                    Directory.CreateDirectory(DataFilePath);
+                }
+                relativePath = System.IO.Path.Combine(DataFilePath, filename);
+            }
+
+            using (StreamWriter streamWriter = File.CreateText(relativePath))
+            {
+                streamWriter.Write(content);
+            }
+            return System.IO.Path.Combine(DataFilePath, filename);
+        }
+
         public static List<T> GetSmallestRandomPermutation<T>(List<List<T>> permutations, bool remove)
         {
 
@@ -21,7 +51,7 @@ namespace WorldBuilder
                 List<T> permutation = permutations[i];
                 if (smallest == permutation.Count) smallestIndices.Add(i);
             }
-            int rand = Random.Range(0, smallestIndices.Count);
+            int rand = UnityEngine.Random.Range(0, smallestIndices.Count);
             List<T> smallestPermutation = permutations[smallestIndices[rand]];
             if (remove) permutations.Remove(smallestPermutation);
 
