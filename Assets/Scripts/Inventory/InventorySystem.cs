@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventorySystem : MonoBehaviour
 {
-    public InventoryObjects[] items;
+    public List<InventoryObjects> items;
     public int index;
     public InventoryObjects selectedItem;
     public SpriteRenderer SelectedRenderer;
@@ -15,6 +15,7 @@ public class InventorySystem : MonoBehaviour
 
     public InventoryWeapon weapon;
     public InventoryAccessory acs;
+    public InventoryChip chip;
 
     GameObject bulletInstance;
 
@@ -25,22 +26,62 @@ public class InventorySystem : MonoBehaviour
 
     bool isAcsSpawned;
 
+    public int maxItemSize;
+
+    public bool isInvFull;
+
+    private void Start()
+    {
+        maxItemSize = items.Count;
+
+        FindObjectOfType<InventoryUI>().updateSprite(maxItemSize, items);
+    }
+
     public void AddItem(InventoryObjects item)
     {
-        if (index <= items.Length - 1)
+        if (index <= items.Count - 1)
         {
             items[index] = item;
             index += 1;
+            
         }
         else
         {
             Debug.Log("INVENTORY FULL");
+            
         }
+
+        FindObjectOfType<InventoryUI>().updateSprite(maxItemSize, items);
+
+    }
+
+    public void removeItem (InventoryObjects item)
+    {
+       
+        items.RemoveAt(items.IndexOf(item));
+
         
+        for (int i = 0; i < maxItemSize - items.Count; i++)
+        {
+            items.Add(null);
+        }
+
+        FindObjectOfType<InventoryUI>().updateSprite(maxItemSize, items);
+
+        index--;
     }
 
     private void Update()
     {
+        if (index < maxItemSize)
+        {
+            isInvFull = false;
+        }
+        else
+        {
+            isInvFull = true;
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             selectedItem = items[0];
@@ -67,7 +108,7 @@ public class InventorySystem : MonoBehaviour
             weaponSpawnedTargetPrefab = null;
         }
 
-        if (selectedItem)
+        if (selectedItem != null)
         {
             SelectedRenderer.sprite = selectedItem.itemSprite;
             
@@ -106,12 +147,43 @@ public class InventorySystem : MonoBehaviour
 
             }
 
-            
+            if (selectedItem.itemType == InventoryObjects.ItemTypes.Chip)
+            {
+
+                chip = (InventoryChip)selectedItem;
+                    
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (weapon.chip != null)
+                    {
+                        weapon.chip = chip;
+                        
+                        removeItem(weapon.chip);
+                        
+                    }
+                    else
+                    {
+                        //returns original chip back to inv
+                        AddItem(weapon.chip);
+                        //sets original chip to current chip
+                        weapon.chip = chip;
+
+                        
+                    }
+                    
+
+
+                }
+
+            }
+
+
 
         }
         else
         {
-            if (SelectedRenderer.sprite) SelectedRenderer.sprite = null;
+            SelectedRenderer.sprite = null;
         }
 
         if (bulletInstance) Destroy(bulletInstance, weapon.destroyAfterTime);
@@ -137,6 +209,9 @@ public class InventorySystem : MonoBehaviour
             GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = false;
         }
         GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90*Zfactor)));
+
+
+        
         
         
     }

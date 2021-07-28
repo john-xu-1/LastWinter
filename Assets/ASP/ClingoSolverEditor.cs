@@ -1,15 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
+using Clingo;
 
 [CustomEditor(typeof(ClingoSolver))]
 public class ClingoSolverEditor : Editor
 {
-
     string solutionOutput = "";
-    TextAsset aspFile;
-
 
     public override void OnInspectorGUI()
     {
@@ -21,30 +17,17 @@ public class ClingoSolverEditor : Editor
         EditorGUILayout.LabelField("Solutions Found: ", solver.SolutionsFound.ToString());
         EditorGUILayout.LabelField("More Solutions: ", solver.MoreSolutions.ToString());
         EditorGUILayout.LabelField("Is Solver Running: ", solver.IsSolverRunning.ToString());
+        EditorGUILayout.LabelField("Status: ", solver.SolverStatus.ToString());
 
-
-        EditorGUILayout.PrefixLabel("File Contents");
-        if (solver.aspFile == null)
+        if (solver.clingoThread != null)
         {
-            EditorGUILayout.TextArea("");
+            EditorGUILayout.LabelField("Thread Alive: ", solver.clingoThread.IsAlive.ToString());
+            EditorGUILayout.LabelField("Thread State: ", solver.clingoThread.ThreadState.ToString());
         }
-        else
-        {
-            EditorGUILayout.TextArea(solver.aspFile.text);
-        }
-
-
-
-        //if (GUILayout.Button("Solve"))
-        //{
-        //    solutionOutput = solver.SolverOutput();
-        //}
 
         if (GUILayout.Button("Solve in Thread"))
         {
-            //solver.MyThread();
-            solver.solveUsingThread();
-            //solutionOutput = solver.solutionOutput;
+            solver.Solve();
         }
 
         solutionOutput = solver.SolutionOutput;
@@ -57,8 +40,6 @@ public class ClingoSolverEditor : Editor
 
         EditorGUILayout.PrefixLabel("Raw Clingo Error Output");
         EditorGUILayout.TextArea(solver.ClingoConsoleError);
-
-
     }
 
 }

@@ -266,12 +266,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a98e64b72e341929ddcaedb628c278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 50
   weapon: {fileID: 0}
   ExplosionPrefab: {fileID: 0}
   FireExplosionPrefab: {fileID: 0}
   numOfExtra: 0
-  range: {x: -1.5, y: 1.5}
+  range: {x: -3, y: 3}
   selfPrefab: {fileID: 0}
   isSub: 1
 --- !u!58 &7875711701051584142

@@ -247,6 +247,10 @@ MonoBehaviour:
   - 0
   - 0
   weapon: {fileID: 0}
+  acs: {fileID: 0}
+  chip: {fileID: 0}
+  maxItemSize: 0
+  isInvFull: 0
 --- !u!61 &6154040031498853883
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -331,6 +335,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 20
+  isDead: 0
+  combatCD: 5
+  nextCombatTime: 0
+  RegenMagnitude: 0.4
+  isCombat: 0
 --- !u!1 &6154040031742622743
 GameObject:
   m_ObjectHideFlags: 0

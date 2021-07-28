@@ -27,5 +27,8 @@ public class InventoryWeapon : InventoryObjects
     public int CDIndex;
 
     public bool isWeaponSwitchBullet;
+
+    public InventoryChip chip;
+
     
 }

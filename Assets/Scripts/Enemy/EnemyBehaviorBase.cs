@@ -67,7 +67,7 @@ public class EnemyBehaviorBase : MonoBehaviour
     {
         if (p.GetComponent<HealthBase>())
         {
-            p.GetComponent<HealthBase>().TakeDamage(damage);
+            p.GetComponent<HealthBase>().TakeDamage(damage, "Enemy" );
         }
         else
         {

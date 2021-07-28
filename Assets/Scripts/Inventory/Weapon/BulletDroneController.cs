@@ -45,4 +45,11 @@ public class BulletDroneController : BulletBase
         base.triggerExitBehavior(collision);
         collisionCheck = true;
     }
+
+    public override void trailBehavior(TrailRenderer tr)
+    {
+        tr.colorGradient = weapon.chip.trail.GetComponent<TrailRenderer>().colorGradient;
+        tr.widthCurve = weapon.chip.trail.GetComponent<TrailRenderer>().widthCurve;
+        tr.widthMultiplier = weapon.chip.trail.GetComponent<TrailRenderer>().widthMultiplier;
+    }
 }

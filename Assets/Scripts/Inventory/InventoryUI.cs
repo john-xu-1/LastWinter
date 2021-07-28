@@ -7,19 +7,21 @@ public class InventoryUI : MonoBehaviour
 {
     public GameObject[] InventoryPictures;
 
-    private void Update()
+    public void updateSprite(int maxSize, List<InventoryObjects> items)
     {
-        for (int i = 0; i < FindObjectOfType<InventorySystem>().items.Length; i += 1)
+        for (int i = 0; i < maxSize; i += 1)
         {
-            if (FindObjectOfType<InventorySystem>().items[i])
+            if (items[i] != null)
             {
-                InventoryPictures[i].GetComponent<Image>().sprite = FindObjectOfType<InventorySystem>().items[i].itemSprite;
+                InventoryPictures[i].GetComponent<Image>().sprite = items[i].itemSprite;
+                
             }
-            
+            else
+            {
+                InventoryPictures[i].GetComponent<Image>().sprite = null;
+            }
+
         }
-
-        
     }
-
 
 }

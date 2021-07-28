@@ -9,11 +9,19 @@ public class BulletBase: MonoBehaviour
     public GameObject ExplosionPrefab;
     public GameObject FireExplosionPrefab;
 
-   
+    
 
     private void Start()
     {
         weapon = (InventoryWeapon)FindObjectOfType<InventorySystem>().selectedItem;
+
+        
+        TrailRenderer tr = transform.GetChild(0).GetComponent<TrailRenderer>();
+        if (weapon.chip)
+        {
+            trailBehavior(tr);
+        }
+        
         setUp();
     }
 
@@ -22,6 +30,14 @@ public class BulletBase: MonoBehaviour
         
         updateBehavior();
 
+    }
+
+    public virtual void trailBehavior(TrailRenderer tr)
+    {
+        tr.colorGradient = weapon.chip.trail.GetComponent<TrailRenderer>().colorGradient;
+        tr.widthCurve = weapon.chip.trail.GetComponent<TrailRenderer>().widthCurve;
+        tr.widthMultiplier = weapon.chip.trail.GetComponent<TrailRenderer>().widthMultiplier;
+        tr.time = weapon.chip.trail.GetComponent<TrailRenderer>().time;
     }
 
     private void FixedUpdate()

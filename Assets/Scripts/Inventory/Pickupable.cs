@@ -21,6 +21,8 @@ public class Pickupable : MonoBehaviour
     bool startChase;
     Collider2D targ;
 
+    
+
 
     private void Start()
     {
@@ -42,23 +44,33 @@ public class Pickupable : MonoBehaviour
             if (range.transform.CompareTag("Player"))
             {
                 startChase = true;
+                
                 targ = range;
 
             }
         }
-        chase(startChase, targ);
+
+        if (FindObjectOfType<InventorySystem>().isInvFull == false && startChase)
+        {
+            chase(targ);
+        }
+
+        if (FindObjectOfType<InventorySystem>().isInvFull == true && startChase)
+        {
+            rb.velocity = Vector2.zero;
+            torque = 0f;
+        }
         
 
         foreach (Collider2D hit in hits)
         {
             if (hit.transform.CompareTag("Player"))
             {
-                Destroy(gameObject);
-                if (FindObjectOfType<InventorySystem>().index <= FindObjectOfType<InventorySystem>().items.Length - 1)
+                startChase = false;
+                if (FindObjectOfType<InventorySystem>().index <= FindObjectOfType<InventorySystem>().items.Count - 1)
                 {
                     FindObjectOfType<InventorySystem>().AddItem(item);
-                    
-
+                    Destroy(gameObject);
                 }
 
             }
@@ -69,13 +81,10 @@ public class Pickupable : MonoBehaviour
 
     }
 
-    void chase(bool isStart, Collider2D target)
+    void chase(Collider2D target)
     {
-        if (isStart)
-        {
-            Vector2 direction = (target.transform.position - transform.position).normalized;
-            rb.velocity = new Vector2(direction.x * attractionSpeed, direction.y * attractionSpeed);
-            rb.AddTorque(torque);
-        }
+        Vector2 direction = (target.transform.position - transform.position).normalized;
+        rb.velocity = new Vector2(direction.x * attractionSpeed, direction.y * attractionSpeed);
+        rb.AddTorque(torque);
     }
 }

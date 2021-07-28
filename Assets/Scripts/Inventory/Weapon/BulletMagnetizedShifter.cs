@@ -25,8 +25,8 @@ public class BulletMagnetizedShifter : BulletBase
         if (collision.transform.CompareTag("bullet"))
         {
 
-            SpriteRenderer sr = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
-            SpriteRenderer sr2 = collision.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+            SpriteRenderer sr = transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
+            SpriteRenderer sr2 = collision.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
 
             Vector2 direction = (collision.transform.position - transform.position).normalized;
             if (sr.sprite == sr2.sprite)

@@ -7,7 +7,7 @@ public class InventoryObjects : ScriptableObject
 {
     public enum ItemTypes
     {
-        Armor,
+        Chip,
         Weapon,
         Accesory
     }
