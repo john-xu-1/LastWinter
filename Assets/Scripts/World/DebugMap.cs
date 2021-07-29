@@ -25,6 +25,7 @@ public class DebugMap : MonoBehaviour
     public TextAsset jsonFile;
     public bool BuildOnStart;
     public ClingoSolver Solver;
+    public int cpus = 4;
     public Worlds WorldBuilder;
     public bool[] connection = { true, true, false, false, false, false, false, false };
     public RoomConnections connections;
@@ -80,10 +81,10 @@ public class DebugMap : MonoBehaviour
         //    Debug.Log("Removed: " + line2);
         //}
 
-        //for (int i = 0; i < 8; i += 1)
-        //{
-        //    WorldBuilder.BuiltWorlds.RemoveAt(0);
-        //}
+        for (int i = 0; i < 11; i += 1)
+        {
+            WorldBuilder.BuiltWorlds.RemoveAt(10);
+        }
 
         if (BuildOnStart) buildMap();
     }
@@ -159,7 +160,7 @@ public class DebugMap : MonoBehaviour
         }else if(MapSource == MapSources.Solver)
         {
             //Generator.ConvertMap(Solver.answerSet);
-            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout);
+            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus);
         }
         else if (MapSource == MapSources.World)
         {
