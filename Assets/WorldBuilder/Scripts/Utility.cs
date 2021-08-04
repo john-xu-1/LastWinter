@@ -3,12 +3,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace WorldBuilder
 {
     public static class Utility
     {
         public static string DataFilePath = @"WorldBuilder/WorldsJson";
+        public static string[] GetFileNames()
+        {
+            string[] allFiles = Directory.GetFiles("Assets/" + DataFilePath);
+            List<string> files = new List<string>();
+            for (int i = 0; i < allFiles.Length; i += 1)
+            {
+                string file = allFiles[i];
+                if (!file.Contains(".meta"))
+                {
+                    file = file.Replace("Assets/", "");
+                    files.Add(file);
+                }
+                
+            }
+
+            return GetArray<string>(files);
+
+        }
+        public static string GetFile(string name)
+        {
+            //string path = Application.persistentDataPath + "\\" + name;
+            string path = Application.dataPath + "/" + name;
+            StreamReader reader = new StreamReader(path);
+            string contents = reader.ReadToEnd();
+            return contents;
+        }
+
+        public static void SaveWorld(World world, string name)
+        {
+            //World world = worlds.BuiltWorlds[0];
+            string json = JsonUtility.ToJson(world, true);
+            //print(json);
+            CreateFile(json, $"{name}.txt");
+        }
+        
+
         public static string CreateFile(string content, string filename)
         {
             string relativePath;

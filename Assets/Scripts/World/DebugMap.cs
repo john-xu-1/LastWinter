@@ -16,18 +16,14 @@ public class DebugMap : MonoBehaviour
     public Text RunNum;
 
     public MapGenerator Generator;
-    public int[][] MyMap;
-
-    [TextArea(5, 10)]
-    public string Bitmap;
+    
 
     public string JsonMapName = "test2.txt";
     public TextAsset jsonFile;
     public bool BuildOnStart;
     public ClingoSolver Solver;
     public Worlds worlds;
-    public bool[] connection = { true, true, false, false, false, false, false, false };
-    public RoomConnections connections;
+    
     public Vector2Int RoomSize = new Vector2Int(20, 20);
     public int headroom = 2, shoulderroom = 3, minCeilingHeight = 3;
     public GameObject nodePrefab, edgePrefab;
@@ -35,8 +31,7 @@ public class DebugMap : MonoBehaviour
     public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2;
     public int jumpHeadroom = 3, timeout = 600;
     public int BuiltWorldIndex;
-    public int[] indices = { 1, 2, 3, 4 };
-    public List<List<int>> permutations;
+    
     public enum MapSources
     {
         None,
@@ -57,13 +52,7 @@ public class DebugMap : MonoBehaviour
         //    WorldBuilder.BuiltWorlds.RemoveAt(0);
         //}
 
-        //Map map = worlds.BuiltWorlds[0].GetRoom(1).map;
-        Map map = new Map();
-        map.area = new Tile[5];
-
-        string json = JsonUtility.ToJson(map, true);
-        print(json);
-        WorldBuilder.Utility.CreateFile(json, "test2.txt");
+     
 
         if (BuildOnStart) buildMap();
 
@@ -132,12 +121,18 @@ public class DebugMap : MonoBehaviour
     {
         if (MapSource == MapSources.Json)
         {
+            string[] files = WorldBuilder.Utility.GetFileNames();
+            foreach (string file in files)
+            {
+                print(WorldBuilder.Utility.GetFile(file));
+            }
             //TextAsset jsonFile = Resources.Load<TextAsset>(JsonMapName);
-            print(jsonFile);
-            string jsonStr = jsonFile.text;
-            Map map = JsonUtility.FromJson<Map>(jsonStr);
-            print(map.dimensions.room_count_height);
-            //Generator.ConvertMap(map);
+            //print(jsonFile);
+            //string jsonStr = jsonFile.text;
+            string jsonStr = WorldBuilder.Utility.GetFile(files[0]);
+            World world = JsonUtility.FromJson<World>(jsonStr);
+
+            BuildWorld(world);
         }
         else if (MapSource == MapSources.Solver)
         {
@@ -148,12 +143,7 @@ public class DebugMap : MonoBehaviour
         {
             //WorldBuilder.BuildWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, 3, Solver.maxDuration - 10);
             World world = worlds.BuiltWorlds[BuiltWorldIndex];
-            //WorldMap.ConvertGraph()
-            foreach (Room room in world.GetRooms())
-            {
-                room.SetupRoom();
-                Generator.ConvertMap(room);
-            }
+            BuildWorld(world);
         }
         else if (MapSource == MapSources.History)
         {
@@ -181,6 +171,15 @@ public class DebugMap : MonoBehaviour
 
     }
 
+    void BuildWorld(World world)
+    {
+        this.world = world;
+        foreach (Room room in world.GetRooms())
+        {
+            room.SetupRoom();
+            Generator.ConvertMap(room);
+        }
+    }
 
 }
 

@@ -8,6 +8,7 @@ namespace WorldBuilder
     public class World
     {
         public string name = "World Name";
+        
         public Graph worldGraph;
         public Dictionary<string, List<List<string>>> rawGraph;
         
