@@ -18,7 +18,9 @@ public class Pickupable : MonoBehaviour
 
     public float torque = 5;
 
-    bool startChase;
+    private float orgTorq;
+
+    public bool startChase;
     Collider2D targ;
 
     
@@ -28,7 +30,7 @@ public class Pickupable : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
         sr.sprite = item.itemSprite;
-
+        orgTorq = torque;
         rb = GetComponent<Rigidbody2D>();
 
     }
@@ -48,16 +50,24 @@ public class Pickupable : MonoBehaviour
                 targ = range;
 
             }
+            else
+            {
+
+                startChase = false;
+            }
         }
 
         if (FindObjectOfType<InventorySystem>().isInvFull == false && startChase)
         {
             chase(targ);
+            torque = orgTorq;
+            Debug.Log("chase");
         }
 
         if (FindObjectOfType<InventorySystem>().isInvFull == true && startChase)
         {
             rb.velocity = Vector2.zero;
+            startChase = false;
             torque = 0f;
         }
         
@@ -67,7 +77,7 @@ public class Pickupable : MonoBehaviour
             if (hit.transform.CompareTag("Player"))
             {
                 startChase = false;
-                if (FindObjectOfType<InventorySystem>().index <= FindObjectOfType<InventorySystem>().items.Count - 1)
+                if (!FindObjectOfType<InventorySystem>().isInvFull)
                 {
                     FindObjectOfType<InventorySystem>().AddItem(item);
                     Destroy(gameObject);

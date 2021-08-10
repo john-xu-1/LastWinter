@@ -38,6 +38,7 @@ public class BulletBase: MonoBehaviour
         tr.widthCurve = weapon.chip.trail.GetComponent<TrailRenderer>().widthCurve;
         tr.widthMultiplier = weapon.chip.trail.GetComponent<TrailRenderer>().widthMultiplier;
         tr.time = weapon.chip.trail.GetComponent<TrailRenderer>().time;
+        tr.sharedMaterials = weapon.chip.trail.GetComponent<TrailRenderer>().sharedMaterials;
     }
 
     private void FixedUpdate()

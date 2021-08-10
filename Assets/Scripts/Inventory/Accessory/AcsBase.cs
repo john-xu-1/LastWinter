@@ -10,7 +10,7 @@ public class AcsBase : MonoBehaviour
     public GameObject player;
     public InventorySystem inv;
 
-
+    public bool isContainItem;
 
     
 
@@ -30,6 +30,21 @@ public class AcsBase : MonoBehaviour
 
         updateBehavior();
 
+        if (isContainItem == false)
+        {
+            foreach (InventoryObjects item in inv.items)
+            {
+                if (item == acs)
+                {
+                    isContainItem = true;
+                }
+                else
+                {
+                    isContainItem = false;
+                }
+            }
+        }
+        
 
     }
 

@@ -23,3 +23,4 @@ MonoBehaviour:
   destroyAfterTime: 15
   CDIndex: 4
   isWeaponSwitchBullet: 0
+  chip: {fileID: 0}

@@ -59,6 +59,15 @@ public class PlatformerController : PhysicsObject
     public float gravityModifierWater;
     public float gravityModifierLava;
 
+    private float dashSpeed;
+    public float dashSpeedStart;
+    private float dashTime;
+    public float dashStartTime;
+    int facing = 1;
+
+    public float nextDashTime;
+    public float DashRate;
+
     public float EffectorAcceleration
     {
         get
@@ -88,9 +97,27 @@ public class PlatformerController : PhysicsObject
 
     public float specialXForce;
 
+
+    public int isDash = 0;
+
+    bool isJump;
+
+
+    public float jumpDashPadding = 0.1f;
+    
+
+    public GameObject dashTrail;
+
+    public Animator anim;
+
+    public bool isFalling = true;
+    
+
     private void Awake()
     {
         gravityModifierNormal = gravityModifer;
+        dashTime = dashStartTime;
+        dashTrail.SetActive(false);
     }
 
     protected override void ComputeVelocity()
@@ -99,20 +126,118 @@ public class PlatformerController : PhysicsObject
 
         horInput.x = Input.GetAxis("Horizontal");
 
+        //flip
+        if (horInput.x < 0)
+        {
+            facing = -1;
+            transform.eulerAngles = new Vector3(0, 180, 0);
+        }
+        else if (horInput.x > 0)
+        {
+            transform.eulerAngles = new Vector3(0, 0, 0);
+            facing = 1;
+        }
+
+        if (Mathf.Abs(velocity.x) > 0)
+        {
+            anim.SetBool("isRun", true);    
+
+        }
+        else if (Mathf.Abs(horInput.x) == 0)
+        {
+            Debug.Log(horInput.x);
+
+            anim.SetBool("isRun", false);
+        }
+
+        
+
         if (EffectorState == EffectorStates.None)
         {
             gravityModifer = gravityModifierNormal;
-            if (Input.GetButtonDown("Jump") && isGrounded)
+
+            
+
+            
+
+            
+            if (velocity.y <= 0)
             {
-                velocity.y = takeOffSpeed;
+                anim.SetBool("isJump", false);
+                
             }
-            else if (Input.GetButtonUp("Jump"))
+
+            if (isDash == 0)
             {
-                if (velocity.y > 0)
+                if (Input.GetButtonDown("Jump") && isGrounded)  
                 {
-                    velocity.y *= 0.5f;
+                    velocity.y = takeOffSpeed;
+                    isFalling = true;
+                    anim.SetBool("isJump", true);
+                    isJump = true;
+                }
+                else if (Input.GetButtonUp("Jump"))
+                {
+                    if (velocity.y > 0)
+                    {
+                        velocity.y *= 0.5f;
+                    }
+                    
+                }
+
+                //padding
+                if (velocity.y <= jumpDashPadding && velocity.y >= 0)
+                {
+                    isJump = false;
                 }
             }
+            
+            
+
+            if (isJump == false)
+            {
+                
+
+                if (isDash == 0)
+                {
+                    if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        if (Time.time >= nextDashTime)
+                        {
+                            isDash = 1;
+                            dashTrail.SetActive(true);
+                            anim.SetTrigger("isDash");
+                            nextDashTime = Time.time + DashRate;
+                        }
+                        
+
+                    }
+                    
+                }
+                else
+                {
+                    if (dashTime <= 0)
+                    {
+                        isDash = 0;
+                        dashTrail.SetActive(false);
+                        dashTime = dashStartTime;
+                        dashSpeed = 0;
+                    }
+                    else
+                    {
+                        dashTime -= Time.deltaTime;
+                        if (isDash == 1)
+                        {
+                            dashSpeed = dashSpeedStart;
+                        }
+                    }
+                }
+
+            }
+
+
+
+
         }
         else
         {
@@ -130,10 +255,10 @@ public class PlatformerController : PhysicsObject
         }
 
         velocity.y += specialYForce;
-        velocity.x += specialXForce;
 
+        Vector2 tspeed = horInput * maxSpeed;
 
-        targetVelocity = horInput * maxSpeed;
+        targetVelocity = new Vector2(tspeed.x + specialXForce + (facing * dashSpeed), tspeed.y);
 
         
 
@@ -152,8 +277,8 @@ public class PlatformerController : PhysicsObject
     }
     */
 
-
-
+    
+   
 
 
 }

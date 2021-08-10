@@ -51,7 +51,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 34e2d94674954489db5bda3f0f16f3d9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -138,7 +138,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0.31226587, a: 1}
+      key0: {r: 1, g: 0, b: 0.03997326, a: 1}
       key1: {r: 1, g: 0.51870775, b: 0, a: 1}
       key2: {r: 1, g: 0.3563676, b: 0, a: 0.53333336}
       key3: {r: 1, g: 0.7008203, b: 0, a: 0}

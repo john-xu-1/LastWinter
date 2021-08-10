@@ -13,7 +13,7 @@ public class BulletVol : BulletBase
     public bool isSub;
     public float KB;
 
-    public float recoil;
+    
 
 
 

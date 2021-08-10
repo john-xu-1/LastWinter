@@ -30,5 +30,11 @@ public class InventoryWeapon : InventoryObjects
 
     public InventoryChip chip;
 
-    
+
+    private void OnEnable()
+    {
+        chip = null;
+    }
+
+
 }

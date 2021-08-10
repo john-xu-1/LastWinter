@@ -8,20 +8,9 @@ using WorldBuilder;
 public class CollisionMap : MonoBehaviour
 {
 
-    private List<Room> rooms = new List<Room>();
+    
     public TileBase Center, Right, Left, Up, Down, TopRight, BottomRight, TopLeft, BottomLeft, LinkersTopRight, LinkersBottomRight, LinkersTopLeft, LinkersBottomLeft;
     public Tilemap tilemap;
-
-    //private int worldWidth, worldHeight;
-
-    //public void newCollisionMap(int worldWidth, int worldHeight)
-    //{
-    //    this.worldHeight = worldHeight;
-    //    this.worldWidth = worldWidth;
-    //    mapGrid = new CollisionTile[worldWidth,worldHeight];
-    //}
-
-
 
     public CollisionTile AddCollisionTiles(Vector2Int pos, int type, Room room)
     {
@@ -32,18 +21,9 @@ public class CollisionMap : MonoBehaviour
         //room.tiles.Add(tile);
         return tile;
     }
-    public void BuildMap()
-    {
-
-    }
 
     public bool FindNeighbor(Vector2Int pos, Room room)
     {
-        //foreach (CollisionTile tile in map)
-        //{
-        //    if (pos == tile.pos && tile.type > 0) return true;
-        //    if (pos == tile.pos && tile.type == 0) return false;
-        //}
         int worldHeight = room.map.dimensions.room_height;
         int worldWidth = room.map.dimensions.room_width;
         int y = -pos.y - 1 - room.pos.y * worldHeight;

@@ -26,18 +26,7 @@ public class MapGenerator : MonoBehaviour
 
     public List<CollisionTile> ConvertMap(Map map, Room room)
     {
-        int worldWidth = 0;
-        int worldHeight = 0;
-        foreach (Tile tile in map.area)
-        {
-            worldWidth = Mathf.Max(worldWidth, tile.x);
-            worldHeight = Mathf.Max(worldHeight, tile.y);
-        }
-        //print(worldWidth + " x " + worldHeight);
-        //CMap.newCollisionMap(worldWidth, worldHeight);
-        //FindObjectOfType<LevelHandler>().Setup(new Vector2(map.start.x, -map.start.y),map.dimensions.room_width,map.dimensions.room_height);
         List<CollisionTile> tiles = new List<CollisionTile>();
-        //FindObjectOfType<LevelHandler>().Setup(map);
         foreach (Tile tile in map.area)
         {
             //Debug.Log("CollisionTile location: " + new Vector2Int(tile.x, -tile.y));

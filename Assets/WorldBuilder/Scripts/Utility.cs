@@ -1,11 +1,81 @@
 ﻿using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 namespace WorldBuilder
 {
     public static class Utility
     {
+        public static string DataFilePath = @"WorldBuilder/WorldJson";
+        public static string[] getFileNames()
+        {
+            string[] allFiles = Directory.GetFiles("Assets/" + DataFilePath);
+
+            List<string> files = new List<string>();
+
+            for (int i = 0; i < allFiles.Length; i++)
+            {
+                string file = allFiles[i];
+
+                if (!file.Contains(".meta"))
+                {
+                    file = file.Replace("Assets/", "");
+                    files.Add(file);
+                }
+            }
+
+            return GetArray<string>(files);
+        }
+
+        public static string GetFile(string name)
+        {
+            string path = Application.dataPath + "/" + name;
+            StreamReader reader = new StreamReader(path);
+
+            string contents = reader.ReadToEnd();
+
+            return contents;
+        }
+
+        public static void SaveWorld(World world, string name)
+        {
+
+            string json = JsonUtility.ToJson(world, true);
+
+
+            CreateFile(json, $"{name}.text");
+
+            
+        }
+
+        public static string CreateFile(string content, string filename)
+        {
+            string relativePath;
+            if (Application.isEditor)
+            {
+                if (!Directory.Exists(System.IO.Path.Combine("Assets", DataFilePath)))
+                {
+                    Directory.CreateDirectory(System.IO.Path.Combine("Assets", DataFilePath));
+                }
+                relativePath = System.IO.Path.Combine("Assets", DataFilePath, filename);
+            }
+            else
+            {
+                if (!Directory.Exists(DataFilePath))
+                {
+                    Directory.CreateDirectory(DataFilePath);
+                }
+                relativePath = System.IO.Path.Combine(DataFilePath, filename);
+            }
+
+            using (StreamWriter streamWriter = File.CreateText(relativePath))
+            {
+                streamWriter.Write(content);
+            }
+            return System.IO.Path.Combine(DataFilePath, filename);
+        }
         public static List<T> GetSmallestRandomPermutation<T>(List<List<T>> permutations, bool remove)
         {
 
