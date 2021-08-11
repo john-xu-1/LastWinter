@@ -225,6 +225,24 @@ public class InventorySystem : MonoBehaviour
 
                 }
 
+                //to eject chip outside when holding weapon
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (isInvFull == false)
+                    {
+                        AddItem(weapon.chip);
+                    }
+                    else
+                    {
+                        GameObject instance = Instantiate(emptyItem, new Vector2(transform.position.x + emptySpawnOffset.x, transform.position.y + emptySpawnOffset.y), Quaternion.identity);
+                        instance.GetComponent<Pickupable>().item = weapon.chip;
+                        instance.GetComponent<SpriteRenderer>().sprite = weapon.chip.itemSprite;
+                    }
+
+
+                    weapon.chip = null;
+                }
+
                 bulletSwitch(weapon.spawnedPrefab1, weapon.spawnedPrefab2, weapon.isWeaponSwitchBullet);
             }
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Accesory)
