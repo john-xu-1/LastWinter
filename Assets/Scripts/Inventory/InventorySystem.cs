@@ -105,7 +105,7 @@ public class InventorySystem : MonoBehaviour
         index--;
     }
 
-    bool isWepChipActive = false;
+    
     private void Update()
     {
         
@@ -134,13 +134,13 @@ public class InventorySystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (items[0])
+            if (items.Count > 0)
             {
                 selectedItem = items[0];
             }
             else
             {
-                selectedItem.itemSprite = null;
+                selectedItem = null;
             }
             
             
@@ -149,13 +149,13 @@ public class InventorySystem : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (items[1])
+            if (items.Count > 1)
             {
                 selectedItem = items[1];
             }
             else
             {
-                selectedItem.itemSprite = null;
+                selectedItem = null;
             }
 
             weaponSpawnedTargetPrefab = null;
@@ -163,13 +163,13 @@ public class InventorySystem : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            if (items[2])
+            if (items.Count > 2)
             {
                 selectedItem = items[2];
             }
             else
             {
-                selectedItem.itemSprite = null;
+                selectedItem = null;
             }
 
             weaponSpawnedTargetPrefab = null;
@@ -177,13 +177,13 @@ public class InventorySystem : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            if (items[3])
+            if (items.Count > 3)
             {
                 selectedItem = items[3];
             }
             else
             {
-                selectedItem.itemSprite = null;
+                selectedItem = null;
             }
 
             weaponSpawnedTargetPrefab = null;
@@ -191,7 +191,7 @@ public class InventorySystem : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            if (items[4])
+            if (items.Count > 4)
             {
                 selectedItem = items[4];
             }

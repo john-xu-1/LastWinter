@@ -145,7 +145,7 @@ public class PlatformerController : PhysicsObject
         }
         else if (Mathf.Abs(horInput.x) == 0)
         {
-            Debug.Log(horInput.x);
+            
 
             anim.SetBool("isRun", false);
         }
