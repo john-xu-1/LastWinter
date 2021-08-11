@@ -17,7 +17,7 @@ MonoBehaviour:
   itemName: Old Shotgun
   itemRare: A
   weaponType: 7
-  spawnedPrefab1: {fileID: 4982714832543282875, guid: 3c8c76952e28745a2b2eee36cb01c89f, type: 3}
+  spawnedPrefab1: {fileID: 4982714832543282875, guid: b74a29294fa5f484bb4b479805dc8633, type: 3}
   spawnedPrefab2: {fileID: 0}
   coolDown: 1.5
   destroyAfterTime: 0.25

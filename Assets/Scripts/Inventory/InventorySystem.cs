@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventorySystem : MonoBehaviour
 {
@@ -30,91 +31,188 @@ public class InventorySystem : MonoBehaviour
 
     public bool isInvFull;
 
+    public GameObject emptyItem;
+
+    public Vector2 emptySpawnOffset;
+
+    public GameObject wepChipPanel;
+    private GameObject wepChipPanelChild;
+
+    private InventoryWeapon selectedWeapon;
+
+
+    List<InventoryWeapon> wep;
+    Dropdown dpd;
+
+    
+
     private void Start()
     {
-        maxItemSize = items.Count;
-
-        FindObjectOfType<InventoryUI>().updateSprite(maxItemSize, items);
+        wepChipPanelChild = wepChipPanel.transform.GetChild(0).gameObject;
+        wepChipPanel.SetActive(false);
+        FindObjectOfType<InventoryUI>().updateSprite(items);
     }
 
     public void AddItem(InventoryObjects item)
     {
-        if (index <= items.Count - 1)
+        bool isFullReplace = false;
+        if (items.Count <= maxItemSize)
         {
-            items[index] = item;
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i] == null)
+                {
+                    isFullReplace = true;
+                    items[i] = item;
+                    break;
+                }
+
+            }
+
+            if (isFullReplace == false)
+            {
+                items.Add(item);
+            }
+
             index += 1;
-            
+
         }
         else
         {
             Debug.Log("INVENTORY FULL");
-            
+
         }
 
-        FindObjectOfType<InventoryUI>().updateSprite(maxItemSize, items);
+        FindObjectOfType<InventoryUI>().updateSprite(items);
 
     }
 
-    public void removeItem (InventoryObjects item)
+    public void removeItem(InventoryObjects item)
     {
-       
-        items.RemoveAt(items.IndexOf(item));
 
-        
-        for (int i = 0; i < maxItemSize - items.Count; i++)
+        //items.RemoveAt(items.IndexOf(item));
+
+
+        items[items.IndexOf(item)] = null;
+
+        if (item == selectedItem)
         {
-            items.Add(null);
+            selectedItem = null;
         }
 
-        FindObjectOfType<InventoryUI>().updateSprite(maxItemSize, items);
+        FindObjectOfType<InventoryUI>().updateSprite(items);
 
         index--;
     }
 
+    bool isWepChipActive = false;
     private void Update()
     {
-        if (index < maxItemSize)
+        
+        int count = 0;
+
+        
+        for (int i = 0; i < items.Count; i++)
         {
-            isInvFull = false;
+            if (items[i] == null)
+            {
+                isInvFull = false;
+                break;
+            }
+            else
+            {
+                count++;
+            }
         }
-        else
+
+        if (count == maxItemSize)
         {
             isInvFull = true;
         }
+        
+
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            selectedItem = items[0];
+            if (items[0])
+            {
+                selectedItem = items[0];
+            }
+            else
+            {
+                selectedItem.itemSprite = null;
+            }
+            
+            
             weaponSpawnedTargetPrefab = null;
+            acsSpawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            selectedItem = items[1];
+            if (items[1])
+            {
+                selectedItem = items[1];
+            }
+            else
+            {
+                selectedItem.itemSprite = null;
+            }
+
             weaponSpawnedTargetPrefab = null;
+            acsSpawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            selectedItem = items[2];
+            if (items[2])
+            {
+                selectedItem = items[2];
+            }
+            else
+            {
+                selectedItem.itemSprite = null;
+            }
+
             weaponSpawnedTargetPrefab = null;
+            acsSpawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            selectedItem = items[3];
+            if (items[3])
+            {
+                selectedItem = items[3];
+            }
+            else
+            {
+                selectedItem.itemSprite = null;
+            }
+
             weaponSpawnedTargetPrefab = null;
+            acsSpawnedTargetPrefab = null;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            selectedItem = items[4];
+            if (items[4])
+            {
+                selectedItem = items[4];
+            }
+            else
+            {
+                selectedItem = null;
+            }
+
             weaponSpawnedTargetPrefab = null;
+            acsSpawnedTargetPrefab = null;
         }
+
+        
 
         if (selectedItem != null)
         {
             SelectedRenderer.sprite = selectedItem.itemSprite;
-            
-            if(selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
+
+            if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
             {
-                weapon = (InventoryWeapon) selectedItem;
+                weapon = (InventoryWeapon)selectedItem;
                 fireRate = weapon.coolDown;
 
                 if (Input.GetButton("Fire1"))
@@ -131,8 +229,8 @@ public class InventorySystem : MonoBehaviour
             }
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Accesory)
             {
-                
-                acs = (InventoryAccessory) selectedItem;
+
+                acs = (InventoryAccessory)selectedItem;
                 setAcsPrefab(acs.spawnPrefab);
 
                 if (isAcsSpawned == false)
@@ -142,7 +240,7 @@ public class InventorySystem : MonoBehaviour
                         Instantiate(acs.spawnPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, Quaternion.identity);
                         isAcsSpawned = true;
                     }
-                    
+
                 }
 
             }
@@ -151,27 +249,67 @@ public class InventorySystem : MonoBehaviour
             {
 
                 chip = (InventoryChip)selectedItem;
-                    
+
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (weapon.chip != null)
+                    //isWepChipActive = !isWepChipActive;
+                    wepChipPanel.SetActive(true);
+                    dpd = wepChipPanelChild.transform.GetChild(0).GetComponent<Dropdown>();
+
+                    wepChipPanelChild.transform.GetChild(1).GetComponent<Image>().sprite = chip.itemSprite;
+
+                    List<string> wepNames = new List<string>();
+                    dpd.ClearOptions();
+                    dpd.AddOptions(new List<string>() { "None" });
+
+                    wep = new List<InventoryWeapon>();
+
+                    for (int i = 0; i < items.Count; i++)
                     {
-                        weapon.chip = chip;
+                        if (items[i])
+                        {
+                            if (items[i].itemType == InventoryObjects.ItemTypes.Weapon)
+                            {
+
+                                wepNames.Add(items[i].itemName);
+
+                                wep.Add((InventoryWeapon)items[i]);
+
+
+
+                            }
+                        }
                         
-                        removeItem(weapon.chip);
-                        
+                    }
+
+                    /*
+                    if (dpd.options.Count > 1)
+                    {
+                        for (int i = 0; i < wepNames.Count; i++)
+                        {
+                            if (i > 0)
+                            {
+                                if (dpd.options[i].text != wepNames[i - 1] || i < dpd.options.Count)
+                                {
+                                    FindObjectOfType<InventoryUI>().setDropdown(dpd, wepNames);
+                                    break;
+                                }
+                                
+                            }
+                        }
                     }
                     else
                     {
-                        //returns original chip back to inv
-                        AddItem(weapon.chip);
-                        //sets original chip to current chip
-                        weapon.chip = chip;
-
-                        
+                        FindObjectOfType<InventoryUI>().setDropdown(dpd, wepNames);
                     }
-                    
+                    */
+                    FindObjectOfType<InventoryUI>().setDropdown(dpd, wepNames);
+
+
+
+
+
 
 
                 }
@@ -198,7 +336,7 @@ public class InventorySystem : MonoBehaviour
 
         float Zangle = Mathf.Atan2(target.x, target.y) * Mathf.Rad2Deg;
 
-        if(transform.rotation.y >= 0)
+        if (transform.rotation.y >= 0)
         {
             Zfactor = -1;
             GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = true;
@@ -208,12 +346,12 @@ public class InventorySystem : MonoBehaviour
             Zfactor = 1;
             GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = false;
         }
-        GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90*Zfactor)));
+        GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90 * Zfactor)));
 
 
-        
-        
-        
+
+
+
     }
 
     public void setAcsPrefab(GameObject prefab)
@@ -247,10 +385,66 @@ public class InventorySystem : MonoBehaviour
             if (!weaponSpawnedTargetPrefab) weaponSpawnedTargetPrefab = a;
         }
 
-        
+
 
     }
 
-    
+    public void setChip()
+    {
+        Debug.Log(selectedWeapon);
+
+        if (dpd.value > 0)
+        {
+            selectedWeapon = wep[dpd.value - 1];
+        }
+        else
+        {
+            selectedWeapon = null;
+        }
+
+        if (selectedWeapon)
+        {
+            if (selectedWeapon.chip == null)
+            {
+                selectedWeapon.chip = chip;
+
+                removeItem(selectedWeapon.chip);
+
+                Debug.Log("set");
+            }
+            else
+            {
+                //returns original chip back to inv
+
+                if (isInvFull == false)
+                {
+                    AddItem(selectedWeapon.chip);
+                }
+                else
+                {
+                    GameObject instance = Instantiate(emptyItem, new Vector2(transform.position.x + emptySpawnOffset.x, transform.position.y + emptySpawnOffset.y), Quaternion.identity);
+                    instance.GetComponent<Pickupable>().item = selectedWeapon.chip;
+                    instance.GetComponent<SpriteRenderer>().sprite = selectedWeapon.chip.itemSprite;
+                }
+
+
+                //sets original chip to current chip
+                Debug.Log("switch");
+                selectedWeapon.chip = chip;
+
+                removeItem(chip);
+
+
+
+
+            }
+        }
+
+
+        wepChipPanel.SetActive(false);
+        
+    }
+
+
 
 }

@@ -23,3 +23,4 @@ MonoBehaviour:
   destroyAfterTime: 5
   CDIndex: 2
   isWeaponSwitchBullet: 0
+  chip: {fileID: 11400000, guid: 658e955a762744dfead012132a84e6c0, type: 2}
