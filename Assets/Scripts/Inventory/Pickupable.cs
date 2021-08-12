@@ -21,7 +21,7 @@ public class Pickupable : MonoBehaviour
     private float orgTorq;
 
     public bool startChase;
-    Collider2D targ;
+    public Collider2D targ;
 
     
 
@@ -46,23 +46,29 @@ public class Pickupable : MonoBehaviour
             if (range.transform.CompareTag("Player"))
             {
                 startChase = true;
-                
+
                 targ = range;
 
             }
             else
             {
-                targ = null;
+                //targ = null;
                 startChase = false;
             }
         }
 
-        if (targ == null)
-        {
-            rb.velocity = Vector2.zero;
-            torque = 0f;
-        }
 
+        if (targ)
+        {
+            float dist = Vector2.Distance(transform.position, targ.transform.position);
+            if (dist > rangeSize.x)
+            {
+                rb.velocity = Vector2.zero;
+                torque = 0f;
+            }
+        }
+        
+        
         if (FindObjectOfType<InventorySystem>().isInvFull == false && startChase)
         {
             chase(targ);

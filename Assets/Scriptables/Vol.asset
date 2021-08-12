@@ -20,7 +20,7 @@ MonoBehaviour:
   spawnedPrefab1: {fileID: 2891621919610108023, guid: 70c8412cc90464e1096a429526b38130, type: 3}
   spawnedPrefab2: {fileID: 0}
   coolDown: 0.5
-  destroyAfterTime: 5
+  destroyAfterTime: 3
   CDIndex: 3
   isWeaponSwitchBullet: 0
   chip: {fileID: 0}
