@@ -101,7 +101,7 @@ Transform:
   m_GameObject: {fileID: 2891621919610108023}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.37, y: 0.61, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 7362866977292634374}
   - {fileID: 2249044188139197724}
@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bd62bafd8faf4b5a8396c48eb3d0506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 25
   weapon: {fileID: 0}
   ExplosionPrefab: {fileID: 0}
   FireExplosionPrefab: {fileID: 3198119191284390770, guid: ba02c26a9f8b94d76ba3fc5f3486e007, type: 3}
@@ -218,7 +218,6 @@ MonoBehaviour:
   subBullet: {fileID: 1264778190397573501, guid: dbf98894ba9fd44f6941e751653dad25, type: 3}
   isSub: 0
   KB: 25
-  recoil: 15
 --- !u!1 &4440748887184078937
 GameObject:
   m_ObjectHideFlags: 0

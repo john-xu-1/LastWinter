@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8959447840444131651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8959447840444131709}
+  - component: {fileID: 8959447840444131708}
+  m_Layer: 0
+  m_Name: CollisionMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8959447840444131709
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8959447840444131651}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8959447840444131708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8959447840444131651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c267f5ced06194dacb656ab804a49ed6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Center: {fileID: 11400000, guid: f69676981cfef4bbaa7f13d1d70e1f52, type: 2}
+  Right: {fileID: 11400000, guid: a579b8cfed81a474fab95b3348f93246, type: 2}
+  Left: {fileID: 11400000, guid: 9990d92356bb34e988c7ab2fffc8af7a, type: 2}
+  Up: {fileID: 11400000, guid: 29dddaf48efc64634a8b3a3a02fcb136, type: 2}
+  Down: {fileID: 11400000, guid: 2b7b5100549ad4ae987b7e131e596680, type: 2}
+  TopRight: {fileID: 11400000, guid: f6c1e3b3dd9244de8a0ba93fbf050805, type: 2}
+  BottomRight: {fileID: 11400000, guid: 121da2b17abc24eb5acf225bff546d47, type: 2}
+  TopLeft: {fileID: 11400000, guid: ce205d4b0099345c49ab6466ac58becb, type: 2}
+  BottomLeft: {fileID: 11400000, guid: 8422dc786ce3d4a8e8367983572ed8af, type: 2}
+  LinkersTopRight: {fileID: 11400000, guid: 428b60c441c614cf680bf8378e6883dd, type: 2}
+  LinkersBottomRight: {fileID: 11400000, guid: 3c39478d5f1f048a3a81b2166eefb769, type: 2}
+  LinkersTopLeft: {fileID: 11400000, guid: 2d1eeac323d724f879fd2657458a100a, type: 2}
+  LinkersBottomLeft: {fileID: 11400000, guid: 0b781efa53f0e4e82b746796253fd081, type: 2}
+  tilemap: {fileID: 0}

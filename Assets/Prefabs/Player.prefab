@@ -1019,6 +1019,7 @@ MonoBehaviour:
   isInvFull: 0
   emptyItem: {fileID: 3067545174209583482, guid: 72bd658676c14467b8d311fe84ccffe5, type: 3}
   emptySpawnOffset: {x: 0.5, y: 0}
+  wepChipPanel: {fileID: 0}
 --- !u!1 &6154040031742622743
 GameObject:
   m_ObjectHideFlags: 0

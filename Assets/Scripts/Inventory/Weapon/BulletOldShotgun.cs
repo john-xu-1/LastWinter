@@ -20,6 +20,7 @@ public class BulletOldShotgun : BulletBase
 
     Vector3 direction;
 
+
     public override void trailBehavior(TrailRenderer tr)
     {
         tr.colorGradient = weapon.chip.trail.GetComponent<TrailRenderer>().colorGradient;

@@ -31,6 +31,14 @@ namespace WorldBuilder
         {
             BuiltWorlds.Add(world);
         }
+
+        public World GetWorld()
+        {
+            if (BuiltWorlds.Count > 0) return BuiltWorlds[0];
+            else return null;
+        }
     }
+
+
 
 }

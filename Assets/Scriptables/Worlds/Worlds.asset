@@ -39342,7 +39342,7 @@ MonoBehaviour:
       buidStatus: 1
       removedNeighbors: 
       lastBuildTime: 0
-    startPos: {x: 0, y: 0}
+    startPos: {x: 60, y: 6}
     WorldState: 1
     WorldHistory:
       roomHistories:

@@ -128,7 +128,7 @@ public class DebugMap : MonoBehaviour
             string jsonStr = WorldBuilder.Utility.GetFile(files[0]);
             World world = JsonUtility.FromJson<World>(jsonStr);
 
-            BuildWorld(world);
+            Generator.BuildWorld(world);
         }
         else if (MapSource == MapSources.Solver)
         {
@@ -140,7 +140,7 @@ public class DebugMap : MonoBehaviour
             //WorldBuilder.BuildWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, 3, Solver.maxDuration - 10);
             World world = worlds.BuiltWorlds[BuiltWorldIndex];
             //WorldMap.ConvertGraph()
-            BuildWorld(world);
+            Generator.BuildWorld(world);
         }
         else if (MapSource == MapSources.History)
         {
@@ -168,15 +168,7 @@ public class DebugMap : MonoBehaviour
 
     }
 
-    void BuildWorld(World world)
-    {
-        this.world = world;
-        foreach (Room room in world.GetRooms())
-        {
-            room.SetupRoom();
-            Generator.ConvertMap(room);
-        }
-    }
+    
 
 
 }

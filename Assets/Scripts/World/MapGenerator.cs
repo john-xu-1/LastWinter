@@ -50,4 +50,14 @@ public class MapGenerator : MonoBehaviour
     {
         CMap.RemoveTiles(room);
     }
+
+    public void BuildWorld(World world)
+    {
+        
+        foreach (Room room in world.GetRooms())
+        {
+            room.SetupRoom();
+            ConvertMap(room);
+        }
+    }
 }
