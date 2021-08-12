@@ -52,9 +52,15 @@ public class Pickupable : MonoBehaviour
             }
             else
             {
-
+                targ = null;
                 startChase = false;
             }
+        }
+
+        if (targ == null)
+        {
+            rb.velocity = Vector2.zero;
+            torque = 0f;
         }
 
         if (FindObjectOfType<InventorySystem>().isInvFull == false && startChase)

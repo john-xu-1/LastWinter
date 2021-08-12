@@ -13,12 +13,17 @@ public class BulletVol : BulletBase
     public bool isSub;
     public float KB;
 
-    
+
+
+    public override void trailBehavior(TrailRenderer tr)
+    {
+        tr.colorGradient = weapon.chip.trail.GetComponent<TrailRenderer>().colorGradient;
+        tr.widthCurve = weapon.chip.trail.GetComponent<TrailRenderer>().widthCurve;
+
+    }
 
 
 
-
-    
     public override void setUp()
     {
         
