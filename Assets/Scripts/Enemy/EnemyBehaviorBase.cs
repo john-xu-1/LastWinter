@@ -21,6 +21,8 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     public float attackCD = 2;
 
+    
+
     void Start()
     {
         p = GameObject.FindGameObjectWithTag("Player");

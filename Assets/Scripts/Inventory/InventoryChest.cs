@@ -5,9 +5,9 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 public class InventoryChest : MonoBehaviour
 {
-    public Color32 chestColor;
+    public Color chestColor;
 
-    public Color32[] colorLibrary = new Color32[4];
+    public Color[] colorLibrary = new Color[4];
 
     public string rarity;
 
@@ -43,6 +43,8 @@ public class InventoryChest : MonoBehaviour
         }
 
         transform.GetChild(1).GetComponent<SpriteRenderer>().color = chestColor;
+
+        
         transform.GetChild(2).GetComponent<Light2D>().color = chestColor;
     }
 

@@ -14,7 +14,8 @@ public class InventoryWeapon : InventoryObjects
         Rainy_Day,
         Flash_Light,
         Bottle,
-        Old_Shotgun
+        Old_Shotgun,
+        BreakOfDawn
     }
     public WeaponTypes weaponType;
 
