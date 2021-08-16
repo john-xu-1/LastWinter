@@ -15,7 +15,8 @@ public class InventoryWeapon : InventoryObjects
         Flash_Light,
         Bottle,
         Old_Shotgun,
-        BreakOfDawn
+        BreakOfDawn,
+        Flamethrower
     }
     public WeaponTypes weaponType;
 

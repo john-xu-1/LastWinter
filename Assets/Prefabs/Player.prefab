@@ -1013,6 +1013,7 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  - 0
   weapon: {fileID: 0}
   acs: {fileID: 0}
   chip: {fileID: 0}
