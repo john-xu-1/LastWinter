@@ -87,6 +87,7 @@ public class CollisionMap : MonoBehaviour
 
     public void DebugPlaceTiles(Room room)
     {
+        
         foreach (CollisionTile tile in room.tiles)
         {
             if (tile.type == 1)
@@ -147,6 +148,7 @@ public class CollisionMap : MonoBehaviour
 
 
         }
+        
     }
 
     void PlaceTile(Tilemap tilemap, Vector3Int pos, TileBase tileType)

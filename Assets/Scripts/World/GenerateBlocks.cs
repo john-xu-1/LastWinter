@@ -11,7 +11,7 @@ public class GenerateBlocks : MonoBehaviour
     void Start()
     {
         print("GenerateBlocks is on " + gameObject.name);
-        UtilityTilemap.PlaceTiles(tilemap, new Vector3Int(3, 4, 0), 2, 3, tilebase);
+//        UtilityTilemap.PlaceTiles(tilemap, new Vector3Int(3, 4, 0), 2, 3, tilebase);
     }
 
     // Update is called once per frame

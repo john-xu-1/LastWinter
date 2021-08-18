@@ -26,12 +26,12 @@ public class DebugMap : MonoBehaviour
     public bool BuildOnStart;
     public ClingoSolver Solver;
     public int cpus = 4;
-    public Worlds WorldBuilder;
+    public Worlds WorldBuilder, WorldsSource;
     public bool[] connection = { true, true, false, false, false, false, false, false };
     public RoomConnections connections;
     public Vector2Int RoomSize = new Vector2Int(20, 20);
     public int headroom = 2, shoulderroom = 3, minCeilingHeight = 3;
-    public GameObject nodePrefab, edgePrefab;
+    public GameObject nodePrefab, edgePrefab, pathPrefab;
 
     public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2;
     public int jumpHeadroom = 3, timeout = 600;
@@ -81,10 +81,19 @@ public class DebugMap : MonoBehaviour
         //    Debug.Log("Removed: " + line2);
         //}
 
-        for (int i = 0; i < 11; i += 1)
-        {
-            WorldBuilder.BuiltWorlds.RemoveAt(10);
-        }
+        //for (int i = 0; i < 11; i += 1)
+        //{
+        //    WorldBuilder.BuiltWorlds.RemoveAt(10);
+        //}
+
+        //foreach(World world in WorldsSource.BuiltWorlds)
+        //{
+        //    if (world.name.Contains("7/29/21"))
+        //    {
+        //        WorldBuilder.AddWorld(world);
+        //        WorldsSource.BuiltWorlds.Remove(world);
+        //    }
+        //}
 
         if (BuildOnStart) buildMap();
     }
@@ -96,6 +105,7 @@ public class DebugMap : MonoBehaviour
     World worldHistory;
     int historyIndex = 0;
     public GameObject MiniMap;
+    private GameObject[,] pathPoints;
     private void Update()
     {
         if(MapSource == MapSources.History)
@@ -110,11 +120,13 @@ public class DebugMap : MonoBehaviour
                 {
                     Debug.Log("RemoveMap");
                     Generator.RemoveMap(room);
+                    RemovePath(room);
                 }
                 else
                 {
                     room.SetupRoom(rh.map);
                     Generator.ConvertMap(room);
+                    AddPath(room);
                 }
                 RoomID.text = rh.roomID.ToString();
                 BuildTime.text = Utility.FormatTime(rh.buildTime);
@@ -130,10 +142,13 @@ public class DebugMap : MonoBehaviour
                     Room room = worldHistory.GetRoom(rh.roomID);
                     Debug.Log("RemoveMap");
                     Generator.RemoveMap(room);
-                }else 
+                    RemovePath(room);
+                }
+                else 
                 {
                     Room room = worldHistory.GetRoom(rh.roomID);
                     Generator.ConvertMap(room);
+                    AddPath(room);
                 }
 
                 historyIndex -= 1;
@@ -144,6 +159,53 @@ public class DebugMap : MonoBehaviour
 
             }
             
+        }
+    }
+    private void AddPath(Room room)
+    {
+        foreach(WorldBuilder.Path path in room.map.paths)
+        {
+            int width = room.map.dimensions.room_width;
+            int height = room.map.dimensions.room_height;
+            int i = room.pos.x;
+            int j = room.pos.y;
+            int x = path.x + width * i;
+            int y = path.y + height * j;
+            
+            string type = path.type;
+            if (!pathPoints[x, y])
+            {
+
+                PathNode node = Instantiate(pathPrefab).GetComponent<PathNode>();
+                pathPoints[x, y] = node.gameObject;
+                node.SetUpPathNode(x , -(y), type);
+            }
+            else
+            {
+                pathPoints[x, y].GetComponent<PathNode>().AddNode(type);
+            }
+        }
+    }
+    private void RemovePath(Room room)
+    {
+        foreach (WorldBuilder.Path path in room.map.paths)
+        {
+            int width = room.map.dimensions.room_width;
+            int height = room.map.dimensions.room_height;
+            int i = room.pos.x;
+            int j = room.pos.y;
+            int x = path.x + width * i;
+            int y = path.y + height * j;
+            string type = path.type;
+            if (pathPoints[x, y])
+            {
+                Destroy(pathPoints[x,y]);
+                pathPoints[x, y] = null;
+            }
+            else
+            {
+
+            }
         }
     }
 
@@ -160,6 +222,7 @@ public class DebugMap : MonoBehaviour
         }else if(MapSource == MapSources.Solver)
         {
             //Generator.ConvertMap(Solver.answerSet);
+            FindObjectOfType<BuildWorld>().Worlds = WorldBuilder;
             FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus);
         }
         else if (MapSource == MapSources.World)
@@ -179,6 +242,7 @@ public class DebugMap : MonoBehaviour
             historySource = WorldBuilder.BuiltWorlds[BuiltWorldIndex];
 
             WorldMap.DisplayGraph(historySource.worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
+            
 
             worldHistory = new World(historySource.Width, historySource.Height);
             historyIndex = 0;
@@ -186,6 +250,7 @@ public class DebugMap : MonoBehaviour
             Room room = worldHistory.GetRoom(rh.roomID);
             room.SetupRoom(rh.map);
             Generator.ConvertMap(room);
+            
 
             TotalTime.text = Utility.FormatTime(historySource.WorldHistory.GetTotalTime());
             RoomID.text = rh.roomID.ToString();
@@ -193,6 +258,13 @@ public class DebugMap : MonoBehaviour
             RunNum.text = (historyIndex + 1).ToString();
 
             historySource.WorldHistory.GetRoomHistoryAnalysis();
+
+            int width = historySource.Width;
+            int roomWidth = room.map.dimensions.room_width;
+            int height = historySource.Height;
+            int roomHeight = room.map.dimensions.room_height;
+            pathPoints = new GameObject[width * roomWidth + 2, height * roomHeight + 2];
+            AddPath(room);
         }
 
 
