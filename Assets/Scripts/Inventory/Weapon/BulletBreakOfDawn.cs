@@ -8,6 +8,8 @@ public class BulletBreakOfDawn : BulletBase
 
     public Vector2 ranRange;
 
+    //public bool isSub;
+
     public override void setUp()
     {
 
@@ -17,6 +19,18 @@ public class BulletBreakOfDawn : BulletBase
         //player = GameObject.FindGameObjectWithTag("Player");
 
         float ranY = Random.Range(ranRange.x, ranRange.y);
+
+        int ranBul = Random.Range(0, 4);
+
+        if (ranBul == 0)
+        {
+            GetComponent<SpriteRenderer>().sprite = weapon.spawnedPrefab1.GetComponent<SpriteRenderer>().sprite;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().sprite = weapon.spawnedPrefab2.GetComponent<SpriteRenderer>().sprite;
+            Debug.Log("yo");
+        }
 
         GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x * speed, direction.y * speed + ranY);
 

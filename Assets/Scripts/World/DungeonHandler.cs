@@ -18,12 +18,15 @@ public class DungeonHandler : MonoBehaviour
 
     private Transform player;
 
+    public bool isSelected;
+
     private int worldWidth, worldHeight, roomWidth, roomHeight;
 
-    void MapSetup()
+    public void MapSetup(World map)
     {
-        dungeon = worlds.GetWorld();
-       
+        //dungeon = worlds.GetWorld();
+
+        dungeon = map;
 
         mapG.BuildWorld(dungeon);
 
@@ -33,25 +36,24 @@ public class DungeonHandler : MonoBehaviour
         roomHeight = dungeon.GetRooms()[0].map.dimensions.room_height;
     }
 
-    void PlayerSetup()
+    public void PlayerSetup()
     {
         player = Instantiate(playerPrefab, new Vector3(dungeon.startPos.x, dungeon.startPos.y, 0), Quaternion.identity).transform;
     }
 
     private void Start()
     {
-        MapSetup();
-        PlayerSetup();
-        camSetup();
+        
     }
 
-    void camSetup()
+    public void camSetup()
     {
         camControl.setUp(worldWidth, worldHeight, roomWidth, roomHeight, player);
     }
 
     private void Update()
     {
+        
         
     }
 }

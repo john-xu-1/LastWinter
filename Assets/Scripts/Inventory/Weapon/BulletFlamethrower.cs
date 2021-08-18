@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BulletFlamethrower : BulletBase
 {
+  
 
     public override void setUp()
     {
