@@ -8,13 +8,15 @@ public class LevelSelection : MonoBehaviour
 {
     public GameObject levelSelectionPanel;
     public DungeonHandler dh;
-    public World[] maps;
+    public Worlds worlds;
+    private World[] maps;
     private Dropdown dpd;
     
     
 
     void Start()
     {
+        maps = worlds.GetWorlds();
         levelSelectionPanel.transform.parent.gameObject.SetActive(true);
         dpd = levelSelectionPanel.transform.GetChild(1).GetComponent<Dropdown>();
         List<string> worldNames = new List<string>();
@@ -30,8 +32,16 @@ public class LevelSelection : MonoBehaviour
 
     public void genWorld()
     {
-        World curWorld = maps[dpd.value - 1];
 
+        World curWorld;
+        if (dpd.value > 0)
+        {
+            curWorld = maps[dpd.value - 1];
+        }
+        else
+        {
+            curWorld = null; ;
+        }
         dh.MapSetup(curWorld);
         dh.PlayerSetup();
         dh.camSetup();

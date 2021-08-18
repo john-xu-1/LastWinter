@@ -18,7 +18,9 @@ public class DungeonHandler : MonoBehaviour
 
     private Transform player;
 
-    public bool isSelected;
+    public GameObject wepChipPan;
+    public GameObject invPan;
+
 
     private int worldWidth, worldHeight, roomWidth, roomHeight;
 
@@ -39,11 +41,13 @@ public class DungeonHandler : MonoBehaviour
     public void PlayerSetup()
     {
         player = Instantiate(playerPrefab, new Vector3(dungeon.startPos.x, dungeon.startPos.y, 0), Quaternion.identity).transform;
+        player.GetComponent<InventorySystem>().wepChipPanel = wepChipPan;
+        invPan.SetActive(true);
     }
 
     private void Start()
     {
-        
+        invPan.SetActive(false);
     }
 
     public void camSetup()

@@ -37,6 +37,25 @@ namespace WorldBuilder
             if (BuiltWorlds.Count > 0) return BuiltWorlds[0];
             else return null;
         }
+
+        public World[] GetWorlds()
+        {
+            World[] output = new World[BuiltWorlds.Count];
+            if (BuiltWorlds.Count > 0)
+            {
+                for (int i = 0; i < BuiltWorlds.Count; i++)
+                {
+                    output[i] = BuiltWorlds[i];
+                }
+            }
+            else
+            {
+                output = null;
+            }
+
+            return output;
+            
+        }
     }
 
 
