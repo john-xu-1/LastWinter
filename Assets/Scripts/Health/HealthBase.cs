@@ -75,6 +75,11 @@ public class HealthBase : MonoBehaviour
             }
         }
 
+        if (health > MaxHealth)
+        {
+            health = MaxHealth;
+        }
+
         if (health >= orgMaxHealth && health < MaxHealth)
         {
             regGapHealth = true;

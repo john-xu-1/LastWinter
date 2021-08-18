@@ -10,11 +10,16 @@ public class AcsHeartFlower : AcsBase
     {
         HealthPlayer h = player.GetComponent<HealthPlayer>();
         h.SetMaxHealth(h.GetMaxHealth() + magnitude);
-        Debug.Log("we calling");
 
 
     }
 
-    
+    public override void unDo()
+    {
+        HealthPlayer h = player.GetComponent<HealthPlayer>();
+        h.SetMaxHealth(h.GetMaxHealth() - magnitude);
+    }
+
+
 
 }

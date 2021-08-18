@@ -67,4 +67,9 @@ public class AcsBase : MonoBehaviour
     {
 
     }
+
+    public virtual void unDo()
+    {
+
+    }
 }

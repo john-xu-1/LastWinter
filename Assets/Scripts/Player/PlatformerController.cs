@@ -25,7 +25,7 @@ public class PlatformerController : PhysicsObject
             if (EffectorState == EffectorStates.None) return MaxSpeedNormal;
             else if (EffectorState == EffectorStates.LavaPartial || EffectorState == EffectorStates.Lava) return MaxSpeedLava;
             else if (EffectorState == EffectorStates.WaterPartial || EffectorState == EffectorStates.Water) return MaxSpeedWater;
-            else return TakeOffSpeedNormal;
+            else return MaxSpeedNormal;
         }
     }
 

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67f22d51a2369403a93fcd4d90a9d1b3, type: 3}
-  m_Name: HeartFlower
+  m_Name: WinningCup
   m_EditorClassIdentifier: 
   itemType: 2
-  itemSprite: {fileID: 21300000, guid: ce3c467b57fc2414f9524cd9ccdd5c8e, type: 3}
-  itemName: HeartFlower
-  itemRare: A
-  acsType: 2
-  spawnPrefab: {fileID: 4537596051620102606, guid: f7ea775854e3143349abf4799b6eea13, type: 3}
-  destroyAfter: 10
+  itemSprite: {fileID: 21300000, guid: d317c27083d7840ebb28c4df6cac6674, type: 3}
+  itemName: Winning Cup
+  itemRare: B
+  acsType: 1
+  spawnPrefab: {fileID: 1213824757439471157, guid: 9a4a659adc24b4a33941a98cee49fd49, type: 3}
+  destroyAfter: 2.5

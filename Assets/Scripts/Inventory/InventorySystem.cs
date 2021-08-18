@@ -25,7 +25,7 @@ public class InventorySystem : MonoBehaviour
 
     float Zfactor;
 
-    bool isAcsSpawned;
+    //bool isAcsSpawned;
 
     public int maxItemSize;
 
@@ -40,9 +40,13 @@ public class InventorySystem : MonoBehaviour
 
     private InventoryWeapon selectedWeapon;
 
+    private GameObject curEffectorInstance;
+    public float curAcsTime;
 
     List<InventoryWeapon> wep;
     Dropdown dpd;
+
+    bool isAcsUndo = false;
 
     
 
@@ -254,18 +258,48 @@ public class InventorySystem : MonoBehaviour
             {
 
                 acs = (InventoryAccessory)selectedItem;
+                curAcsTime = acs.destroyAfter;
                 setAcsPrefab(acs.spawnPrefab);
 
-                if (isAcsSpawned == false)
+                if (!FindObjectOfType<AcsBase>())
                 {
-                    if (Input.GetButton("Fire1"))
-                    {
-                        Instantiate(acs.spawnPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, Quaternion.identity);
-                        isAcsSpawned = true;
-                    }
+                    curEffectorInstance = Instantiate(acs.spawnPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, Quaternion.identity);
 
                 }
 
+            }
+            else
+            {
+                if (curEffectorInstance)
+                {
+                    
+                    if (curAcsTime <= 0)
+                    {
+                        if (isAcsUndo == false)
+                        {
+                            curEffectorInstance.GetComponent<AcsBase>().unDo();
+
+                            Destroy(curEffectorInstance);
+
+                            isAcsUndo = true;
+
+                        }
+
+                    }
+                    else
+                    {
+                        isAcsUndo = false;
+                        curAcsTime -= Time.deltaTime;
+
+                    }
+
+                    
+
+                    
+
+
+                }
+                
             }
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Chip)
