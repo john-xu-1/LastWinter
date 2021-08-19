@@ -11,7 +11,7 @@ namespace WorldBuilder
         public static string DataFilePath = @"WorldBuilder/WorldJson";
         public static string[] getFileNames()
         {
-            string[] allFiles = Directory.GetFiles("Assets/" + DataFilePath);
+            string[] allFiles = Directory.GetFiles(System.IO.Path.Combine("Assets", DataFilePath));
 
             List<string> files = new List<string>();
 
@@ -21,12 +21,13 @@ namespace WorldBuilder
 
                 if (!file.Contains(".meta"))
                 {
+                    file = file.Replace("Assets\\", "");
                     file = file.Replace("Assets/", "");
                     files.Add(file);
                 }
             }
 
-            return GetArray<string>(files);
+            return GetArray(files);
         }
 
         public static string GetFile(string name)
@@ -47,16 +48,17 @@ namespace WorldBuilder
 
             int counter = 0;
             string testName = name;
-            string datafilePath = Application.isEditor ? System.IO.Path.Combine("Assets", DataFilePath) : DataFilePath;
-            while (File.Exists(System.IO.Path.Combine(datafilePath, testName) + ".txt"))
+            string dataFilePath = Application.isEditor ? System.IO.Path.Combine("Assets", DataFilePath) : DataFilePath;
+            while (File.Exists(System.IO.Path.Combine(dataFilePath, testName + ".txt")))
             {
                 counter += 1;
                 testName = name + " " + counter;
             }
 
+            Debug.Log(System.IO.Path.Combine(dataFilePath, testName + ".txt"));
             CreateFile(json, $"{testName}.txt");
 
-            
+
         }
 
         public static string CreateFile(string content, string filename)
@@ -68,6 +70,7 @@ namespace WorldBuilder
                 {
                     Directory.CreateDirectory(System.IO.Path.Combine("Assets", DataFilePath));
                 }
+
                 relativePath = System.IO.Path.Combine("Assets", DataFilePath, filename);
             }
             else
@@ -78,7 +81,7 @@ namespace WorldBuilder
                 }
                 relativePath = System.IO.Path.Combine(DataFilePath, filename);
             }
-
+            Debug.Log(relativePath);
             using (StreamWriter streamWriter = File.CreateText(relativePath))
             {
                 streamWriter.Write(content);
@@ -110,7 +113,7 @@ namespace WorldBuilder
         {
             return GetPermutations(GetArray(indices));
         }
-            public static List<List<T>> GetPermutations<T>(T[] indices)
+        public static List<List<T>> GetPermutations<T>(T[] indices)
         {
             List<List<T>> permutations = new List<List<T>>();
             int permutationCount = (int)Mathf.Pow(2, indices.Length);
@@ -159,11 +162,11 @@ namespace WorldBuilder
         {
             int height = map.dimensions.room_height;
             int width = map.dimensions.room_width;
-            foreach(Tile tile in map.area)
+            foreach (Tile tile in map.area)
             {
                 int x = tile.x;
                 int y = tile.y;
-                if(tile.type == 0 && (side == "up" && y == 1 || side == "down" && y == height || side == "left" && x == 1 || side == "right" && x == width)) return true;
+                if (tile.type == 0 && (side == "up" && y == 1 || side == "down" && y == height || side == "left" && x == 1 || side == "right" && x == width)) return true;
             }
             return false;
         }
@@ -240,7 +243,7 @@ namespace WorldBuilder
         public static T[] GetArray<T>(List<T> list)
         {
             T[] newList = new T[list.Count];
-            for(int i =0; i < list.Count; i += 1)
+            for (int i = 0; i < list.Count; i += 1)
             {
                 newList[i] = list[i];
             }

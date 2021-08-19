@@ -9,22 +9,25 @@ public class LevelSelection : MonoBehaviour
     public GameObject levelSelectionPanel;
     public DungeonHandler dh;
     public Worlds worlds;
-    private World[] maps;
+    List<string> worldNames = new List<string>();
+    List<string> worldPaths = new List<string>();
     private Dropdown dpd;
     
     
 
     void Start()
     {
-        maps = worlds.GetWorlds();
         levelSelectionPanel.transform.parent.gameObject.SetActive(true);
         dpd = levelSelectionPanel.transform.GetChild(1).GetComponent<Dropdown>();
-        List<string> worldNames = new List<string>();
-        for (int i = 0; i < maps.Length; i++)
-        {
-            worldNames.Add(maps[i].name);
-        }
+        
 
+        for (int i = 0; i < WorldBuilder.Utility.getFileNames().Length; i++)
+        {
+            worldPaths.Add(WorldBuilder.Utility.getFileNames()[i]);
+            string[] texts = WorldBuilder.Utility.getFileNames()[i].Split('/');
+            worldNames.Add(texts[texts.Length - 1]);
+        }
+        
         dpd.AddOptions(worldNames);
     }
 
@@ -32,20 +35,28 @@ public class LevelSelection : MonoBehaviour
 
     public void genWorld()
     {
-
-        World curWorld;
+        string jsonStr;
+        
         if (dpd.value > 0)
         {
-            curWorld = maps[dpd.value - 1];
+            jsonStr = WorldBuilder.Utility.GetFile(worldPaths[dpd.value - 1]);
+            Debug.Log(jsonStr);
         }
         else
         {
-            curWorld = null; ;
+            jsonStr = "";
         }
-        dh.MapSetup(curWorld);
-        dh.PlayerSetup();
-        dh.camSetup();
 
-        levelSelectionPanel.transform.parent.gameObject.SetActive(false);
+        if (jsonStr != "")
+        {
+            World world = JsonUtility.FromJson<World>(jsonStr);
+
+            dh.MapSetup(world);
+            dh.PlayerSetup();
+            dh.camSetup();
+
+            levelSelectionPanel.transform.parent.gameObject.SetActive(false);
+        }
+        
     }
 }
