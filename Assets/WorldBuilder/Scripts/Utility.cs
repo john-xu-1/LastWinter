@@ -45,7 +45,16 @@ namespace WorldBuilder
             string json = JsonUtility.ToJson(world, true);
 
 
-            CreateFile(json, $"{name}.text");
+            int counter = 0;
+            string testName = name;
+            string datafilePath = Application.isEditor ? System.IO.Path.Combine("Assets", DataFilePath) : DataFilePath;
+            while (File.Exists(System.IO.Path.Combine(datafilePath, testName) + ".txt"))
+            {
+                counter += 1;
+                testName = name + " " + counter;
+            }
+
+            CreateFile(json, $"{testName}.txt");
 
             
         }

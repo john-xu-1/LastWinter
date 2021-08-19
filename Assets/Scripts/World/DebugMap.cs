@@ -54,6 +54,19 @@ public class DebugMap : MonoBehaviour
         
         if (BuildOnStart) buildMap();
 
+        if (worlds)
+        {
+            World[] builtWorlds = worlds.GetWorlds();
+
+            foreach (World world in builtWorlds)
+            {
+                string name = world.name.Replace("/", "_");
+                WorldBuilder.Utility.SaveWorld(world, name);
+            }
+        }
+
+        
+
 
     }
     //bool isBuilt = false;
