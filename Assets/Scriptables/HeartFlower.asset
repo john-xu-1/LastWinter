@@ -16,6 +16,11 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: ce3c467b57fc2414f9524cd9ccdd5c8e, type: 3}
   itemName: HeartFlower
   itemRare: A
+  tooltip: 'Yes, flowers make people stronger, that''s totally 100% science.
+
+
+    Activates
+    while holding: gives the player a BLESSING FROM THE HEART effect which adds an
+    extra 5 health for 30 seconds.'
   acsType: 2
   spawnPrefab: {fileID: 4537596051620102606, guid: f7ea775854e3143349abf4799b6eea13, type: 3}
-  destroyAfter: 10

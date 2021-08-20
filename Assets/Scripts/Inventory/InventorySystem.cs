@@ -41,7 +41,8 @@ public class InventorySystem : MonoBehaviour
     private InventoryWeapon selectedWeapon;
 
     private bool acsSpawned;
-    private float acsDestroyAfter;
+
+    private int curSelectedKey = 0;
 
     List<InventoryWeapon> wep;
     Dropdown dpd;
@@ -137,6 +138,7 @@ public class InventorySystem : MonoBehaviour
         
 
 
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (items.Count > 0)
@@ -148,7 +150,13 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
-            acsSpawned = false;
+            
+            if (curSelectedKey != 1)
+            {
+                acsSpawned = false;
+                curSelectedKey = 1;
+            }
+            
             
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
@@ -164,8 +172,12 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
-            acsSpawned = false;
-            
+            if (curSelectedKey != 2)
+            {
+                acsSpawned = false;
+                curSelectedKey = 2;
+            }
+
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
         }
@@ -180,8 +192,12 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
-            acsSpawned = false;
-            
+            if (curSelectedKey != 3)
+            {
+                acsSpawned = false;
+                curSelectedKey = 3;
+            }
+
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
         }
@@ -196,8 +212,12 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
-            acsSpawned = false;
-            
+            if (curSelectedKey != 4)
+            {
+                acsSpawned = false;
+                curSelectedKey = 4;
+            }
+
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
         }
@@ -212,8 +232,12 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
-            acsSpawned = false;
-            
+            if (curSelectedKey != 5)
+            {
+                acsSpawned = false;
+                curSelectedKey = 5;
+            }
+
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
         }
@@ -277,7 +301,6 @@ public class InventorySystem : MonoBehaviour
                 if (acsSpawned == false)
                 {
                     eb = Instantiate(acs.spawnPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, Quaternion.identity).GetComponent<EffectBase>();
-                    acsDestroyAfter = eb.maxDuration;
                     FindObjectOfType<Effectable>().addEffect(eb.GetComponent<EffectBase>());
                     
                     acsSpawned = true;

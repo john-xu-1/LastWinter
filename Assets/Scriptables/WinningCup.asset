@@ -16,6 +16,11 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: d317c27083d7840ebb28c4df6cac6674, type: 3}
   itemName: Winning Cup
   itemRare: B
+  tooltip: 'Fast as the wind! Remember when everything was perfect?
+
+
+    Activates
+    while holding: gives the player SWEET MEMORIES effect which increases the player''s
+    speed on land by 3.5 for 2.5 seconds.'
   acsType: 1
   spawnPrefab: {fileID: 1213824757439471157, guid: 9a4a659adc24b4a33941a98cee49fd49, type: 3}
-  destroyAfter: 2.5

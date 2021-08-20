@@ -16,6 +16,11 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: ca0277fb89b494537a8ea5b53963b646, type: 3}
   itemName: Break of Dawn
   itemRare: A
+  tooltip: 'Maybe someday the sun will rise again.
+
+
+    Shoots stars out at a rapid
+    rate with mild inaccuracies. There is a 1/5th chance of a stronger star appearing.'
   weaponType: 8
   spawnedPrefab1: {fileID: 25013441216200535, guid: d9d5822eeda474f8889e1e174f85146c, type: 3}
   spawnedPrefab2: {fileID: 3050451465836025865, guid: 86371815b4eb0428db1611e07bb33940, type: 3}

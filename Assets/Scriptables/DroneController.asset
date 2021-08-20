@@ -16,6 +16,11 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: a04140e568ad04931adf3e8535c43d9b, type: 3}
   itemName: Drone Controller
   itemRare: A
+  tooltip: 'The future, in your hands.
+
+
+    Use mouse to control movement, hitting
+    an enemy will decrease its cool down.'
   weaponType: 2
   spawnedPrefab1: {fileID: 6104214910540336568, guid: cfdc3f6eb3da84cf985dff0a57975479, type: 3}
   spawnedPrefab2: {fileID: 0}
@@ -23,4 +28,4 @@ MonoBehaviour:
   destroyAfterTime: 5
   CDIndex: 2
   isWeaponSwitchBullet: 0
-  chip: {fileID: 11400000, guid: 658e955a762744dfead012132a84e6c0, type: 2}
+  chip: {fileID: 0}

@@ -16,6 +16,12 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: a0d35963e80964169ae3de9b4db15c8d, type: 3}
   itemName: Gaea's Touch
   itemRare: B
+  tooltip: 'haha plant go brrrrrrrrr, haha me go weeeeee
+
+
+    Releases a fungus
+    that grows rapidly, once big enough players can jump on it to receive a jump
+    boost.'
   weaponType: 3
   spawnedPrefab1: {fileID: 1011377624895968878, guid: 7204f84a0a8094d19bb14ce97a9f6663, type: 3}
   spawnedPrefab2: {fileID: 0}

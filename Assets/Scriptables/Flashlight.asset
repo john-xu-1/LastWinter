@@ -16,6 +16,7 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 617e87e96d5b14d03afe0a4f00ff6957, type: 3}
   itemName: Flashlight
   itemRare: C
+  tooltip: 
   weaponType: 5
   spawnedPrefab1: {fileID: 6576712946892690093, guid: 4f72d2b5f228e481e8c57679b6f02331, type: 3}
   spawnedPrefab2: {fileID: 0}
@@ -23,3 +24,4 @@ MonoBehaviour:
   destroyAfterTime: 20
   CDIndex: 5
   isWeaponSwitchBullet: 0
+  chip: {fileID: 0}

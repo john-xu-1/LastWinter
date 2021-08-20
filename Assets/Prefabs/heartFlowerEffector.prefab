@@ -48,3 +48,5 @@ MonoBehaviour:
   magnitude: 25
   pc: {fileID: 0}
   ph: {fileID: 0}
+  effectName: Blessing from the Heart
+  effectIcon: {fileID: 0}

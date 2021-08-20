@@ -16,11 +16,16 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: ebf9f7933e2c44667a7c990cefe2f26b, type: 3}
   itemName: Rainy Day
   itemRare: A
+  tooltip: 'Last time I saw the rain, it was a long time ago. I was so alone, I was
+    so cold.
+
+
+    Rapidly fires singular bullets that fall faster.'
   weaponType: 4
-  spawnedTargetPrefab: {fileID: 0}
   spawnedPrefab1: {fileID: 166805943583265557, guid: 066f4d952ee4c457fbe32c0bfacdae5f, type: 3}
   spawnedPrefab2: {fileID: 0}
   coolDown: 0.25
   destroyAfterTime: 4
   CDIndex: 1
   isWeaponSwitchBullet: 0
+  chip: {fileID: 0}

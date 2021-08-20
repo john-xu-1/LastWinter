@@ -14,6 +14,10 @@ public class EffectBase : MonoBehaviour
 
     public HealthPlayer ph;
 
+    public string effectName;
+
+    public Sprite effectIcon;
+
 
     private void Start()
     {

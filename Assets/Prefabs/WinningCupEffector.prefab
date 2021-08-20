@@ -48,3 +48,5 @@ MonoBehaviour:
   magnitude: 10.5
   pc: {fileID: 0}
   ph: {fileID: 0}
+  effectName: Sweet Memories
+  effectIcon: {fileID: 0}

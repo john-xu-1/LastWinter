@@ -16,6 +16,11 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 9b69c6770a917426e8bae9d82d5c088d, type: 3}
   itemName: Flamethrower
   itemRare: B
+  tooltip: 'You really have ROASTED your enemies. Somebody please help my jokes are
+    terrible.
+
+
+    Releases rapid damage fire in a close range.'
   weaponType: 9
   spawnedPrefab1: {fileID: 492289600681480079, guid: 6abf65bac1d584c94923d8f616af7753, type: 3}
   spawnedPrefab2: {fileID: 0}

@@ -16,5 +16,10 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 6462516f34eb24210b68df9d18fa5a6e, type: 3}
   itemName: Water Chip
   itemRare: B
+  tooltip: 'A glimpse of water.
+
+
+    Increases damage of bullets that have this
+    chip attached.'
   chipType: 1
   trail: {fileID: 1315250778426502904, guid: ba186f6c8f15e4fc3980d0df946b95a8, type: 3}

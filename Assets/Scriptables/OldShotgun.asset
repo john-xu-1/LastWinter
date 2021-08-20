@@ -16,6 +16,11 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: ed01af7ab513740188899f9a77b8c9f4, type: 3}
   itemName: Old Shotgun
   itemRare: A
+  tooltip: 'Just like dad''s hunting gun.
+
+
+    Fires multiple bullets at once in
+    a close range.'
   weaponType: 7
   spawnedPrefab1: {fileID: 4982714832543282875, guid: b74a29294fa5f484bb4b479805dc8633, type: 3}
   spawnedPrefab2: {fileID: 0}

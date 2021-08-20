@@ -822,6 +822,7 @@ GameObject:
   - component: {fileID: 1288998866}
   - component: {fileID: 6848640476687598549}
   - component: {fileID: 4952244571176048423}
+  - component: {fileID: 294944347346429806}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -1022,6 +1023,20 @@ MonoBehaviour:
   emptyItem: {fileID: 3067545174209583482, guid: 72bd658676c14467b8d311fe84ccffe5, type: 3}
   emptySpawnOffset: {x: 0.5, y: 0}
   wepChipPanel: {fileID: 0}
+  eb: {fileID: 0}
+--- !u!114 &294944347346429806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6154040031498853860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab4138460e2fa414bad158f07d61d5c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effects: []
 --- !u!1 &6154040031742622743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1617,9 +1632,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: -7052831677531792021, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
---- !u!4 &3243438903541821193 stripped
+--- !u!4 &8174317057381277557 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 8675209081154888669, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2600416194218464161, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
   m_PrefabInstance: {fileID: 6154040031619058900}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &842451104557669899 stripped
@@ -1632,9 +1647,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -248607118114557499, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
   m_PrefabInstance: {fileID: 6154040031619058900}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &8174317057381277557 stripped
+--- !u!4 &3243438903541821193 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 2600416194218464161, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8675209081154888669, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
   m_PrefabInstance: {fileID: 6154040031619058900}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1143338167324961844 stripped

@@ -15,4 +15,7 @@ public class InventoryObjects : ScriptableObject
     public Sprite itemSprite;
     public string itemName;
     public string itemRare;
+
+    [TextArea(5, 10)]
+    public string tooltip;
 }

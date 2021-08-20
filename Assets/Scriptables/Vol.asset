@@ -16,6 +16,12 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: c043d47cf5dba4b06b243606344f6145, type: 3}
   itemName: Vol
   itemRare: S
+  tooltip: 'Sci-fi pew pew gun.
+
+
+    Shoots extremely fast lazers at insane frequencies.
+    These lazers target on the nearest enemy and bounces to other enemies nearby.
+    On contact, lazers spawn sub-bullet bubbles that also do dammage.'
   weaponType: 0
   spawnedPrefab1: {fileID: 2891621919610108023, guid: 70c8412cc90464e1096a429526b38130, type: 3}
   spawnedPrefab2: {fileID: 0}
