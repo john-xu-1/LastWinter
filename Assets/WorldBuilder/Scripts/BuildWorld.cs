@@ -110,18 +110,24 @@ namespace WorldBuilder
 
         }
 
-        List<Vector2Int> BuildQueue;
+        public List<Vector2Int> BuildQueue;
         RoomConnections[] connections;
 
         void BuildingRoomsSetup()
         {
             connections = WorldMap.get_room_connections(world.rawGraph);
             BuildQueue = new List<Vector2Int>();
+            foreach(Gate gate in world.worldGraph.gates)
+            {
+                Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
+                BuildQueue.Add(gateRoom);
+            }
             for(int y = 0; y < worldHeight; y += 1)
             {
                 for(int x = 0; x < worldWidth; x += 1)
                 {
-                    BuildQueue.Add(new Vector2Int(x, y));
+                    Vector2Int newRoom = new Vector2Int(x, y);
+                    if(!BuildQueue.Contains(newRoom)) BuildQueue.Add(newRoom);
                 }
             }
             BuildState += 1;
@@ -152,7 +158,7 @@ namespace WorldBuilder
             Debug.Log("Building roomID: " + roomID + " index: " + index);
             Neighbors neighbors = world.GetNeighbors(roomID);
             //bool[] connection = WorldMap.GetConnections(connections[roomID]);
-            BuildRoom(new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, connections[roomID], neighbors);
+            BuildRoom(roomID, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, connections[roomID], neighbors);
             //BuildState += 1;
         }
 
@@ -180,7 +186,7 @@ namespace WorldBuilder
                 }
 
                 if (history) world.WorldHistoryAdd(roomID, newRoom.map, buildTime, Solver.SolverStatus);
-                if (display) Generator.ConvertMap(newRoom);
+                if (display) DisplayRoom(newRoom); 
 
                 newRoom.buidStatus = ClingoSolver.Status.SATISFIABLE;
                 BuildState = BuildStates.roomBuilding;
@@ -202,15 +208,7 @@ namespace WorldBuilder
                     
                 }
 
-                //Room killRoom = world.GetRandomNeighbor(roomID);
-                //killRoom.isDestroyed = true;
-                //if (history) {
-                //    int killRoomID = Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight);
-                //    world.WorldHistoryRemove(killRoomID, killRoom.map, destroyTime, roomID, Solver.SolverStatus);
-
-                //}
-                //if (display) Generator.RemoveMap(killRoom);
-                //BuildQueue.Insert(0, killRoom.pos);
+                
                 BuildQueue.Insert(0, currentRoom);
 
                 if(room.buidStatus != ClingoSolver.Status.UNSATISFIABLE)
@@ -237,18 +235,9 @@ namespace WorldBuilder
                 if(killRoom != null)
                 {
                     double destroyTime = Solver.Duration;// Time.fixedTime - buildTimeStart;
-                    //killRoom.isDestroyed = true;
-                    //if (history)
-                    //{
-                    //    float destroyTime = Time.fixedTime - buildTimeStart;
-                    //    int killRoomID = Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight);
-                    //    world.WorldHistoryRemove(killRoomID, killRoom.map, destroyTime, roomID, Solver.SolverStatus);
-
-                    //}
-                    //if (display) Generator.RemoveMap(killRoom);
+                   
                     DestroyRoom(killRoom, destroyTime, roomID, Solver.SolverStatus);
-                    //BuildQueue.Insert(0, killRoom.pos);
-                    //Debug.Log(Solver.SolverStatus + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
+                    
                 }
                 else
                 {
@@ -267,11 +256,21 @@ namespace WorldBuilder
                 Debug.LogWarning($"Unhandled ClingoSolver.Status: {Solver.SolverStatus}");
             }
         }
+        void DisplayRoom(Room room)
+        {
+            Generator.ConvertMap(room);
+            if (FindObjectOfType<DebugMap>()) FindObjectOfType<DebugMap>().AddPath(room);
+        }
+        void HideRoom(Room room)
+        {
+            Generator.RemoveMap(room);
+            if (FindObjectOfType<DebugMap>()) FindObjectOfType<DebugMap>().RemovePath(room);
+        }
         void DestroyRoom(Room killRoom, double destroyTime, int destoryerID, Clingo.ClingoSolver.Status status)
         {
             killRoom.isDestroyed = true;
             if (history) world.WorldHistoryRemove(killRoom, destroyTime, destoryerID, status);
-            if(display) Generator.RemoveMap(killRoom);
+            if (display) HideRoom(killRoom);
             BuildQueue.Insert(0, killRoom.pos);
             Debug.Log(status + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
         }
@@ -286,13 +285,14 @@ namespace WorldBuilder
         }
 
         float buildTimeStart = 0;
-        void BuildRoom(Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, RoomConnections connections, Neighbors neighbors)
+        void BuildRoom(int roomID,Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, RoomConnections connections, Neighbors neighbors)
         {
 
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
             string aspCode = WorldStructure.get_world_gen(roomSize.x, roomSize.y) + WorldStructure.tile_rules + WorldStructure.get_floor_rules(headroom, shoulderroom) + WorldStructure.get_chamber_rule(minCeilingHeight) + Pathfinding.movement_rules + Pathfinding.platform_rules + Pathfinding.path_rules;
 
-            aspCode += Pathfinding.set_openings(connections.boolArray) + WorldStructure.GetDoorRules(neighbors);
+            GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
+            aspCode += Pathfinding.set_openings(connections.boolArray) + WorldStructure.GetDoorRules(neighbors) + Gates.GetGateASP(world, roomID, gates);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
             {

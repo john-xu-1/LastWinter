@@ -47,12 +47,15 @@ namespace WorldBuilder
       jump_headroom_offset(1..headroom).
       has_headroom(XX,YY) :- { state(XX,YY-H, one): jump_headroom_offset(H)} == 0, width(XX), height(YY).
 
-      path(XX, YY, Type) :- floor(XX+L,YY+1), path(XX+L, YY+1, Type), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY).
-      path(XX, YY, Type) :- floor(XX +L*2,YY+2), path(XX +L*2, YY+2, Type), state(XX +L,YY+1, zero), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY).
-      path(XX, YY, Type) :- floor(XX +L*3,YY+3), path(XX +L*3, YY+3, Type), state(XX +L,YY+1, zero), state(XX +L*2,YY+2, zero), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY).
+      path(XX, YY, Type) :- floor(XX+L,YY+1), path(XX+L, YY+1, Type), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY), not fluid(XX,YY).
+      path(XX, YY, Type) :- floor(XX +L*2,YY+2), path(XX +L*2, YY+2, Type), state(XX +L,YY+1, zero), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY), not fluid(XX,YY).
+      path(XX, YY, Type) :- floor(XX +L*3,YY+3), path(XX +L*3, YY+3, Type), state(XX +L,YY+1, zero), state(XX +L*2,YY+2, zero), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY), not fluid(XX,YY).
   
       %path(XX,YY-1,Type) :- floor(XX,YY), path(XX, YY-2, Type), state(XX,YY-1,zero), path_type(Type), lmr_offset(L), width(XX), height(YY-1).
       %path(XX,YY-2,Type) :- floor(XX,YY), path(XX, YY-3, Type), state(XX,YY-2,zero), path_type(Type), lmr_offset(L), width(XX), height(YY-2).
+
+    %swimming
+        path(XX,YY, Type) :- path(XX + LMR,YY+TMB,Type), state(XX,YY,zero), path_type(Type), lmr_offset(LMR), lmr_offset(TMB), has_headroom(XX,YY), width(XX), height(YY), fluid(XX,YY).
 
     %falling 
       path(XX,YY,Type) :- path(XX + LMR,YY-1,Type), state(XX,YY,zero), path_type(Type), lmr_offset(LMR), has_headroom(XX,YY), width(XX), height(YY).

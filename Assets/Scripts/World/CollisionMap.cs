@@ -11,6 +11,12 @@ public class CollisionMap : MonoBehaviour
     private List<Room> rooms = new List<Room>();
     public TileBase Center, Right, Left, Up, Down, TopRight, BottomRight, TopLeft, BottomLeft, LinkersTopRight, LinkersBottomRight, LinkersTopLeft, LinkersBottomLeft;
     public Tilemap tilemap;
+    public TileBase waterTop, water;
+    public Tilemap waterTilemap;
+    public TileBase lavaTop, lava;
+    public Tilemap lavaTilemap;
+    public TileBase door;
+    public Tilemap doorTilemap;
 
     //private int worldWidth, worldHeight;
 
@@ -39,11 +45,7 @@ public class CollisionMap : MonoBehaviour
 
     public bool FindNeighbor(Vector2Int pos, Room room)
     {
-        //foreach (CollisionTile tile in map)
-        //{
-        //    if (pos == tile.pos && tile.type > 0) return true;
-        //    if (pos == tile.pos && tile.type == 0) return false;
-        //}
+        
         int worldHeight = room.map.dimensions.room_height;
         int worldWidth = room.map.dimensions.room_width;
         int y = -pos.y - 1 - room.pos.y * worldHeight;
@@ -51,7 +53,7 @@ public class CollisionMap : MonoBehaviour
         //print(y);
         if (y < worldHeight && y >= 0 && x < worldWidth && x >= 0)
         {
-            if (room.mapGrid[x, y].type > 0) return true;
+            if (room.mapGrid[x, y].type == 1) return true;
             else return false;
         }
         else return true;
@@ -84,6 +86,48 @@ public class CollisionMap : MonoBehaviour
         return neighbors;
     }
 
+    public bool FindNeighbor(Vector2Int pos, Room room, int tileType)
+    {
+
+        int worldHeight = room.map.dimensions.room_height;
+        int worldWidth = room.map.dimensions.room_width;
+        int y = -pos.y - 1 - room.pos.y * worldHeight;
+        int x = pos.x - 1 - room.pos.x * worldWidth;
+        //print(y);
+        if (y < worldHeight && y >= 0 && x < worldWidth && x >= 0)
+        {
+            if (room.mapGrid[x, y].type == tileType) return true;
+            else return false;
+        }
+        else return true;
+
+
+    }
+    public int[] FindNeighbors(Vector2Int startpos, Room room, int tileType)
+    {
+        int[] neighbors = new int[9];
+        neighbors[4] = 1;
+        for (int i = -1; i <= 1; i += 1)
+        {
+            for (int j = -1; j <= 1; j += 1)
+            {
+                Vector2Int pos = new Vector2Int(startpos.x + i, startpos.y + j);
+                int x = i + 1;
+                int y = -j + 1;
+                int index = x + 3 * y;
+
+                if (pos != startpos && FindNeighbor(pos, room, tileType))
+                {
+                    neighbors[index] = 1;
+                }
+                else
+                {
+                    neighbors[index] = 0;
+                }
+            }
+        }
+        return neighbors;
+    }
 
     public void DebugPlaceTiles(Room room)
     {
@@ -137,13 +181,21 @@ public class CollisionMap : MonoBehaviour
                     print(tile.pos + "Tile placement is missing");
                 }
             }
-            else if (tile.type == 2)
+            else if (tile.type == 2) //water
             {
-                UtilityTilemap.PlaceTile(tilemap, (Vector3Int)tile.pos, Right);
+                int[] neighbors = FindNeighbors(tile.pos, room, 2);
+                if (neighbors[1] == 0) PlaceTile(waterTilemap, (Vector3Int)tile.pos, waterTop);
+                else PlaceTile(waterTilemap, (Vector3Int)tile.pos, water);
             }
-            else
+            else if(tile.type == 3) //lava
             {
-
+                int[] neighbors = FindNeighbors(tile.pos, room, tile.type);
+                if (neighbors[1] == 0) PlaceTile(lavaTilemap, (Vector3Int)tile.pos, lavaTop);
+                else PlaceTile(lavaTilemap, (Vector3Int)tile.pos, lava);
+            }
+            else if(tile.type == 4) //door
+            {
+                PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
             }
 
 
@@ -159,6 +211,9 @@ public class CollisionMap : MonoBehaviour
     public void RemoveTiles(Room room)
     {
         room.DestroyRoom(tilemap);
+        room.DestroyRoom(waterTilemap);
+        room.DestroyRoom(lavaTilemap);
+        room.DestroyRoom(doorTilemap);
     }
 
 }

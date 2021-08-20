@@ -36,6 +36,7 @@ public class DebugMap : MonoBehaviour
     public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2;
     public int jumpHeadroom = 3, timeout = 600;
     public int BuiltWorldIndex;
+    int builtWorldIndex { get { return BuiltWorldIndex > 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
     public int[] indices = { 1, 2, 3, 4 };
     public List<List<int>> permutations;
     public enum MapSources
@@ -161,7 +162,7 @@ public class DebugMap : MonoBehaviour
             
         }
     }
-    private void AddPath(Room room)
+    public void AddPath(Room room)
     {
         foreach(WorldBuilder.Path path in room.map.paths)
         {
@@ -173,6 +174,9 @@ public class DebugMap : MonoBehaviour
             int y = path.y + height * j;
             
             string type = path.type;
+
+            if(pathPoints == null) pathPoints = new GameObject[width * worldWidth + 2, height * worldHeight + 2];
+
             if (!pathPoints[x, y])
             {
 
@@ -186,7 +190,7 @@ public class DebugMap : MonoBehaviour
             }
         }
     }
-    private void RemovePath(Room room)
+    public void RemovePath(Room room)
     {
         foreach (WorldBuilder.Path path in room.map.paths)
         {
@@ -228,7 +232,7 @@ public class DebugMap : MonoBehaviour
         else if (MapSource == MapSources.World)
         {
             //WorldBuilder.BuildWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, 3, Solver.maxDuration - 10);
-            World world = WorldBuilder.BuiltWorlds[BuiltWorldIndex];
+            World world = WorldBuilder.BuiltWorlds[builtWorldIndex];
             //WorldMap.ConvertGraph()
             foreach(Room room in world.GetRooms())
             {
@@ -239,7 +243,7 @@ public class DebugMap : MonoBehaviour
         {
 
 
-            historySource = WorldBuilder.BuiltWorlds[BuiltWorldIndex];
+            historySource = WorldBuilder.BuiltWorlds[builtWorldIndex];
 
             WorldMap.DisplayGraph(historySource.worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
             
