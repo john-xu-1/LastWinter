@@ -35,6 +35,11 @@ public class HealthBase : MonoBehaviour
         orgMaxHealth = MaxHealth;
     }
 
+    public void revertToOrgMax()
+    {
+        SetMaxHealth(orgMaxHealth);
+    }
+
     public float GetMaxHealth()
     {
         return MaxHealth;
@@ -60,7 +65,7 @@ public class HealthBase : MonoBehaviour
             health = 0;
         }
 
-        if (curDamageType == "Enemy")
+        if (curDamageType == "Enemy" || curDamageType == "Effect")
         {
             if (Time.time >= nextCombatTime)
             {

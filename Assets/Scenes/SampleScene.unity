@@ -2064,7 +2064,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4952244571176048423, guid: d021e07fd68584ae184f35db76284713, type: 3}
   m_PrefabInstance: {fileID: 6154040031860930411}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6154040031860930412}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cba40d81bfbe45ba8f75dbdbadee7b1, type: 3}
@@ -6972,7 +6972,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1578849595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7130,13 +7130,14 @@ GameObject:
   - component: {fileID: 1584184731}
   - component: {fileID: 1584184733}
   - component: {fileID: 1584184734}
+  - component: {fileID: 1584184735}
   m_Layer: 8
   m_Name: Tilemap Lava
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1584184730
 Transform:
   m_ObjectHideFlags: 0
@@ -7383,6 +7384,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FluidType: 1
+--- !u!114 &1584184735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584184729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1203148bd60b4d5b8149a9c6ee28bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 5
+  maxDuration: 0
+  magnitude: 1
+  pc: {fileID: 0}
+  ph: {fileID: 0}
+  damageRate: 0.5
 --- !u!1 &1634127853
 GameObject:
   m_ObjectHideFlags: 0
@@ -8869,6 +8888,22 @@ PrefabInstance:
       propertyPath: wepChipPanel
       value: 
       objectReference: {fileID: 1921463589}
+    - target: {fileID: 4952244571176048423, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: acsSpawned.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4952244571176048423, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: acsSpawned.Array.data[0]
+      value: 
+      objectReference: {fileID: 4537596051620102606, guid: f7ea775854e3143349abf4799b6eea13, type: 3}
+    - target: {fileID: 4952244571176048423, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: acsSpawned.Array.data[1]
+      value: 
+      objectReference: {fileID: 1213824757439471157, guid: 9a4a659adc24b4a33941a98cee49fd49, type: 3}
+    - target: {fileID: 4952244571176048423, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: curEffectorInstances.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_Name
       value: Player
@@ -8919,3 +8954,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d021e07fd68584ae184f35db76284713, type: 3}
+--- !u!1 &6154040031860930412 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
+  m_PrefabInstance: {fileID: 6154040031860930411}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6154040031860930413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6154040031860930412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab4138460e2fa414bad158f07d61d5c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effect: {fileID: 0}

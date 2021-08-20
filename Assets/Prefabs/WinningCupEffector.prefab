@@ -43,8 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d580cae927747b9afe5ddabc0ec5f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acs: {fileID: 0}
-  magnitude: 3.5
-  player: {fileID: 0}
-  inv: {fileID: 0}
-  isContainItem: 0
+  duration: 2.5
+  maxDuration: 0
+  magnitude: 10.5
+  pc: {fileID: 0}
+  ph: {fileID: 0}

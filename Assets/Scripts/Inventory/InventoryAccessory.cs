@@ -17,5 +17,4 @@ public class InventoryAccessory : InventoryObjects
 
     public GameObject spawnPrefab;
 
-    public float destroyAfter;
 }

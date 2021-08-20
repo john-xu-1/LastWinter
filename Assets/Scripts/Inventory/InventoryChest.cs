@@ -84,6 +84,8 @@ public class InventoryChest : MonoBehaviour
 
             Debug.Log("doing" + i + " times");
         }
+
+        Destroy(gameObject);
     }
 
     private void Update()

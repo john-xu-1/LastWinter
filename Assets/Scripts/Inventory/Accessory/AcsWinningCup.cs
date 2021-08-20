@@ -2,23 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AcsWinningCup : AcsBase
+public class AcsWinningCup : EffectBase
 {
-    public override void setUp()
-    {
-        PlatformerController pc = player.GetComponent<PlatformerController>();
 
-        pc.MaxSpeedNormal += magnitude;
-        pc.MaxSpeedWater += magnitude;
-        pc.MaxSpeedLava += magnitude;
+    float orgspeed = 0;
+
+    
+
+    public override void effectBehavior()
+    {
+        
+        if (duration > 0)
+        {
+            if (orgspeed == 0) orgspeed = pc.MaxSpeedNormal;
+            duration -= Time.deltaTime;
+            if (!ph.isDead)
+            {
+                pc.MaxSpeedNormal = magnitude;
+                
+            }
+        }
+        else
+        {
+            unDo();
+        }
+       
     }
 
     public override void unDo()
     {
-        PlatformerController pc = player.GetComponent<PlatformerController>();
+        pc.MaxSpeedNormal = orgspeed;
 
-        pc.MaxSpeedNormal -= magnitude;
-        pc.MaxSpeedWater -= magnitude;
-        pc.MaxSpeedLava -= magnitude;
+        FindObjectOfType<Effectable>().effects.RemoveAt(FindObjectOfType<Effectable>().effects.IndexOf(GetComponent<AcsWinningCup>()));
+        Destroy(gameObject);
     }
 }

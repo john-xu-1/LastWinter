@@ -2,22 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AcsHeartFlower : AcsBase
+public class AcsHeartFlower : EffectBase
 {
     
 
-    public override void setUp()
+    public override void effectBehavior()
     {
-        HealthPlayer h = player.GetComponent<HealthPlayer>();
-        h.SetMaxHealth(h.GetMaxHealth() + magnitude);
+
+        if (duration > 0)
+        {
+            duration -= Time.deltaTime;
+            if (!ph.isDead)
+            {
+                ph.SetMaxHealth(magnitude);
+            }
+        }
+        else
+        {
+            unDo();
+        }
+        
 
 
     }
 
     public override void unDo()
     {
-        HealthPlayer h = player.GetComponent<HealthPlayer>();
-        h.SetMaxHealth(h.GetMaxHealth() - magnitude);
+
+        ph.revertToOrgMax();
+
+        FindObjectOfType<Effectable>().effects.RemoveAt(FindObjectOfType<Effectable>().effects.IndexOf(GetComponent<AcsHeartFlower>()));
+        Destroy(gameObject);
     }
 
 

@@ -40,13 +40,14 @@ public class InventorySystem : MonoBehaviour
 
     private InventoryWeapon selectedWeapon;
 
-    private GameObject curEffectorInstance;
-    public float curAcsTime;
+    private bool acsSpawned;
+    private float acsDestroyAfter;
 
     List<InventoryWeapon> wep;
     Dropdown dpd;
 
-    bool isAcsUndo = false;
+
+    public EffectBase eb;
 
     
 
@@ -146,7 +147,8 @@ public class InventorySystem : MonoBehaviour
             {
                 selectedItem = null;
             }
-            
+
+            acsSpawned = false;
             
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
@@ -162,6 +164,8 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
+            acsSpawned = false;
+            
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
         }
@@ -176,6 +180,8 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
+            acsSpawned = false;
+            
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
         }
@@ -190,6 +196,8 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
+            acsSpawned = false;
+            
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
         }
@@ -204,6 +212,8 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
+            acsSpawned = false;
+            
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
         }
@@ -257,50 +267,58 @@ public class InventorySystem : MonoBehaviour
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Accesory)
             {
 
+                
                 acs = (InventoryAccessory)selectedItem;
-                curAcsTime = acs.destroyAfter;
+                
+                
                 setAcsPrefab(acs.spawnPrefab);
 
-                if (!FindObjectOfType<AcsBase>())
+
+                if (acsSpawned == false)
                 {
-                    curEffectorInstance = Instantiate(acs.spawnPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, Quaternion.identity);
-
-                }
-
-            }
-            else
-            {
-                if (curEffectorInstance)
-                {
+                    eb = Instantiate(acs.spawnPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, Quaternion.identity).GetComponent<EffectBase>();
+                    acsDestroyAfter = eb.maxDuration;
+                    FindObjectOfType<Effectable>().addEffect(eb.GetComponent<EffectBase>());
                     
-                    if (curAcsTime <= 0)
-                    {
-                        if (isAcsUndo == false)
-                        {
-                            curEffectorInstance.GetComponent<AcsBase>().unDo();
-
-                            Destroy(curEffectorInstance);
-
-                            isAcsUndo = true;
-
-                        }
-
-                    }
-                    else
-                    {
-                        isAcsUndo = false;
-                        curAcsTime -= Time.deltaTime;
-
-                    }
-
-                    
-
-                    
-
-
+                    acsSpawned = true;
                 }
                 
+                
+
             }
+            /*
+            else
+            {
+
+
+                if (curAcsTime <= 0)
+                {
+                    if (isAcsUndo == false)
+                    {
+                        for(int i = 0; i < curEffectorInstances.Count; i++)
+                        {
+                            if (curEffectorInstances[i])
+                            {
+                                
+                                curEffectorInstances[i].GetComponent<AcsBase>().unDo();
+                                Destroy(curEffectorInstances[i]);
+                                
+
+                                isAcsUndo = true;
+                            }
+                            
+                        }
+                    }
+
+                }
+                else
+                {
+                    isAcsUndo = false;
+                    curAcsTime -= Time.deltaTime;
+
+                }
+            }
+            */
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Chip)
             {
