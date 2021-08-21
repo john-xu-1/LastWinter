@@ -7,79 +7,81 @@ namespace WorldBuilder
     public class Pathfinding
     {
         public static string movement_rules = @"
-      path_type(right; left; top; bottom; middle).
+            path_type(right; left; top; bottom; middle).
       
-      %Create destination points (nodes)
-      {path(XX,YY, Type, Type): floor(XX,YY), height(YY), width(XX)}1 :- path_type(Type).
+        %Create destination points (nodes)
+            {path(XX,YY, Type, Type): floor(XX,YY), height(YY), width(XX)}1 :- path_type(Type).
 
-      %One node of each type?
-      %:- path(XX,YY, Type1, Type1), path(XX,YY, Type2, Type2), Type1 != Type2.
-      %:- path(X1, Y1, Type,Type), path(X2,Y2, Type, Type), X1 != X2.
-      %:- path(X1, Y1, Type,Type), path(X2,Y2, Type, Type), Y1 != Y2.
-
-
-      %add each node type to its path type
-      path(XX,YY, Type) :- path(XX,YY,Type, Type), path_type(Type).
+        %One node of each type?
+            %:- path(XX,YY, Type1, Type1), path(XX,YY, Type2, Type2), Type1 != Type2.
+            %:- path(X1, Y1, Type,Type), path(X2,Y2, Type, Type), X1 != X2.
+            %:- path(X1, Y1, Type,Type), path(X2,Y2, Type, Type), Y1 != Y2.
 
 
-
-    %ensures every point on path has headroom
-      :- path(XX,YY, Type), floor(XX,YY), state(XX, YY-H, one), headroom_offset(H), path_type(Type).
+        %add each node type to its path type
+            path(XX,YY, Type) :- path(XX,YY,Type, Type), path_type(Type).
 
 
 
-    %sets neighboring floor tiles on path
-      %path(XX,YY, Type) :- floor(XX,YY), path(XX-1, YY, Type), floor(XX-1,YY), path_type(Type).
-      %path(XX,YY, Type) :- floor(XX,YY), path(XX+1, YY, Type), floor(XX+1,YY), path_type(Type).
-      %path(XX,YY, Type) :- state(XX,YY, zero), path(XX-1, YY, Type), floor(XX-1,YY), path_type(Type).
-      %path(XX,YY, Type) :- state(XX,YY, zero), path(XX+1, YY, Type), floor(XX+1,YY), path_type(Type).
+        %ensures every point on path has headroom
+            :- path(XX,YY, Type), floor(XX,YY), state(XX, YY-H, one), headroom_offset(H), path_type(Type).
 
-    % an empty tile is on a path if its neighbor to the right or left is floor and on path
-      path(XX,YY, Type) :- state(XX,YY, zero), path(XX+H, YY, Type), floor(XX+H,YY), path_type(Type), horizontal(H).
 
-    % a floor tile is on a path if it is within the jump distance of H width and V high
-      path(XX,YY,Type) :- floor(XX,YY), path(XX+H, YY+V,Type), floor(XX+H, YY+V), horizontal(H), vertical(V), path_type(Type).
+
+        %sets neighboring floor tiles on path
+            %path(XX,YY, Type) :- floor(XX,YY), path(XX-1, YY, Type), floor(XX-1,YY), path_type(Type).
+            %path(XX,YY, Type) :- floor(XX,YY), path(XX+1, YY, Type), floor(XX+1,YY), path_type(Type).
+            %path(XX,YY, Type) :- state(XX,YY, zero), path(XX-1, YY, Type), floor(XX-1,YY), path_type(Type).
+            %path(XX,YY, Type) :- state(XX,YY, zero), path(XX+1, YY, Type), floor(XX+1,YY), path_type(Type).
+
+        % an empty tile is on a path if its neighbor to the right or left is floor and on path
+            path(XX,YY, Type) :- state(XX,YY, zero), path(XX+H, YY, Type), floor(XX+H,YY), path_type(Type), horizontal(H).
+
+        % a floor tile is on a path if it is within the jump distance of H width and V high
+            path(XX,YY,Type) :- floor(XX,YY), path(XX+H, YY+V,Type), floor(XX+H, YY+V), horizontal(H), vertical(V), path_type(Type).
   
 
-    %jumping
-      lmr_offset(-1..1).
+        %jumping
+            lmr_offset(-1..1).
 
-      jump_headroom_offset(1..headroom).
-      has_headroom(XX,YY) :- { state(XX,YY-H, one): jump_headroom_offset(H)} == 0, width(XX), height(YY).
+            jump_headroom_offset(1..headroom).
+            has_headroom(XX,YY) :- { state(XX,YY-H, one): jump_headroom_offset(H)} == 0, width(XX), height(YY).
 
-      path(XX, YY, Type) :- floor(XX+L,YY+1), path(XX+L, YY+1, Type), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY), not fluid(XX,YY).
-      path(XX, YY, Type) :- floor(XX +L*2,YY+2), path(XX +L*2, YY+2, Type), state(XX +L,YY+1, zero), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY), not fluid(XX,YY).
-      path(XX, YY, Type) :- floor(XX +L*3,YY+3), path(XX +L*3, YY+3, Type), state(XX +L,YY+1, zero), state(XX +L*2,YY+2, zero), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY), not fluid(XX,YY).
+            fluid(-1000,-1000).
+            obstacle(-1000,-1000).
+            path(XX, YY, Type) :- floor(XX+L,YY+1), path(XX+L, YY+1, Type), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY), not fluid(XX,YY).
+            path(XX, YY, Type) :- floor(XX +L*2,YY+2), path(XX +L*2, YY+2, Type), state(XX +L,YY+1, zero), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY), not fluid(XX,YY).
+            path(XX, YY, Type) :- floor(XX +L*3,YY+3), path(XX +L*3, YY+3, Type), state(XX +L,YY+1, zero), state(XX +L*2,YY+2, zero), state(XX,YY, zero), path_type(Type), lmr_offset(L), has_headroom(XX,YY), not fluid(XX,YY).
   
-      %path(XX,YY-1,Type) :- floor(XX,YY), path(XX, YY-2, Type), state(XX,YY-1,zero), path_type(Type), lmr_offset(L), width(XX), height(YY-1).
-      %path(XX,YY-2,Type) :- floor(XX,YY), path(XX, YY-3, Type), state(XX,YY-2,zero), path_type(Type), lmr_offset(L), width(XX), height(YY-2).
+            %path(XX,YY-1,Type) :- floor(XX,YY), path(XX, YY-2, Type), state(XX,YY-1,zero), path_type(Type), lmr_offset(L), width(XX), height(YY-1).
+            %path(XX,YY-2,Type) :- floor(XX,YY), path(XX, YY-3, Type), state(XX,YY-2,zero), path_type(Type), lmr_offset(L), width(XX), height(YY-2).
 
-    %swimming
-        path(XX,YY, Type) :- path(XX + LMR,YY+TMB,Type), state(XX,YY,zero), path_type(Type), lmr_offset(LMR), lmr_offset(TMB), has_headroom(XX,YY), width(XX), height(YY), fluid(XX,YY).
+        %swimming
+            path(XX,YY, Type) :- path(XX + LMR,YY+TMB,Type), state(XX,YY,zero), path_type(Type), lmr_offset(LMR), lmr_offset(TMB), has_headroom(XX,YY), width(XX), height(YY), fluid(XX,YY).
 
-    %falling 
-      path(XX,YY,Type) :- path(XX + LMR,YY-1,Type), state(XX,YY,zero), path_type(Type), lmr_offset(LMR), has_headroom(XX,YY), width(XX), height(YY).
-      path(XX,YY,Type) :- path(XX + LMR,YY-1,Type), floor(XX,YY), path_type(Type), lmr_offset(LMR), width(XX), height(YY).
+        %falling 
+            path(XX,YY,Type) :- path(XX + LMR,YY-1,Type), state(XX,YY,zero), path_type(Type), lmr_offset(LMR), has_headroom(XX,YY), width(XX), height(YY).
+            path(XX,YY,Type) :- path(XX + LMR,YY-1,Type), floor(XX,YY), path_type(Type), lmr_offset(LMR), width(XX), height(YY).
 
 
 
-      #show path/4.
-      #show path/3.
+            #show path/4.
+            #show path/3.
     ";
 
         public static string platform_rules = @"
-        #show platform/3.
+            #show platform/3.
 
-        horizontal(-1; 1).
-        vertical(-3..3).
-        platform(XX,YY,Type) :- platform(XX+H, YY+V,Type), floor(XX,YY), horizontal(H), vertical(V), path_type(Type).
+            horizontal(-1; 1).
+            vertical(-3..3).
+            platform(XX,YY,Type) :- platform(XX+H, YY+V,Type), floor(XX,YY), horizontal(H), vertical(V), path_type(Type).
       
   
-        :- floor(XX,YY), not platform(XX,YY,_).
-        platform(XX,YY, Type) :- path(XX,YY,Type, Type), path_type(Type).
+            :- floor(XX,YY), not platform(XX,YY,_).
+            platform(XX,YY, Type) :- path(XX,YY,Type, Type), path_type(Type).
 
         % no platforms can overlap
-        :- platform(XX,YY, Type1), platform(XX, YY, Type2), Type1 != Type2.
+            :- platform(XX,YY, Type1), platform(XX, YY, Type2), Type1 != Type2.
     ";
 
         public static string path_rules = @"

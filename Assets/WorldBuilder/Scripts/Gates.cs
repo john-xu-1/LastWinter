@@ -15,8 +15,8 @@ namespace WorldBuilder
     public class Gates
     {
         public static string water_rules = @"
-            #const max_water_depth = 3.
-            #const min_water_depth = 3.
+            #const max_water_depth = 5.
+            #const min_water_depth = 5.
 
         %adding blue_gate to tile_type
             tile_type(blue_gate).
@@ -84,8 +84,8 @@ namespace WorldBuilder
         ";
 
         public static string lava_rules = @"
-            #const max_lava_depth = 3.
-            #const min_lava_depth = 3.
+            #const max_lava_depth = 7.
+            #const min_lava_depth = 7.
 
         %adding orange_gate to tile_type
             tile_type(orange_gate).
@@ -117,7 +117,14 @@ namespace WorldBuilder
             %#show lava_depth/3.
         ";
 
-        public static string GetGateASP(World world, int roomID, GateTypes[] gates)
+        public static string gating_rules = @"
+            gated_max(0..20).
+            gated_path(XX,YY,0) :- path(XX,YY,middle,middle).
+            gated_path(XX,YY,Count) :- path(XX,YY,_), not fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
+            gated_path(XX,YY,Count + 1) :- path(XX,YY,_), fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
+        ";
+
+        public static string GetGateASP(World world, int roomID, GateTypes[] gates, RoomConnections connections)
         {
             string code = "";
             foreach(Gate gate in world.worldGraph.gates)
@@ -125,15 +132,19 @@ namespace WorldBuilder
                 if(gate.source == roomID)
                 {
                     
-                    code += GetGateASP(gates[gate.type - 1], GetGatedPath(world,roomID));
+                    code += GetGateASP(gates[gate.type - 1], GetGatedPath(world, gate, connections));
                 }
             }
             return code;
         }
-        static string GetGatedPath(World world, int roomID)
+        static string GetGatedPath(World world, Gate gate, RoomConnections connections)
         {
-            //Neighbors neighbors = world.GetNeighbors(roomID);
-            //int upNeighbor = Utility.index_to_roomID(neighbors.up.pos, world.Width, world.Height);
+            //get neighbor ids
+
+            //find gated path with ids
+
+            //a
+
             return "";
         }
 
@@ -155,14 +166,14 @@ namespace WorldBuilder
 
         public static string GetWaterASP(string gatedPath)
         {
-            string code = $"";
-            return code + water_rules;
+            string code = $":-{{path(XX,YY,_):water(XX,YY,_)}} == 0.";
+            return code + water_rules + gating_rules;
         }
 
         public static string GetLavaASP(string gatedPath)
         {
-            string code = $"";
-            return code + lava_rules;
+            string code = $":-{{path(XX,YY,_):lava(XX,YY,_)}} == 0.";
+            return code + lava_rules + gating_rules;
         }
 
         public static string GetDoorASP(string gatedPath)
