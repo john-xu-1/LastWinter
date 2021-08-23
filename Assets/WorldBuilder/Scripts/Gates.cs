@@ -140,6 +140,10 @@ namespace WorldBuilder
         static string GetGatedPath(World world, Gate gate, RoomConnections connections)
         {
             //get neighbor ids
+            int gatedID = gate.destination;
+            int gateID = gate.source;
+
+
 
             //find gated path with ids
 
