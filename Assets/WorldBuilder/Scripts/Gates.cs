@@ -122,6 +122,9 @@ namespace WorldBuilder
             gated_path(XX,YY,0) :- path(XX,YY,middle,middle).
             gated_path(XX,YY,Count) :- path(XX,YY,_), not fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
             gated_path(XX,YY,Count + 1) :- path(XX,YY,_), fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
+            
+            %min_gated_path(XX,YY,Min) :- path(XX,YY,Type,Type), path_types(Type), Min = #min{Count: gated_path(XX,YY,Count)}.
+            
         ";
 
         public static string GetGateASP(World world, int roomID, GateTypes[] gates, RoomConnections connections)
@@ -137,50 +140,105 @@ namespace WorldBuilder
             }
             return code;
         }
-        static string GetGatedPath(World world, Gate gate, RoomConnections connections)
+        static List<string> GetGatedPath(World world, Gate gate, RoomConnections connections)
         {
             //get neighbor ids
             int gatedID = gate.destination;
             int gateID = gate.source;
+            List<string> paths = new List<string>();
+            bool upGated = false;
+            bool downGated = false;
+            bool rightGated = false;
+            bool leftGated = false;
+            if (gatedID == gateID - 1) leftGated = true;
+            else if (gatedID == gateID + 1) rightGated = true;
+            else if (gatedID < gateID) upGated = true;
+            else if (gatedID > gateID) downGated = true;
+            else Debug.LogWarning("Gated Room Error");
 
-
+            if(connections.upEgress || connections.upIngress)
+            {
+                if (upGated) paths.Insert(0, "top");
+                else paths.Add("top");
+            }
+            if (connections.downEgress || connections.downIngress)
+            {
+                if (downGated) paths.Insert(0, "bottom");
+                else paths.Add("bottom");
+            }
+            if (connections.rightEgress || connections.rightIngress)
+            {
+                if (rightGated) paths.Insert(0, "right");
+                else paths.Add("right");
+            }
+            if (connections.leftEgress || connections.leftIngress)
+            {
+                if (leftGated) paths.Insert(0, "left");
+                else paths.Add("left");
+            }
 
             //find gated path with ids
 
             //a
 
-            return "";
+            return paths;
         }
 
-        static string GetGateASP(GateTypes gate, string gatedPath)
+        static string GetGateASP(GateTypes gate, List<string> paths)
         {
             switch (gate)
             {
                 case GateTypes.water:
-                    return GetWaterASP(gatedPath);
+                    return GetWaterASP(paths);
                 case GateTypes.lava:
-                    return GetLavaASP(gatedPath);
+                    return GetLavaASP(paths);
                 case GateTypes.door:
-                    return GetDoorASP(gatedPath);
+                    return GetDoorASP(paths);
                 default:
                     return "";
 
             }
         }
 
-        public static string GetWaterASP(string gatedPath)
+        public static string GetWaterASP(List<string> paths)
         {
-            string code = $":-{{path(XX,YY,_):water(XX,YY,_)}} == 0.";
+            string gatedPath = paths[0];
+            string code = $@"
+                :-{{path(XX,YY,_):water(XX,YY,_)}} == 0.
+                :- path(XX,YY,middle, middle), fluid(XX,YY-1).
+                
+            ";
+            
+            Debug.Log($"gatedPath: {gatedPath}");
+            code += $":- gated_path(XX,YY,Count), path(XX,YY,{gatedPath},{gatedPath}), Count < 6.\n";
+            for(int i = 1; i < paths.Count; i += 1)
+            {
+                Debug.Log($"non gatedPath: {paths[i]}");
+                code += $":- not gated_path(XX,YY,0), path(XX,YY,{paths[i]},{paths[i]}).\n";
+            }
             return code + water_rules + gating_rules;
         }
 
-        public static string GetLavaASP(string gatedPath)
+        public static string GetLavaASP(List<string> paths)
         {
-            string code = $":-{{path(XX,YY,_):lava(XX,YY,_)}} == 0.";
+            string gatedPath = paths[0];
+            string code = $@"
+                :-{{path(XX,YY,_):lava(XX,YY,_)}} == 0.
+                :- path(XX,YY,middle, middle), fluid(XX,YY-1).
+                :- path(XX,YY,{gatedPath}, {gatedPath}), fluid(XX,YY-1).
+            ";
+            
+            Debug.Log($"gatedPath: {gatedPath}");
+            code += $":- gated_path(XX,YY,Count), path(XX,YY,{gatedPath},{gatedPath}), Count < 1.\n";
+            for (int i = 1; i < paths.Count; i += 1)
+            {
+                Debug.Log($"non gatedPath: {paths[i]}");
+                code += $":- not gated_path(XX,YY,0), path(XX,YY,{paths[i]},{paths[i]}).\n";
+            }
             return code + lava_rules + gating_rules;
         }
 
-        public static string GetDoorASP(string gatedPath)
+        public static string GetDoorASP(List<string> paths)
         {
             string code = $"";
             return code + door_rules;

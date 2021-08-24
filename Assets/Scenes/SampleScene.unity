@@ -3735,19 +3735,19 @@ MonoBehaviour:
   WorldBuilder: {fileID: 11400000, guid: bec8088f61b844a6aa7e0d34ef6b3ae1, type: 2}
   WorldsSource: {fileID: 11400000, guid: 4477f1631e85c4baa9fc93d1f25c59ec, type: 2}
   connection: 0101000000000000
-  RoomSize: {x: 32, y: 18}
+  RoomSize: {x: 20, y: 20}
   headroom: 2
   shoulderroom: 3
   minCeilingHeight: 3
   nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
   edgePrefab: {fileID: 4894238030931249867, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}
   pathPrefab: {fileID: 3858733167211834716, guid: c7fe75d5e1a584669b52c9f9725111c9, type: 3}
-  worldWidth: 4
-  worldHeight: 4
+  worldWidth: 7
+  worldHeight: 7
   keyTypeCount: 3
   maxGatePerKey: 2
   jumpHeadroom: 3
-  timeout: 300
+  timeout: 500
   BuiltWorldIndex: -1
   indices: 010000000200000003000000
   MapSource: 2
