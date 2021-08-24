@@ -34,6 +34,8 @@ public class Effectable : MonoBehaviour
                 if (effects[i])
                 {
                     effects[i].effectBehavior();
+
+                    
                 }
                 
             }

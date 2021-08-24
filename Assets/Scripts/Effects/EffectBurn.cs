@@ -31,6 +31,8 @@ public class EffectBurn : EffectBase
         }
     }
 
+    
+
     public override void effectBehavior()
     {
         

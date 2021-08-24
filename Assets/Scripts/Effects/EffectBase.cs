@@ -34,6 +34,16 @@ public class EffectBase : MonoBehaviour
         duration -= Time.deltaTime;
     }
 
+    private void Update()
+    {
+        updateBehavior();
+    }
+
+    public virtual void updateBehavior()
+    {
+        
+    }
+
     public virtual void unDo()
     {
 
@@ -57,6 +67,11 @@ public class EffectBase : MonoBehaviour
     public virtual void onTriggerStayBehavior (Collider2D collision)
     {
 
+    }
+
+    public virtual void alternativeDetectionMethod()
+    {
+        
     }
 
 }
