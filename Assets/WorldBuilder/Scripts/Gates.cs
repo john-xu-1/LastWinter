@@ -122,11 +122,11 @@ namespace WorldBuilder
         public static string gating_rules = @"
             gated_max(0..20).
             gated_path(XX,YY,0) :- path(XX,YY,middle,middle).
-            gated_path(XX,YY,Count) :- path(XX,YY,_), not fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
-            gated_path(XX,YY,Count + 1) :- path(XX,YY,_), fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
+            gated_path(XX,YY,Count) :- path(XX,YY,_), not fluid(XX,YY), not obstacle(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
+            gated_path(XX,YY,Count + 1) :- path(XX,YY,_), fluid(XX,YY), not obstacle(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
             
-            gated_path(XX,YY,Count) :- path(XX,YY,_), not obstacle(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
-            gated_path(XX,YY,Count + 1) :- path(XX,YY,_), obstacle(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
+            gated_path(XX,YY,Count) :- path(XX,YY,_), not obstacle(XX,YY), not fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
+            gated_path(XX,YY,Count + 1) :- path(XX,YY,_), obstacle(XX,YY), not fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
 
             %min_gated_path(XX,YY,Min) :- path(XX,YY,Type,Type), path_types(Type), Min = #min{Count: gated_path(XX,YY,Count)}.
             
@@ -219,7 +219,7 @@ namespace WorldBuilder
                 :- water(XX,YY,_), XX = max_width.
             ";
             
-            Debug.Log($"gatedPath: {gatedPath}");
+            Debug.Log($"water gatedPath: {gatedPath}");
             code += $":- gated_path(XX,YY,Count), path(XX,YY,{gatedPath},{gatedPath}), Count < 6.\n";
             for(int i = 1; i < paths.Count; i += 1)
             {
@@ -243,7 +243,7 @@ namespace WorldBuilder
                 :- lava(XX,YY,_), XX = max_width.
             ";
             
-            Debug.Log($"gatedPath: {gatedPath}");
+            Debug.Log($"lava gatedPath: {gatedPath}");
             code += $":- gated_path(XX,YY,Count), path(XX,YY,{gatedPath},{gatedPath}), Count < 1.\n";
             for (int i = 1; i < paths.Count; i += 1)
             {
@@ -267,7 +267,7 @@ namespace WorldBuilder
                 %:- door(XX,YY), XX = max_width.
             ";
 
-            Debug.Log($"gatedPath: {gatedPath}");
+            Debug.Log($"door gatedPath: {gatedPath}");
             code += $":- gated_path(XX,YY,Count), path(XX,YY,{gatedPath},{gatedPath}), Count < 1.\n";
             for (int i = 1; i < paths.Count; i += 1)
             {
