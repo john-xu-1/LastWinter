@@ -291,7 +291,7 @@ namespace WorldBuilder
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
             string aspCode = WorldStructure.get_world_gen(roomSize.x, roomSize.y) + WorldStructure.tile_rules + WorldStructure.get_floor_rules(headroom, shoulderroom) + WorldStructure.get_chamber_rule(minCeilingHeight) + Pathfinding.movement_rules + Pathfinding.platform_rules + Pathfinding.path_rules;
 
-            GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
+            GateTypes[] gates = { GateTypes.door, GateTypes.lava, GateTypes.water };
             aspCode += Pathfinding.set_openings(connections.boolArray) + WorldStructure.GetDoorRules(neighbors) + Gates.GetGateASP(world, roomID, gates,connections);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)

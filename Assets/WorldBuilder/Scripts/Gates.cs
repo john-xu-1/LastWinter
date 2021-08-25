@@ -125,6 +125,9 @@ namespace WorldBuilder
             gated_path(XX,YY,Count) :- path(XX,YY,_), not fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
             gated_path(XX,YY,Count + 1) :- path(XX,YY,_), fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
             
+            gated_path(XX,YY,Count) :- path(XX,YY,_), not obstacle(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
+            gated_path(XX,YY,Count + 1) :- path(XX,YY,_), obstacle(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
+
             %min_gated_path(XX,YY,Min) :- path(XX,YY,Type,Type), path_types(Type), Min = #min{Count: gated_path(XX,YY,Count)}.
             
         ";
