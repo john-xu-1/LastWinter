@@ -15,8 +15,8 @@ namespace WorldBuilder
     public class Gates
     {
         public static string water_rules = @"
-            #const max_water_depth = 5.
-            #const min_water_depth = 5.
+            #const max_water_depth = 10.
+            #const min_water_depth = 1.
 
         %adding blue_gate to tile_type
             tile_type(blue_gate).
@@ -37,7 +37,7 @@ namespace WorldBuilder
         %water must have water, wall or edge neighbors
             :- water(XX, YY, Height), {water(XX-1, YY, _); water(XX+1, YY, _); state(XX-1, YY, one); state(XX+1, YY, one); XX ==0; XX == max_width} != 2.
 
-            :- {water(XX, YY, _)} == 0.
+            %:- {water(XX, YY, _)} == 0.
             water_surface(XX, YY, Height) :- Height = #max{H1:water(XX,YY,H1); H2:water(XX-1,YY,H2); H3:water(XX+1,YY,H3)}, water(XX,YY,_), not water(XX,YY-1,_).
             water_depth(XX, YY, Depth) :- water_surface(XX, YY, _), Depth = 0.
             water_depth(XX, YY, Depth) :- water(XX, YY, _), water_depth(XX, YY-1, D1), Depth = D1 + 1.
@@ -45,6 +45,40 @@ namespace WorldBuilder
             %#show water/3.
             %#show water_surface/3.
             %#show water_depth/3.
+        ";
+        public static string lava_rules = @"
+            #const max_lava_depth = 10.
+            #const min_lava_depth = 1.
+
+        %adding orange_gate to tile_type
+            tile_type(orange_gate).
+
+            fluid(XX,YY) :- lava(XX,YY,_).
+
+        %define orange_gates as lava
+            lava(XX, YY, Height) :- tile(XX, YY, orange_gate), lava(XX, YY+1, Depth), Height = Depth + 1.
+            lava(XX, YY, 1) :- tile(XX, YY, orange_gate), floor(XX, YY+1).
+            lava(XX, YY, 1) :- tile(XX, YY, orange_gate), YY == max_height.
+
+            :- lava(XX, YY, _), {lava(XX, YY+1, _); floor(XX, YY+1); YY == max_height} < 1.
+            :- tile(XX, YY, orange_gate), not lava(XX, YY, _).
+
+        %control lava levels
+            :- lava(XX, YY, Height), Height > max_lava_depth.
+            :- lava_surface(XX, YY, Height), Height<min_lava_depth.
+ 
+        %lava must have water, wall or edge neighbors
+            %:- lava(XX, YY, Height), {lava(XX-1, YY, _); lava(XX+1, YY, _); state(XX-1, YY, one); state(XX+1, YY, one); XX ==0; XX == max_width} != 2.
+            :- lava(XX, YY, Height), {lava(XX-1, YY, _); lava(XX+1, YY, _); state(XX-1, YY, one); state(XX+1, YY, one); XX ==0; XX == max_width} != 2.
+
+            :- {lava(XX, YY, _)} == 0.
+            lava_surface(XX, YY, Height) :- Height = #max{H1:lava(XX,YY,H1); H2:lava(XX-1,YY,H2); H3:lava(XX+1,YY,H3)}, lava(XX,YY,_), not lava(XX,YY-1,_).
+            lava_depth(XX, YY, Depth) :- lava_surface(XX, YY, _), Depth = 0.
+            lava_depth(XX, YY, Depth) :- lava(XX, YY, _), lava_depth(XX, YY-1, D1), Depth = D1 + 1.
+
+            %#show lava/3.
+            %#show lava_surface/3.
+            %#show lava_depth/3.
         ";
 
         public static string door_rules = @"
@@ -83,39 +117,7 @@ namespace WorldBuilder
             %#show door_bottom/2.
         ";
 
-        public static string lava_rules = @"
-            #const max_lava_depth = 7.
-            #const min_lava_depth = 7.
-
-        %adding orange_gate to tile_type
-            tile_type(orange_gate).
-
-            fluid(XX,YY) :- lava(XX,YY,_).
-
-        %define orange_gates as lava
-            lava(XX, YY, Height) :- tile(XX, YY, orange_gate), lava(XX, YY+1, Depth), Height = Depth + 1.
-            lava(XX, YY, 1) :- tile(XX, YY, orange_gate), floor(XX, YY+1).
-            lava(XX, YY, 1) :- tile(XX, YY, orange_gate), YY == max_height.
-
-            :- lava(XX, YY, _), {lava(XX, YY+1, _); floor(XX, YY+1); YY == max_height} < 1.
-            :- tile(XX, YY, orange_gate), not lava(XX, YY, _).
-
-        %control lava levels
-            :- lava(XX, YY, Height), Height > max_lava_depth.
-            :- lava_surface(XX, YY, Height), Height<min_lava_depth.
- 
-        %lava must have water, wall or edge neighbors
-            :- lava(XX, YY, Height), {lava(XX-1, YY, _); lava(XX+1, YY, _); state(XX-1, YY, one); state(XX+1, YY, one); XX ==0; XX == max_width} != 2.
-
-            :- {lava(XX, YY, _)} == 0.
-            lava_surface(XX, YY, Height) :- Height = #max{H1:lava(XX,YY,H1); H2:lava(XX-1,YY,H2); H3:lava(XX+1,YY,H3)}, lava(XX,YY,_), not lava(XX,YY-1,_).
-            lava_depth(XX, YY, Depth) :- lava_surface(XX, YY, _), Depth = 0.
-            lava_depth(XX, YY, Depth) :- lava(XX, YY, _), lava_depth(XX, YY-1, D1), Depth = D1 + 1.
-
-            %#show lava/3.
-            %#show lava_surface/3.
-            %#show lava_depth/3.
-        ";
+        
 
         public static string gating_rules = @"
             gated_max(0..20).
@@ -206,7 +208,12 @@ namespace WorldBuilder
             string code = $@"
                 :-{{path(XX,YY,_):water(XX,YY,_)}} == 0.
                 :- path(XX,YY,middle, middle), fluid(XX,YY-1).
-                
+                :- path(XX,YY,{gatedPath}, {gatedPath}), fluid(XX,YY-1).
+
+            % no water touching another room
+                :- water(XX,YY,_), YY == max_height.
+                :- water(XX,YY,_), XX = 1.
+                :- water(XX,YY,_), XX = max_width.
             ";
             
             Debug.Log($"gatedPath: {gatedPath}");
@@ -226,6 +233,11 @@ namespace WorldBuilder
                 :-{{path(XX,YY,_):lava(XX,YY,_)}} == 0.
                 :- path(XX,YY,middle, middle), fluid(XX,YY-1).
                 :- path(XX,YY,{gatedPath}, {gatedPath}), fluid(XX,YY-1).
+
+            % no lava touching another room
+                :- lava(XX,YY,_), YY == max_height.
+                :- lava(XX,YY,_), XX = 1.
+                :- lava(XX,YY,_), XX = max_width.
             ";
             
             Debug.Log($"gatedPath: {gatedPath}");
@@ -240,8 +252,26 @@ namespace WorldBuilder
 
         public static string GetDoorASP(List<string> paths)
         {
-            string code = $"";
-            return code + door_rules;
+            string gatedPath = paths[0];
+            string code = $@"
+                :-{{path(XX,YY,_):door(XX,YY)}} == 0.
+                :- path(XX,YY,middle, middle), obstacle(XX,YY-1).
+                :- path(XX,YY,{gatedPath}, {gatedPath}), obstacle(XX,YY-1).
+
+            % no door touching another room
+                %:- door(XX,YY), YY == max_height.
+                %:- door(XX,YY), XX = 1.
+                %:- door(XX,YY), XX = max_width.
+            ";
+
+            Debug.Log($"gatedPath: {gatedPath}");
+            code += $":- gated_path(XX,YY,Count), path(XX,YY,{gatedPath},{gatedPath}), Count < 1.\n";
+            for (int i = 1; i < paths.Count; i += 1)
+            {
+                Debug.Log($"non gatedPath: {paths[i]}");
+                code += $":- not gated_path(XX,YY,0), path(XX,YY,{paths[i]},{paths[i]}).\n";
+            }
+            return code + door_rules + gating_rules;
         }
     }
 

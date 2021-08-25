@@ -95,6 +95,8 @@ public class DebugMap : MonoBehaviour
         //        WorldsSource.BuiltWorlds.Remove(world);
         //    }
         //}
+        //WorldBuilder.BuiltWorlds.Add( WorldsSource.BuiltWorlds[WorldsSource.BuiltWorlds.Count - 1]);
+        //WorldsSource.BuiltWorlds.RemoveAt(WorldsSource.BuiltWorlds.Count - 1);
 
         if (BuildOnStart) buildMap();
     }
