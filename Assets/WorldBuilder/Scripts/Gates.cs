@@ -6,6 +6,7 @@ namespace WorldBuilder
 {
     public enum GateTypes
     {
+        none,
         water,
         lava,
         door,

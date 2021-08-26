@@ -190,6 +190,7 @@ namespace WorldBuilder
 
                 newRoom.buidStatus = ClingoSolver.Status.SATISFIABLE;
                 BuildState = BuildStates.roomBuilding;
+                NonTimeout();
             }else if(Solver.SolverStatus == ClingoSolver.Status.UNSATISFIABLE)
             {
                 double destroyTime = Solver.Duration; // Time.fixedTime - buildTimeStart;
@@ -248,7 +249,8 @@ namespace WorldBuilder
 
                 
                 BuildState = BuildStates.roomBuilding;
-                
+
+                Timedout();
             }
             else
             {
@@ -291,7 +293,9 @@ namespace WorldBuilder
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
             string aspCode = WorldStructure.get_world_gen(roomSize.x, roomSize.y) + WorldStructure.tile_rules + WorldStructure.get_floor_rules(headroom, shoulderroom) + WorldStructure.get_chamber_rule(minCeilingHeight) + Pathfinding.movement_rules + Pathfinding.platform_rules + Pathfinding.path_rules;
 
-            GateTypes[] gates = { GateTypes.door, GateTypes.lava, GateTypes.water };
+            GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
+            GateTypes[,] keys = { { GateTypes.door, GateTypes.enemy }, { GateTypes.lava, GateTypes.none }, { GateTypes.water, GateTypes.none } };
+
             aspCode += Pathfinding.set_openings(connections.boolArray) + WorldStructure.GetDoorRules(neighbors) + Gates.GetGateASP(world, roomID, gates,connections);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
@@ -318,8 +322,23 @@ namespace WorldBuilder
 
             string path = ClingoUtil.CreateFile(aspCode);
             buildTimeStart = Time.fixedTime;
-            solver.maxDuration = timeout + 10;
-            solver.Solve(path, $" --parallel-mode {cpus} --time-limit={timeout}");
+            solver.maxDuration =  GetTimeout() + 10;
+            solver.Solve(path, $" --parallel-mode {cpus} --time-limit={GetTimeout()}");
+        }
+        int addedTimeoutMax = 1000;
+        int addedTimeout = 800;
+        int addedTimeoutStep = 100;
+        private int GetTimeout()
+        {
+            return timeout  + addedTimeout;
+        }
+        private void Timedout()
+        {
+            addedTimeout = Mathf.Clamp(addedTimeout + addedTimeoutStep, 0, addedTimeoutMax);
+        }
+        private void NonTimeout()
+        {
+            addedTimeout = Mathf.Clamp(addedTimeout - addedTimeoutStep, 0, addedTimeoutMax);
         }
     }
 }
