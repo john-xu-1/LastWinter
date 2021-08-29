@@ -116,6 +116,8 @@ namespace WorldBuilder
                 if (key == 1) gateColor = Color.blue;
                 else if (key == 2) gateColor = Color.red;
                 else if (key == 3) gateColor = Color.yellow;
+                else if (key == 4) gateColor = Color.cyan;
+                else if (key == 5) gateColor = Color.gray;
                 Vector2Int sourceIndex = Utility.roomID_to_index(source, worldWidth, worldHeight);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetType("gate");
@@ -404,7 +406,9 @@ namespace WorldBuilder
 
             door_count(RoomID, Count) :- Count = {door_east(RoomID); door_west(RoomID); door_north(RoomID); door_south(RoomID)}, roomID(RoomID).
             door_soft_lock_count(RoomID, Count) :- Count = {door_east_soft_lock(RoomID); door_west_soft_lock(RoomID); door_north_soft_lock(RoomID); door_south_soft_lock(RoomID)}, roomID(RoomID).
-    
+
+
+            door_soft_locked(Source, Destination) :- door(Source, Destination), not door(Destination, Source).
     
             %:- door_count(RoomID, Count), roomID(RoomID), Count > 3.
     
@@ -414,15 +418,15 @@ namespace WorldBuilder
             :- door_soft_lock_count(RoomID, Count), Count > 0, door_count(RoomID, Count2), Count2 > 2.
 
         %world must have at least one directional door
-            :- {door_soft_lock_count(RoomID, Count) : roomID(RoomID), Count > 0} < 5.
+            %:- {door_soft_lock_count(RoomID, Count) : roomID(RoomID), Count > 0} < 5.
 
         %neighboring door to a room with directional door cannot have a directional door
             :- door_soft_lock_count(RoomID, Count), Count > 1.
 
-            :- not door_east_soft_lock(_).
-            :- not door_west_soft_lock(_).
-            :- not door_north_soft_lock(_).
-            :- not door_south_soft_lock(_).
+            %:- not door_east_soft_lock(_).
+            %:- not door_west_soft_lock(_).
+            %:- not door_north_soft_lock(_).
+            %:- not door_south_soft_lock(_).
 
         ";
 
@@ -465,6 +469,30 @@ namespace WorldBuilder
             have_key(KeyID, T) :- path_order(RoomID, T), key(KeyID, RoomID).
             %have_key(KeyID, RoomID, T+1) :- door(RoomSourceID, RoomID), have_key(KeyID, RoomSourceID, T).
 
+
+        %% gated area
+            %gated_order(RoomID) :- gate(_,_,RoomID).
+            %gated_order(RoomID) :- not door_soft_locked(Source, RoomID), door(Source, RoomID), gated_order(Source), not gate(_,RoomID,_).
+
+            gated_order(RoomID, GateRoomID) :- gate(_,_,RoomID), GateRoomID = RoomID.
+            gated_order(RoomID, GateRoomID) :- gated_order(Source,GateRoomID), door(Source, RoomID), not door_soft_locked(Source, RoomID), not gate(_,RoomID,_), GateRoomID != -1.
+            %gated_order(RoomID, GateRoomID) :- door(Source, RoomID), gated_order(Source,GateRoomID), gate(_,RoomID,GatedID), GateRoomID != RoomID, GatedID != Source.
+
+            gated_gate(RoomID, GateRoomID) :- door(Source, RoomID), gated_order(Source,GateRoomID), gate(_,RoomID,GatedRoom), GateRoomID != RoomID, Source != GatedRoom.
+
+            %:- {gated_order(RoomID,_):gate(_,RoomID,_)} == 0.
+
+            
+
+            non_gated(RoomID) :- start(RoomID).
+            non_gated(RoomID) :- door(Source, RoomID), non_gated(Source), not gate(_,Source, RoomID).
+
+            :- room(RoomID), {gated_order(RoomID,_); non_gated(RoomID); gated_gate(RoomID,_)} != 1.
+
+        %% no gated area can have a directional connection into it unless it is same GateRoomID
+            :- gated_order(RoomID, GateRoomID), door(Source, RoomID), not door(RoomID, Source), not gated_order(Source, GateRoomID), Source != GateRoomID.
+
+
         % no softlocks on gated rooms
             :- gate(_, Source, Destination), door_soft_lock_count(Source, Count), Count > 0.
             :- gate(_, Source, Destination), door_soft_lock_count(Destination, Count), Count > 0.
@@ -473,8 +501,8 @@ namespace WorldBuilder
             %:- gate(_, Source, Destination), door_count(Source, Count), Count > 4.
 
         % gated horizontally only
-            :- gate(_,Source,_), door_north(Source).
-            :- gate(_,Source,_), door_south(Source).
+            %:- gate(_,Source,_), door_north(Source).
+            %:- gate(_,Source,_), door_south(Source).
 
         ";
     }

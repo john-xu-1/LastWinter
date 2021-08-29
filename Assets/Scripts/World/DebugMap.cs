@@ -45,7 +45,8 @@ public class DebugMap : MonoBehaviour
         Json,
         Solver,
         World,
-        History
+        History,
+        Graph
     }
     public MapSources MapSource;
     public World world;
@@ -109,6 +110,7 @@ public class DebugMap : MonoBehaviour
     int historyIndex = 0;
     public GameObject MiniMap;
     private GameObject[,] pathPoints;
+    bool testDone = false;
     private void Update()
     {
         if(MapSource == MapSources.History)
@@ -162,6 +164,20 @@ public class DebugMap : MonoBehaviour
 
             }
             
+        }else if(MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !testDone)
+        {
+            Graph worldGraph = WorldMap.ConvertGraph(Solver.answerSet);
+            foreach(List<string> gated in Solver.answerSet["gated_order"])
+            {
+                print(gated);
+            }
+            print("non_gated");
+            foreach (List<string> nongated in Solver.answerSet["non_gated"])
+            {
+                print(nongated);
+            }
+            WorldMap.DisplayGraph(worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
+            testDone = true;
         }
     }
     public void AddPath(Room room)
@@ -271,6 +287,9 @@ public class DebugMap : MonoBehaviour
             int roomHeight = room.map.dimensions.room_height;
             pathPoints = new GameObject[width * roomWidth + 2, height * roomHeight + 2];
             AddPath(room);
+        }else if(MapSource == MapSources.Graph)
+        {
+            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, 3, timeout, cpus);
         }
 
 

@@ -67,7 +67,7 @@ namespace WorldBuilder
             switch (BuildState)
             {
                 case BuildStates.graph:
-                    BuildGraph(worldWidth, worldHeight, keyCount, maxGatePerKey, 3, timeout);
+                    BuildGraph(worldWidth, worldHeight, keyCount, maxGatePerKey, 3, timeout,cpus);
                     BuildState += 1;
                     break;
                 case BuildStates.graphBuilding:
@@ -277,7 +277,7 @@ namespace WorldBuilder
             Debug.Log(status + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
         }
 
-        void BuildGraph(int worldWidth, int worldHeight, int gateKeyCount, int maxGatePerKey, int startRoom, int timeout)
+        public void BuildGraph(int worldWidth, int worldHeight, int gateKeyCount, int maxGatePerKey, int startRoom, int timeout, int cpus)
         {
             string aspCode = WorldMap.bidirectional_rules + WorldMap.test_text + WorldMap.gate_key_rules;
             string path = ClingoUtil.CreateFile(aspCode);
