@@ -150,6 +150,8 @@ namespace WorldBuilder
                 if (keyType == 1) gateColor = Color.blue;
                 else if (keyType == 2) gateColor = Color.red;
                 else if (keyType == 3) gateColor = Color.yellow;
+                else if (keyType == 4) gateColor = Color.cyan;
+                else if (keyType == 5) gateColor = Color.gray;
                 Vector2Int sourceIndex = Utility.roomID_to_index(roomID, worldWidth, worldHeight);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetType("key");
@@ -222,6 +224,8 @@ namespace WorldBuilder
                 if (key == 1) gateColor = Color.blue;
                 else if (key == 2) gateColor = Color.red;
                 else if (key == 3) gateColor = Color.yellow;
+                else if (key == 4) gateColor = Color.cyan;
+                else if (key == 5) gateColor = Color.gray;
                 Vector2Int sourceIndex = Utility.roomID_to_index(source, worldWidth, worldHeight);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
                 if (destination == source + 1)
@@ -471,23 +475,28 @@ namespace WorldBuilder
 
 
         %% gated area
-            %gated_order(RoomID) :- gate(_,_,RoomID).
-            %gated_order(RoomID) :- not door_soft_locked(Source, RoomID), door(Source, RoomID), gated_order(Source), not gate(_,RoomID,_).
-
-            gated_order(RoomID, GateRoomID) :- gate(_,_,RoomID), GateRoomID = RoomID.
-            gated_order(RoomID, GateRoomID) :- gated_order(Source,GateRoomID), door(Source, RoomID), not door_soft_locked(Source, RoomID), not gate(_,RoomID,_), GateRoomID != -1.
+            
+            gated_order(RoomID, GateRoomID) :- gate(KeyID,_,RoomID), GateRoomID = RoomID, not gated_key(RoomID,KeyRoomID), key(KeyID,KeyRoomID).
+            gated_order(RoomID, GateRoomID) :- gated_order(Source,GateRoomID), door(Source, RoomID), not door_soft_locked(Source, RoomID), not gate(_,RoomID,_).
             %gated_order(RoomID, GateRoomID) :- door(Source, RoomID), gated_order(Source,GateRoomID), gate(_,RoomID,GatedID), GateRoomID != RoomID, GatedID != Source.
 
             gated_gate(RoomID, GateRoomID) :- door(Source, RoomID), gated_order(Source,GateRoomID), gate(_,RoomID,GatedRoom), GateRoomID != RoomID, Source != GatedRoom.
+
+            gated_key(RoomID, KeyRoomID) :- key(_,RoomID), KeyRoomID = RoomID.
+            gated_key(RoomID, KeyRoomID) :- gated_key(Source, KeyRoomID), door(Source,RoomID), not gate(KeyID,Source,RoomID), key(KeyID, KeyRoomID).
+
+            gated_key_check(RoomID, KeyRoomID) :- gated_key(RoomID, KeyRoomID), gate(KeyID,RoomID,_), key(KeyID, KeyRoomID).
+            gated_key_check(RoomID, KeyRoomID) :- gated_key_check(Source,KeyRoomID), door(Source, RoomID), not gate(_,Source, RoomID).
+            :- gated_key(RoomID, KeyRoomID), not gated_key_check(RoomID,KeyRoomID).
 
             %:- {gated_order(RoomID,_):gate(_,RoomID,_)} == 0.
 
             
 
             non_gated(RoomID) :- start(RoomID).
-            non_gated(RoomID) :- door(Source, RoomID), non_gated(Source), not gate(_,Source, RoomID).
+            non_gated(RoomID) :- door(Source, RoomID), non_gated(Source), not gate(_,Source, RoomID), not door_soft_locked(Source, RoomID).
 
-            :- room(RoomID), {gated_order(RoomID,_); non_gated(RoomID); gated_gate(RoomID,_)} != 1.
+            :- room(RoomID), {gated_order(RoomID,_); non_gated(RoomID); gated_gate(RoomID,_); gated_key(RoomID,_)} != 1.
 
         %% no gated area can have a directional connection into it unless it is same GateRoomID
             :- gated_order(RoomID, GateRoomID), door(Source, RoomID), not door(RoomID, Source), not gated_order(Source, GateRoomID), Source != GateRoomID.
