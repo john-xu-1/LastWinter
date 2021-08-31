@@ -441,7 +441,7 @@ namespace WorldBuilder
             keys_types(1..key_count).
 
             1{key(KeyID, RoomID) : roomID(RoomID)}1 :- keys_types(KeyID).
-            1 {gate(KeyID, RoomID, RoomIDExit) : door(RoomID, RoomIDExit)} max_gate_type_count :- keys_types(KeyID).
+            min_gate_type_count {gate(KeyID, RoomID, RoomIDExit) : door(RoomID, RoomIDExit)} max_gate_type_count :- keys_types(KeyID).
 
       
             poi(RoomID, Count) :- roomID(RoomID), Count = {key(_, RoomID); start(RoomID); gate(_, RoomID, RoomIDLocked)}.
@@ -474,14 +474,23 @@ namespace WorldBuilder
             %have_key(KeyID, RoomID, T+1) :- door(RoomSourceID, RoomID), have_key(KeyID, RoomSourceID, T).
 
 
-        %% gated area
-            
-            gated_order(RoomID, GateRoomID) :- gate(KeyID,_,RoomID), GateRoomID = RoomID, not gated_key(RoomID,KeyRoomID), key(KeyID,KeyRoomID).
+        %% gated area --------------------------
+
+            :- room(RoomID), {gated_order(RoomID,_); non_gated(RoomID); gated_gate(RoomID,_); gated_key(RoomID,_)} != 1.
+
+        %% gated_order
+            %gated_order(RoomID, GateRoomID) :- gate(KeyID,_,RoomID), GateRoomID = RoomID, not gated_key(RoomID,KeyRoomID), key(KeyID,KeyRoomID).
+            gated_order(RoomID, GateRoomID) :- gate(KeyID,GateRoomID,RoomID), not gated_key(GateRoomID,KeyRoomID), key(KeyID,KeyRoomID).
+            %gated_order(RoomID, GateRoomID) :- gate(KeyID,GateRoomID,RoomID).
+
             gated_order(RoomID, GateRoomID) :- gated_order(Source,GateRoomID), door(Source, RoomID), not door_soft_locked(Source, RoomID), not gate(_,RoomID,_).
             %gated_order(RoomID, GateRoomID) :- door(Source, RoomID), gated_order(Source,GateRoomID), gate(_,RoomID,GatedID), GateRoomID != RoomID, GatedID != Source.
 
+        %% gated gate
             gated_gate(RoomID, GateRoomID) :- door(Source, RoomID), gated_order(Source,GateRoomID), gate(_,RoomID,GatedRoom), GateRoomID != RoomID, Source != GatedRoom.
+            :- gate(_,GateRoomID,RoomID), not gated_order(RoomID, GateRoomID), not non_gated(RoomID).
 
+        %% gated key
             gated_key(RoomID, KeyRoomID) :- key(_,RoomID), KeyRoomID = RoomID.
             gated_key(RoomID, KeyRoomID) :- gated_key(Source, KeyRoomID), door(Source,RoomID), not gate(KeyID,Source,RoomID), key(KeyID, KeyRoomID).
 
@@ -489,17 +498,31 @@ namespace WorldBuilder
             gated_key_check(RoomID, KeyRoomID) :- gated_key_check(Source,KeyRoomID), door(Source, RoomID), not gate(_,Source, RoomID).
             :- gated_key(RoomID, KeyRoomID), not gated_key_check(RoomID,KeyRoomID).
 
-            %:- {gated_order(RoomID,_):gate(_,RoomID,_)} == 0.
 
+            %gated_area(RoomID) :- gate(_,Source,RoomID), gated_gate(Source, _).
+            %gated_area(RoomID) :- gate(_,Source,RoomID), gated_order(RoomID,_).
+            %gated_area(RoomID) :- door_soft_locked(RoomID,_).
+            %gated_area(RoomID) :- door_soft_locked(_,RoomID).
+            %gated_area(RoomID) :- gate(_,RoomID,_), gated_key(RoomID,_).
+
+            gated_area(RoomID) :- gated_order(RoomID,_).
+            gated_area(RoomID) :- gated_gate(RoomID,_).
+            gated_area(RoomID) :- gated_key(RoomID,_).
+
+            :- door_soft_locked(Source, Dest), non_gated(Source), non_gated(Dest).
+            :- door_soft_locked(Source, Dest), gated_order(Source, GateRoomID), gated_order(Dest, GateRoomID).
+            :- door_soft_locked(Source, Dest), gated_key(Source, KeyRoomID), gated_key(Dest, KeyRoomID).
             
-
+        %% not gated
             non_gated(RoomID) :- start(RoomID).
-            non_gated(RoomID) :- door(Source, RoomID), non_gated(Source), not gate(_,Source, RoomID), not door_soft_locked(Source, RoomID).
-
-            :- room(RoomID), {gated_order(RoomID,_); non_gated(RoomID); gated_gate(RoomID,_); gated_key(RoomID,_)} != 1.
+            %non_gated(RoomID) :- door(Source, RoomID), non_gated(Source), not gate(_,Source, RoomID), not door_soft_locked(Source, RoomID).
+            non_gated(RoomID) :- door(Source, RoomID), non_gated(Source), not gated_area(RoomID).
+            
 
         %% no gated area can have a directional connection into it unless it is same GateRoomID
             :- gated_order(RoomID, GateRoomID), door(Source, RoomID), not door(RoomID, Source), not gated_order(Source, GateRoomID), Source != GateRoomID.
+
+        %% end gated area ---------------------------------
 
 
         % no softlocks on gated rooms
@@ -510,8 +533,16 @@ namespace WorldBuilder
             %:- gate(_, Source, Destination), door_count(Source, Count), Count > 4.
 
         % gated horizontally only
-            %:- gate(_,Source,_), door_north(Source).
-            %:- gate(_,Source,_), door_south(Source).
+            gated_horizontally(0).
+            %gated_horizontally(1).
+            :- gate(KeyID,Source,_), door_north(Source), gated_horizontally(KeyID).
+            :- gate(KeyID,Source,_), door_south(Source), gated_horizontally(KeyID).
+
+        %% gated vertically only
+            gated_vertically(0).
+            %gated_vertically(2).
+            :- gate(KeyID,Source,_), door_east(Source), gated_vertically(KeyID).
+            :- gate(KeyID,Source,_), door_west(Source), gated_vertically(KeyID).
 
         ";
     }
