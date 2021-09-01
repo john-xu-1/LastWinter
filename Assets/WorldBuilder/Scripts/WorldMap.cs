@@ -496,6 +496,8 @@ namespace WorldBuilder
 
             gated_key_check(RoomID, KeyRoomID) :- gated_key(RoomID, KeyRoomID), gate(KeyID,RoomID,_), key(KeyID, KeyRoomID).
             gated_key_check(RoomID, KeyRoomID) :- gated_key_check(Source,KeyRoomID), door(Source, RoomID), not gate(_,Source, RoomID).
+            %gated_key_check(RoomID, KeyRoomID) :- gated_key_check(Source,KeyRoomID), door(Source, RoomID), not gate(_,Source, RoomID), key(KeyID, KeyRoomID), not gate_order(_,KeyID).
+            %gated_key_check(RoomID, KeyRoomID) :- gated_key_check(Source,KeyRoomID), door(Source, RoomID), gate(_,Source, RoomID), key(KeyID, KeyRoomID), gate_order(_,KeyID).
             :- gated_key(RoomID, KeyRoomID), not gated_key_check(RoomID,KeyRoomID).
 
 
@@ -517,7 +519,19 @@ namespace WorldBuilder
             non_gated(RoomID) :- start(RoomID).
             %non_gated(RoomID) :- door(Source, RoomID), non_gated(Source), not gate(_,Source, RoomID), not door_soft_locked(Source, RoomID).
             non_gated(RoomID) :- door(Source, RoomID), non_gated(Source), not gated_area(RoomID).
+           
+
+        %% gate order 
+            gate_order(0,0).
+            gate_order(1,2).
             
+            gated_start(RoomID, KeyID ) :- gated_key(RoomID, KeyRoomID), key(KeyID,KeyRoomID), door_soft_locked(_,RoomID).
+            %:- gate_order(K1,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), not gated_order(Source, GateRoomID), gate(K1,RoomID).
+            %:- gate_order(K1,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), not gated_order(Source, GateRoomID), gate(KeyID, GateRoomID,_), K1 == KeyID.
+            
+            
+            :- gate_order(K1,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), not gated_order(Source, _).
+            :- gate_order(K1,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), gated_order(Source, GateRoomID), gate(KeyID, GateRoomID,_), K1 != KeyID.
 
         %% no gated area can have a directional connection into it unless it is same GateRoomID
             :- gated_order(RoomID, GateRoomID), door(Source, RoomID), not door(RoomID, Source), not gated_order(Source, GateRoomID), Source != GateRoomID.
