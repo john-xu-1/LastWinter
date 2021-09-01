@@ -33,7 +33,7 @@ public class DebugMap : MonoBehaviour
     public int headroom = 2, shoulderroom = 3, minCeilingHeight = 3;
     public GameObject nodePrefab, edgePrefab, pathPrefab;
 
-    public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2, minGatePerKey = 2;
+    public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2, minGatePerKey = 2, bossGateKey = 2;
     public int jumpHeadroom = 3, timeout = 600;
     public int BuiltWorldIndex;
     int builtWorldIndex { get { return BuiltWorldIndex > 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
@@ -245,7 +245,7 @@ public class DebugMap : MonoBehaviour
         {
             //Generator.ConvertMap(Solver.answerSet);
             FindObjectOfType<BuildWorld>().Worlds = WorldBuilder;
-            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus);
+            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey,bossGateKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus);
         }
         else if (MapSource == MapSources.World)
         {
@@ -289,7 +289,7 @@ public class DebugMap : MonoBehaviour
             AddPath(room);
         }else if(MapSource == MapSources.Graph)
         {
-            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, 3, timeout, cpus);
+            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, 3, bossGateKey, timeout, cpus);
         }
 
 

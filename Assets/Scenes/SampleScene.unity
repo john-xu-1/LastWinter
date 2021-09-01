@@ -568,6 +568,7 @@ MonoBehaviour:
   keyCount: 0
   maxGatePerKey: 0
   minGatePerKey: 0
+  bossGateKey: 0
   roomWidth: 0
   roomHeight: 0
   headroom: 0
@@ -3743,13 +3744,14 @@ MonoBehaviour:
   nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
   edgePrefab: {fileID: 4894238030931249867, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}
   pathPrefab: {fileID: 3858733167211834716, guid: c7fe75d5e1a584669b52c9f9725111c9, type: 3}
-  worldWidth: 8
-  worldHeight: 8
-  keyTypeCount: 4
+  worldWidth: 7
+  worldHeight: 7
+  keyTypeCount: 3
   maxGatePerKey: 6
-  minGatePerKey: 2
+  minGatePerKey: 1
+  bossGateKey: 3
   jumpHeadroom: 3
-  timeout: 2000
+  timeout: 3000
   BuiltWorldIndex: -1
   indices: 010000000200000003000000
   MapSource: 5

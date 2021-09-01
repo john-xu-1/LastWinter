@@ -13,7 +13,7 @@ namespace WorldBuilder
         public ClingoSolver Solver;
         public bool SolvingWorld;
         public GameObject nodePrefab, edgePrefab;
-        public int worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, roomWidth, roomHeight, headroom, shoulderroom, jumpHeadroom, timeout, cpus;
+        public int worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, bossGateKey, roomWidth, roomHeight, headroom, shoulderroom, jumpHeadroom, timeout, cpus;
         public GameObject MiniMap;
 
         public enum BuildStates
@@ -44,13 +44,14 @@ namespace WorldBuilder
             }
         }
 
-        public void BuildAWorld(int worldWidth, int worldHeight, int keyCount, int maxGatePerKey, int minGatePerKey, int roomWidth, int roomHeight, int headroom, int shoulderroom, int jumpHeadroom, int timeout,int cpus)
+        public void BuildAWorld(int worldWidth, int worldHeight, int keyCount, int maxGatePerKey, int minGatePerKey, int bossGateKey, int roomWidth, int roomHeight, int headroom, int shoulderroom, int jumpHeadroom, int timeout,int cpus)
         {
             this.worldWidth = worldWidth;
             this.worldHeight = worldHeight;
             this.keyCount = keyCount;
             this.maxGatePerKey = maxGatePerKey;
             this.minGatePerKey = minGatePerKey;
+            this.bossGateKey = bossGateKey;
             this.roomWidth = roomWidth;
             this.roomHeight = roomHeight;
             this.headroom = headroom;
@@ -68,7 +69,7 @@ namespace WorldBuilder
             switch (BuildState)
             {
                 case BuildStates.graph:
-                    BuildGraph(worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, 3, timeout,cpus);
+                    BuildGraph(worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout,cpus);
                     BuildState += 1;
                     break;
                 case BuildStates.graphBuilding:
@@ -278,13 +279,13 @@ namespace WorldBuilder
             Debug.Log(status + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
         }
 
-        public void BuildGraph(int worldWidth, int worldHeight, int gateKeyCount, int maxGatePerKey, int minGatePerKey, int startRoom, int timeout, int cpus)
+        public void BuildGraph(int worldWidth, int worldHeight, int gateKeyCount, int maxGatePerKey, int minGatePerKey, int bossGateKey, int startRoom, int timeout, int cpus)
         {
             string aspCode = WorldMap.bidirectional_rules + WorldMap.test_text + WorldMap.gate_key_rules;
             string path = ClingoUtil.CreateFile(aspCode);
             ClingoSolver solver = FindObjectOfType<ClingoSolver>();
             solver.maxDuration = timeout + 10;
-            solver.Solve(path, $" -c max_width={worldWidth} -c max_height={worldHeight} -c start_room={startRoom} -c key_count={gateKeyCount} -c max_gate_type_count={maxGatePerKey} -c min_gate_type_count={minGatePerKey} --parallel-mode {cpus} --time-limit={timeout}");
+            solver.Solve(path, $" -c max_width={worldWidth} -c max_height={worldHeight} -c start_room={startRoom} -c key_count={gateKeyCount} -c max_gate_type_count={maxGatePerKey} -c min_gate_type_count={minGatePerKey} -c boss_gate_type={bossGateKey} --parallel-mode {cpus} --time-limit={timeout}");
         }
 
         float buildTimeStart = 0;

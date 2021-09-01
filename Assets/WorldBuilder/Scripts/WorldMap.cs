@@ -160,6 +160,8 @@ namespace WorldBuilder
             int startRoomID = world.startRoomID;
             Vector2Int startIndex = Utility.roomID_to_index(startRoomID, worldWidth, worldHeight);
             worldGrid[startIndex.x, startIndex.y].SetColor(Color.green);
+
+            
         }
         public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
         {
@@ -372,7 +374,9 @@ namespace WorldBuilder
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX, YY-1, RoomID2).
 
             path(RoomID, Type) :- path(RoomIDSource, Type), door(RoomIDSource, RoomID), roomID(Type).
-            start(start_room).
+            %start(start_room).
+
+            1{start(RoomID): room_grid(_,YY,RoomID), YY == 1}1.
             path(RoomID, Type) :- roomID(RoomID), Type = RoomID.
             :- room(RoomID), not path(RoomID, Type), roomID(Type).
 
@@ -521,9 +525,10 @@ namespace WorldBuilder
             non_gated(RoomID) :- door(Source, RoomID), non_gated(Source), not gated_area(RoomID).
            
 
-        %% gate order 
+        %% gate ordering 
             gate_order(0,0).
-            gate_order(1,2).
+            %gate_order(2,1).
+            
             
             gated_start(RoomID, KeyID ) :- gated_key(RoomID, KeyRoomID), key(KeyID,KeyRoomID), door_soft_locked(_,RoomID).
             %:- gate_order(K1,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), not gated_order(Source, GateRoomID), gate(K1,RoomID).
@@ -558,6 +563,27 @@ namespace WorldBuilder
             :- gate(KeyID,Source,_), door_east(Source), gated_vertically(KeyID).
             :- gate(KeyID,Source,_), door_west(Source), gated_vertically(KeyID).
 
+        %% boss room
+            #const boss_room_size = 4.
+            #const boss_gate_type = 2.
+            boss_room_size {boss_room(RoomID): room(RoomID)} boss_room_size.
+
+            :- boss_room(RoomID), {boss_room(Source):door(Source,RoomID)} == 0.
+            boss_room_entrance(RoomID) :- boss_room(RoomID), door(Source, RoomID), not boss_room(Source).
+            boss_room_exit(RoomID) :- boss_room(RoomID), door(RoomID, Source), not boss_room(Source).
+            :- {boss_room_entrance(_)} > 1.
+            :- {boss_room_exit(_)} > 1.
+            :- boss_room_exit(R1), boss_room_entrance(R2), R1 != R2.
+            :- boss_room_entrance(RoomID), {door(Source,RoomID): not boss_room(Source)} > 1.
+
+            :- boss_room(RoomID), {boss_room(Neighbor): door(Neighbor, RoomID)} < 2.
+
+            :- boss_room(RoomID), key(_,RoomID).
+            :- boss_room(RoomID), gate(_,RoomID,_).
+
+            gate(boss_gate_type, Source, RoomID) :- boss_room_entrance(RoomID), door(Source,RoomID), not boss_room(Source).
+            %:- path_order(BossKeyRoom, min, D1), path_order(KeyRoom, min, D2), D1 < D2, key(boss_gate_type, BossKeyRoom), key(KeyID, KeyRoom), keys_types(KeyID).
+            %gate_order(1,boss_gate_type).
         ";
     }
 }
