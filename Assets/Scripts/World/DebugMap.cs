@@ -167,15 +167,15 @@ public class DebugMap : MonoBehaviour
         }else if(MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !testDone)
         {
             Graph worldGraph = WorldMap.ConvertGraph(Solver.answerSet);
-            foreach(List<string> gated in Solver.answerSet["gated_order"])
-            {
-                print(gated);
-            }
-            print("non_gated");
-            foreach (List<string> nongated in Solver.answerSet["non_gated"])
-            {
-                print(nongated);
-            }
+            //foreach(List<string> gated in Solver.answerSet["gated_order"])
+            //{
+            //    print(gated);
+            //}
+            //print("non_gated");
+            //foreach (List<string> nongated in Solver.answerSet["non_gated"])
+            //{
+            //    print(nongated);
+            //}
             WorldMap.DisplayGraph(worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
             testDone = true;
         }
@@ -289,7 +289,7 @@ public class DebugMap : MonoBehaviour
             AddPath(room);
         }else if(MapSource == MapSources.Graph)
         {
-            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, 3, bossGateKey, timeout, cpus);
+            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout, cpus);
         }
 
 

@@ -565,7 +565,7 @@ namespace WorldBuilder
 
         %% boss room
             #const boss_room_size = 4.
-            #const boss_gate_type = 2.
+            #const boss_gate_type = 1.
             boss_room_size {boss_room(RoomID): room(RoomID)} boss_room_size.
 
             :- boss_room(RoomID), {boss_room(Source):door(Source,RoomID)} == 0.
@@ -580,8 +580,11 @@ namespace WorldBuilder
 
             :- boss_room(RoomID), key(_,RoomID).
             :- boss_room(RoomID), gate(_,RoomID,_).
+            :- boss_room(RoomID), start(RoomID).
 
             gate(boss_gate_type, Source, RoomID) :- boss_room_entrance(RoomID), door(Source,RoomID), not boss_room(Source).
+            %:- boss_room_entrance(RoomID), not gated_order(RoomID, _).
+            %:- boss_room_entrance(RoomID), gated_order(RoomID, GatedRoomID), not gate(boss_gate_type, GatedRoomID, _).
             %:- path_order(BossKeyRoom, min, D1), path_order(KeyRoom, min, D2), D1 < D2, key(boss_gate_type, BossKeyRoom), key(KeyID, KeyRoom), keys_types(KeyID).
             %gate_order(1,boss_gate_type).
         ";
