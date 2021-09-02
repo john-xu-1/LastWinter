@@ -29,6 +29,8 @@ namespace WorldBuilder
 
         public void AddWorld(World world)
         {
+            Utility.SaveWorld(world, world.name);
+
             BuiltWorlds.Add(world);
         }
 
