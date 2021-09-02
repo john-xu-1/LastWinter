@@ -15,7 +15,7 @@ public static class UtilityTilemap
         tilemap.SetTile(pos, null);
     }
 
-    public static void PlaceTiles (Tilemap tilemap, Vector3Int pos, float height, float width, TileBase tileType)
+    public static void PlaceTiles(Tilemap tilemap, Vector3Int pos, float height, float width, TileBase tileType)
     {
         int xStart = pos.x - (int)(width / 2);
         int yStart = pos.y - (int)(height / 2);

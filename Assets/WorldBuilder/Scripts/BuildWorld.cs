@@ -13,7 +13,7 @@ namespace WorldBuilder
         public ClingoSolver Solver;
         public bool SolvingWorld;
         public GameObject nodePrefab, edgePrefab;
-        public int worldWidth, worldHeight, keyCount, maxGatePerKey, roomWidth, roomHeight, headroom, shoulderroom, jumpHeadroom, timeout, cpus;
+        public int worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, bossGateKey, roomWidth, roomHeight, headroom, shoulderroom, jumpHeadroom, timeout, cpus;
         public GameObject MiniMap;
 
         public enum BuildStates
@@ -44,12 +44,14 @@ namespace WorldBuilder
             }
         }
 
-        public void BuildAWorld(int worldWidth, int worldHeight, int keyCount, int maxGatePerKey, int roomWidth, int roomHeight, int headroom, int shoulderroom, int jumpHeadroom, int timeout, int cpus)
+        public void BuildAWorld(int worldWidth, int worldHeight, int keyCount, int maxGatePerKey, int minGatePerKey, int bossGateKey, int roomWidth, int roomHeight, int headroom, int shoulderroom, int jumpHeadroom, int timeout,int cpus)
         {
             this.worldWidth = worldWidth;
             this.worldHeight = worldHeight;
             this.keyCount = keyCount;
             this.maxGatePerKey = maxGatePerKey;
+            this.minGatePerKey = minGatePerKey;
+            this.bossGateKey = bossGateKey;
             this.roomWidth = roomWidth;
             this.roomHeight = roomHeight;
             this.headroom = headroom;
@@ -67,7 +69,7 @@ namespace WorldBuilder
             switch (BuildState)
             {
                 case BuildStates.graph:
-                    BuildGraph(worldWidth, worldHeight, keyCount, maxGatePerKey, 3, timeout);
+                    BuildGraph(worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout,cpus);
                     BuildState += 1;
                     break;
                 case BuildStates.graphBuilding:
@@ -110,18 +112,24 @@ namespace WorldBuilder
 
         }
 
-        List<Vector2Int> BuildQueue;
+        public List<Vector2Int> BuildQueue;
         RoomConnections[] connections;
 
         void BuildingRoomsSetup()
         {
             connections = WorldMap.get_room_connections(world.rawGraph);
             BuildQueue = new List<Vector2Int>();
+            foreach(Gate gate in world.worldGraph.gates)
+            {
+                Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
+                BuildQueue.Add(gateRoom);
+            }
             for(int y = 0; y < worldHeight; y += 1)
             {
                 for(int x = 0; x < worldWidth; x += 1)
                 {
-                    BuildQueue.Add(new Vector2Int(x, y));
+                    Vector2Int newRoom = new Vector2Int(x, y);
+                    if(!BuildQueue.Contains(newRoom)) BuildQueue.Add(newRoom);
                 }
             }
             BuildState += 1;
@@ -152,7 +160,7 @@ namespace WorldBuilder
             Debug.Log("Building roomID: " + roomID + " index: " + index);
             Neighbors neighbors = world.GetNeighbors(roomID);
             //bool[] connection = WorldMap.GetConnections(connections[roomID]);
-            BuildRoom(new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, connections[roomID], neighbors);
+            BuildRoom(roomID, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, connections[roomID], neighbors);
             //BuildState += 1;
         }
 
@@ -180,10 +188,11 @@ namespace WorldBuilder
                 }
 
                 if (history) world.WorldHistoryAdd(roomID, newRoom.map, buildTime, Solver.SolverStatus);
-                if (display) Generator.ConvertMap(newRoom);
+                if (display) DisplayRoom(newRoom); 
 
                 newRoom.buidStatus = ClingoSolver.Status.SATISFIABLE;
                 BuildState = BuildStates.roomBuilding;
+                NonTimeout();
             }else if(Solver.SolverStatus == ClingoSolver.Status.UNSATISFIABLE)
             {
                 double destroyTime = Solver.Duration; // Time.fixedTime - buildTimeStart;
@@ -202,15 +211,7 @@ namespace WorldBuilder
                     
                 }
 
-                //Room killRoom = world.GetRandomNeighbor(roomID);
-                //killRoom.isDestroyed = true;
-                //if (history) {
-                //    int killRoomID = Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight);
-                //    world.WorldHistoryRemove(killRoomID, killRoom.map, destroyTime, roomID, Solver.SolverStatus);
-
-                //}
-                //if (display) Generator.RemoveMap(killRoom);
-                //BuildQueue.Insert(0, killRoom.pos);
+                
                 BuildQueue.Insert(0, currentRoom);
 
                 if(room.buidStatus != ClingoSolver.Status.UNSATISFIABLE)
@@ -231,23 +232,15 @@ namespace WorldBuilder
             }
             else if (Solver.SolverStatus == ClingoSolver.Status.TIMEDOUT)
             {
+                world.GetRoom(roomID).buidStatus = ClingoSolver.Status.TIMEDOUT;
 
                 Room killRoom = world.GetRandomNeighbor(roomID);
                 if(killRoom != null)
                 {
                     double destroyTime = Solver.Duration;// Time.fixedTime - buildTimeStart;
-                    //killRoom.isDestroyed = true;
-                    //if (history)
-                    //{
-                    //    float destroyTime = Time.fixedTime - buildTimeStart;
-                    //    int killRoomID = Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight);
-                    //    world.WorldHistoryRemove(killRoomID, killRoom.map, destroyTime, roomID, Solver.SolverStatus);
-
-                    //}
-                    //if (display) Generator.RemoveMap(killRoom);
+                   
                     DestroyRoom(killRoom, destroyTime, roomID, Solver.SolverStatus);
-                    //BuildQueue.Insert(0, killRoom.pos);
-                    //Debug.Log(Solver.SolverStatus + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
+                    
                 }
                 else
                 {
@@ -256,41 +249,56 @@ namespace WorldBuilder
                 
                 BuildQueue.Insert(0, currentRoom);
 
-                world.GetRoom(roomID).buidStatus = ClingoSolver.Status.TIMEDOUT;
-                BuildState = BuildStates.roomBuilding;
                 
+                BuildState = BuildStates.roomBuilding;
+
+                Timedout();
             }
             else
             {
-                BuildState = BuildStates.solved;
-                Debug.LogWarning("Unhandled ClingoSolver.Status");
+                BuildState = BuildStates.complete;
+                Debug.LogWarning($"Unhandled ClingoSolver.Status: {Solver.SolverStatus}");
             }
+        }
+        void DisplayRoom(Room room)
+        {
+            Generator.ConvertMap(room);
+            if (FindObjectOfType<DebugMap>()) FindObjectOfType<DebugMap>().AddPath(room);
+        }
+        void HideRoom(Room room)
+        {
+            Generator.RemoveMap(room);
+            if (FindObjectOfType<DebugMap>()) FindObjectOfType<DebugMap>().RemovePath(room);
         }
         void DestroyRoom(Room killRoom, double destroyTime, int destoryerID, Clingo.ClingoSolver.Status status)
         {
             killRoom.isDestroyed = true;
             if (history) world.WorldHistoryRemove(killRoom, destroyTime, destoryerID, status);
-            if(display) Generator.RemoveMap(killRoom);
+            if (display) HideRoom(killRoom);
             BuildQueue.Insert(0, killRoom.pos);
             Debug.Log(status + ": removing roomID: " + Utility.index_to_roomID(killRoom.pos, worldWidth, worldHeight) + " index: " + killRoom.pos);
         }
 
-        void BuildGraph(int worldWidth, int worldHeight, int gateKeyCount, int maxGatePerKey, int startRoom, int timeout)
+        public void BuildGraph(int worldWidth, int worldHeight, int gateKeyCount, int maxGatePerKey, int minGatePerKey, int bossGateKey, int startRoom, int timeout, int cpus)
         {
             string aspCode = WorldMap.bidirectional_rules + WorldMap.test_text + WorldMap.gate_key_rules;
             string path = ClingoUtil.CreateFile(aspCode);
             ClingoSolver solver = FindObjectOfType<ClingoSolver>();
-            solver.Solve(path, $" -c max_width={worldWidth} -c max_height={worldHeight} -c start_room={startRoom} -c key_count={gateKeyCount} -c max_gate_type_count={maxGatePerKey}  -t 1 --time-limit={timeout}");
+            solver.maxDuration = timeout + 10;
+            solver.Solve(path, $" -c max_width={worldWidth} -c max_height={worldHeight} -c start_room={startRoom} -c key_count={gateKeyCount} -c max_gate_type_count={maxGatePerKey} -c min_gate_type_count={minGatePerKey} -c boss_gate_type={bossGateKey} --parallel-mode {cpus} --time-limit={timeout}");
         }
 
         float buildTimeStart = 0;
-        void BuildRoom(Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, RoomConnections connections, Neighbors neighbors)
+        void BuildRoom(int roomID,Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, RoomConnections connections, Neighbors neighbors)
         {
 
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
             string aspCode = WorldStructure.get_world_gen(roomSize.x, roomSize.y) + WorldStructure.tile_rules + WorldStructure.get_floor_rules(headroom, shoulderroom) + WorldStructure.get_chamber_rule(minCeilingHeight) + Pathfinding.movement_rules + Pathfinding.platform_rules + Pathfinding.path_rules;
 
-            aspCode += Pathfinding.set_openings(connections.boolArray) + WorldStructure.GetDoorRules(neighbors);
+            GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
+            GateTypes[,] keys = { { GateTypes.door, GateTypes.enemy }, { GateTypes.lava, GateTypes.none }, { GateTypes.water, GateTypes.none } };
+
+            aspCode += Pathfinding.set_openings(connections.boolArray) + WorldStructure.GetDoorRules(neighbors) + Gates.GetGateASP(world, roomID, gates,connections);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
             {
@@ -316,7 +324,23 @@ namespace WorldBuilder
 
             string path = ClingoUtil.CreateFile(aspCode);
             buildTimeStart = Time.fixedTime;
-            solver.Solve(path, " -t 4 ");
+            solver.maxDuration =  GetTimeout() + 10;
+            solver.Solve(path, $" --parallel-mode {cpus} --time-limit={GetTimeout()}");
+        }
+        int addedTimeoutMax = 1000;
+        int addedTimeout = 800;
+        int addedTimeoutStep = 100;
+        private int GetTimeout()
+        {
+            return timeout  + addedTimeout;
+        }
+        private void Timedout()
+        {
+            addedTimeout = Mathf.Clamp(addedTimeout + addedTimeoutStep, 0, addedTimeoutMax);
+        }
+        private void NonTimeout()
+        {
+            addedTimeout = Mathf.Clamp(addedTimeout - addedTimeoutStep, 0, addedTimeoutMax);
         }
     }
 }

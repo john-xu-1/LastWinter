@@ -25,6 +25,7 @@ namespace Clingo
         public int numOfSolutionsWanted = 1; // set to 0 for all possible solution
         public int seed = 42;
         public bool useRandomSeed;
+        public bool saveToFile = true;
         public Dictionary<string, List<List<string>>> answerSet = new Dictionary<string, List<List<string>>>();
 
 
@@ -147,17 +148,50 @@ namespace Clingo
             }
 
 
-            if (status == Status.TIMEDOUT) { return; }
-
-
 
             //            clingoConsoleOutput = clingoProcess.StandardOutput.ReadToEnd();
             clingoConsoleError = clingoProcess.StandardError.ReadToEnd();
 
-            clingoProcess.OutputDataReceived -= OutputDataReceived;
+
+
+            if (status == Status.TIMEDOUT)
+            {
+                clingoProcess.CancelOutputRead();
+                clingoProcess.Close();
+                clingoProcess.OutputDataReceived -= OutputDataReceived;
+
+                return;
+            }
+
+            print("clingoConsoleError");
+            print(clingoConsoleError);
+
+            print("clingoConsoleOutput");
+            print(clingoConsoleOutput);
             clingoProcess.CancelOutputRead();
             clingoProcess.Close();
+            clingoProcess.OutputDataReceived -= OutputDataReceived;
 
+
+            if (clingoConsoleError.Length > 0)
+            {
+                print("clingoConsoleError");
+                print(clingoConsoleError);
+                print(clingoConsoleError.Contains("INTERRUPTED by signal!"));
+
+                if (clingoConsoleError.Contains("INTERRUPTED by signal!") || clingoConsoleError.Contains("solving stopped by signal"))
+                {
+                    status = Status.TIMEDOUT;
+                }
+                else
+                {
+                    status = Status.ERROR;
+                }
+
+                isSolverRunning = false;
+                UnityEngine.Debug.Log("Solver is Done.");
+                return;
+            }
 
 
             ClingoRoot clingoOutput = JsonUtility.FromJson<ClingoRoot>(clingoConsoleOutput);
@@ -241,6 +275,7 @@ namespace Clingo
         void OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             clingoConsoleOutput += e.Data + "\n";
+            //print(e.Data);
         }
 
 

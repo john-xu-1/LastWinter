@@ -16,72 +16,106 @@ public class DebugMap : MonoBehaviour
     public Text RunNum;
 
     public MapGenerator Generator;
+    public int[][] MyMap;
+
+    [TextArea(5, 10)]
+    public string Bitmap;
 
     public string JsonMapName = "test2.txt";
     public TextAsset jsonFile;
     public bool BuildOnStart;
     public ClingoSolver Solver;
-    public Worlds worlds;
+    public int cpus = 4;
+    public Worlds WorldBuilder, WorldsSource;
+    public bool[] connection = { true, true, false, false, false, false, false, false };
+    public RoomConnections connections;
     public Vector2Int RoomSize = new Vector2Int(20, 20);
     public int headroom = 2, shoulderroom = 3, minCeilingHeight = 3;
-    public GameObject nodePrefab, edgePrefab;
+    public GameObject nodePrefab, edgePrefab, pathPrefab;
 
-    public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2;
+    public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2, minGatePerKey = 2, bossGateKey = 2;
     public int jumpHeadroom = 3, timeout = 600;
     public int BuiltWorldIndex;
+    int builtWorldIndex { get { return BuiltWorldIndex > 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
+    public int[] indices = { 1, 2, 3, 4 };
+    public List<List<int>> permutations;
     public enum MapSources
     {
         None,
         Json,
         Solver,
         World,
-        History
-    }   
+        History,
+        Graph
+    }
     public MapSources MapSource;
     public World world;
 
     private void Start()
     {
-
-
-        //for (int i = 0; i < 8; i += 1)
+        //Debug.Log(Clingo.ClingoSolver.Status.SATISFIABLE);
+        //Clingo.ClingoSolver.Status status = "SATISFIABLE";
+        //if("SATISFIABLE" == Clingo.ClingoSolver.Status.SATISFIABLE.ToString())
         //{
-        //    WorldBuilder.BuiltWorlds.RemoveAt(0);
+
+        //}
+        //permutations = global::WorldBuilder.Utility.GetPermutations( indices);
+        //foreach (List<int> permutation in permutations)
+        //{
+        //    string line = "";
+        //    foreach (int index in permutation)
+        //    {
+        //        line += index;
+        //    }
+        //    Debug.Log(line);
+        //}
+        //int count = permutations.Count;
+        //for(int i = 0; i < count; i += 1)
+        //{
+
+
+        //    List<int> removed = global::WorldBuilder.Utility.GetSmallestRandomPermutation(permutations, true);
+        //    string line2 = "";
+        //    foreach (int index in removed)
+        //    {
+        //        line2 += index;
+        //    }
+        //    Debug.Log("Removed: " + line2);
         //}
 
-        //Map map = worlds.BuiltWorlds[0].GetRoom(1).map;
+        //for (int i = 0; i < 11; i += 1)
+        //{
+        //    WorldBuilder.BuiltWorlds.RemoveAt(10);
+        //}
 
-        
+        //foreach(World world in WorldsSource.BuiltWorlds)
+        //{
+        //    if (world.name.Contains("7/29/21"))
+        //    {
+        //        WorldBuilder.AddWorld(world);
+        //        WorldsSource.BuiltWorlds.Remove(world);
+        //    }
+        //}
+        //WorldBuilder.BuiltWorlds.Add( WorldsSource.BuiltWorlds[WorldsSource.BuiltWorlds.Count - 1]);
+        //WorldsSource.BuiltWorlds.RemoveAt(WorldsSource.BuiltWorlds.Count - 1);
+
         if (BuildOnStart) buildMap();
-
-        if (worlds)
-        {
-            World[] builtWorlds = worlds.GetWorlds();
-
-            foreach (World world in builtWorlds)
-            {
-                string name = world.name.Replace("/", "_");
-                WorldBuilder.Utility.SaveWorld(world, name);
-            }
-        }
-
-        
-
-
     }
-    //bool isBuilt = false;
-    //int xTest = 0;
-    //int yTest = 0;
-    //Room lastRoom;
+    bool isBuilt = false;
+    int xTest = 0;
+    int yTest = 0;
+    Room lastRoom;
     World historySource;
     World worldHistory;
     int historyIndex = 0;
     public GameObject MiniMap;
+    private GameObject[,] pathPoints;
+    bool testDone = false;
     private void Update()
     {
-        if (MapSource == MapSources.History)
+        if(MapSource == MapSources.History)
         {
-
+            
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 historyIndex += 1;
@@ -91,11 +125,13 @@ public class DebugMap : MonoBehaviour
                 {
                     Debug.Log("RemoveMap");
                     Generator.RemoveMap(room);
+                    RemovePath(room);
                 }
                 else
                 {
                     room.SetupRoom(rh.map);
                     Generator.ConvertMap(room);
+                    AddPath(room);
                 }
                 RoomID.text = rh.roomID.ToString();
                 BuildTime.text = Utility.FormatTime(rh.buildTime);
@@ -104,18 +140,20 @@ public class DebugMap : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-
+                
                 RoomHistory rh = historySource.WorldHistory.GetRoom(historyIndex);
                 if (!rh.destroyed)
                 {
                     Room room = worldHistory.GetRoom(rh.roomID);
                     Debug.Log("RemoveMap");
                     Generator.RemoveMap(room);
+                    RemovePath(room);
                 }
-                else
+                else 
                 {
                     Room room = worldHistory.GetRoom(rh.roomID);
                     Generator.ConvertMap(room);
+                    AddPath(room);
                 }
 
                 historyIndex -= 1;
@@ -125,43 +163,108 @@ public class DebugMap : MonoBehaviour
                 RunNum.text = (historyIndex + 1).ToString();
 
             }
+            
+        }else if(MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !testDone)
+        {
+            Graph worldGraph = WorldMap.ConvertGraph(Solver.answerSet);
+            foreach(List<string> gated in Solver.answerSet["gated_order"])
+            {
+                print(gated);
+            }
+            print("non_gated");
+            foreach (List<string> nongated in Solver.answerSet["non_gated"])
+            {
+                print(nongated);
+            }
+            WorldMap.DisplayGraph(worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
+            testDone = true;
+        }
+    }
+    public void AddPath(Room room)
+    {
+        foreach(WorldBuilder.Path path in room.map.paths)
+        {
+            int width = room.map.dimensions.room_width;
+            int height = room.map.dimensions.room_height;
+            int i = room.pos.x;
+            int j = room.pos.y;
+            int x = path.x + width * i;
+            int y = path.y + height * j;
+            
+            string type = path.type;
 
+            if(pathPoints == null) pathPoints = new GameObject[width * worldWidth + 2, height * worldHeight + 2];
+
+            if (!pathPoints[x, y])
+            {
+
+                PathNode node = Instantiate(pathPrefab).GetComponent<PathNode>();
+                pathPoints[x, y] = node.gameObject;
+                node.SetUpPathNode(x , -(y), type);
+            }
+            else
+            {
+                pathPoints[x, y].GetComponent<PathNode>().AddNode(type);
+            }
+        }
+    }
+    public void RemovePath(Room room)
+    {
+        foreach (WorldBuilder.Path path in room.map.paths)
+        {
+            int width = room.map.dimensions.room_width;
+            int height = room.map.dimensions.room_height;
+            int i = room.pos.x;
+            int j = room.pos.y;
+            int x = path.x + width * i;
+            int y = path.y + height * j;
+            string type = path.type;
+            if (pathPoints[x, y])
+            {
+                Destroy(pathPoints[x,y]);
+                pathPoints[x, y] = null;
+            }
+            else
+            {
+
+            }
         }
     }
 
     private void buildMap()
     {
-        if (MapSource == MapSources.Json)
+        if(MapSource == MapSources.Json)
         {
-            string[] files = WorldBuilder.Utility.getFileNames();
-            foreach (string file in files)
-            {
-                print(WorldBuilder.Utility.GetFile(file));
-            }
-            string jsonStr = WorldBuilder.Utility.GetFile(files[0]);
-            World world = JsonUtility.FromJson<World>(jsonStr);
-
-            Generator.BuildWorld(world);
-        }
-        else if (MapSource == MapSources.Solver)
+            //TextAsset jsonFile = Resources.Load<TextAsset>(JsonMapName);
+            print(jsonFile);
+            string jsonStr = jsonFile.text;
+            Map map = JsonUtility.FromJson<Map>(jsonStr);
+            print(map.dimensions.room_count_height);
+            //Generator.ConvertMap(map);
+        }else if(MapSource == MapSources.Solver)
         {
             //Generator.ConvertMap(Solver.answerSet);
-            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, 4);
+            FindObjectOfType<BuildWorld>().Worlds = WorldBuilder;
+            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey,bossGateKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus);
         }
         else if (MapSource == MapSources.World)
         {
             //WorldBuilder.BuildWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, 3, Solver.maxDuration - 10);
-            World world = worlds.BuiltWorlds[BuiltWorldIndex];
+            World world = WorldBuilder.BuiltWorlds[builtWorldIndex];
             //WorldMap.ConvertGraph()
-            Generator.BuildWorld(world);
-        }
-        else if (MapSource == MapSources.History)
+            foreach(Room room in world.GetRooms())
+            {
+                room.SetupRoom();
+                Generator.ConvertMap(room);
+            }
+        }else if(MapSource == MapSources.History)
         {
 
 
-            historySource = worlds.BuiltWorlds[BuiltWorldIndex];
+            historySource = WorldBuilder.BuiltWorlds[builtWorldIndex];
 
             WorldMap.DisplayGraph(historySource.worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
+            
 
             worldHistory = new World(historySource.Width, historySource.Height);
             historyIndex = 0;
@@ -169,6 +272,7 @@ public class DebugMap : MonoBehaviour
             Room room = worldHistory.GetRoom(rh.roomID);
             room.SetupRoom(rh.map);
             Generator.ConvertMap(room);
+            
 
             TotalTime.text = Utility.FormatTime(historySource.WorldHistory.GetTotalTime());
             RoomID.text = rh.roomID.ToString();
@@ -176,14 +280,22 @@ public class DebugMap : MonoBehaviour
             RunNum.text = (historyIndex + 1).ToString();
 
             historySource.WorldHistory.GetRoomHistoryAnalysis();
+
+            int width = historySource.Width;
+            int roomWidth = room.map.dimensions.room_width;
+            int height = historySource.Height;
+            int roomHeight = room.map.dimensions.room_height;
+            pathPoints = new GameObject[width * roomWidth + 2, height * roomHeight + 2];
+            AddPath(room);
+        }else if(MapSource == MapSources.Graph)
+        {
+            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, 3, bossGateKey, timeout, cpus);
         }
 
 
     }
-
     
-
-
+    
 }
 
 

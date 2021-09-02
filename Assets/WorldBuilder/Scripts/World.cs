@@ -150,7 +150,6 @@ namespace WorldBuilder
         }
     }
 
-    
     public class Neighbors
     {
         public Room left, right, up, down;

@@ -9,6 +9,7 @@ namespace WorldBuilder
         public TextMesh text;
         public SpriteRenderer marker;
         public edge upExit, downExit, rightExit, leftExit;
+        public Sprite gate, key; 
         public void SetText(string text)
         {
             this.text.text = text;
@@ -17,6 +18,12 @@ namespace WorldBuilder
         public void SetText(int text)
         {
             this.text.text = text.ToString();
+        }
+
+        public void SetType(string type)
+        {
+            if (type == "gate") marker.sprite = gate;
+            else if (type == "key") marker.sprite = key;
         }
 
         public void SetColor(Color color)

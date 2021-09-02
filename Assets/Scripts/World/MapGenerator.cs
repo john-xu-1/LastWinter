@@ -53,7 +53,7 @@ public class MapGenerator : MonoBehaviour
 
     public void BuildWorld(World world)
     {
-        
+
         foreach (Room room in world.GetRooms())
         {
             room.SetupRoom();
