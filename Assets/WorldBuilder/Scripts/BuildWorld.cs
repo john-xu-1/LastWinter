@@ -77,7 +77,7 @@ namespace WorldBuilder
                     {
                         world.worldGraph = WorldMap.ConvertGraph(Solver.answerSet);
                         world.rawGraph = Solver.answerSet;
-                        WorldMap.DisplayGraph(Solver.answerSet, nodePrefab, edgePrefab, MiniMap.transform);
+                        WorldMap.DisplayGraph(world.worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
                         BuildState += 1;
                     }
                     else

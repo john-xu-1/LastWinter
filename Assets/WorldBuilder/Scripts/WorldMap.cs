@@ -373,12 +373,12 @@ namespace WorldBuilder
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX, YY+1, RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX, YY-1, RoomID2).
 
-            path(RoomID, Type) :- path(RoomIDSource, Type), door(RoomIDSource, RoomID), roomID(Type).
+            %path(RoomID, Type) :- path(RoomIDSource, Type), door(RoomIDSource, RoomID), roomID(Type).
             %start(start_room).
 
             1{start(RoomID): room_grid(_,YY,RoomID), YY == 1}1.
-            path(RoomID, Type) :- roomID(RoomID), Type = RoomID.
-            :- room(RoomID), not path(RoomID, Type), roomID(Type).
+            %path(RoomID, Type) :- roomID(RoomID), Type = RoomID.
+            %:- room(RoomID), not path(RoomID, Type), roomID(Type).
 
         ";
 
@@ -402,6 +402,11 @@ namespace WorldBuilder
             door_north(RoomID) :- door_north_entrance(RoomID).
             door_south(RoomID) :- door_south_exit(RoomID).
             door_south(RoomID) :- door_south_entrance(RoomID).
+
+            door_horizontal(RoomID) :- door_east(RoomID).
+            door_horizontal(RoomID) :- door_west(RoomID).
+            door_vertical(RoomID) :- door_north(RoomID).
+            door_vertical(RoomID) :- door_south(RoomID).
 
             door_east_soft_lock(RoomID) :- door_east_exit(RoomID), not door_east_entrance(RoomID).
             door_east_soft_lock(RoomID) :- door_east_entrance(RoomID), not door_east_exit(RoomID).
@@ -444,7 +449,11 @@ namespace WorldBuilder
 
             keys_types(1..key_count).
 
-            1{key(KeyID, RoomID) : roomID(RoomID)}1 :- keys_types(KeyID).
+            key_present(0).
+            %key_present(1).
+            %key_present(2).
+
+            1{key(KeyID, RoomID) : roomID(RoomID)}1 :- keys_types(KeyID), not key_present(KeyID).
             min_gate_type_count {gate(KeyID, RoomID, RoomIDExit) : door(RoomID, RoomIDExit)} max_gate_type_count :- keys_types(KeyID).
 
       
@@ -474,7 +483,8 @@ namespace WorldBuilder
             %:- path_order(RoomID, T), door(R1, RoomID), path_order(R1, T1), door(R2, RoomID), path_order(R2, T2), T1<T2, not T<T2.
             :- gate(_, RoomSourceID, RoomGatedID), path_order(RoomSourceID, min, T1), path_order(RoomGatedID, min, T2), not T1<T2.
 
-            have_key(KeyID, T) :- path_order(RoomID, T), key(KeyID, RoomID).
+            have_key(KeyID, T) :- path_order(RoomID, T), key(KeyID, RoomID), not key_present(KeyID).
+            have_key(KeyID, 0) :- key_present(KeyID).
             %have_key(KeyID, RoomID, T+1) :- door(RoomSourceID, RoomID), have_key(KeyID, RoomSourceID, T).
 
 
@@ -493,6 +503,8 @@ namespace WorldBuilder
         %% gated gate
             gated_gate(RoomID, GateRoomID) :- door(Source, RoomID), gated_order(Source,GateRoomID), gate(_,RoomID,GatedRoom), GateRoomID != RoomID, Source != GatedRoom.
             :- gate(_,GateRoomID,RoomID), not gated_order(RoomID, GateRoomID), not non_gated(RoomID).
+
+            %:- gated_gate(RoomID, GateRoomID), gate(KeyID, GateRoomID,_), gate(K2, RoomID,_), KeyID == K2.
 
         %% gated key
             gated_key(RoomID, KeyRoomID) :- key(_,RoomID), KeyRoomID = RoomID.
@@ -527,8 +539,8 @@ namespace WorldBuilder
 
         %% gate ordering 
             gate_order(0,0).
-            %gate_order(2,1).
-            
+            %gate_order(1,2).
+            %gate_order(2,3).
             
             gated_start(RoomID, KeyID ) :- gated_key(RoomID, KeyRoomID), key(KeyID,KeyRoomID), door_soft_locked(_,RoomID).
             %:- gate_order(K1,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), not gated_order(Source, GateRoomID), gate(K1,RoomID).
@@ -564,26 +576,31 @@ namespace WorldBuilder
             :- gate(KeyID,Source,_), door_west(Source), gated_vertically(KeyID).
 
         %% boss room
-            % #const boss_room_size = 4.
-            % #const boss_gate_type = 2.
-            % boss_room_size {boss_room(RoomID): room(RoomID)} boss_room_size.
+            #const boss_room_max = 4.
+            #const boss_room_min = 4.
+            #const boss_gate_type = 2.
+            boss_room_min {boss_room(RoomID): room(RoomID)} boss_room_max.
 
-            % :- boss_room(RoomID), {boss_room(Source):door(Source,RoomID)} == 0.
-            % boss_room_entrance(RoomID) :- boss_room(RoomID), door(Source, RoomID), not boss_room(Source).
-            % boss_room_exit(RoomID) :- boss_room(RoomID), door(RoomID, Source), not boss_room(Source).
-            % :- {boss_room_entrance(_)} > 1.
-            % :- {boss_room_exit(_)} > 1.
-            % :- boss_room_exit(R1), boss_room_entrance(R2), R1 != R2.
-            % :- boss_room_entrance(RoomID), {door(Source,RoomID): not boss_room(Source)} > 1.
+            :- boss_room(RoomID), {boss_room(Source):door(Source,RoomID)} == 0.
+            boss_room_entrance(RoomID) :- boss_room(RoomID), door(Source, RoomID), not boss_room(Source).
+            boss_room_exit(RoomID) :- boss_room(RoomID), door(RoomID, Source), not boss_room(Source).
+            :- {boss_room_entrance(_)} > 1.
+            :- {boss_room_exit(_)} > 1.
+            :- boss_room_exit(R1), boss_room_entrance(R2), R1 != R2.
+            :- boss_room_entrance(RoomID), {door(Source,RoomID): not boss_room(Source)} > 1.
 
-            % :- boss_room(RoomID), {boss_room(Neighbor): door(Neighbor, RoomID)} < 2.
+            :- boss_room(RoomID), {boss_room(Neighbor): door(Neighbor, RoomID)} < 2.
+            :- boss_room(RoomID), not door_horizontal(RoomID).
+            :- boss_room(RoomID), not door_vertical(RoomID).
 
-            % :- boss_room(RoomID), key(_,RoomID).
-            % :- boss_room(RoomID), gate(_,RoomID,_).
+            :- boss_room(RoomID), key(_,RoomID).
+            :- boss_room(RoomID), gate(_,RoomID,_).
 
-            % gate(boss_gate_type, Source, RoomID) :- boss_room_entrance(RoomID), door(Source,RoomID), not boss_room(Source).
-            %:- path_order(BossKeyRoom, min, D1), path_order(KeyRoom, min, D2), D1 < D2, key(boss_gate_type, BossKeyRoom), key(KeyID, KeyRoom), keys_types(KeyID).
-            %gate_order(1,boss_gate_type).
+            gate(boss_gate_type, Source, RoomID) :- boss_room_entrance(RoomID), door(Source,RoomID), not boss_room(Source).
+
+            gate_path_order(KeyID, T) :- T = #min{Order:gate(KeyID,RoomID,_),path_order(RoomID,Order) }, keys_types(KeyID).
+            %:- path_order(BossKeyRoom, min, D1), gate_path_order(KeyID,D2), D1 < D2, key(boss_gate_type, BossKeyRoom), keys_types(KeyID), KeyID != boss_gate_type.
+            
         ";
     }
 }
