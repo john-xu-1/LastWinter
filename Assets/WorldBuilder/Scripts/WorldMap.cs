@@ -373,12 +373,12 @@ namespace WorldBuilder
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX, YY+1, RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX, YY-1, RoomID2).
 
-            path(RoomID, Type) :- path(RoomIDSource, Type), door(RoomIDSource, RoomID), roomID(Type).
+            %path(RoomID, Type) :- path(RoomIDSource, Type), door(RoomIDSource, RoomID), roomID(Type).
             %start(start_room).
 
             1{start(RoomID): room_grid(_,YY,RoomID), YY == 1}1.
-            path(RoomID, Type) :- roomID(RoomID), Type = RoomID.
-            :- room(RoomID), not path(RoomID, Type), roomID(Type).
+            %path(RoomID, Type) :- roomID(RoomID), Type = RoomID.
+            %:- room(RoomID), not path(RoomID, Type), roomID(Type).
 
         ";
 
@@ -527,7 +527,7 @@ namespace WorldBuilder
 
         %% gate ordering 
             gate_order(0,0).
-            %gate_order(2,1).
+            gate_order(1,2).
             
             
             gated_start(RoomID, KeyID ) :- gated_key(RoomID, KeyRoomID), key(KeyID,KeyRoomID), door_soft_locked(_,RoomID).
@@ -535,7 +535,7 @@ namespace WorldBuilder
             %:- gate_order(K1,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), not gated_order(Source, GateRoomID), gate(KeyID, GateRoomID,_), K1 == KeyID.
             
             
-            :- gate_order(K1,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), not gated_order(Source, _).
+            :- gate_order(_,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), not gated_order(Source, _).
             :- gate_order(K1,K2), gated_start(RoomID, K2), door_soft_locked(Source, RoomID), gated_order(Source, GateRoomID), gate(KeyID, GateRoomID,_), K1 != KeyID.
 
         %% no gated area can have a directional connection into it unless it is same GateRoomID
