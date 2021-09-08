@@ -21,14 +21,15 @@ namespace WorldBuilder
 
        
 
-        public void AddWorld(Dictionary<string, List<List<string>>> newWorld)
-        {
-            WorldList.Add(newWorld);
-            WorldCount = WorldList.Count;
-        }
+        //public void AddWorld(Dictionary<string, List<List<string>>> newWorld)
+        //{
+        //    WorldList.Add(newWorld);
+        //    WorldCount = WorldList.Count;
+        //}
 
         public void AddWorld(World world)
         {
+            Utility.SaveWorld(world, world.name);
             BuiltWorlds.Add(world);
 
         }
