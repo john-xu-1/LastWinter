@@ -36,7 +36,7 @@ public class DebugMap : MonoBehaviour
     public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2, minGatePerKey = 2, bossGateKey = 2;
     public int jumpHeadroom = 3, timeout = 600;
     public int BuiltWorldIndex;
-    int builtWorldIndex { get { return BuiltWorldIndex > 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
+    int builtWorldIndex { get { return BuiltWorldIndex >= 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
     public int[] indices = { 1, 2, 3, 4 };
     public List<List<int>> permutations;
     public enum MapSources

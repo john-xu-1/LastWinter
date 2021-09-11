@@ -10,9 +10,19 @@ namespace WorldBuilder
         public Door[] doors;
         public Key[] keys;
         public Gate[] gates;
+        public Gated[] gatedRooms;
         public int startRoomID;
         public int width;
         public int height;
+        public BossRoom bossRoom;
+    }
+
+    [System.Serializable]
+    public class BossRoom
+    {
+        public int[] bossRooms;
+        public int bossEntranceRoom;
+        public int bossStartRoom;
     }
 
     [System.Serializable]
@@ -38,4 +48,11 @@ namespace WorldBuilder
         public int source;
         public int destination;
     }
-}
+
+    [System.Serializable]
+    public class Gated
+    {
+        public int roomID;
+        public int type;
+    }
+ }

@@ -24,7 +24,8 @@ public class LevelSelection : MonoBehaviour
         for (int i = 0; i < WorldBuilder.Utility.getFileNames().Length; i++)
         {
             worldPaths.Add(WorldBuilder.Utility.getFileNames()[i]);
-            string[] texts = WorldBuilder.Utility.getFileNames()[i].Split('/');
+            char[] separators = { '/', '\\' };
+            string[] texts = WorldBuilder.Utility.getFileNames()[i].Split(separators);
             worldNames.Add(texts[texts.Length - 1]);
         }
         

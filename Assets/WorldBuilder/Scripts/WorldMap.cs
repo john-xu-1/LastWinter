@@ -9,12 +9,6 @@ namespace WorldBuilder
         public static Graph ConvertGraph(Dictionary<string, List<List<string>>> world)
         {
             Graph graph = new Graph();
-            //Door[] doors;
-            //Key[] keys;
-            //Gate[] gates;
-            //int startRoomID;
-            //int width;
-            //int height;
 
             graph.startRoomID = int.Parse(world["start"][0][0]);
             graph.width = Utility.Max(world["width"]);
@@ -51,6 +45,29 @@ namespace WorldBuilder
                 gates.Add(newGate);
             }
             graph.gates = Utility.GetArray(gates);
+
+            List<int> bossRooms = new List<int>();
+            foreach(List<string> bossRoom in world["boss_room"])
+            {
+                bossRooms.Add(int.Parse(bossRoom[0]));
+            }
+            graph.bossRoom = new BossRoom();
+            graph.bossRoom.bossRooms = Utility.GetArray(bossRooms);
+
+            if (world.ContainsKey("gated_room"))
+            {
+                List<Gated> gatedRooms = new List<Gated>();
+                foreach (List<string> gated in world["gated_room"])
+                {
+                    Gated gatedRoom = new Gated();
+                    gatedRoom.roomID = int.Parse(gated[0]);
+                    gatedRoom.type = int.Parse(gated[1]);
+                    gatedRooms.Add(gatedRoom);
+                }
+                graph.gatedRooms = Utility.GetArray(gatedRooms);
+            }
+            
+
             return graph;
         }
         public static void DisplayGraph(Graph world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
@@ -117,7 +134,7 @@ namespace WorldBuilder
                 else if (key == 2) gateColor = Color.red;
                 else if (key == 3) gateColor = Color.yellow;
                 else if (key == 4) gateColor = Color.cyan;
-                else if (key == 5) gateColor = Color.gray;
+                //else if (key == 5) gateColor = Color.gray;
                 Vector2Int sourceIndex = Utility.roomID_to_index(source, worldWidth, worldHeight);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetType("gate");
@@ -151,7 +168,7 @@ namespace WorldBuilder
                 else if (keyType == 2) gateColor = Color.red;
                 else if (keyType == 3) gateColor = Color.yellow;
                 else if (keyType == 4) gateColor = Color.cyan;
-                else if (keyType == 5) gateColor = Color.gray;
+                //else if (keyType == 5) gateColor = Color.gray;
                 Vector2Int sourceIndex = Utility.roomID_to_index(roomID, worldWidth, worldHeight);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetType("key");
@@ -162,6 +179,28 @@ namespace WorldBuilder
             worldGrid[startIndex.x, startIndex.y].SetColor(Color.green);
 
             
+            foreach(int bossRoom in world.bossRoom.bossRooms)
+            {
+                Vector2Int bossRoomIndex = Utility.roomID_to_index(bossRoom, worldWidth, worldHeight);
+                worldGrid[bossRoomIndex.x, bossRoomIndex.y].SetColor(Color.gray);
+            }
+            
+            if(world.gatedRooms != null)
+            {
+                foreach (Gated gatedRoom in world.gatedRooms)
+                {
+                    Vector2Int gatedRoomID = Utility.roomID_to_index(gatedRoom.roomID, worldWidth, worldHeight);
+                    int keyType = gatedRoom.type;
+                    Color gateColor = Color.magenta;
+                    if (keyType == 1) gateColor = Color.blue;
+                    else if (keyType == 2) gateColor = Color.red;
+                    else if (keyType == 3) gateColor = Color.yellow;
+                    else if (keyType == 4) gateColor = Color.cyan;
+                    worldGrid[gatedRoomID.x, gatedRoomID.y].SetColor(gateColor);
+                }
+            }
+            
+
         }
         public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
         {
@@ -526,10 +565,16 @@ namespace WorldBuilder
             gated_area(RoomID) :- gated_order(RoomID,_).
             gated_area(RoomID) :- gated_gate(RoomID,_).
             gated_area(RoomID) :- gated_key(RoomID,_).
-
+       
             :- door_soft_locked(Source, Dest), non_gated(Source), non_gated(Dest).
             :- door_soft_locked(Source, Dest), gated_order(Source, GateRoomID), gated_order(Dest, GateRoomID).
             :- door_soft_locked(Source, Dest), gated_key(Source, KeyRoomID), gated_key(Dest, KeyRoomID).
+
+
+        %% create gated_room for Unity
+            gated_room(RoomID, KeyID) :- gated_order(RoomID, GateRoomID), gate(KeyID, GateRoomID,_), not boss_room(RoomID).
+
+            
             
         %% not gated
             non_gated(RoomID) :- start(RoomID).

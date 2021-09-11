@@ -24,6 +24,9 @@ namespace WorldBuilder
 
             fluid(XX,YY) :- water(XX,YY,_).
 
+        %% prevent water on bottom
+           :- water(_,YY,_), YY == max_height.
+
             water(XX, YY, Height) :- tile(XX, YY, blue_gate), water(XX, YY+1, Depth), Height = Depth + 1.
             water(XX, YY, 1) :- tile(XX, YY, blue_gate), floor(XX, YY+1).
             water(XX, YY, 1) :- tile(XX, YY, blue_gate), YY == max_height.
@@ -55,6 +58,9 @@ namespace WorldBuilder
             tile_type(orange_gate).
 
             fluid(XX,YY) :- lava(XX,YY,_).
+
+        %% prevent lava on bottom
+        :- lava(_,YY,_), YY == max_height.
 
         %define orange_gates as lava
             lava(XX, YY, Height) :- tile(XX, YY, orange_gate), lava(XX, YY+1, Depth), Height = Depth + 1.
@@ -90,6 +96,9 @@ namespace WorldBuilder
             tile_type(brown_gate).
 
             obstacle(XX,YY) :- door(XX,YY).
+
+            door_count(Count) :- Count = {door_top(_,_)}.
+            :- door_count(Count), Count > 1.
 
             door_top(XX, YY) :- tile(XX, YY, brown_gate), tile(XX, YY -1, filled).
             door_bottom(XX, YY) :- tile(XX, YY, brown_gate), tile(XX, YY +1, filled).
@@ -144,6 +153,14 @@ namespace WorldBuilder
                     code += GetGateASP(gates[gate.type - 1], GetGatedPath(world, gate, connections));
                 }
             }
+
+            foreach(Gated gated in world.worldGraph.gatedRooms)
+            {
+                if(gated.roomID == roomID)
+                {
+                    code += GetGateASP(gates[gated.type - 1]);
+                }
+            }
             return code;
         }
         static List<string> GetGatedPath(World world, Gate gate, RoomConnections connections)
@@ -188,6 +205,21 @@ namespace WorldBuilder
             //a
 
             return paths;
+        }
+        static string GetGateASP(GateTypes gate)
+        {
+            switch (gate)
+            {
+                case GateTypes.water:
+                    return water_rules;
+                case GateTypes.lava:
+                    return lava_rules;
+                case GateTypes.door:
+                    return door_rules;
+                default:
+                    return "";
+
+            }
         }
 
         static string GetGateASP(GateTypes gate, List<string> paths)
