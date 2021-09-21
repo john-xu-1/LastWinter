@@ -15,6 +15,7 @@ namespace WorldBuilder
         public GameObject nodePrefab, edgePrefab;
         public int worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, bossGateKey, roomWidth, roomHeight, headroom, shoulderroom, jumpHeadroom, timeout, cpus;
         public GameObject MiniMap;
+        public GameObject KeyPrefab;
 
         public enum BuildStates
         {
@@ -119,6 +120,11 @@ namespace WorldBuilder
         {
             connections = WorldMap.get_room_connections(world.rawGraph);
             BuildQueue = new List<Vector2Int>();
+            foreach(Key key in world.worldGraph.keys)
+            {
+                Vector2Int keyRoom = Utility.roomID_to_index(key.roomID, worldWidth, worldHeight);
+                BuildQueue.Add(keyRoom);
+            }
             foreach(Gate gate in world.worldGraph.gates)
             {
                 Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
@@ -293,12 +299,22 @@ namespace WorldBuilder
         {
 
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
-            string aspCode = WorldStructure.get_world_gen(roomSize.x, roomSize.y) + WorldStructure.tile_rules + WorldStructure.get_floor_rules(headroom, shoulderroom) + WorldStructure.get_chamber_rule(minCeilingHeight) + Pathfinding.movement_rules + Pathfinding.platform_rules + Pathfinding.path_rules;
+            string aspCode = "";
+            aspCode += WorldStructure.get_world_gen(roomSize.x, roomSize.y);
+            aspCode += WorldStructure.tile_rules;
+            aspCode += WorldStructure.get_floor_rules(headroom, shoulderroom);
+            aspCode += WorldStructure.get_chamber_rule(minCeilingHeight);
+            aspCode += Pathfinding.movement_rules;
+            aspCode += Pathfinding.platform_rules;
+            aspCode += Pathfinding.path_rules;
 
             GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
             GateTypes[,] keys = { { GateTypes.door, GateTypes.enemy }, { GateTypes.lava, GateTypes.none }, { GateTypes.water, GateTypes.none } };
 
-            aspCode += Pathfinding.set_openings(connections.boolArray) + WorldStructure.GetDoorRules(neighbors) + Gates.GetGateASP(world, roomID, gates,connections);
+            aspCode += Pathfinding.set_openings(connections.boolArray);
+            aspCode += WorldStructure.GetDoorRules(neighbors);
+            aspCode += Gates.GetGateASP(world, roomID, gates,connections);
+            aspCode += Keys.GetKeyRoomRules(world, roomID, gates);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
             {

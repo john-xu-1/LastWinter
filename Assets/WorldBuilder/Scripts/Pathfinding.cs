@@ -112,6 +112,16 @@ namespace WorldBuilder
           :- invalid_exit_up(Type, top), path_type(Type).
           :- invalid_exit_down(Type, bottom), path_type(Type).
 
+            door_start_top(XX) :- state(XX - 1, YY, one), state(XX,YY,zero), YY == 1.
+            door_start_bottom(XX) :- state(XX - 1, YY, one), state(XX,YY,zero), YY == max_height.
+            door_start_left(YY) :- state(XX, YY - 1, one), state(XX,YY,zero), XX == 1.
+            door_start_right(YY) :- state(XX, YY - 1, one), state(XX,YY,zero), XX == max_width.
+
+            :- {door_start_top(_)} > 1.
+            :- {door_start_bottom(_)} > 1.
+            :- {door_start_left(_)} > 1.
+            :- {door_start_right(_)} > 1.
+
         %Set node's location
           :- path(XX, YY, left, left), not XX == 1.
           :- path(XX, YY, right, right), not XX == max_width.
@@ -137,7 +147,7 @@ namespace WorldBuilder
           :- path(XX,YY,middle,middle), YY < 3.
 
 
-        
+            :- floor(XX,YY), YY < 2.
         
 
           
