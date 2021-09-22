@@ -2,22 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Key : MonoBehaviour
+public class Key : Item
 {
 
     public WorldBuilder.GateTypes keyType;
     public SpriteRenderer sprite;
+    public override void ItemSetup()
+    {
+        transform.position = new Vector3(startPos.x, startPos.y, transform.position.z);
+        
+    }
+
+    public override void Remove()
+    {
+        Destroy(gameObject);
+    }
+
     public void SetupKey(float x, float y, WorldBuilder.GateTypes keyType)
     {
-        transform.position = new Vector3(x, y, transform.position.z);
+        
         this.keyType = keyType;
         SetupKeyType(keyType);
+        startPos = new Vector2(x, y);
+        itemType = WorldBuilder.Items.ItemTypes.key;
+        variation = keyType.ToString();
+        ItemSetup();
     }
     public void SetupKey(float x, float y, WorldBuilder.GateTypes keyType, Color color)
     {
-        transform.position = new Vector3(x, y, transform.position.z);
-        this.keyType = keyType;
+
+        SetupKey(x, y, keyType);
         sprite.color = color;
+        
     }
 
     void SetupKeyType(WorldBuilder.GateTypes keyType)

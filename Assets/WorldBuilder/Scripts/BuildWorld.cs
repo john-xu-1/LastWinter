@@ -314,7 +314,7 @@ namespace WorldBuilder
             aspCode += Pathfinding.set_openings(connections.boolArray);
             aspCode += WorldStructure.GetDoorRules(neighbors);
             aspCode += Gates.GetGateASP(world, roomID, gates,connections);
-            aspCode += Keys.GetKeyRoomRules(world, roomID, gates);
+            aspCode += Items.GetKeyRoomRules(world, roomID, gates);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
             {

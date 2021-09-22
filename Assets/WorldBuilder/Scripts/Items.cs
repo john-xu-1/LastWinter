@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace WorldBuilder
 {
-    public class Keys
+    public class Items
     {
         public static Dictionary<int, Color> KeyColors = new Dictionary<int, Color>() {
             { 1, Color.blue },
@@ -14,6 +14,18 @@ namespace WorldBuilder
             { 5, Color.magenta }
         };
 
+        public enum ItemTypes
+        {
+            none,
+            key
+        }
+
+        static string GetItemRules(ItemTypes itemType, string variation, int min, int max)
+        {
+            string code = $"{min}{{item(XX,YY,{itemType},{variation}): width(XX),height(YY)}}{max}.";
+            return code;
+        }
+
         public static string GetKeyRoomRules(World world, int roomID, GateTypes[] gates)
         {
             string code = "";
@@ -22,10 +34,11 @@ namespace WorldBuilder
             {
                 if(key.roomID == roomID)
                 {
-                    code += @$"
-                        1{{key(XX,YY,{gates[key.type - 1]}): width(XX), height(YY)}}1 .
-                        :- key(XX,YY,_), not path(XX,YY+2,_).
-                        :- key(XX,YY,_), not state(XX,YY,zero).
+                    code += GetItemRules(ItemTypes.key, gates[key.type - 1].ToString(), 1, 1);
+                    code += $@"
+                        
+                        :- item(XX,YY,key,_), not path(XX,YY+2,_).
+                        :- item(XX,YY,key,_), not state(XX,YY,zero).
 
                     ";
                 }

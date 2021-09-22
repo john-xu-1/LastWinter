@@ -20,6 +20,7 @@ namespace WorldBuilder
         public List<List<int>> neighborPermutations;
         public List<int> removedNeighbors;
         public double lastBuildTime;
+        List<Item> items = new List<Item>();
         
 
         public Room(Vector2Int pos)
@@ -69,6 +70,22 @@ namespace WorldBuilder
             {
                 UtilityTilemap.DestroyTile(tilemap, (Vector3Int)tile.pos);
             }
+        }
+
+        private List<Item> ConvertItems(Dictionary<string, List<List<string>>> dict)
+        {
+            List<Item> items = new List<Item>();
+            foreach(List<string> item in dict["item"])
+            {
+                int x = int.Parse(item[0]);
+                int y = int.Parse(item[1]);
+                //Items.ItemTypes itemType = (Items.ItemTypes)item[2];
+                string variation = item[3];
+                global::Key key = new global::Key();
+                key.SetupKey(x, y, (GateTypes)System.Enum.Parse(typeof(GateTypes), variation));
+                items.Add(key);
+            }
+            return items;
         }
 
         public Map ConvertMap(Dictionary<string, List<List<string>>> dict)
