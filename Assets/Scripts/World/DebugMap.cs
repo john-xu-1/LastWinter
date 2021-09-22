@@ -36,7 +36,7 @@ public class DebugMap : MonoBehaviour
     public int worldWidth = 4, worldHeight = 4, keyTypeCount = 3, maxGatePerKey = 2, minGatePerKey = 2, bossGateKey = 2;
     public int jumpHeadroom = 3, timeout = 600;
     public int BuiltWorldIndex;
-    int builtWorldIndex { get { return BuiltWorldIndex > 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
+    int builtWorldIndex { get { return BuiltWorldIndex >= 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
     public int[] indices = { 1, 2, 3, 4 };
     public List<List<int>> permutations;
     public enum MapSources
@@ -111,16 +111,11 @@ public class DebugMap : MonoBehaviour
     public GameObject MiniMap;
     private GameObject[,] pathPoints;
     bool testDone = false;
-
-    
-    public int GraphBuildsMax = 1;
-    int graphBuildsCount = 0;
-    double totalTime = 0;
     private void Update()
     {
-        if (MapSource == MapSources.History)
+        if(MapSource == MapSources.History)
         {
-
+            
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 historyIndex += 1;
@@ -145,7 +140,7 @@ public class DebugMap : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-
+                
                 RoomHistory rh = historySource.WorldHistory.GetRoom(historyIndex);
                 if (!rh.destroyed)
                 {
@@ -154,7 +149,7 @@ public class DebugMap : MonoBehaviour
                     Generator.RemoveMap(room);
                     RemovePath(room);
                 }
-                else
+                else 
                 {
                     Room room = worldHistory.GetRoom(rh.roomID);
                     Generator.ConvertMap(room);
@@ -168,34 +163,21 @@ public class DebugMap : MonoBehaviour
                 RunNum.text = (historyIndex + 1).ToString();
 
             }
-
-        }
-        else if (MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !testDone)
+            
+        }else if(MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !testDone)
         {
             Graph worldGraph = WorldMap.ConvertGraph(Solver.answerSet);
-            Transform miniMap = Instantiate(MiniMap, MiniMap.transform.position + new Vector3(graphBuildsCount * worldWidth, 0, 0), Quaternion.identity).transform;
-            WorldMap.DisplayGraph(worldGraph, nodePrefab, edgePrefab, miniMap);
-            Debug.Log($"------------------------number {graphBuildsCount + 1} : SATISFIABLE : {Solver.Duration} seconds-------------------------");
-            totalTime += Solver.Duration;
-            graphBuildsCount += 1;
-            if (graphBuildsCount < GraphBuildsMax)
+            foreach(List<string> gated in Solver.answerSet["gated_order"])
             {
-                FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout, cpus);
+                print(gated);
             }
-            else
+            print("non_gated");
+            foreach (List<string> nongated in Solver.answerSet["non_gated"])
             {
-                Debug.Log($"------------------------all {graphBuildsCount} : COMPLETE : {totalTime} seconds-------------------------");
-                testDone = true;
+                print(nongated);
             }
-
-            timeout -= 100;
-        }
-        else if (MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.TIMEDOUT && !testDone)
-        {
-            timeout += 100;
-            Debug.Log($"------------------------number {graphBuildsCount + 1} : TIMEDOUT : {timeout} seconds-------------------------");
-            totalTime += timeout;
-            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout, cpus);
+            WorldMap.DisplayGraph(worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
+            testDone = true;
         }
     }
     public void AddPath(Room room)

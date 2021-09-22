@@ -13,6 +13,7 @@ namespace WorldBuilder
         public int startRoomID;
         public int width;
         public int height;
+        public bossRoom bossRoom;
     }
 
     [System.Serializable]
@@ -21,6 +22,14 @@ namespace WorldBuilder
         public string name; //{ get { return source + "->" + destination; } }
         public int source;
         public int destination;
+    }
+
+    [System.Serializable]
+    public class bossRoom
+    {
+        public int[] bossRooms;
+        public int bossEntranceRoom;
+        public int bossStartRoom;
     }
 
     [System.Serializable]

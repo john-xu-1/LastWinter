@@ -1134,12 +1134,12 @@ MonoBehaviour:
   nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
   edgePrefab: {fileID: 4894238030931249867, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}
   pathPrefab: {fileID: 3858733167211834716, guid: c7fe75d5e1a584669b52c9f9725111c9, type: 3}
-  worldWidth: 8
-  worldHeight: 8
-  keyTypeCount: 3
+  worldWidth: 5
+  worldHeight: 5
+  keyTypeCount: 2
   maxGatePerKey: 100
   minGatePerKey: 1
-  bossGateKey: 3
+  bossGateKey: 2
   jumpHeadroom: 3
   timeout: 1500
   BuiltWorldIndex: 0
@@ -1154,6 +1154,10 @@ MonoBehaviour:
       startRoomID: 0
       width: 0
       height: 0
+      bossRoom:
+        bossRooms: 
+        bossEntranceRoom: 0
+        bossStartRoom: 0
     width: 0
     height: 0
     RoomsArray: []
@@ -1164,7 +1168,6 @@ MonoBehaviour:
       roomHistoryAnalysis: []
       history: []
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 5
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
@@ -2173,6 +2176,10 @@ MonoBehaviour:
       startRoomID: 0
       width: 0
       height: 0
+      bossRoom:
+        bossRooms: 
+        bossEntranceRoom: 0
+        bossStartRoom: 0
     width: 0
     height: 0
     RoomsArray: []
@@ -2356,29 +2363,9 @@ PrefabInstance:
       value: CollisionMap
       objectReference: {fileID: 0}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: door
-      value: 
-      objectReference: {fileID: 11400000, guid: 2a18b69755f2649ff8a609653c40d93d, type: 2}
-    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: lava
-      value: 
-      objectReference: {fileID: 11400000, guid: 2a18b69755f2649ff8a609653c40d93d, type: 2}
-    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: water
-      value: 
-      objectReference: {fileID: 11400000, guid: 945c4aa4acb1545ea9af81dc59a39ea6, type: 2}
-    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: lavaTop
-      value: 
-      objectReference: {fileID: 11400000, guid: 2208384aaf59746d892007f80244712d, type: 2}
-    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 151439278}
-    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: waterTop
-      value: 
-      objectReference: {fileID: 11400000, guid: 45d2951da076b4051be3866db2630d81, type: 2}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: doorTilemap
       value: 

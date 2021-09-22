@@ -9,19 +9,13 @@ namespace WorldBuilder
         public static Graph ConvertGraph(Dictionary<string, List<List<string>>> world)
         {
             Graph graph = new Graph();
-            //Door[] doors;
-            //Key[] keys;
-            //Gate[] gates;
-            //int startRoomID;
-            //int width;
-            //int height;
 
             graph.startRoomID = int.Parse(world["start"][0][0]);
             graph.width = Utility.Max(world["width"]);
             graph.height = Utility.Max(world["height"]);
 
             List<Door> doors = new List<Door>();
-            foreach(List<string> door in world["door"])
+            foreach (List<string> door in world["door"])
             {
                 Door newDoor = new Door();
                 newDoor.name = door[0] + "->" + door[1];
@@ -42,7 +36,7 @@ namespace WorldBuilder
             graph.keys = Utility.GetArray(keys);
 
             List<Gate> gates = new List<Gate>();
-            foreach(List<string> gate in world["gate"])
+            foreach (List<string> gate in world["gate"])
             {
                 Gate newGate = new Gate();
                 newGate.type = int.Parse(gate[0]);
@@ -51,6 +45,15 @@ namespace WorldBuilder
                 gates.Add(newGate);
             }
             graph.gates = Utility.GetArray(gates);
+
+            List<int> bossRooms = new List<int>();
+            foreach (List<string> bossRoom in world["boss_room"])
+            {
+                bossRooms.Add(int.Parse(bossRoom[0]));
+            }
+            graph.bossRoom = new bossRoom();
+            graph.bossRoom.bossRooms = Utility.GetArray(bossRooms);
+
             return graph;
         }
         public static void DisplayGraph(Graph world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
@@ -117,7 +120,7 @@ namespace WorldBuilder
                 else if (key == 2) gateColor = Color.red;
                 else if (key == 3) gateColor = Color.yellow;
                 else if (key == 4) gateColor = Color.cyan;
-                else if (key == 5) gateColor = Color.gray;
+                //else if (key == 5) gateColor = Color.gray;
                 Vector2Int sourceIndex = Utility.roomID_to_index(source, worldWidth, worldHeight);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetType("gate");
@@ -141,7 +144,7 @@ namespace WorldBuilder
 
             }
 
-            foreach(Key key in world.keys)
+            foreach (Key key in world.keys)
             {
                 Debug.Log(key.roomID + " " + key.type);
                 int keyType = key.type;
@@ -151,7 +154,7 @@ namespace WorldBuilder
                 else if (keyType == 2) gateColor = Color.red;
                 else if (keyType == 3) gateColor = Color.yellow;
                 else if (keyType == 4) gateColor = Color.cyan;
-                else if (keyType == 5) gateColor = Color.gray;
+                //else if (keyType == 5) gateColor = Color.gray;
                 Vector2Int sourceIndex = Utility.roomID_to_index(roomID, worldWidth, worldHeight);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetType("key");
@@ -161,7 +164,13 @@ namespace WorldBuilder
             Vector2Int startIndex = Utility.roomID_to_index(startRoomID, worldWidth, worldHeight);
             worldGrid[startIndex.x, startIndex.y].SetColor(Color.green);
 
-            
+
+            foreach (int bossRoom in world.bossRoom.bossRooms)
+            {
+                Vector2Int bossRoomIndex = Utility.roomID_to_index(bossRoom, worldWidth, worldHeight);
+                worldGrid[bossRoomIndex.x, bossRoomIndex.y].SetColor(Color.gray);
+            }
+
         }
         public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
         {

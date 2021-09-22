@@ -24,7 +24,8 @@ public class LevelSelection : MonoBehaviour
         for (int i = 0; i < WorldBuilder.Utility.getFileNames().Length; i++)
         {
             worldPaths.Add(WorldBuilder.Utility.getFileNames()[i]);
-            string[] texts = WorldBuilder.Utility.getFileNames()[i].Split('/');
+            char[] seperators = { '/', '\\' };
+            string[] texts = WorldBuilder.Utility.getFileNames()[i].Split(seperators);
             worldNames.Add(texts[texts.Length - 1]);
         }
         
@@ -58,5 +59,20 @@ public class LevelSelection : MonoBehaviour
             levelSelectionPanel.transform.parent.gameObject.SetActive(false);
         }
         
+    }
+    public void genWorldSO()
+    {
+        World world = worlds.BuiltWorlds[0];
+
+        if (world != null)
+        {
+
+            dh.MapSetup(world);
+            dh.PlayerSetup();
+            dh.camSetup();
+
+            levelSelectionPanel.transform.parent.gameObject.SetActive(false);
+        }
+
     }
 }
