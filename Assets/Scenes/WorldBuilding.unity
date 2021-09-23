@@ -1123,7 +1123,7 @@ MonoBehaviour:
   jsonFile: {fileID: 0}
   BuildOnStart: 1
   Solver: {fileID: 1490995698}
-  cpus: 4
+  cpus: 8
   WorldBuilder: {fileID: 11400000, guid: e69a65c60634ac64c97170e6c4ed09e1, type: 2}
   WorldsSource: {fileID: 0}
   connection: 0101000000000000
@@ -1142,9 +1142,9 @@ MonoBehaviour:
   bossGateKey: 1
   jumpHeadroom: 3
   timeout: 1500
-  BuiltWorldIndex: 0
+  BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
-  MapSource: 2
+  MapSource: 5
   world:
     name: 
     worldGraph:
