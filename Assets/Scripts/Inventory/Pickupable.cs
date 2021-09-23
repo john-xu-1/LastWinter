@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pickupable : MonoBehaviour
 {
     public InventoryObjects item;
-    private SpriteRenderer sr;
+    [SerializeField] private SpriteRenderer sr;
 
     private Rigidbody2D rb;
     
@@ -28,7 +28,7 @@ public class Pickupable : MonoBehaviour
 
     private void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
+        //sr = GetComponent<SpriteRenderer>();
         sr.sprite = item.itemSprite;
         orgTorq = torque;
         rb = GetComponent<Rigidbody2D>();

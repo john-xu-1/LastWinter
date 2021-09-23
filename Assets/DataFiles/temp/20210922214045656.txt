@@ -1,12 +1,97 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace WorldBuilder
-{
-    public class Pathfinding
-    {
-        public static string movement_rules = @"
+        
+        width(1..max_width). % -> width(1), width(2),..., width(max_width)
+        height(1..max_height).
+
+        tile_type(empty; filled).
+  
+        %border_type(filled; red_gate).
+
+        states(zero; one).
+        %check_tile(XX, YY, COUNT) :- COUNT = {XX < 1; XX > max_width; YY < 1; YY > max_height; TYPE == empty}, tile(XX,YY,TYPE).
+        check_tile(XX, YY, COUNT) :- COUNT = {XX < 1; XX > max_width; YY < 1; YY > max_height; TYPE != filled}, tile(XX,YY,TYPE).
+        state(XX,YY,STATE) :- COUNT > 0, STATE == zero, states(STATE), check_tile(XX,YY,COUNT).
+        state(XX,YY,STATE) :- COUNT < 1, STATE == one, states(STATE), check_tile(XX,YY,COUNT).
+
+        1{tile(XX,YY, TYPE): tile_type(TYPE)}1 :- width(XX), height(YY).
+        %1{enemy(XX,YY,Enemy): enemies(Enemy)}5 :- width(XX), height(YY).
+
+  
+
+        %:- tile(XX,YY,TYPE) , TYPE == red_gate.
+
+        #show width/1.
+        #show height/1.
+        #show tile/3.
+        
+    
+        #const max_width = 20.
+        #const max_height = 20.
+
+    
+      #show state/3.
+
+      %tiles must have a neighbor
+      :- state(XX,YY, one), state(XX-1, YY, zero), state(XX+1, YY, zero).
+      :- state(XX,YY, one), state(XX, YY-1, zero), state(XX, YY+1, zero).
+
+      %:- state(XX,YY, one), state(XX-1, YY, zero), XX == max_width.
+      %:- state(XX,YY, one), XX == 1, state(XX+1, YY, zero).
+      %:- state(XX,YY, one), state(XX, YY-1, zero), YY == max_height.
+      %:- state(XX,YY, one), YY == 1, state(XX, YY+1, zero).
+
+
+      %no empty diagonals with adjencent filled diagonals (no checkers pattern)
+      :- state(XX, YY, zero), state(XX+1, YY + 1, zero), state(XX, YY +1, one), state(XX+1, YY, one).
+      :- state(XX, YY, zero), state(XX+1, YY - 1, zero), state(XX+1, YY, one), state(XX, YY-1, one).
+
+      %no knight move from empty to empty
+      :- state(XX,YY,one), state(XX-1, YY, zero), state(XX, YY+1, one), state(XX +1, YY+1, zero).
+      :- state(XX,YY,one), state(XX-1, YY, one), state(XX, YY -1, zero), state(XX-1,YY +1, zero).
+      :- state(XX,YY,one), state(XX,YY-1, one), state(XX+1, YY, zero), state(XX-1, YY-1, zero).
+      :- state(XX,YY,one), state(XX+1,YY, one), state(XX, YY+1, zero), state(XX+1, YY-1, zero).
+
+      :- state(XX,YY,one), state(XX-1, YY, zero), state(XX, YY-1, one), state(XX +1, YY-1, zero).
+      :- state(XX,YY,one), state(XX+1, YY, one), state(XX, YY -1, zero), state(XX+1,YY +1, zero).
+      :- state(XX,YY,one), state(XX,YY+1, one), state(XX+1, YY, zero), state(XX-1, YY+1, zero).
+      :- state(XX,YY,one), state(XX-1,YY, one), state(XX, YY+1, zero), state(XX-1, YY-1, zero).
+
+      % no 2 empty diagonals on a filled tile
+      %:- state(XX,YY, one), state(XX+1, YY-1, zero), state(XX-1, YY+1, zero).
+      %:- state(XX,YY, one), state(XX-1, YY-1, zero), state(XX+1, YY+1, zero).
+      :- state(XX,YY, one), state(XX+1, YY-1, zero), state(XX-1, YY+1, zero), state(XX, YY-1, one), state(XX,YY+1,one), state(XX+1,YY,one), state(XX-1,YY,one).
+      :- state(XX,YY, one), state(XX-1, YY-1, zero), state(XX+1, YY+1, zero), state(XX, YY-1, one), state(XX,YY+1,one), state(XX+1,YY,one), state(XX-1,YY,one).
+
+
+    
+
+
+        %headroom_offset(1..headroom).
+        floor(XX,YY) :- state(XX,YY, one), state(XX, YY-1, zero).
+
+    
+        #const headroom = 2.
+        #const shoulderroom = 3.
+    
+        
+
+          headroom_offset(1..min_ceiling_height).
+          floor(XX,YY) :- state(XX,YY, one), state(XX, YY-1, zero).
+          :- floor(XX,YY), state(XX, YY - H, one), headroom_offset(H).
+
+          shoulderroom_offset(1..shoulderroom).
+          left_wall(XX,YY) :- state(XX,YY,one), state(XX+1,YY, zero).
+          :- left_wall(XX,YY), state(XX+S,YY,one), shoulderroom_offset(S).
+
+          left_step(XX,YY) :- floor(XX,YY), state(XX-1, YY, zero).
+          right_step(XX,YY) :- floor(XX,YY), state(XX+1, YY, zero).
+          :- left_step(XX,YY), state(XX - S, YY-H, one), headroom_offset(H), shoulderroom_offset(S).
+          :- right_step(XX,YY), state(XX + S, YY - H, one), headroom_offset(H), shoulderroom_offset(S).
+
+    
+        #const min_ceiling_height = 3.
+        %#const shoulderroom = 3.
+    
             path_type(right; left; top; bottom; middle).
       
         %Create destination points (nodes)
@@ -67,9 +152,7 @@ namespace WorldBuilder
 
             #show path/4.
             #show path/3.
-    ";
-
-        public static string platform_rules = @"
+    
             #show platform/3.
 
             horizontal(-1; 1).
@@ -82,9 +165,7 @@ namespace WorldBuilder
 
         % no platforms can overlap
             :- platform(XX,YY, Type1), platform(XX, YY, Type2), Type1 != Type2.
-    ";
-
-        public static string path_rules = @"
+    
 
         %each corner has a tile, makes sure opening occur on the correct side
           :- not state(1,1,one).
@@ -156,93 +237,19 @@ namespace WorldBuilder
         %connected chambers
           %:- floor(XX,YY), path(XX,YY,Type1), path(XX,YY,Type2), Type1 != Type2.
 
-        ";
-
-        public static string set_openings(bool[] connections)
-        {
-            string connection_rules = @"
+        
             %:- {path(XX,YY,middle,middle): width(XX), height(YY)} == 0.
-        ";
-            connection_rules += set_opening(connections[0], connections[1], "top");
-            connection_rules += set_opening(connections[2], connections[3], "right");
-            connection_rules += set_opening(connections[4], connections[5], "bottom");
-            connection_rules += set_opening(connections[6], connections[7], "left");
+         :- {path(XX,YY,top): width(XX), height(YY)} == 0. 
 
+                    :- path(XX,YY,middle,middle), not path(XX,YY,top).
+                    :- path(XX,YY,top,top), not path(XX,YY,middle).
+                 :- {path(XX,YY,right): width(XX), height(YY)} == 0. 
 
-            return connection_rules;
-        }
-
-        private static string set_opening(bool egress, bool ingress, string side)
-        {
-            string connection_rules = "";
-            if (egress || ingress)
-            {
-                connection_rules += $" :- {{path(XX,YY,{side}): width(XX), height(YY)}} == 0. \n";
-                if (egress && !ingress)
-                {
-                    connection_rules += $@"
-                    :-path(XX, YY, middle, middle), path(XX, YY, {side}).
-                    :-path(XX, YY, {side}, {side}), not path(XX, YY, middle).
-                ";
-                }
-                else
-                {
-                    connection_rules += $@"
-                    :- path(XX,YY,middle,middle), not path(XX,YY,{side}).
-                    :- path(XX,YY,{side},{side}), not path(XX,YY,middle).
-                ";
-                }
-            }
-            else
-            {
-                connection_rules += $" :- path(XX,YY,{side}), width(XX), height(YY).\n";
-            }
-            return connection_rules;
-        }
-
-        public static string get_path_start_rules(string path, Dictionary<string, List<List<string>>> map)
-        {
-            string rule = "";
-            return rule;
-        }
-        
-        public static string getPathStartRules(string path, Room room)
-        {
-            string rule = "";
-            if(path == "top")
-            {
-                Vector2Int node = room.downExit;
-                rule += $@"
-                    bottom_node :- path({node.x} -1,_,top,top).
-                    bottom_node :- path({node.x} +1,_,top,top).
-                    :- not bottom_node.
-                ";
-            }else if(path == "bottom")
-            {
-                Vector2Int node = room.upExit;
-                rule += $@"
-                    top_node :- path({node.x} -1, _, bottom,bottom).
-                    top_node :- path({node.x} +1, _, bottom,bottom).
-                    :- not top_node.
-                ";
-            }
-            else if (path == "right")
-            {
-                Vector2Int node = room.leftExit;
-                rule += $@"
-                    :- not path(_, {node.y}, right,right).
-                ";
-            }
-            else if (path == "left")
-            {
-                Vector2Int node = room.rightExit;
-                rule += $@"
-                    :- not path(_, {node.y}, left,left).
-                ";
-            }
-            return rule;
-        }
-        
-        
-    }
-}
+                    :- path(XX,YY,middle,middle), not path(XX,YY,right).
+                    :- path(XX,YY,right,right), not path(XX,YY,middle).
+                 :- path(XX,YY,bottom), width(XX), height(YY).
+ :- path(XX,YY,left), width(XX), height(YY).
+1{free_object(XX,YY,key,water):width(XX),height(YY)}1.
+                        :- free_object(XX,YY,key,_), not path(XX,YY+headroom,_).
+                        :- free_object(XX,YY,key,_), not state(XX,YY,zero).
+                    

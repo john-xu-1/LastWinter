@@ -1136,15 +1136,15 @@ MonoBehaviour:
   pathPrefab: {fileID: 3858733167211834716, guid: c7fe75d5e1a584669b52c9f9725111c9, type: 3}
   worldWidth: 5
   worldHeight: 5
-  keyTypeCount: 2
+  keyTypeCount: 1
   maxGatePerKey: 100
   minGatePerKey: 1
-  bossGateKey: 2
+  bossGateKey: 1
   jumpHeadroom: 3
   timeout: 1500
   BuiltWorldIndex: 0
   indices: 01000000020000000300000004000000
-  MapSource: 5
+  MapSource: 2
   world:
     name: 
     worldGraph:
