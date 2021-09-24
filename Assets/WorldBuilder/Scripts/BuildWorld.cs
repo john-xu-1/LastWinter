@@ -8,6 +8,7 @@ namespace WorldBuilder
     public class BuildWorld : MonoBehaviour
     {
         public MapGenerator Generator;
+        public FreeObjects FreeObjects;
         public Worlds Worlds;
         [SerializeField] private World world;
         public ClingoSolver Solver;
@@ -269,6 +270,7 @@ namespace WorldBuilder
         void DisplayRoom(Room room)
         {
             Generator.ConvertMap(room);
+            room.BuildRoom(FreeObjects);
             if (FindObjectOfType<DebugMap>()) FindObjectOfType<DebugMap>().AddPath(room);
         }
         void HideRoom(Room room)
@@ -314,7 +316,7 @@ namespace WorldBuilder
             aspCode += Pathfinding.set_openings(connections.boolArray);
             aspCode += WorldStructure.GetDoorRules(neighbors);
             aspCode += Gates.GetGateASP(world, roomID, gates,connections);
-            aspCode += Items.GetKeyRoomRules(world, roomID, gates);
+            aspCode += FreeObject.GetKeyRoomRules(world, roomID, gates);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
             {

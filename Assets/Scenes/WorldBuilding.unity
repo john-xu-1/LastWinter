@@ -1138,7 +1138,7 @@ MonoBehaviour:
   worldHeight: 5
   keyTypeCount: 1
   maxGatePerKey: 100
-  minGatePerKey: 1
+  minGatePerKey: 3
   bossGateKey: 1
   jumpHeadroom: 3
   timeout: 1500
@@ -1169,7 +1169,7 @@ MonoBehaviour:
       roomHistoryAnalysis: []
       history: []
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 1
+  GraphBuildsMax: 5
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
@@ -2250,6 +2250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Generator: {fileID: 231321408}
+  FreeObjects: {fileID: 11400000, guid: 5e608c3c897168244a79fcd9f11764c9, type: 2}
   Worlds: {fileID: 11400000, guid: 3eb5fb8e4b1304f4bb85c35e8daaa99c, type: 2}
   world:
     name: 

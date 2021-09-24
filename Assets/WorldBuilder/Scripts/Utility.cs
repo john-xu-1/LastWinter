@@ -260,5 +260,10 @@ namespace WorldBuilder
 
         //    }
         //}
+
+        //public static string GetEnum<T>(string type)
+        //{
+        //    return (T)System.Enum.Parse(typeof(T), type);
+        //}
     }
 }

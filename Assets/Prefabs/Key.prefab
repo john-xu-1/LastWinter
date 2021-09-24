@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 1244970617033004467}
   - component: {fileID: 5420208671632673230}
   - component: {fileID: 7527575133975175555}
+  - component: {fileID: 5908709058437589723}
   m_Layer: 0
   m_Name: Key
   m_TagString: Untagged
@@ -123,13 +124,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1236074848859744999}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a5cc4ea27d504cc1844404e716e35ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 820748069152f468dbe2d1ad127a88aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyType: 0
-  sprite: {fileID: 857679178997818720}
+  item: {fileID: 0}
+  hitSize: {x: 1, y: 1}
+  rangeSize: {x: 4, y: 4}
+  attractionSpeed: 5
+  torque: 5
+  startChase: 0
+  targ: {fileID: 0}
 --- !u!58 &5420208671632673230
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -137,7 +143,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1236074848859744999}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -165,3 +171,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!50 &5908709058437589723
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236074848859744999}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
