@@ -20,7 +20,7 @@ namespace WorldBuilder
         public List<List<int>> neighborPermutations;
         public List<int> removedNeighbors;
         public double lastBuildTime;
-        List<FreeObject> items = new List<FreeObject>();
+        public List<FreeObject> items = new List<FreeObject>();
         
 
         public Room(Vector2Int pos)
@@ -62,6 +62,7 @@ namespace WorldBuilder
             foreach(FreeObject freeObject in items)
             {
                 freeObject.gameObject = GameObject.Instantiate(freeObjects.GetFreeObjectPrefab(freeObject.FreeObjectType, freeObject.GetVariation()));
+                Debug.Log($"-----------{freeObject.FreeObjectType}::{freeObject.variation} at ({freeObject.x},{freeObject.y})---------------");
                 freeObject.gameObject.transform.position = new Vector2(0.5f + freeObject.x + xOffset, 0.5f -freeObject.y - yOffset);
             }
         }
@@ -77,21 +78,29 @@ namespace WorldBuilder
             {
                 UtilityTilemap.DestroyTile(tilemap, (Vector3Int)tile.pos);
             }
+            foreach(FreeObject freeObject in items)
+            {
+                GameObject.Destroy(freeObject.gameObject);
+            }
         }
 
         private List<FreeObject> ConvertItems(Dictionary<string, List<List<string>>> dict)
         {
             List<FreeObject> items = new List<FreeObject>();
-            foreach(List<string> item in dict["free_object"])
+            if (dict.ContainsKey("free_object"))
             {
-                int x = int.Parse(item[0]);
-                int y = int.Parse(item[1]);
-                //Items.ItemTypes itemType = (Items.ItemTypes)item[2];
-                string variation = item[3];
-                KeyFreeObject key = new KeyFreeObject();
-                key.SetupKey(x, y, (GateTypes)System.Enum.Parse(typeof(GateTypes), variation));
-                items.Add(key);
+                foreach (List<string> item in dict["free_object"])
+                {
+                    int x = int.Parse(item[0]);
+                    int y = int.Parse(item[1]);
+                    //Items.ItemTypes itemType = (Items.ItemTypes)item[2];
+                    string variation = item[3];
+                    KeyFreeObject key = new KeyFreeObject();
+                    key.SetupKey(x, y, (GateTypes)System.Enum.Parse(typeof(GateTypes), variation));
+                    items.Add(key);
+                }
             }
+            
             return items;
         }
 

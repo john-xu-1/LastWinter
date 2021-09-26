@@ -147,7 +147,7 @@ namespace WorldBuilder
           :- path(XX,YY,middle,middle), YY < 3.
 
 
-            :- floor(XX,YY), YY < 2.
+            :- floor(XX,YY), YY < 3.
         
 
           

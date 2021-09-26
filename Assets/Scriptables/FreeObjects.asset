@@ -19,3 +19,15 @@ MonoBehaviour:
     gameObject: {fileID: 1236074848859744999, guid: 1cb51a897841740eda69597d65070061, type: 3}
     keyType: 1
     sprite: {fileID: 0}
+  - x: 0
+    y: 0
+    FreeObjectType: 1
+    gameObject: {fileID: 1236074848859744999, guid: 1f49701fa59314d499f3214651875852, type: 3}
+    keyType: 2
+    sprite: {fileID: 0}
+  - x: 0
+    y: 0
+    FreeObjectType: 1
+    gameObject: {fileID: 1236074848859744999, guid: 599f6778ca2d54cff898203bd8fa5ae8, type: 3}
+    keyType: 3
+    sprite: {fileID: 0}
