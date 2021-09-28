@@ -4,20 +4,21 @@ using UnityEngine;
 
 namespace WorldBuilder
 {
-    
-    public abstract class FreeObject
+    [System.Serializable]
+    public class FreeObject
     {
         public float x, y;
         public FreeObjectTypes FreeObjectType;
-        public string variation { set { SetVariation(value); } get { return GetVariation(); } }
+        public string Variation { set { SetVariation(value); } get { return GetVariation(); } }
+        public string variation;
         public GameObject gameObject;
 
-        public abstract string GetVariation();
-        public abstract void SetVariation(string variation);
-        public abstract void ItemSetup();
-        public abstract void Remove();
+        public virtual string GetVariation() { throw new System.NotImplementedException(); }
+        public virtual void SetVariation(string variation) { throw new System.NotImplementedException(); }
+        public virtual void ItemSetup() { throw new System.NotImplementedException(); }
+        public virtual void Remove() { throw new System.NotImplementedException(); }
 
-        
+
 
         public enum FreeObjectTypes
         {

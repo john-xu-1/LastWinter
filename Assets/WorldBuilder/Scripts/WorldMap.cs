@@ -54,9 +54,9 @@ namespace WorldBuilder
             graph.bossRoom = new BossRoom();
             graph.bossRoom.bossRooms = Utility.GetArray(bossRooms);
 
+            List<Gated> gatedRooms = new List<Gated>();
             if (world.ContainsKey("gated_room"))
-            {
-                List<Gated> gatedRooms = new List<Gated>();
+            {              
                 foreach (List<string> gated in world["gated_room"])
                 {
                     Gated gatedRoom = new Gated();
@@ -64,9 +64,9 @@ namespace WorldBuilder
                     gatedRoom.type = int.Parse(gated[1]);
                     gatedRooms.Add(gatedRoom);
                 }
-                graph.gatedRooms = Utility.GetArray(gatedRooms);
             }
-            
+            graph.gatedRooms = Utility.GetArray(gatedRooms);
+
 
             return graph;
         }

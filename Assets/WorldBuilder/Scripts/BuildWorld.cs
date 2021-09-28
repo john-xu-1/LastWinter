@@ -7,6 +7,8 @@ namespace WorldBuilder
 {
     public class BuildWorld : MonoBehaviour
     {
+        public bool DebugMode { get { return debugMode; } }
+        [SerializeField] private bool debugMode;
         public MapGenerator Generator;
         public FreeObjects FreeObjects;
         public Worlds Worlds;
@@ -121,17 +123,17 @@ namespace WorldBuilder
         {
             connections = WorldMap.get_room_connections(world.rawGraph);
             BuildQueue = new List<Vector2Int>();
-            //foreach(Key key in world.worldGraph.keys)
-            //{
-            //    Vector2Int keyRoom = Utility.roomID_to_index(key.roomID, worldWidth, worldHeight);
-            //    BuildQueue.Add(keyRoom);
-            //}
+            foreach (Key key in world.worldGraph.keys)
+            {
+                Vector2Int keyRoom = Utility.roomID_to_index(key.roomID, worldWidth, worldHeight);
+                BuildQueue.Add(keyRoom);
+            }
             //foreach(Gate gate in world.worldGraph.gates)
             //{
             //    Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
             //    BuildQueue.Add(gateRoom);
             //}
-            for(int y = 0; y < worldHeight; y += 1)
+            for (int y = 0; y < worldHeight; y += 1)
             {
                 for(int x = 0; x < worldWidth; x += 1)
                 {
@@ -267,13 +269,14 @@ namespace WorldBuilder
                 Debug.LogWarning($"Unhandled ClingoSolver.Status: {Solver.SolverStatus}");
             }
         }
-        void DisplayRoom(Room room)
+        public void DisplayRoom(Room room)
         {
-            Generator.ConvertMap(room);
-            room.BuildRoom(FreeObjects);
+            //Generator.ConvertMap(room);
+            //room.BuildRoom(FreeObjects);
+            Generator.BuildRoom(room);
             if (FindObjectOfType<DebugMap>()) FindObjectOfType<DebugMap>().AddPath(room);
         }
-        void HideRoom(Room room)
+        public void HideRoom(Room room)
         {
             Generator.RemoveMap(room);
             if (FindObjectOfType<DebugMap>()) FindObjectOfType<DebugMap>().RemovePath(room);
@@ -303,7 +306,7 @@ namespace WorldBuilder
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
             string aspCode = "";
             aspCode += WorldStructure.get_world_gen(roomSize.x, roomSize.y);
-            aspCode += WorldStructure.tile_rules;
+            if(!debugMode) aspCode += WorldStructure.tile_rules;
             aspCode += WorldStructure.get_floor_rules(headroom, shoulderroom);
             aspCode += WorldStructure.get_chamber_rule(minCeilingHeight);
             aspCode += Pathfinding.movement_rules;

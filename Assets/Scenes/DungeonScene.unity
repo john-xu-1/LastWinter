@@ -750,6 +750,10 @@ PrefabInstance:
       propertyPath: CMap
       value: 
       objectReference: {fileID: 2121398986}
+    - target: {fileID: 6354463022769951142, guid: 6baa69753dac44b1292fc369bbbe2648, type: 3}
+      propertyPath: freeObjects
+      value: 
+      objectReference: {fileID: 11400000, guid: 5e608c3c897168244a79fcd9f11764c9, type: 2}
     - target: {fileID: 6354463022769951192, guid: 6baa69753dac44b1292fc369bbbe2648, type: 3}
       propertyPath: m_Name
       value: MapGenerator
@@ -1166,7 +1170,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 17}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 250, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1093723044
 MonoBehaviour:
@@ -2937,6 +2941,10 @@ PrefabInstance:
       propertyPath: waterTop
       value: 
       objectReference: {fileID: 11400000, guid: 45d2951da076b4051be3866db2630d81, type: 2}
+    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
+      propertyPath: debugMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: doorTilemap
       value: 

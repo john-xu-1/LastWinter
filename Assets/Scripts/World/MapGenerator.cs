@@ -5,24 +5,8 @@ using UnityEngine;
 using WorldBuilder;
 public class MapGenerator : MonoBehaviour
 {
-    public CollisionMap CMap;
-    //public void ConvertMap (string bitmap)
-    //{
-    //    string[] rows = bitmap.Split('\n');
-    //    int rowCount = 0;
-    //    foreach (string row in rows)
-    //    {
-    //        int colCount = 0;
-    //        foreach (char bit in row)
-    //        {
-    //            CMap.AddCollisionTiles(new Vector2Int(colCount, -rowCount), (int) char.GetNumericValue(bit));
-    //            colCount += 1;
-    //        }
-    //        rowCount += 1;
-    //    }
-
-    //    CMap.DebugPlaceTiles();
-    //}
+    [SerializeField] CollisionMap CMap;
+    [SerializeField] FreeObjects freeObjects;
 
     public List<CollisionTile> ConvertMap(Map map, Room room)
     {
@@ -32,9 +16,6 @@ public class MapGenerator : MonoBehaviour
             //Debug.Log("CollisionTile location: " + new Vector2Int(tile.x, -tile.y));
             tiles.Add(CMap.AddCollisionTiles(new Vector2Int(tile.x, -tile.y), tile.type, room));
         }
-
-
-
         return tiles;
     }
 
@@ -49,6 +30,7 @@ public class MapGenerator : MonoBehaviour
     public void RemoveMap(Room room)
     {
         CMap.RemoveTiles(room);
+        //need to add RemoveItems(room)
     }
 
     public void BuildWorld(World world)
@@ -56,8 +38,14 @@ public class MapGenerator : MonoBehaviour
 
         foreach (Room room in world.GetRooms())
         {
-            room.SetupRoom();
-            ConvertMap(room);
+            BuildRoom(room);
         }
+    }
+
+    public void BuildRoom(Room room)
+    {
+        room.SetupRoom();
+        ConvertMap(room);
+        room.BuildRoom(freeObjects);
     }
 }

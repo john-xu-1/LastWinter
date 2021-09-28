@@ -66,6 +66,7 @@ namespace WorldBuilder
         public override void SetVariation(string variation)
         {
             keyType = (GateTypes)System.Enum.Parse(typeof(GateTypes), variation);
+            this.variation = variation;
         }
     }
 }

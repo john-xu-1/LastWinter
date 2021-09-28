@@ -18,6 +18,9 @@ public class CollisionMap : MonoBehaviour
     public TileBase door;
     public Tilemap doorTilemap;
 
+    public bool DebugMode { get { return debugMode; } }
+    [SerializeField] private bool debugMode;
+
     //private int worldWidth, worldHeight;
 
     //public void newCollisionMap(int worldWidth, int worldHeight)
@@ -138,7 +141,12 @@ public class CollisionMap : MonoBehaviour
             {
 
                 int[] neighbors = FindNeighbors(tile.pos, room);
-                if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
+                //DEBUG
+                if (debugMode)
+                {
+                    PlaceTile(tilemap, (Vector3Int)tile.pos, Center);
+                }
+                else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[2] == 1 && neighbors[3] == 1 && neighbors[5] == 1 && neighbors[6] == 1 && neighbors[7] == 1 && neighbors[8] == 1)
                     PlaceTile(tilemap, (Vector3Int)tile.pos, Center);
                 //RIGHT
                 else if (neighbors[0] == 1 && neighbors[1] == 1 && neighbors[3] == 1 && neighbors[5] == 0 && neighbors[6] == 1 && neighbors[7] == 1)
@@ -184,18 +192,34 @@ public class CollisionMap : MonoBehaviour
             else if (tile.type == 2) //water
             {
                 int[] neighbors = FindNeighbors(tile.pos, room, 2);
-                if (neighbors[1] == 0) PlaceTile(waterTilemap, (Vector3Int)tile.pos, waterTop);
+                if (debugMode)
+                {
+                    PlaceTile(waterTilemap, (Vector3Int)tile.pos, water);
+                }
+                else if (neighbors[1] == 0) PlaceTile(waterTilemap, (Vector3Int)tile.pos, waterTop);
                 else PlaceTile(waterTilemap, (Vector3Int)tile.pos, water);
             }
             else if(tile.type == 3) //lava
             {
                 int[] neighbors = FindNeighbors(tile.pos, room, tile.type);
-                if (neighbors[1] == 0) PlaceTile(lavaTilemap, (Vector3Int)tile.pos, lavaTop);
+                if (debugMode)
+                {
+                    PlaceTile(lavaTilemap, (Vector3Int)tile.pos, lava);
+                }
+                else if (neighbors[1] == 0) PlaceTile(lavaTilemap, (Vector3Int)tile.pos, lavaTop);
                 else PlaceTile(lavaTilemap, (Vector3Int)tile.pos, lava);
             }
             else if(tile.type == 4) //door
             {
-                PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
+                if (debugMode)
+                {
+                    PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
+                }
+                else
+                {
+                    PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
+                }
+                
             }
 
 

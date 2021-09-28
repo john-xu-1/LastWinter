@@ -1,0 +1,890 @@
+{
+    "name": "World 4x4 Rooms 20x20",
+    "worldGraph": {
+        "doors": [
+            {
+                "name": "1->2",
+                "source": 1,
+                "destination": 2
+            },
+            {
+                "name": "2->3",
+                "source": 2,
+                "destination": 3
+            },
+            {
+                "name": "3->4",
+                "source": 3,
+                "destination": 4
+            },
+            {
+                "name": "6->7",
+                "source": 6,
+                "destination": 7
+            },
+            {
+                "name": "7->8",
+                "source": 7,
+                "destination": 8
+            },
+            {
+                "name": "9->10",
+                "source": 9,
+                "destination": 10
+            },
+            {
+                "name": "11->12",
+                "source": 11,
+                "destination": 12
+            },
+            {
+                "name": "14->15",
+                "source": 14,
+                "destination": 15
+            },
+            {
+                "name": "15->16",
+                "source": 15,
+                "destination": 16
+            },
+            {
+                "name": "2->1",
+                "source": 2,
+                "destination": 1
+            },
+            {
+                "name": "4->3",
+                "source": 4,
+                "destination": 3
+            },
+            {
+                "name": "7->6",
+                "source": 7,
+                "destination": 6
+            },
+            {
+                "name": "8->7",
+                "source": 8,
+                "destination": 7
+            },
+            {
+                "name": "10->9",
+                "source": 10,
+                "destination": 9
+            },
+            {
+                "name": "12->11",
+                "source": 12,
+                "destination": 11
+            },
+            {
+                "name": "15->14",
+                "source": 15,
+                "destination": 14
+            },
+            {
+                "name": "16->15",
+                "source": 16,
+                "destination": 15
+            },
+            {
+                "name": "1->5",
+                "source": 1,
+                "destination": 5
+            },
+            {
+                "name": "4->8",
+                "source": 4,
+                "destination": 8
+            },
+            {
+                "name": "5->9",
+                "source": 5,
+                "destination": 9
+            },
+            {
+                "name": "6->10",
+                "source": 6,
+                "destination": 10
+            },
+            {
+                "name": "9->13",
+                "source": 9,
+                "destination": 13
+            },
+            {
+                "name": "10->14",
+                "source": 10,
+                "destination": 14
+            },
+            {
+                "name": "11->15",
+                "source": 11,
+                "destination": 15
+            },
+            {
+                "name": "12->16",
+                "source": 12,
+                "destination": 16
+            },
+            {
+                "name": "5->1",
+                "source": 5,
+                "destination": 1
+            },
+            {
+                "name": "8->4",
+                "source": 8,
+                "destination": 4
+            },
+            {
+                "name": "9->5",
+                "source": 9,
+                "destination": 5
+            },
+            {
+                "name": "10->6",
+                "source": 10,
+                "destination": 6
+            },
+            {
+                "name": "13->9",
+                "source": 13,
+                "destination": 9
+            },
+            {
+                "name": "14->10",
+                "source": 14,
+                "destination": 10
+            },
+            {
+                "name": "15->11",
+                "source": 15,
+                "destination": 11
+            },
+            {
+                "name": "16->12",
+                "source": 16,
+                "destination": 12
+            }
+        ],
+        "keys": [
+            {
+                "type": 1,
+                "roomID": 4
+            }
+        ],
+        "gates": [
+            {
+                "type": 1,
+                "source": 14,
+                "destination": 15
+            },
+            {
+                "type": 1,
+                "source": 7,
+                "destination": 6
+            }
+        ],
+        "gatedRooms": [],
+        "startRoomID": 2,
+        "width": 4,
+        "height": 4,
+        "bossRoom": {
+            "bossRooms": [
+                11,
+                12,
+                15,
+                16
+            ],
+            "bossEntranceRoom": 0,
+            "bossStartRoom": 0
+        }
+    },
+    "width": 4,
+    "height": 4,
+    "RoomsArray": [
+        {
+            "pos": {
+                "x": 0,
+                "y": 0
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 1,
+                "y": 0
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 2,
+                "y": 0
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 3,
+                "y": 0
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 0,
+                "y": 1
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 1,
+                "y": 1
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 2,
+                "y": 1
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 3,
+                "y": 1
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 0,
+                "y": 2
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 1,
+                "y": 2
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 2,
+                "y": 2
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 3,
+                "y": 2
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 0,
+                "y": 3
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 1,
+                "y": 3
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 2,
+                "y": 3
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        },
+        {
+            "pos": {
+                "x": 3,
+                "y": 3
+            },
+            "map": {
+                "area": [],
+                "start": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "dimensions": {
+                    "room_width": 0,
+                    "room_height": 0,
+                    "room_count_width": 0,
+                    "room_count_height": 0
+                },
+                "paths": [],
+                "pathStarts": []
+            },
+            "isDestroyed": false,
+            "upExit": {
+                "x": 0,
+                "y": 0
+            },
+            "downExit": {
+                "x": 0,
+                "y": 0
+            },
+            "rightExit": {
+                "x": 0,
+                "y": 0
+            },
+            "leftExit": {
+                "x": 0,
+                "y": 0
+            },
+            "buidStatus": 0,
+            "removedNeighbors": [],
+            "lastBuildTime": 0.0,
+            "items": []
+        }
+    ],
+    "startPos": {
+        "x": 0,
+        "y": 0
+    },
+    "WorldState": 1,
+    "WorldHistory": {
+        "roomHistories": [],
+        "roomHistoryAnalysis": [],
+        "history": []
+    }
+}

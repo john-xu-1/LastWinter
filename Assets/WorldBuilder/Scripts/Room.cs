@@ -34,6 +34,7 @@ namespace WorldBuilder
             isDestroyed = false;
             this.rawMap = new Dictionary<string, List<List<string>>>(rawMap);
             map = ConvertMap(this.rawMap);
+            //map = ConvertMap(rawMap);
             items = ConvertItems(rawMap);
             SetupRoom(map);
         }
@@ -59,10 +60,12 @@ namespace WorldBuilder
         {
             float xOffset = map.dimensions.room_width * pos.x;
             float yOffset = map.dimensions.room_height * pos.y;
+            Debug.Log($"----------freeObject count :: {items.Count}");
             foreach(FreeObject freeObject in items)
             {
-                freeObject.gameObject = GameObject.Instantiate(freeObjects.GetFreeObjectPrefab(freeObject.FreeObjectType, freeObject.GetVariation()));
                 Debug.Log($"-----------{freeObject.FreeObjectType}::{freeObject.variation} at ({freeObject.x},{freeObject.y})---------------");
+                freeObject.gameObject = GameObject.Instantiate(freeObjects.GetFreeObjectPrefab(freeObject.FreeObjectType, freeObject.variation)); // ((KeyFreeObject)freeObject).GetVariation()));
+                
                 freeObject.gameObject.transform.position = new Vector2(0.5f + freeObject.x + xOffset, 0.5f -freeObject.y - yOffset);
             }
         }

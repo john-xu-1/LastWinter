@@ -11,6 +11,7 @@ namespace WorldBuilder
         public GameObject GetFreeObjectPrefab(FreeObject.FreeObjectTypes objectType, string variation)
         {
             GameObject prefab = null;
+            Debug.Log($"FreeObjects GetFreeObjectPrefab ({objectType} , {variation})");
             foreach(FreeObject freeObject in freeObjects)
             {
                 if (freeObject.FreeObjectType == objectType && variation == freeObject.GetVariation()) prefab = freeObject.gameObject;

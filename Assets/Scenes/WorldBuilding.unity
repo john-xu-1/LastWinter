@@ -1134,17 +1134,17 @@ MonoBehaviour:
   nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
   edgePrefab: {fileID: 4894238030931249867, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}
   pathPrefab: {fileID: 3858733167211834716, guid: c7fe75d5e1a584669b52c9f9725111c9, type: 3}
-  worldWidth: 6
-  worldHeight: 6
-  keyTypeCount: 2
+  worldWidth: 4
+  worldHeight: 4
+  keyTypeCount: 1
   maxGatePerKey: 100
-  minGatePerKey: 3
+  minGatePerKey: 1
   bossGateKey: 1
   jumpHeadroom: 3
-  timeout: 1500
+  timeout: 3000
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
-  MapSource: 2
+  MapSource: 5
   world:
     name: 
     worldGraph:
@@ -1168,8 +1168,12 @@ MonoBehaviour:
       roomHistories: []
       roomHistoryAnalysis: []
       history: []
+  cpuDebugs: 0800000004000000
+  widthDebugs: 14000000
+  heightDebugs: 14000000
+  keyTypesDebugs: 02000000
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 5
+  GraphBuildsMax: 2
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
@@ -2249,6 +2253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0feff9849791d49569f5cf5016ddbe39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugMode: 1
   Generator: {fileID: 231321408}
   FreeObjects: {fileID: 11400000, guid: 5e608c3c897168244a79fcd9f11764c9, type: 2}
   Worlds: {fileID: 11400000, guid: 3eb5fb8e4b1304f4bb85c35e8daaa99c, type: 2}
@@ -2388,6 +2393,10 @@ PrefabInstance:
       propertyPath: CMap
       value: 
       objectReference: {fileID: 76890016}
+    - target: {fileID: 6354463022769951142, guid: 6baa69753dac44b1292fc369bbbe2648, type: 3}
+      propertyPath: freeObjects
+      value: 
+      objectReference: {fileID: 11400000, guid: 5e608c3c897168244a79fcd9f11764c9, type: 2}
     - target: {fileID: 6354463022769951192, guid: 6baa69753dac44b1292fc369bbbe2648, type: 3}
       propertyPath: m_Name
       value: MapGenerator
@@ -2534,6 +2543,10 @@ PrefabInstance:
       propertyPath: waterTop
       value: 
       objectReference: {fileID: 11400000, guid: 45d2951da076b4051be3866db2630d81, type: 2}
+    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
+      propertyPath: debugMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: doorTilemap
       value: 
