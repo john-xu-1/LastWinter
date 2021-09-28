@@ -221,8 +221,9 @@ public class DebugMap : MonoBehaviour
                 }
                 else
                 {
-                    FinishGraphRuntimeData();
                     testDone = true;
+                    FinishGraphRuntimeData();
+                    
                 }
                 
             }

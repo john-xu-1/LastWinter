@@ -18,6 +18,29 @@ namespace WorldBuilder
         public static string water_rules = @"
             #const max_water_depth = 10.
             #const min_water_depth = 1.
+            #const max_water_surface = 1.
+
+        %adding blue_gate to tile_type
+            tile_fluid_type(blue_gate).
+
+            {tile_fluid_surface(XX,YY,blue_gate): state(XX,YY,zero)}max_water_surface.
+            tile_fluid(XX,YY,Type) :- tile_fluid_surface(XX,YY,Type).
+            tile_fluid(XX,YY,Type) :- tile_fluid(XX,YY-1, Type), state(XX,YY,zero).
+            tile_fluid(XX,YY,Type) :- tile_fluid(XX-1,YY, Type), state(XX,YY,zero).
+            tile_fluid(XX,YY,Type) :- tile_fluid(XX+1,YY, Type), state(XX,YY,zero).
+
+            fluid(XX,YY) :- tile_fluid(XX,YY,blue_gate).
+            water(XX,YY, 0) :- tile_fluid(XX,YY,blue_gate).
+
+
+            %#show water/3.
+            %#show water_surface/3.
+            %#show water_depth/3.
+        ";
+
+        public static string water_rules_old = @"
+            #const max_water_depth = 10.
+            #const min_water_depth = 1.
 
         %adding blue_gate to tile_type
             tile_type(blue_gate).
