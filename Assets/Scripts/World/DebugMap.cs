@@ -39,6 +39,7 @@ public class DebugMap : MonoBehaviour
     int builtWorldIndex { get { return BuiltWorldIndex >= 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
     public int[] indices = { 1, 2, 3, 4 };
     public List<List<int>> permutations;
+    public GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
     public enum MapSources
     {
         None,
@@ -51,8 +52,32 @@ public class DebugMap : MonoBehaviour
     public MapSources MapSource;
     public World world;
 
+    //List<List<string>> graphRuntimeData = new List<List<string>>();
+    string[,] graphRuntimeData;
+    public int[] cpuDebugs = { 1, 2, 4, 8 };
+    public int[] widthDebugs = { 20 }, heightDebugs = { 20 };
+    public int[] keyTypesDebugs = { 2 };
+    int cpuDebugsIndex = 0;
+    int runID = 0;
+    public void GraphRuntimeData(float value)
+    {
+        GraphRuntimeData(value, runID, cpuDebugsIndex, 0, 0, 0);
+    }
+    public void GraphRuntimeData(float value, int runID, int cpu, int width, int height, int keyType)
+    {
+
+        graphRuntimeData[cpu, runID] = value.ToString();
+        Debug.Log($"x:{cpu},y:{runID} = {graphRuntimeData[cpu, runID]}");
+    }
+    void FinishGraphRuntimeData()
+    {
+        string table = SaveUtility.CreateCSV(graphRuntimeData);
+        Debug.Log(table);
+        SaveUtility.CreateFile(table, "CSVTest1.csv");
+    }
     private void Start()
     {
+        graphRuntimeData = new string[cpuDebugs.Length, GraphBuildsMax];
         //Debug.Log(Clingo.ClingoSolver.Status.SATISFIABLE);
         //Clingo.ClingoSolver.Status status = "SATISFIABLE";
         //if("SATISFIABLE" == Clingo.ClingoSolver.Status.SATISFIABLE.ToString())
@@ -111,11 +136,16 @@ public class DebugMap : MonoBehaviour
     public GameObject MiniMap;
     private GameObject[,] pathPoints;
     bool testDone = false;
+
+
+    public int GraphBuildsMax = 1;
+    int graphBuildsCount = 0;
+    double totalTime = 0;
     private void Update()
     {
-        if(MapSource == MapSources.History)
+        if (MapSource == MapSources.History)
         {
-            
+
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 historyIndex += 1;
@@ -124,13 +154,15 @@ public class DebugMap : MonoBehaviour
                 if (rh.destroyed)
                 {
                     Debug.Log("RemoveMap");
-                    Generator.RemoveMap(room);
+                    FindObjectOfType<BuildWorld>().HideRoom(room);
+                    //Generator.RemoveMap(room);
                     RemovePath(room);
                 }
                 else
                 {
                     room.SetupRoom(rh.map);
-                    Generator.ConvertMap(room);
+                    FindObjectOfType<BuildWorld>().DisplayRoom(room);
+                    //Generator.ConvertMap(room);
                     AddPath(room);
                 }
                 RoomID.text = rh.roomID.ToString();
@@ -140,19 +172,21 @@ public class DebugMap : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                
+
                 RoomHistory rh = historySource.WorldHistory.GetRoom(historyIndex);
                 if (!rh.destroyed)
                 {
                     Room room = worldHistory.GetRoom(rh.roomID);
                     Debug.Log("RemoveMap");
-                    Generator.RemoveMap(room);
+                    FindObjectOfType<BuildWorld>().HideRoom(room);
+                    //Generator.RemoveMap(room);
                     RemovePath(room);
                 }
-                else 
+                else
                 {
                     Room room = worldHistory.GetRoom(rh.roomID);
-                    Generator.ConvertMap(room);
+                    FindObjectOfType<BuildWorld>().DisplayRoom(room);
+                    //Generator.ConvertMap(room);
                     AddPath(room);
                 }
 
@@ -163,26 +197,51 @@ public class DebugMap : MonoBehaviour
                 RunNum.text = (historyIndex + 1).ToString();
 
             }
-            
-        }else if(MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !testDone)
+
+        }
+        else if (MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !testDone)
         {
             Graph worldGraph = WorldMap.ConvertGraph(Solver.answerSet);
-            foreach(List<string> gated in Solver.answerSet["gated_order"])
+            Transform miniMap = Instantiate(MiniMap, MiniMap.transform.position + new Vector3(graphBuildsCount * worldWidth, -cpuDebugsIndex * worldHeight, 0), Quaternion.identity).transform;
+            WorldMap.DisplayGraph(worldGraph, nodePrefab, edgePrefab, miniMap);
+            GraphRuntimeData((float)Solver.Duration, graphBuildsCount, cpuDebugsIndex, 0, 0, 0);
+            Debug.Log($"------------------------number {graphBuildsCount + 1} : SATISFIABLE : {Solver.Duration} seconds-------------------------");
+            totalTime += Solver.Duration;
+            graphBuildsCount += 1;
+            if (graphBuildsCount < GraphBuildsMax)
             {
-                print(gated);
+                FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout, cpuDebugs[cpuDebugsIndex]);
             }
-            print("non_gated");
-            foreach (List<string> nongated in Solver.answerSet["non_gated"])
+            else
             {
-                print(nongated);
+                Debug.Log($"------------------------all {graphBuildsCount} : COMPLETE : {totalTime} seconds-------------------------");
+                if (cpuDebugsIndex < cpuDebugs.Length - 1)
+                {
+                    graphBuildsCount = 0;
+                    cpuDebugsIndex += 1;
+                }
+                else
+                {
+                    testDone = true;
+                    FinishGraphRuntimeData();
+
+                }
+
             }
-            WorldMap.DisplayGraph(worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
-            testDone = true;
+
+            //timeout -= 100;
+        }
+        else if (MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.TIMEDOUT && !testDone)
+        {
+            timeout += 100;
+            Debug.Log($"------------------------number {graphBuildsCount + 1} : TIMEDOUT : {timeout} seconds-------------------------");
+            totalTime += timeout;
+            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout, cpus);
         }
     }
     public void AddPath(Room room)
     {
-        foreach(WorldBuilder.Path path in room.map.paths)
+        foreach (WorldBuilder.Path path in room.map.paths)
         {
             int width = room.map.dimensions.room_width;
             int height = room.map.dimensions.room_height;
@@ -190,17 +249,17 @@ public class DebugMap : MonoBehaviour
             int j = room.pos.y;
             int x = path.x + width * i;
             int y = path.y + height * j;
-            
+
             string type = path.type;
 
-            if(pathPoints == null) pathPoints = new GameObject[width * worldWidth + 2, height * worldHeight + 2];
+            if (pathPoints == null) pathPoints = new GameObject[width * worldWidth + 2, height * worldHeight + 2];
 
             if (!pathPoints[x, y])
             {
 
                 PathNode node = Instantiate(pathPrefab).GetComponent<PathNode>();
                 pathPoints[x, y] = node.gameObject;
-                node.SetUpPathNode(x , -(y), type);
+                node.SetUpPathNode(x, -(y), type);
             }
             else
             {
@@ -221,7 +280,7 @@ public class DebugMap : MonoBehaviour
             string type = path.type;
             if (pathPoints[x, y])
             {
-                Destroy(pathPoints[x,y]);
+                Destroy(pathPoints[x, y]);
                 pathPoints[x, y] = null;
             }
             else
@@ -233,7 +292,7 @@ public class DebugMap : MonoBehaviour
 
     private void buildMap()
     {
-        if(MapSource == MapSources.Json)
+        if (MapSource == MapSources.Json)
         {
             //TextAsset jsonFile = Resources.Load<TextAsset>(JsonMapName);
             print(jsonFile);
@@ -241,38 +300,42 @@ public class DebugMap : MonoBehaviour
             Map map = JsonUtility.FromJson<Map>(jsonStr);
             print(map.dimensions.room_count_height);
             //Generator.ConvertMap(map);
-        }else if(MapSource == MapSources.Solver)
+        }
+        else if (MapSource == MapSources.Solver)
         {
             //Generator.ConvertMap(Solver.answerSet);
             FindObjectOfType<BuildWorld>().Worlds = WorldBuilder;
-            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey,bossGateKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus);
+            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus, gates);
         }
         else if (MapSource == MapSources.World)
         {
             //WorldBuilder.BuildWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, 3, Solver.maxDuration - 10);
             World world = WorldBuilder.BuiltWorlds[builtWorldIndex];
             //WorldMap.ConvertGraph()
-            foreach(Room room in world.GetRooms())
+            foreach (Room room in world.GetRooms())
             {
                 room.SetupRoom();
-                Generator.ConvertMap(room);
+                FindObjectOfType<BuildWorld>().DisplayRoom(room);
+                //Generator.ConvertMap(room);
             }
-        }else if(MapSource == MapSources.History)
+        }
+        else if (MapSource == MapSources.History)
         {
 
 
             historySource = WorldBuilder.BuiltWorlds[builtWorldIndex];
 
             WorldMap.DisplayGraph(historySource.worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
-            
+
 
             worldHistory = new World(historySource.Width, historySource.Height);
             historyIndex = 0;
             RoomHistory rh = historySource.WorldHistory.GetRoom(historyIndex);
             Room room = worldHistory.GetRoom(rh.roomID);
             room.SetupRoom(rh.map);
-            Generator.ConvertMap(room);
-            
+            FindObjectOfType<BuildWorld>().DisplayRoom(room);
+            //Generator.ConvertMap(room);
+
 
             TotalTime.text = Utility.FormatTime(historySource.WorldHistory.GetTotalTime());
             RoomID.text = rh.roomID.ToString();
@@ -287,15 +350,21 @@ public class DebugMap : MonoBehaviour
             int roomHeight = room.map.dimensions.room_height;
             pathPoints = new GameObject[width * roomWidth + 2, height * roomHeight + 2];
             AddPath(room);
-        }else if(MapSource == MapSources.Graph)
+        }
+        else if (MapSource == MapSources.Graph)
         {
-            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout, cpus);
+            FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout, cpuDebugs[0]);
         }
 
 
     }
-    
-    
+
+    [System.Serializable]
+    public class DebugRoom
+    {
+
+    }
+
 }
 
 

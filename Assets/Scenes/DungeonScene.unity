@@ -2920,7 +2920,7 @@ PrefabInstance:
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: door
       value: 
-      objectReference: {fileID: 11400000, guid: 50f426c432da776488557fd844e28972, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: lava
       value: 
@@ -2943,7 +2943,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 45d2951da076b4051be3866db2630d81, type: 2}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: debugMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: doorTilemap
