@@ -1123,10 +1123,19 @@ MonoBehaviour:
   jsonFile: {fileID: 0}
   BuildOnStart: 1
   Solver: {fileID: 1490995698}
-  cpus: 8
+  cpus: 4
   WorldBuilder: {fileID: 11400000, guid: e69a65c60634ac64c97170e6c4ed09e1, type: 2}
   WorldsSource: {fileID: 0}
   connection: 0101000000000000
+  connections:
+    upEgress: 0
+    upIngress: 0
+    rightEgress: 0
+    rightIngress: 0
+    downEgress: 0
+    downIngress: 0
+    leftEgress: 0
+    leftIngress: 0
   RoomSize: {x: 20, y: 20}
   headroom: 2
   shoulderroom: 3
@@ -1134,17 +1143,18 @@ MonoBehaviour:
   nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
   edgePrefab: {fileID: 4894238030931249867, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}
   pathPrefab: {fileID: 3858733167211834716, guid: c7fe75d5e1a584669b52c9f9725111c9, type: 3}
-  worldWidth: 4
-  worldHeight: 4
-  keyTypeCount: 1
+  worldWidth: 8
+  worldHeight: 8
+  keyTypeCount: 3
   maxGatePerKey: 100
-  minGatePerKey: 2
+  minGatePerKey: 3
   bossGateKey: 1
   jumpHeadroom: 3
-  timeout: 3000
+  timeout: 30000
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
-  MapSource: 2
+  gates: 010000000200000003000000
+  MapSource: 5
   world:
     name: 
     worldGraph:
@@ -1521,6 +1531,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FluidType: 0
+--- !u!1 &1369613141
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1369613143}
+  - component: {fileID: 1369613142}
+  m_Layer: 0
+  m_Name: Debugger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1369613142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369613141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8090447e10906349a0988e0ccd0827a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugging: 1
+  debugSources:
+  - debug: 0
+    source: 1
+--- !u!4 &1369613143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369613141}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 39.70399, y: -40.64263, z: -456.59076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1402093249
 GameObject:
   m_ObjectHideFlags: 0

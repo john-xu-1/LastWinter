@@ -39,6 +39,7 @@ public class DebugMap : MonoBehaviour
     int builtWorldIndex { get { return BuiltWorldIndex >= 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
     public int[] indices = { 1, 2, 3, 4 };
     public List<List<int>> permutations;
+    public GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door};
     public enum MapSources
     {
         None,
@@ -303,7 +304,7 @@ public class DebugMap : MonoBehaviour
         {
             //Generator.ConvertMap(Solver.answerSet);
             FindObjectOfType<BuildWorld>().Worlds = WorldBuilder;
-            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey,bossGateKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus);
+            FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey,bossGateKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus, gates);
         }
         else if (MapSource == MapSources.World)
         {
@@ -355,6 +356,11 @@ public class DebugMap : MonoBehaviour
 
     }
     
+    [System.Serializable]
+    public class DebugRoom
+    {
+
+    }
     
 }
 

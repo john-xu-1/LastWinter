@@ -18,7 +18,7 @@ public class CollisionMap : MonoBehaviour
     public TileBase door;
     public Tilemap doorTilemap;
 
-    public bool DebugMode { get { return debugMode; } }
+    public bool DebugMode(Debugger.DebugTypes source) { if (FindObjectOfType<Debugger>()) return FindObjectOfType<Debugger>().Debug(source); else return debugMode; }
     [SerializeField] private bool debugMode;
 
     //private int worldWidth, worldHeight;
@@ -142,7 +142,7 @@ public class CollisionMap : MonoBehaviour
 
                 int[] neighbors = FindNeighbors(tile.pos, room);
                 //DEBUG
-                if (debugMode)
+                if (DebugMode(Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(tilemap, (Vector3Int)tile.pos, Center);
                 }
@@ -192,7 +192,7 @@ public class CollisionMap : MonoBehaviour
             else if (tile.type == 2) //water
             {
                 int[] neighbors = FindNeighbors(tile.pos, room, 2);
-                if (debugMode)
+                if (DebugMode(Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(waterTilemap, (Vector3Int)tile.pos, water);
                 }
@@ -202,7 +202,7 @@ public class CollisionMap : MonoBehaviour
             else if(tile.type == 3) //lava
             {
                 int[] neighbors = FindNeighbors(tile.pos, room, tile.type);
-                if (debugMode)
+                if (DebugMode(Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(lavaTilemap, (Vector3Int)tile.pos, lava);
                 }
@@ -211,7 +211,7 @@ public class CollisionMap : MonoBehaviour
             }
             else if(tile.type == 4) //door
             {
-                if (debugMode)
+                if (DebugMode(Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
                 }

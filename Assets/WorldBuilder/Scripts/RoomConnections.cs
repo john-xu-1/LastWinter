@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace WorldBuilder
 {
+    [System.Serializable]
     public class RoomConnections
     {
         public bool upEgress, upIngress, rightEgress, rightIngress, downEgress, downIngress, leftEgress, leftIngress;

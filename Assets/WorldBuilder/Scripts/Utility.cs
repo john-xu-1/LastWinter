@@ -163,19 +163,22 @@ namespace WorldBuilder
 
             if (world.ContainsKey("tile_fluid"))
             {
-                foreach (List<string> tile in world["tile_fluid"])
+                foreach (List<string> tileFluid in world["tile_fluid"])
                 {
-                    Tile newTile = new Tile();
-                    newTile.x = int.Parse(tile[0]);
-                    newTile.y = int.Parse(tile[1]);
-                    if (tile[2] == "filled") newTile.type = 1;
-                    else if (tile[2] == "empty") newTile.type = 0;
-                    else if (tile[2] == "blue_gate") newTile.type = 2;
-                    else if (tile[2] == "orange_gate") newTile.type = 3;
-                    else if (tile[2] == "brown_gate") newTile.type = 4;
+                    
+                    int x = int.Parse(tileFluid[0]);
+                    int y = int.Parse(tileFluid[1]);
+                    Tile newTile = null;
+                    foreach(Tile tile in area)
+                    {
+                        if (tile.x == x && tile.y == y) newTile = tile;
+                    }
 
-                    area[tileIndex] = newTile;
-                    tileIndex += 1;
+                    if (tileFluid[2] == "blue_gate") newTile.type = 2;
+                    else if (tileFluid[2] == "orange_gate") newTile.type = 3;
+                    else if (tileFluid[2] == "brown_gate") newTile.type = 4;
+
+                    
                 }
             }
             

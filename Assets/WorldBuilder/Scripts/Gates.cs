@@ -15,7 +15,7 @@ namespace WorldBuilder
     }
     public class Gates
     {
-        public static string water_rules = @"
+        public static string water_rules_new = @"
             #const max_water_depth = 10.
             #const min_water_depth = 1.
             #const max_water_surface = 1.
@@ -32,13 +32,13 @@ namespace WorldBuilder
             fluid(XX,YY) :- tile_fluid(XX,YY,blue_gate).
             water(XX,YY, 0) :- tile_fluid(XX,YY,blue_gate).
 
-
+            #show tile_fluid/3.
             %#show water/3.
             %#show water_surface/3.
             %#show water_depth/3.
         ";
 
-        public static string water_rules_old = @"
+        public static string water_rules = @"
             #const max_water_depth = 10.
             #const min_water_depth = 1.
 
@@ -172,8 +172,9 @@ namespace WorldBuilder
             {
                 if(gate.source == roomID)
                 {
-                    
-                    code += GetGateASP(gates[gate.type - 1], GetGatedPath(world, gate, connections));
+
+                    //code += GetGateASP(gates[gate.type - 1], GetGatedPath(gate, connections));
+                    code += GetGateASP(gate, gates, connections);
                 }
             }
 
@@ -181,12 +182,25 @@ namespace WorldBuilder
             {
                 if(gated.roomID == roomID)
                 {
-                    code += GetGateASP(gates[gated.type - 1]);
+                    //code += GetGateASP(gates[gated.type - 1]);
+                    code += GetGateASP(gated, gates);
                 }
             }
             return code;
         }
-        static List<string> GetGatedPath(World world, Gate gate, RoomConnections connections)
+        public static string GetGateASP(Gate gate, Gated gated, GateTypes[] gates, RoomConnections connections)
+        {
+            return GetGateASP(gate, gates, connections) + GetGateASP(gated, gates);
+        }
+        public static string GetGateASP(Gate gate, GateTypes[] gates, RoomConnections connections)
+        {
+            return GetGateASP(gates[gate.type - 1], GetGatedPath(gate, connections));
+        }
+        public static string GetGateASP(Gated gated, GateTypes[] gates)
+        {
+            return GetGateASP(gates[gated.type - 1]);
+        }
+        static List<string> GetGatedPath(Gate gate, RoomConnections connections)
         {
             //get neighbor ids
             int gatedID = gate.destination;

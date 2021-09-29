@@ -7,8 +7,9 @@ namespace WorldBuilder
 {
     public class BuildWorld : MonoBehaviour
     {
-        public bool DebugMode { get { return debugMode; } }
+        //public bool DebugMode { get { return debugMode; } }
         [SerializeField] private bool debugMode;
+        public bool DebugMode(Debugger.DebugTypes source) { if (FindObjectOfType<Debugger>()) return FindObjectOfType<Debugger>().Debug(source); else return debugMode; }
         public MapGenerator Generator;
         public FreeObjects FreeObjects;
         public Worlds Worlds;
@@ -17,6 +18,7 @@ namespace WorldBuilder
         public bool SolvingWorld;
         public GameObject nodePrefab, edgePrefab;
         public int worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, bossGateKey, roomWidth, roomHeight, headroom, shoulderroom, jumpHeadroom, timeout, cpus;
+        GateTypes[] gates;
         public GameObject MiniMap;
         public GameObject KeyPrefab;
 
@@ -48,7 +50,7 @@ namespace WorldBuilder
             }
         }
 
-        public void BuildAWorld(int worldWidth, int worldHeight, int keyCount, int maxGatePerKey, int minGatePerKey, int bossGateKey, int roomWidth, int roomHeight, int headroom, int shoulderroom, int jumpHeadroom, int timeout,int cpus)
+        public void BuildAWorld(int worldWidth, int worldHeight, int keyCount, int maxGatePerKey, int minGatePerKey, int bossGateKey, int roomWidth, int roomHeight, int headroom, int shoulderroom, int jumpHeadroom, int timeout,int cpus, GateTypes[] gates)
         {
             this.worldWidth = worldWidth;
             this.worldHeight = worldHeight;
@@ -63,6 +65,7 @@ namespace WorldBuilder
             this.jumpHeadroom = jumpHeadroom;
             this.timeout = timeout;
             this.cpus = cpus;
+            this.gates = gates;
             BuildState = BuildStates.graph;
             world = new World(worldWidth, worldHeight);
             world.name = $"World {worldWidth}x{worldHeight} Rooms {roomWidth}x{roomHeight}";
@@ -169,7 +172,7 @@ namespace WorldBuilder
             Debug.Log("Building roomID: " + roomID + " index: " + index);
             Neighbors neighbors = world.GetNeighbors(roomID);
             //bool[] connection = WorldMap.GetConnections(connections[roomID]);
-            BuildRoom(roomID, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, connections[roomID], neighbors);
+            BuildRoom(roomID, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], neighbors, gates);
             //BuildState += 1;
         }
 
@@ -300,20 +303,20 @@ namespace WorldBuilder
         }
 
         float buildTimeStart = 0;
-        void BuildRoom(int roomID,Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, RoomConnections connections, Neighbors neighbors)
+        void BuildRoom(int roomID,Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, int cpus, RoomConnections connections, Neighbors neighbors, GateTypes[] gates)
         {
 
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
             string aspCode = "";
             aspCode += WorldStructure.get_world_gen(roomSize.x, roomSize.y);
-            if(!debugMode) aspCode += WorldStructure.tile_rules;
+            if(!DebugMode(Debugger.DebugTypes.tile_rules)) aspCode += WorldStructure.tile_rules;
             aspCode += WorldStructure.get_floor_rules(headroom, shoulderroom);
             aspCode += WorldStructure.get_chamber_rule(minCeilingHeight);
             aspCode += Pathfinding.movement_rules;
             aspCode += Pathfinding.platform_rules;
             aspCode += Pathfinding.path_rules;
 
-            GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
+            //GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
             GateTypes[,] keys = { { GateTypes.door, GateTypes.enemy }, { GateTypes.lava, GateTypes.none }, { GateTypes.water, GateTypes.none } };
 
             aspCode += Pathfinding.set_openings(connections.boolArray);
