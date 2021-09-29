@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pickupable : MonoBehaviour
 {
     public InventoryObjects item;
-    private SpriteRenderer sr;
+    public SpriteRenderer sr;
 
     private Rigidbody2D rb;
     
@@ -109,4 +109,6 @@ public class Pickupable : MonoBehaviour
         rb.velocity = new Vector2(direction.x * attractionSpeed, direction.y * attractionSpeed);
         rb.AddTorque(torque);
     }
+
+    
 }

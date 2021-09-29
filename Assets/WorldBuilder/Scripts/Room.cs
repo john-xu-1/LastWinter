@@ -20,6 +20,7 @@ namespace WorldBuilder
         public List<List<int>> neighborPermutations;
         public List<int> removedNeighbors;
         public double lastBuildTime;
+        public List<FreeObjects> freeObjects = new List<FreeObjects>();
         
 
         public Room(Vector2Int pos)
