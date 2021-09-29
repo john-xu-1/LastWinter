@@ -700,6 +700,14 @@ MonoBehaviour:
   LinkersTopLeft: {fileID: 11400000, guid: 2d1eeac323d724f879fd2657458a100a, type: 2}
   LinkersBottomLeft: {fileID: 11400000, guid: 0b781efa53f0e4e82b746796253fd081, type: 2}
   tilemap: {fileID: 151439278}
+  waterTop: {fileID: 0}
+  water: {fileID: 0}
+  waterTilemap: {fileID: 0}
+  lavaTop: {fileID: 0}
+  lava: {fileID: 0}
+  lavaTilemap: {fileID: 0}
+  door: {fileID: 0}
+  doorTilemap: {fileID: 0}
 --- !u!4 &76890017
 Transform:
   m_ObjectHideFlags: 0
@@ -2388,24 +2396,32 @@ MonoBehaviour:
   BuildTime: {fileID: 0}
   RunNum: {fileID: 0}
   Generator: {fileID: 231321408}
+  Bitmap: 
   JsonMapName: directionalTest4x4world20x20rooms
   jsonFile: {fileID: 0}
   BuildOnStart: 0
   Solver: {fileID: 0}
-  worlds: {fileID: 0}
+  cpus: 4
+  WorldBuilder: {fileID: 0}
+  WorldsSource: {fileID: 0}
+  connection: 0101000000000000
   RoomSize: {x: 20, y: 20}
   headroom: 2
   shoulderroom: 3
   minCeilingHeight: 3
   nodePrefab: {fileID: 0}
   edgePrefab: {fileID: 0}
+  pathPrefab: {fileID: 0}
   worldWidth: 4
   worldHeight: 4
   keyTypeCount: 3
   maxGatePerKey: 2
+  minGatePerKey: 2
+  bossGateKey: 2
   jumpHeadroom: 3
   timeout: 600
   BuiltWorldIndex: 0
+  indices: 01000000020000000300000004000000
   MapSource: 0
   world:
     name: 
@@ -2416,6 +2432,10 @@ MonoBehaviour:
       startRoomID: 0
       width: 0
       height: 0
+      bossRoom:
+        bossRooms: 
+        bossEntranceRoom: 0
+        bossStartRoom: 0
     width: 0
     height: 0
     RoomsArray: []

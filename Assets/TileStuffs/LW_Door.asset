@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: LW_Door
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: c9e8e1f3ae5fffa40950602bccb7581d, type: 3}
-  m_Color: {r: 1, g: 0.6882861, b: 0.3160377, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 7294a6d6a76184247a8747bfc0d03c3c, type: 3}
+  m_Color: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
   m_Transform:
     e00: 1
     e01: 0
