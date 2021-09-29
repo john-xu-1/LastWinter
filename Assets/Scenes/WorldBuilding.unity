@@ -1154,7 +1154,7 @@ MonoBehaviour:
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
   gates: 010000000200000003000000
-  MapSource: 4
+  MapSource: 5
   world:
     name: 
     worldGraph:
@@ -1183,7 +1183,7 @@ MonoBehaviour:
   heightDebugs: 14000000
   keyTypesDebugs: 02000000
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 30
+  GraphBuildsMax: 2
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
