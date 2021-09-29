@@ -11,11 +11,11 @@ namespace WorldBuilder
         [SerializeField] private List<RoomHistory> roomHistories = new List<RoomHistory>();
         [SerializeField] private RoomHistoryAnalysis[] roomHistoryAnalysis;
         public RoomHistory[] history;
-        public void AddRoom(int roomID, Map map, double buildTime, Clingo.ClingoSolver.Status status)
+        public void AddRoom(int roomID, Map map, List<FreeObject> items, double buildTime, Clingo.ClingoSolver.Status status)
         {
-            roomHistories.Add(new RoomHistory(roomID, map, buildTime, status));
+            roomHistories.Add(new RoomHistory(roomID, map, items, buildTime, status));
         }
-        public void DestroyRoom(int roomID, Map map, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
+        public void DestroyRoom(int roomID, Map map, List<FreeObject> items, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
         {
             Map destroyedMap = new Map();
             destroyedMap.dimensions =  map.dimensions;
@@ -32,7 +32,7 @@ namespace WorldBuilder
                 destroyedMap.area[i].type = 0;
 
             }
-            roomHistories.Add(new RoomHistory(roomID, map, destroyTime, destroyedByID, status));
+            roomHistories.Add(new RoomHistory(roomID, map, items, destroyTime, destroyedByID, status));
         }
         public RoomHistory GetRoom(int index)
         {
@@ -86,24 +86,27 @@ namespace WorldBuilder
         public string roomName;
         public int roomID;
         public Map map;
+        public List<FreeObject> items;
         public double buildTime;
         public bool destroyed;
         public int destroyedByID;
         public Clingo.ClingoSolver.Status buildStatus;
 
-        public RoomHistory(int roomID, Map map, double buildTime, Clingo.ClingoSolver.Status status)
+        public RoomHistory(int roomID, Map map, List<FreeObject> items, double buildTime, Clingo.ClingoSolver.Status status)
         {
             this.roomID = roomID;
             this.map = map;
             this.buildTime = buildTime;
+            this.items = items;
             roomName = "Room " + roomID.ToString() + " BuildTime: " + buildTime.ToString();
             buildStatus = status;
         }
-        public RoomHistory(int roomID, Map map, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
+        public RoomHistory(int roomID, Map map, List<FreeObject> items, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
         {
             buildTime = destroyTime;
             this.roomID = roomID;
             this.map = map;
+            this.items = items;
             buildStatus = status;
             DestroyRoom(destroyedByID);
             roomName = "Destroyed Room " + roomID.ToString() + " " + status;

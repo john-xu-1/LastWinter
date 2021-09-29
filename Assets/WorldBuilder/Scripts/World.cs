@@ -39,18 +39,18 @@ namespace WorldBuilder
             WorldHistory = new WorldHistory();
         }
 
-        public void WorldHistoryAdd(int roomID, Map map, double buildTime, Clingo.ClingoSolver.Status status)
+        public void WorldHistoryAdd(int roomID, Map map, List<FreeObject> items, double buildTime, Clingo.ClingoSolver.Status status)
         {
-            WorldHistory.AddRoom(roomID, map, buildTime, status);
+            WorldHistory.AddRoom(roomID, map, items, buildTime, status);
         }
-        public void WorldHistoryRemove(int roomID, Map map, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
+        public void WorldHistoryRemove(int roomID, Map map, List<FreeObject> items, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
         {
-            WorldHistory.DestroyRoom(roomID, map, destroyTime, destroyedByID, status);
+            WorldHistory.DestroyRoom(roomID, map, items, destroyTime, destroyedByID, status);
         }
         public void WorldHistoryRemove(Room room, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
         {
             int roomID = Utility.index_to_roomID(room.pos, width, height);
-            WorldHistory.DestroyRoom(roomID, room.map, destroyTime, destroyedByID, status);
+            WorldHistory.DestroyRoom(roomID, room.map, room.items, destroyTime, destroyedByID, status);
         }
 
         public Room[] GetRooms()

@@ -199,7 +199,7 @@ namespace WorldBuilder
                     }
                 }
 
-                if (history) world.WorldHistoryAdd(roomID, newRoom.map, buildTime, Solver.SolverStatus);
+                if (history) world.WorldHistoryAdd(roomID, newRoom.map, newRoom.items, buildTime, Solver.SolverStatus);
                 if (display) DisplayRoom(newRoom); 
 
                 newRoom.buidStatus = ClingoSolver.Status.SATISFIABLE;
