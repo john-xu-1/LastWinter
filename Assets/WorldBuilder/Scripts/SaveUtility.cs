@@ -62,6 +62,35 @@ namespace WorldBuilder
 
         public static string CreateFile(string content, string filename)
         {
+            //string relativePath;
+            //if (Application.isEditor)
+            //{
+            //    if (!Directory.Exists(System.IO.Path.Combine("Assets", DataFilePath)))
+            //    {
+            //        Directory.CreateDirectory(System.IO.Path.Combine("Assets", DataFilePath));
+            //    }
+
+            //    relativePath = System.IO.Path.Combine("Assets", DataFilePath, filename);
+            //}
+            //else
+            //{
+            //    if (!Directory.Exists(DataFilePath))
+            //    {
+            //        Directory.CreateDirectory(DataFilePath);
+            //    }
+            //    relativePath = System.IO.Path.Combine(DataFilePath, filename);
+            //}
+            //Debug.Log(relativePath);
+            //using (StreamWriter streamWriter = File.CreateText(relativePath))
+            //{
+            //    streamWriter.Write(content);
+            //}
+            //return System.IO.Path.Combine(DataFilePath, filename);
+            return CreateFile(content, filename, DataFilePath);
+        }
+
+        public static string CreateFile(string content, string filename, string DataFilePath)
+        {
             string relativePath;
             if (Application.isEditor)
             {

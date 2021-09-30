@@ -9,7 +9,7 @@ namespace WorldBuilder
     {
         //public bool DebugMode { get { return debugMode; } }
         [SerializeField] private bool debugMode;
-        public bool DebugMode(Debugger.DebugTypes source) { if (FindObjectOfType<Debugger>()) return FindObjectOfType<Debugger>().Debug(source); else return debugMode; }
+        public bool DebugMode(Debugger.Debugger.DebugTypes source) { if (FindObjectOfType<Debugger.Debugger>()) return FindObjectOfType<Debugger.Debugger>().Debug(source); else return debugMode; }
         public MapGenerator Generator;
         public FreeObjects FreeObjects;
         public Worlds Worlds;
@@ -280,12 +280,12 @@ namespace WorldBuilder
             //Generator.ConvertMap(room);
             //room.BuildRoom(FreeObjects);
             Generator.BuildRoom(room);
-            if (FindObjectOfType<DebugMap>()) FindObjectOfType<DebugMap>().AddPath(room);
+            if (FindObjectOfType<Debugger.DebugMap>()) FindObjectOfType<Debugger.DebugMap>().AddPath(room);
         }
         public void HideRoom(Room room)
         {
             Generator.RemoveMap(room);
-            if (FindObjectOfType<DebugMap>()) FindObjectOfType<DebugMap>().RemovePath(room);
+            if (FindObjectOfType<Debugger.DebugMap>()) FindObjectOfType<Debugger.DebugMap>().RemovePath(room);
         }
         void DestroyRoom(Room killRoom, double destroyTime, int destoryerID, Clingo.ClingoSolver.Status status)
         {
@@ -312,7 +312,7 @@ namespace WorldBuilder
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
             string aspCode = "";
             aspCode += WorldStructure.get_world_gen(roomSize.x, roomSize.y);
-            if(!DebugMode(Debugger.DebugTypes.tile_rules)) aspCode += WorldStructure.tile_rules;
+            if(!DebugMode(Debugger.Debugger.DebugTypes.tile_rules)) aspCode += WorldStructure.tile_rules;
             aspCode += WorldStructure.get_floor_rules(headroom, shoulderroom);
             aspCode += WorldStructure.get_chamber_rule(minCeilingHeight);
             aspCode += Pathfinding.movement_rules;
