@@ -1153,7 +1153,7 @@ MonoBehaviour:
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
   gates: 010000000200000003000000
-  MapSource: 6
+  MapSource: 5
   world:
     name: 
     worldGraph:
@@ -1183,12 +1183,12 @@ MonoBehaviour:
   keyTypesDebugs: 02000000
   debugData: {fileID: 1369613144}
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 5
+  GraphBuildsMax: 30
   debugRoom:
     gate:
-      type: 0
-      source: 0
-      destination: 0
+      type: 1
+      source: 1
+      destination: 2
     gated:
       roomID: 0
       type: 0
@@ -1591,7 +1591,9 @@ MonoBehaviour:
   debugSources:
   - debug: 0
     source: 1
-  debugStrSources: []
+  debugStrSources:
+  - debug: 1
+    source: ignore TIMEOUT
 --- !u!4 &1369613143
 Transform:
   m_ObjectHideFlags: 0
@@ -1618,7 +1620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b6d51a813d446588db5ebf5c559f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDataPath: GraphCSVTest1
+  testDataPath: 'Room 20 x 20 new water gate L - R '
 --- !u!1 &1402093249
 GameObject:
   m_ObjectHideFlags: 0

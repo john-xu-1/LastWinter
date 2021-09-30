@@ -15,7 +15,7 @@ namespace WorldBuilder
     }
     public class Gates
     {
-        public static string water_rules_new = @"
+        public static string water_rules = @"
             #const max_water_depth = 10.
             #const min_water_depth = 1.
             #const max_water_surface = 1.
@@ -38,7 +38,7 @@ namespace WorldBuilder
             %#show water_depth/3.
         ";
 
-        public static string water_rules = @"
+        public static string water_rules_old = @"
             #const max_water_depth = 10.
             #const min_water_depth = 1.
 

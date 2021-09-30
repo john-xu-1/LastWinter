@@ -19,7 +19,7 @@ public class CollisionMap : MonoBehaviour
     public TileBase door;
     public Tilemap doorTilemap;
 
-    public bool DebugMode(Debugger.Debugger.DebugTypes source) { if (FindObjectOfType<Debugger.Debugger>()) return FindObjectOfType<Debugger.Debugger>().Debug(source); else return debugMode; }
+    public bool DebugMode(Debugging.Debugger.DebugTypes source) { if (FindObjectOfType<Debugging.Debugger>()) return FindObjectOfType<Debugging.Debugger>().Debug(source); else return debugMode; }
     [SerializeField] private bool debugMode;
 
     //private int worldWidth, worldHeight;
@@ -143,7 +143,7 @@ public class CollisionMap : MonoBehaviour
 
                 int[] neighbors = FindNeighbors(tile.pos, room);
                 //DEBUG
-                if (DebugMode(Debugger.Debugger.DebugTypes.tile_rules))
+                if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(tilemap, (Vector3Int)tile.pos, Center);
                 }
@@ -193,7 +193,7 @@ public class CollisionMap : MonoBehaviour
             else if (tile.type == 2) //water
             {
                 int[] neighbors = FindNeighbors(tile.pos, room, 2);
-                if (DebugMode(Debugger.Debugger.DebugTypes.tile_rules))
+                if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(waterTilemap, (Vector3Int)tile.pos, water);
                 }
@@ -203,7 +203,7 @@ public class CollisionMap : MonoBehaviour
             else if(tile.type == 3) //lava
             {
                 int[] neighbors = FindNeighbors(tile.pos, room, tile.type);
-                if (DebugMode(Debugger.Debugger.DebugTypes.tile_rules))
+                if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(lavaTilemap, (Vector3Int)tile.pos, lava);
                 }
@@ -212,7 +212,7 @@ public class CollisionMap : MonoBehaviour
             }
             else if(tile.type == 4) //door
             {
-                if (DebugMode(Debugger.Debugger.DebugTypes.tile_rules))
+                if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
                 }
