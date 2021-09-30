@@ -131,11 +131,11 @@ namespace WorldBuilder
                 Vector2Int keyRoom = Utility.roomID_to_index(key.roomID, worldWidth, worldHeight);
                 BuildQueue.Add(keyRoom);
             }
-            foreach (Gate gate in world.worldGraph.gates)
-            {
-                Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
-                BuildQueue.Add(gateRoom);
-            }
+            //foreach (Gate gate in world.worldGraph.gates)
+            //{
+            //    Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
+            //    BuildQueue.Add(gateRoom);
+            //}
             for (int y = 0; y < worldHeight; y += 1)
             {
                 for(int x = 0; x < worldWidth; x += 1)
@@ -172,7 +172,10 @@ namespace WorldBuilder
             Debug.Log("Building roomID: " + roomID + " index: " + index);
             Neighbors neighbors = world.GetNeighbors(roomID);
             //bool[] connection = WorldMap.GetConnections(connections[roomID]);
-            BuildRoom(roomID, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], neighbors, gates);
+            Gate gate = Gates.GetGate(world.worldGraph, roomID);
+            Gated gated = Gates.GetGated(world.worldGraph, roomID);
+            Key key = FreeObject.GetKey(world.worldGraph, roomID);
+            BuildRoom(gate,gated,key, roomID, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], neighbors, gates);
             //BuildState += 1;
         }
 
@@ -303,7 +306,7 @@ namespace WorldBuilder
         }
 
         float buildTimeStart = 0;
-        void BuildRoom(int roomID,Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, int cpus, RoomConnections connections, Neighbors neighbors, GateTypes[] gates)
+        public void BuildRoom(Gate gate, Gated gated, Key key, int roomID,Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, int cpus, RoomConnections connections, Neighbors neighbors, GateTypes[] gates)
         {
 
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
@@ -321,8 +324,8 @@ namespace WorldBuilder
 
             aspCode += Pathfinding.set_openings(connections.boolArray);
             aspCode += WorldStructure.GetDoorRules(neighbors);
-            aspCode += Gates.GetGateASP(world, roomID, gates,connections);
-            aspCode += FreeObject.GetKeyRoomRules(world, roomID, gates);
+            aspCode += Gates.GetGateASP(gate, gated, gates,connections);
+            aspCode += FreeObject.GetKeyRoomRules(key, gates);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
             {

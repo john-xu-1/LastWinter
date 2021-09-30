@@ -27,7 +27,7 @@ public class DebugMap : MonoBehaviour
     public ClingoSolver Solver;
     public int cpus = 4;
     public Worlds WorldBuilder, WorldsSource;
-    public bool[] connection = { true, true, false, false, false, false, false, false };
+    //public bool[] connection = { true, true, false, false, false, false, false, false };
     public RoomConnections connections;
     public Vector2Int RoomSize = new Vector2Int(20, 20);
     public int headroom = 2, shoulderroom = 3, minCeilingHeight = 3;
@@ -47,6 +47,7 @@ public class DebugMap : MonoBehaviour
         Solver,
         World,
         History,
+        Room,
         Graph
     }
     public MapSources MapSource;
@@ -141,9 +142,48 @@ public class DebugMap : MonoBehaviour
     public int GraphBuildsMax = 1;
     int graphBuildsCount = 0;
     double totalTime = 0;
+    public DebugRoom debugRoom;
+
+    private void DebugBuildRoom(DebugRoom debugRoom)
+    {
+        FindObjectOfType<BuildWorld>().timeout = timeout;
+        FindObjectOfType<BuildWorld>().BuildRoom(debugRoom.gate, debugRoom.gated, debugRoom.key, 0, debugRoom.roomSize, debugRoom.headroom, debugRoom.shoulderroom, debugRoom.minCeilingHeight, debugRoom.cpus, debugRoom.connections, new Neighbors(), debugRoom.gates);
+    }
     private void Update()
     {
-        if (MapSource == MapSources.History)
+        if (MapSource == MapSources.Room && !testDone)
+        {
+            if (Solver.SolverStatus == ClingoSolver.Status.READY || Solver.SolverStatus == ClingoSolver.Status.UNINITIATED)
+            {
+                DebugBuildRoom(debugRoom);
+            }
+            else if (Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE)
+            {
+                Room room = new Room(new Vector2Int(graphBuildsCount, 0));
+                room.SetupRoom(Solver.answerSet);
+                Generator.BuildRoom(room);
+                Debug.Log($"------------------------number {graphBuildsCount + 1} : SATISFIABLE : {Solver.Duration} seconds-------------------------");
+                totalTime += Solver.Duration;
+                graphBuildsCount += 1;
+
+                if (graphBuildsCount < GraphBuildsMax)
+                {
+                    DebugBuildRoom(debugRoom);
+                }
+                else
+                {
+                    testDone = true;
+                    Debug.Log($"------------------------all {graphBuildsCount} : COMPLETE : {totalTime} seconds-------------------------");
+                }
+            }
+            else if (Solver.SolverStatus == ClingoSolver.Status.TIMEDOUT)
+            {
+                Debug.Log($"------------------------number {graphBuildsCount + 1} : TIMEDOUT : {Solver.maxDuration} seconds-------------------------");
+                totalTime += Solver.maxDuration;
+                DebugBuildRoom(debugRoom);
+            }
+        }
+        else if(MapSource == MapSources.History)
         {
 
             if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -362,6 +402,13 @@ public class DebugMap : MonoBehaviour
     [System.Serializable]
     public class DebugRoom
     {
+        public Gate gate;
+        public Gated gated;
+        public Key key;
+        public Vector2Int roomSize;
+        public int headroom, shoulderroom, minCeilingHeight, cpus;
+        public RoomConnections connections;
+        public GateTypes[] gates;
 
     }
 

@@ -1126,7 +1126,6 @@ MonoBehaviour:
   cpus: 4
   WorldBuilder: {fileID: 11400000, guid: e69a65c60634ac64c97170e6c4ed09e1, type: 2}
   WorldsSource: {fileID: 0}
-  connection: 0101000000000000
   connections:
     upEgress: 0
     upIngress: 0
@@ -1150,11 +1149,11 @@ MonoBehaviour:
   minGatePerKey: 2
   bossGateKey: 1
   jumpHeadroom: 3
-  timeout: 45
+  timeout: 3000
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
   gates: 010000000200000003000000
-  MapSource: 4
+  MapSource: 5
   world:
     name: 
     worldGraph:
@@ -1184,6 +1183,32 @@ MonoBehaviour:
   keyTypesDebugs: 02000000
   MiniMap: {fileID: 19207587}
   GraphBuildsMax: 30
+  debugRoom:
+    gate:
+      type: 0
+      source: 0
+      destination: 0
+    gated:
+      roomID: 0
+      type: 0
+    key:
+      type: 0
+      roomID: 0
+    roomSize: {x: 20, y: 20}
+    headroom: 2
+    shoulderroom: 3
+    minCeilingHeight: 3
+    cpus: 4
+    connections:
+      upEgress: 0
+      upIngress: 0
+      rightEgress: 1
+      rightIngress: 1
+      downEgress: 0
+      downIngress: 0
+      leftEgress: 1
+      leftIngress: 1
+    gates: 010000000200000003000000
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
