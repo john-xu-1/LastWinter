@@ -1183,10 +1183,10 @@ MonoBehaviour:
   keyTypesDebugs: 02000000
   debugData: {fileID: 1369613144}
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 30
+  GraphBuildsMax: 90
   debugRoom:
     gate:
-      type: 1
+      type: 0
       source: 1
       destination: 2
     gated:
@@ -1204,7 +1204,7 @@ MonoBehaviour:
       upEgress: 0
       upIngress: 0
       rightEgress: 1
-      rightIngress: 1
+      rightIngress: 0
       downEgress: 0
       downIngress: 0
       leftEgress: 1
@@ -1620,7 +1620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b6d51a813d446588db5ebf5c559f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDataPath: 'Room 20 x 20 new water gate L - R '
+  testDataPath: 'Room 20 x 20 L -> R '
 --- !u!1 &1402093249
 GameObject:
   m_ObjectHideFlags: 0
