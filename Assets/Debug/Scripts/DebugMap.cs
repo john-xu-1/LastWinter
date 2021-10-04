@@ -65,7 +65,7 @@ namespace Debugging
         
         private void Start()
         {
-            
+
             //Debug.Log(Clingo.ClingoSolver.Status.SATISFIABLE);
             //Clingo.ClingoSolver.Status status = "SATISFIABLE";
             //if("SATISFIABLE" == Clingo.ClingoSolver.Status.SATISFIABLE.ToString())
@@ -111,6 +111,14 @@ namespace Debugging
             //}
             //WorldBuilder.BuiltWorlds.Add( WorldsSource.BuiltWorlds[WorldsSource.BuiltWorlds.Count - 1]);
             //WorldsSource.BuiltWorlds.RemoveAt(WorldsSource.BuiltWorlds.Count - 1);
+            //string[,] matrix = new string[1, 0];
+            //string[] first = { "one" };
+            //string[] second = { "two" };
+            //matrix = DebugUtility.AddRow(matrix, first);
+            //Debug.Log(DebugUtility.ConvertMatrixToString(matrix));
+
+            //matrix = DebugUtility.AddRow(matrix, second);
+            //Debug.Log(DebugUtility.ConvertMatrixToString(matrix));
 
             if (BuildOnStart) buildMap();
         }
@@ -129,7 +137,8 @@ namespace Debugging
         public int GraphBuildsMax = 1;
         int graphBuildsCount = 0;
         double totalTime = 0;
-        public DebugRoom debugRoom;
+        public DebugRoom[] debugRoom;
+        private int debugRoomIndex = 0;
 
         private void DebugBuildRoom(DebugRoom debugRoom)
         {
@@ -142,15 +151,15 @@ namespace Debugging
             {
                 if (Solver.SolverStatus == ClingoSolver.Status.READY || Solver.SolverStatus == ClingoSolver.Status.UNINITIATED)
                 {
-                    DebugBuildRoom(debugRoom);
+                    DebugBuildRoom(debugRoom[debugRoomIndex]);
                 }
                 else if (Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE)
                 {
-                    Room room = new Room(new Vector2Int(graphBuildsCount, 0));
+                    Room room = new Room(new Vector2Int(graphBuildsCount, debugRoomIndex));
                     room.SetupRoom(Solver.answerSet);
                     Generator.BuildRoom(room);
-                    debugData.RoomRuntimeData(graphBuildsCount, (float)Solver.Duration, debugRoom, room, Solver.SolverStatus);
-                    Debug.Log($"------------------------number {graphBuildsCount + 1} : SATISFIABLE : {Solver.Duration} seconds-------------------------");
+                    debugData.RoomRuntimeData(graphBuildsCount, (float)Solver.Duration, debugRoom[debugRoomIndex], room, Solver.SolverStatus);
+                    Debug.Log($"------------------------number {graphBuildsCount + 1 + debugRoomIndex * GraphBuildsMax} : SATISFIABLE : {Solver.Duration} seconds-------------------------");
                     totalTime += Solver.Duration;
                     graphBuildsCount += 1;
                     CheckRoomDebug();
@@ -158,8 +167,8 @@ namespace Debugging
                 }
                 else if (Solver.SolverStatus == ClingoSolver.Status.TIMEDOUT)
                 {
-                    debugData.RoomRuntimeData(graphBuildsCount, (float)(Solver.maxDuration - 10), debugRoom, new Vector2Int(graphBuildsCount, 0), Solver.SolverStatus);
-                    Debug.Log($"------------------------number {graphBuildsCount + 1} : TIMEDOUT : {Solver.maxDuration - 10} seconds-------------------------");
+                    debugData.RoomRuntimeData(graphBuildsCount, (float)(Solver.maxDuration - 10), debugRoom[debugRoomIndex], new Vector2Int(graphBuildsCount, debugRoomIndex), Solver.SolverStatus);
+                    Debug.Log($"------------------------number {graphBuildsCount + 1 + debugRoomIndex * GraphBuildsMax} : TIMEDOUT : {Solver.maxDuration - 10} seconds-------------------------");
                     totalTime += Solver.maxDuration - 10;
                     if(FindObjectOfType<Debugger>() && !FindObjectOfType<Debugger>().Debug("ignore TIMEOUT")) graphBuildsCount += 1;
                     CheckRoomDebug();
@@ -259,7 +268,7 @@ namespace Debugging
             else if (MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.TIMEDOUT && !testDone)
             {
                 timeout += 100;
-                Debug.Log($"------------------------number {graphBuildsCount + 1} : TIMEDOUT : {timeout} seconds-------------------------");
+                Debug.Log($"------------------------number {graphBuildsCount + 1 + debugRoomIndex * GraphBuildsMax} : TIMEDOUT : {timeout} seconds-------------------------");
                 totalTime += timeout;
                 FindObjectOfType<BuildWorld>().BuildGraph(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout, cpus);
             }
@@ -269,7 +278,14 @@ namespace Debugging
         {
             if (graphBuildsCount < GraphBuildsMax)
             {
-                DebugBuildRoom(debugRoom);
+                DebugBuildRoom(debugRoom[debugRoomIndex]);
+            }else if(debugRoomIndex < debugRoom.Length - 1)
+            {
+
+                graphBuildsCount = 0;
+                debugRoomIndex += 1;
+                debugData.RuntimeDataBatchEnd();
+                DebugBuildRoom(debugRoom[debugRoomIndex]);
             }
             else
             {

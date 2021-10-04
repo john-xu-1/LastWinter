@@ -35,6 +35,42 @@ namespace Debugging
             }
             return asciRoom;
         }
+
+        public static T[,] AddRow<T>(T[,] matrix, T[] row)
+        {
+            int rows = matrix.GetUpperBound(1)+1;
+            int cols = matrix.GetUpperBound(0)+1;
+            Debug.Log($"{cols} {rows}");
+            T[,] newMatrix = new T[cols, rows + 1];
+            for(int i = 0; i < rows; i += 1)
+            {
+                for(int j = 0; j < cols; j += 1)
+                {
+                    newMatrix[j, i] = matrix[j,i];
+                }
+            }
+            for(int i = 0; i < cols; i += 1)
+            {
+                newMatrix[i, rows] = row[i];
+            }
+            return newMatrix;
+        }
+
+        public static string ConvertMatrixToString(string [,] matrix)
+        {
+            string str = "";
+            
+            for (int j = 0; j < matrix.GetUpperBound(1) + 1; j += 1)
+            {
+
+                for (int i = 0; i < matrix.GetUpperBound(0) + 1; i += 1)
+                {
+                    str += matrix[i, j] + " ";
+                }
+                str += "\n";
+            }
+            return str;
+        }
     }
 }
 

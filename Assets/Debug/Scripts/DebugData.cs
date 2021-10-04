@@ -11,7 +11,13 @@ namespace Debugging
 
         public void RuntimeDataStart(int col, int rows)
         {
-            runtimeData = new string[col, rows];
+            //runtimeData = new string[col, rows];
+            runtimeData = new string[col, 0];
+        }
+        public void RuntimeDataBatchEnd()
+        {
+            string[] space = new string[runtimeData.GetUpperBound(0) + 1];
+            runtimeData = DebugUtility.AddRow(runtimeData, space);
         }
         public void RuntimeData(float value, int runID, int col)
         {
@@ -32,10 +38,22 @@ namespace Debugging
         }
         public void RuntimeData(string[] values, int runID)
         {
-            for (int i = 0; i < values.Length; i += 1)
-            {
-                runtimeData[i, runID] = values[i];
-            }
+            runtimeData = DebugUtility.AddRow(runtimeData, values);
+
+            
+            Debug.Log(DebugUtility.ConvertMatrixToString(runtimeData));
+            //if (runID >= runtimeData.GetUpperBound(1))
+            //{
+                
+            //}
+            //else
+            //{
+            //    for (int i = 0; i < values.Length; i += 1)
+            //    {
+            //        runtimeData[i, runID] = values[i];
+            //    }
+            //}
+            
         }
         public void FinishRuntimeData()
         {
