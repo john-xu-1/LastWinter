@@ -37,21 +37,50 @@ namespace WorldBuilder
             return code;
         }
 
-        public static string GetKeyRoomRules(World world, int roomID, GateTypes[] gates)
+        public static Key GetKey(Graph worldGraph, int roomID)
+        {
+            foreach (Key key in worldGraph.keys)
+            {
+                if (key.roomID == roomID)
+                {
+                    return key;
+                }
+            }
+            return null;
+        }
+
+        public static string GetKeyRoomRules (Key key, GateTypes[] gates)
         {
             string code = "";
-
-            foreach(Key key in world.worldGraph.keys)
+            if (key != null)
             {
-                if(key.roomID == roomID)
-                {
-                    code += GetItemRules(FreeObjectTypes.key, gates[key.type - 1].ToString(), 1, 1);
-                    code += $@"
+                code += GetItemRules(FreeObjectTypes.key, gates[key.type - 1].ToString(), 1, 1);
+                code += $@"
                         
                         :- free_object(XX,YY,{FreeObjectTypes.key},_), not path(XX,YY+2,_).
                         :- free_object(XX,YY,{FreeObjectTypes.key},_), not state(XX,YY,zero).
 
                     ";
+            }
+            return code;
+        }
+
+        public static string GetKeyRoomRules(Graph worldGraph, int roomID, GateTypes[] gates)
+        {
+            string code = "";
+
+            foreach(Key key in worldGraph.keys)
+            {
+                if(key.roomID == roomID)
+                {
+                    //code += GetItemRules(FreeObjectTypes.key, gates[key.type - 1].ToString(), 1, 1);
+                    //code += $@"
+
+                    //    :- free_object(XX,YY,{FreeObjectTypes.key},_), not path(XX,YY+2,_).
+                    //    :- free_object(XX,YY,{FreeObjectTypes.key},_), not state(XX,YY,zero).
+
+                    //";
+                    code += GetKeyRoomRules(key, gates);
                 }
             }
             return code;

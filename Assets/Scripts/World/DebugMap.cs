@@ -27,7 +27,7 @@ public class DebugMap : MonoBehaviour
     public ClingoSolver Solver;
     public int cpus = 4;
     public Worlds WorldBuilder, WorldsSource;
-    public bool[] connection = { true, true, false, false, false, false, false, false };
+    //public bool[] connection = { true, true, false, false, false, false, false, false };
     public RoomConnections connections;
     public Vector2Int RoomSize = new Vector2Int(20, 20);
     public int headroom = 2, shoulderroom = 3, minCeilingHeight = 3;

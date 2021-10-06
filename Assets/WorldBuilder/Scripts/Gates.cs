@@ -165,39 +165,52 @@ namespace WorldBuilder
             
         ";
 
-        public static string GetGateASP(World world, int roomID, GateTypes[] gates, RoomConnections connections)
+        public static Gate GetGate (Graph worldGraph, int roomID)
         {
-            string code = "";
-            foreach(Gate gate in world.worldGraph.gates)
+            foreach (Gate gate in worldGraph.gates)
             {
-                if(gate.source == roomID)
+                if (gate.source == roomID)
                 {
 
-                    //code += GetGateASP(gates[gate.type - 1], GetGatedPath(gate, connections));
-                    code += GetGateASP(gate, gates, connections);
+                    return gate;
                 }
             }
 
-            foreach(Gated gated in world.worldGraph.gatedRooms)
-            {
-                if(gated.roomID == roomID)
-                {
-                    //code += GetGateASP(gates[gated.type - 1]);
-                    code += GetGateASP(gated, gates);
-                }
-            }
-            return code;
+            return null;
         }
+
+        public static Gated GetGated(Graph worldGraph, int roomID)
+        {
+            foreach (Gated gated in worldGraph.gatedRooms)
+            {
+                if (gated.roomID == roomID)
+                {
+
+                    return gated;
+                }
+            }
+
+            return null;
+        }
+
         public static string GetGateASP(Gate gate, Gated gated, GateTypes[] gates, RoomConnections connections)
         {
             return GetGateASP(gate, gates, connections) + GetGateASP(gated, gates);
         }
         public static string GetGateASP(Gate gate, GateTypes[] gates, RoomConnections connections)
         {
+            if (gate == null)
+            {
+                return "";
+            }
             return GetGateASP(gates[gate.type - 1], GetGatedPath(gate, connections));
         }
         public static string GetGateASP(Gated gated, GateTypes[] gates)
         {
+            if (gated == null)
+            {
+                return "";
+            }
             return GetGateASP(gates[gated.type - 1]);
         }
         static List<string> GetGatedPath(Gate gate, RoomConnections connections)
