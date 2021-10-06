@@ -69,6 +69,8 @@ namespace WorldBuilder
             BuildState = BuildStates.graph;
             world = new World(worldWidth, worldHeight);
             world.name = $"World {worldWidth}x{worldHeight} Rooms {roomWidth}x{roomHeight}";
+
+            if (DebugMode(Debugging.Debugger.DebugTypes.debugData) && FindObjectOfType<Debugging.DebugData>()) FindObjectOfType<Debugging.DebugData>().RuntimeDataStart(22, 0);
         }
 
         void BuildingWorld()
@@ -106,6 +108,10 @@ namespace WorldBuilder
                     //handle object clean up
                     world.WorldState = World.WorldStates.Built;
                     Worlds.AddWorld(world);
+                    if (DebugMode(Debugging.Debugger.DebugTypes.debugData))
+                    {
+                        FindObjectOfType<Debugging.DebugData>().FinishRuntimeData();
+                    }
                     BuildState += 1;
                     break;
                 case BuildStates.complete:
@@ -203,7 +209,16 @@ namespace WorldBuilder
                 }
 
                 if (history) world.WorldHistoryAdd(roomID, newRoom.map, newRoom.items, buildTime, Solver.SolverStatus);
-                if (display) DisplayRoom(newRoom); 
+                if (display) DisplayRoom(newRoom);
+
+                if (DebugMode(Debugging.Debugger.DebugTypes.debugData)) {
+                    Neighbors neighbors = world.GetNeighbors(roomID);
+                    Gate gate = Gates.GetGate(world.worldGraph, roomID);
+                    Gated gated = Gates.GetGated(world.worldGraph, roomID);
+                    Key key = FreeObject.GetKey(world.worldGraph, roomID);
+                    Debugging.DebugRoom debugRoom = new Debugging.DebugRoom(gate, gated,key, new Vector2Int(roomWidth, roomHeight),headroom,shoulderroom,jumpHeadroom,cpus,connections[roomID],gates,neighbors);
+                    FindObjectOfType<Debugging.DebugData>().RoomRuntimeData(roomID,(float)Solver.Duration, debugRoom, newRoom, Solver.SolverStatus);
+                }
 
                 newRoom.buidStatus = ClingoSolver.Status.SATISFIABLE;
                 BuildState = BuildStates.roomBuilding;
@@ -214,7 +229,17 @@ namespace WorldBuilder
 
                 Room room = world.GetRoom(roomID);
 
-                if(room.buidStatus != ClingoSolver.Status.UNSATISFIABLE)
+                if (DebugMode(Debugging.Debugger.DebugTypes.debugData))
+                {
+                    Neighbors neighbors = world.GetNeighbors(roomID);
+                    Gate gate = Gates.GetGate(world.worldGraph, roomID);
+                    Gated gated = Gates.GetGated(world.worldGraph, roomID);
+                    Key key = FreeObject.GetKey(world.worldGraph, roomID);
+                    Debugging.DebugRoom debugRoom = new Debugging.DebugRoom(gate, gated, key, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], gates, neighbors);
+                    FindObjectOfType<Debugging.DebugData>().RoomRuntimeData(roomID, 0, debugRoom, room, Solver.SolverStatus);
+                }
+
+                if (room.buidStatus != ClingoSolver.Status.UNSATISFIABLE)
                 {
                     List<List<int>> indices = Utility.GetPermutations(world.GetNeighborIDs(roomID));
                     room.neighborPermutations = indices;
@@ -248,6 +273,17 @@ namespace WorldBuilder
             else if (Solver.SolverStatus == ClingoSolver.Status.TIMEDOUT)
             {
                 world.GetRoom(roomID).buidStatus = ClingoSolver.Status.TIMEDOUT;
+
+                if (DebugMode(Debugging.Debugger.DebugTypes.debugData))
+                {
+                    Room room = world.GetRoom(roomID);
+                    Neighbors neighbors = world.GetNeighbors(roomID);
+                    Gate gate = Gates.GetGate(world.worldGraph, roomID);
+                    Gated gated = Gates.GetGated(world.worldGraph, roomID);
+                    Key key = FreeObject.GetKey(world.worldGraph, roomID);
+                    Debugging.DebugRoom debugRoom = new Debugging.DebugRoom(gate, gated, key, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], gates, neighbors);
+                    FindObjectOfType<Debugging.DebugData>().RoomRuntimeData(roomID, Solver.maxDuration - 10, debugRoom, room, Solver.SolverStatus);
+                }
 
                 Room killRoom = world.GetRandomNeighbor(roomID);
                 if(killRoom != null)

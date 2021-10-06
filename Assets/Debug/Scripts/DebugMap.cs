@@ -413,7 +413,7 @@ namespace Debugging
             }
             else if (MapSource == MapSources.Room)
             {
-                debugData.RuntimeDataStart(21, GraphBuildsMax);
+                debugData.RuntimeDataStart(22, GraphBuildsMax);
                 
             }
 
@@ -432,6 +432,22 @@ namespace Debugging
         public int headroom, shoulderroom, minCeilingHeight, cpus;
         public RoomConnections connections;
         public GateTypes[] gates;
+        public Neighbors neighbors;
 
+        public DebugRoom() { }
+        public DebugRoom(Gate gate, Gated gated, Key key, Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, int cpus, RoomConnections connections, GateTypes[] gates, Neighbors neighbors)
+        {
+            this.gate = gate;
+            this.gated = gated;
+            this.key = key;
+            this.roomSize = roomSize;
+            this.headroom = headroom;
+            this.shoulderroom = shoulderroom;
+            this.minCeilingHeight = minCeilingHeight;
+            this.cpus = cpus;
+            this.connections = connections;
+            this.gates = gates;
+            this.neighbors = neighbors;
+        }
     }
 }

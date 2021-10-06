@@ -12,7 +12,8 @@ namespace Debugging
         public enum DebugTypes
         {
             none,
-            tile_rules
+            tile_rules,
+            debugData
         }
         public bool Debug(DebugTypes source)
         {

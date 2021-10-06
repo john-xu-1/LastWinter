@@ -12,27 +12,52 @@ namespace Debugging
 
         public static string GetASCIRoom(WorldBuilder.Room room)
         {
+
             string asciRoom = "";
             if (room.isDestroyed) return asciRoom;
             int width = room.map.dimensions.room_width;
             int height = room.map.dimensions.room_height;
+            List<WorldBuilder.FreeObject> freeObjects = room.items;
             for(int j = 1; j <= height; j += 1)
             {
                 for(int i =1; i <= width; i += 1)
                 {
-                    foreach(Tile tile in room.map.area)
+                    WorldBuilder.FreeObject item = new FreeObject();
+                    foreach (WorldBuilder.FreeObject obj in freeObjects)
                     {
-                        if(tile.x == i && tile.y == j)
+                        if (obj.x == i && obj.y == j) item = obj;
+                    }
+                    foreach (Tile tile in room.map.area)
+                    {
+                        
+                        if(item.x == i && item.y == j)
                         {
-                            if (tile.type == 0) asciRoom += "-";
-                            else if (tile.type == 1) asciRoom += "X";
-                            else if (tile.type == 2) asciRoom += "W";
-                            else if (tile.type == 3) asciRoom += "L";
-                            else if (tile.type == 4) asciRoom += "D";
+                            if(item.FreeObjectType == FreeObject.FreeObjectTypes.key) asciRoom += "K";
+                            break;
+                        }
+                        else if(tile.x == i && tile.y == j)
+                        {
+                            asciRoom += GetASCIRoomValue(tile.type);
+                            //if (tile.type == 0) asciRoom += "-";
+                            //else if (tile.type == 1) asciRoom += "X";
+                            //else if (tile.type == 2) asciRoom += "W";
+                            //else if (tile.type == 3) asciRoom += "L";
+                            //else if (tile.type == 4) asciRoom += "D";
                         }
                     }
                 }
             }
+            return asciRoom;
+        }
+
+        public static string GetASCIRoomValue(int index)
+        {
+            string asciRoom = "";
+            if (index == 0) asciRoom += "-";
+            else if (index == 1) asciRoom += "X";
+            else if (index == 2) asciRoom += "W";
+            else if (index == 3) asciRoom += "L";
+            else if (index == 4) asciRoom += "D";
             return asciRoom;
         }
 

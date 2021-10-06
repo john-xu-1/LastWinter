@@ -8,6 +8,13 @@ namespace WorldBuilder
 {
     public class Utility
     {
+
+        public enum Directions{
+            up,
+            right,
+            down,
+            left
+        }
         
         public static List<T> GetSmallestRandomPermutation<T>(List<List<T>> permutations, bool remove)
         {
