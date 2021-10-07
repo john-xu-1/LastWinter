@@ -180,7 +180,7 @@ namespace WorldBuilder
             //bool[] connection = WorldMap.GetConnections(connections[roomID]);
             Gate gate = Gates.GetGate(world.worldGraph, roomID);
             Gated gated = Gates.GetGated(world.worldGraph, roomID);
-            Key key = FreeObject.GetKey(world.worldGraph, roomID);
+            Key key = KeyFreeObject.GetKey(world.worldGraph, roomID);
             BuildRoom(gate,gated,key, roomID, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], neighbors, gates);
             //BuildState += 1;
         }
@@ -215,7 +215,7 @@ namespace WorldBuilder
                     Neighbors neighbors = world.GetNeighbors(roomID);
                     Gate gate = Gates.GetGate(world.worldGraph, roomID);
                     Gated gated = Gates.GetGated(world.worldGraph, roomID);
-                    Key key = FreeObject.GetKey(world.worldGraph, roomID);
+                    Key key = KeyFreeObject.GetKey(world.worldGraph, roomID);
                     Debugging.DebugRoom debugRoom = new Debugging.DebugRoom(gate, gated,key, new Vector2Int(roomWidth, roomHeight),headroom,shoulderroom,jumpHeadroom,cpus,connections[roomID],gates,neighbors);
                     FindObjectOfType<Debugging.DebugData>().RoomRuntimeData(roomID,(float)Solver.Duration, debugRoom, newRoom, Solver.SolverStatus);
                 }
@@ -234,7 +234,7 @@ namespace WorldBuilder
                     Neighbors neighbors = world.GetNeighbors(roomID);
                     Gate gate = Gates.GetGate(world.worldGraph, roomID);
                     Gated gated = Gates.GetGated(world.worldGraph, roomID);
-                    Key key = FreeObject.GetKey(world.worldGraph, roomID);
+                    Key key = KeyFreeObject.GetKey(world.worldGraph, roomID);
                     Debugging.DebugRoom debugRoom = new Debugging.DebugRoom(gate, gated, key, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], gates, neighbors);
                     FindObjectOfType<Debugging.DebugData>().RoomRuntimeData(roomID, 0, debugRoom, room, Solver.SolverStatus);
                 }
@@ -280,7 +280,7 @@ namespace WorldBuilder
                     Neighbors neighbors = world.GetNeighbors(roomID);
                     Gate gate = Gates.GetGate(world.worldGraph, roomID);
                     Gated gated = Gates.GetGated(world.worldGraph, roomID);
-                    Key key = FreeObject.GetKey(world.worldGraph, roomID);
+                    Key key = KeyFreeObject.GetKey(world.worldGraph, roomID);
                     Debugging.DebugRoom debugRoom = new Debugging.DebugRoom(gate, gated, key, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], gates, neighbors);
                     FindObjectOfType<Debugging.DebugData>().RoomRuntimeData(roomID, Solver.maxDuration - 10, debugRoom, room, Solver.SolverStatus);
                 }
@@ -361,7 +361,7 @@ namespace WorldBuilder
             aspCode += Pathfinding.set_openings(connections.boolArray);
             aspCode += WorldStructure.GetDoorRules(neighbors);
             aspCode += Gates.GetGateASP(gate, gated, gates,connections);
-            aspCode += FreeObject.GetKeyRoomRules(key, gates);
+            aspCode += KeyFreeObject.GetKeyRoomRules(key, gates);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
             {

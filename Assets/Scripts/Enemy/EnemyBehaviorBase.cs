@@ -27,6 +27,7 @@ public class EnemyBehaviorBase : MonoBehaviour
     {
         p = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
+        ChildStart();
     }
 
     void Update()
@@ -36,6 +37,7 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     }
 
+    protected virtual void ChildStart() { }
 
     public virtual void defaultAI()
     {
