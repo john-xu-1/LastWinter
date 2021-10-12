@@ -1149,7 +1149,7 @@ MonoBehaviour:
   minGatePerKey: 2
   bossGateKey: 1
   jumpHeadroom: 3
-  timeout: 3000
+  timeout: 30000
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
   gates: 01000000020000000300000004000000
@@ -1188,62 +1188,12 @@ MonoBehaviour:
   - gate:
       type: 1
       source: 1
-      destination: 2
-    gated:
-      roomID: 0
-      type: 0
-    key:
-      type: 4
-      roomID: 0
-    roomSize: {x: 20, y: 20}
-    headroom: 2
-    shoulderroom: 3
-    minCeilingHeight: 3
-    cpus: 4
-    connections:
-      upEgress: 0
-      upIngress: 0
-      rightEgress: 1
-      rightIngress: 1
-      downEgress: 0
-      downIngress: 0
-      leftEgress: 1
-      leftIngress: 1
-    gates: 01000000020000000300000004000000
-  - gate:
-      type: 1
-      source: 4
-      destination: 1
-    gated:
-      roomID: 0
-      type: 0
-    key:
-      type: 4
-      roomID: 0
-    roomSize: {x: 20, y: 20}
-    headroom: 2
-    shoulderroom: 3
-    minCeilingHeight: 3
-    cpus: 4
-    connections:
-      upEgress: 1
-      upIngress: 1
-      rightEgress: 0
-      rightIngress: 0
-      downEgress: 1
-      downIngress: 1
-      leftEgress: 0
-      leftIngress: 0
-    gates: 01000000020000000300000004000000
-  - gate:
-      type: 1
-      source: 1
       destination: 4
     gated:
       roomID: 0
       type: 0
     key:
-      type: 4
+      type: 0
       roomID: 0
     roomSize: {x: 20, y: 20}
     headroom: 2
@@ -1672,7 +1622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b6d51a813d446588db5ebf5c559f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDataPath: Rooms 20 x 20 old water straight path 3
+  testDataPath: Rooms 20 x 20 old water straight path 4
 --- !u!1 &1402093249
 GameObject:
   m_ObjectHideFlags: 0
