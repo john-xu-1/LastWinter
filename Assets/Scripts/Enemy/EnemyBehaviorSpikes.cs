@@ -19,7 +19,11 @@ public class EnemyBehaviorSpikes : EnemyBehaviorBase
 
     List<Vector3Int> POSs = new List<Vector3Int>();
 
-    
+
+    protected override void childStart()
+    {
+        tmap = FindObjectOfType<CollisionMap>().tilemap;
+    }
 
     public override void defaultAI()
     {

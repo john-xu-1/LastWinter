@@ -12,22 +12,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccb420e0b92de9d4b80b3268db9e217b, type: 3}
   m_Name: FreeObjects
   m_EditorClassIdentifier: 
-  freeObjects:
+  keyFreeObjects:
   - x: 0
     y: 0
     FreeObjectType: 1
+    variation: 
     gameObject: {fileID: 1236074848859744999, guid: 1cb51a897841740eda69597d65070061, type: 3}
     keyType: 1
-    sprite: {fileID: 0}
   - x: 0
     y: 0
     FreeObjectType: 1
+    variation: 
     gameObject: {fileID: 1236074848859744999, guid: 1f49701fa59314d499f3214651875852, type: 3}
     keyType: 2
-    sprite: {fileID: 0}
   - x: 0
     y: 0
     FreeObjectType: 1
+    variation: 
     gameObject: {fileID: 1236074848859744999, guid: 599f6778ca2d54cff898203bd8fa5ae8, type: 3}
     keyType: 3
-    sprite: {fileID: 0}
+  - x: 0
+    y: 0
+    FreeObjectType: 1
+    variation: 
+    gameObject: {fileID: 1236074848859744999, guid: 9f35f83efdbb14f8a9936871024de2c7, type: 3}
+    keyType: 4
+  enemyFreeObjects:
+  - x: 0
+    y: 0
+    FreeObjectType: 0
+    variation: 
+    gameObject: {fileID: 2472293266469785582, guid: c1aa9e7584b4b4a62bcee03bc0342238, type: 3}
+    enemyType: 0
+  - x: 0
+    y: 0
+    FreeObjectType: 0
+    variation: 
+    gameObject: {fileID: 29171630304346465, guid: 864dbd67b6cdc4b96bba5fd8eca2e9fb, type: 3}
+    enemyType: 1
+  - x: 0
+    y: 0
+    FreeObjectType: 0
+    variation: 
+    gameObject: {fileID: 8855345290569420329, guid: 37c78b870d1824ca5b27441737abbfa4, type: 3}
+    enemyType: 2
+  - x: 0
+    y: 0
+    FreeObjectType: 0
+    variation: 
+    gameObject: {fileID: 2891008129906380086, guid: 6c172ab0eaf01405bb8978528de88696, type: 3}
+    enemyType: 3
+  environmentFreeObjects: []

@@ -9,7 +9,6 @@ namespace WorldBuilder
     {
 
         public WorldBuilder.GateTypes keyType;
-        public SpriteRenderer sprite;
 
         public static Dictionary<int, Color> KeyColors = new Dictionary<int, Color>() {
             { 1, Color.blue },
@@ -45,7 +44,7 @@ namespace WorldBuilder
         {
 
             SetupKey(x, y, keyType);
-            sprite.color = color;
+            //sprite.color = color;
 
         }
 
@@ -67,6 +66,35 @@ namespace WorldBuilder
         {
             keyType = (GateTypes)System.Enum.Parse(typeof(GateTypes), variation);
             this.variation = variation;
+        }
+
+        public static Key GetKey(Graph worldGraph, int roomID)
+        {
+            foreach (Key key in worldGraph.keys)
+            {
+                if (key.roomID == roomID)
+                {
+                    return key;
+                }
+            }
+            return null;
+        }
+
+        public static string GetKeyRoomRules(Key key, GateTypes[] gates)
+        {
+            string code = "";
+            if (key != null && key.type > 0)
+            {
+                code += GetItemRules(FreeObjectTypes.key, gates[key.type - 1].ToString(), 1, 1);
+                code += $@"
+                        
+                        :- free_object(XX,YY,{FreeObjectTypes.key},_), not path(XX,YY+2,_).
+                        :- free_object(XX,YY,{FreeObjectTypes.key},_), not state(XX,YY,zero).
+
+                    ";
+            }
+
+            return code;
         }
     }
 }

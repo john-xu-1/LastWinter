@@ -28,7 +28,7 @@ namespace WorldBuilder
             environment
         }
 
-        static string GetItemRules(FreeObjectTypes type, string variation, int min, int max)
+        protected static string GetItemRules(FreeObjectTypes type, string variation, int min, int max)
         {
             string code = $@"
                 #show free_object/4.
@@ -37,34 +37,7 @@ namespace WorldBuilder
             return code;
         }
 
-        public static Key GetKey(Graph worldGraph, int roomID)
-        {
-            foreach (Key key in worldGraph.keys)
-            {
-                if (key.roomID == roomID)
-                {
-                    return key;
-                }
-            }
-            return null;
-        }
-
-        public static string GetKeyRoomRules(Key key, GateTypes[] gates)
-        {
-            string code = "";
-            if(key != null && key.type > 0)
-            {
-                code += GetItemRules(FreeObjectTypes.key, gates[key.type - 1].ToString(), 1, 1);
-                code += $@"
-                        
-                        :- free_object(XX,YY,{FreeObjectTypes.key},_), not path(XX,YY+2,_).
-                        :- free_object(XX,YY,{FreeObjectTypes.key},_), not state(XX,YY,zero).
-
-                    ";
-            }
-            
-            return code;
-        }
+        
 
 
     }

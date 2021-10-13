@@ -22,7 +22,19 @@ namespace Debugging
             {
                 foreach (DebugSource<DebugTypes> debugSource in debugSources)
                 {
-                    if (debugSource.source == source) return debugSource.debug;
+                    if (debugSource.source == source)
+                    {
+                        if (debugSource.source == DebugTypes.debugData)
+                        {
+                            if (FindObjectOfType<DebugData>() && debugSource.debug) return true;
+                            else UnityEngine.Debug.LogWarning("DebugData not present");
+                        }
+                        else
+                        {
+                            return debugSource.debug;
+                        }
+                    }
+                    
                 }
                 return true;
             }
