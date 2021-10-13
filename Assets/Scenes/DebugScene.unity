@@ -1153,7 +1153,7 @@ MonoBehaviour:
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
   gates: 01000000020000000300000004000000
-  MapSource: 5
+  MapSource: 2
   world:
     name: 
     worldGraph:
@@ -1622,7 +1622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b6d51a813d446588db5ebf5c559f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDataPath: Rooms 20 x 20 old water straight path 4
+  testDataPath: 'World 4 x 4 Rooms 20 x 20 '
 --- !u!1 &1402093249
 GameObject:
   m_ObjectHideFlags: 0
