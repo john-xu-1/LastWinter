@@ -28,7 +28,7 @@ namespace WorldBuilder
             environment
         }
 
-        protected static string GetItemRules(FreeObjectTypes type, string variation, int min, int max)
+        public static string GetItemRules(FreeObjectTypes type, string variation, int min, int max)
         {
             string code = $@"
                 #show free_object/4.

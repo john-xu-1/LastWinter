@@ -16,6 +16,10 @@ namespace WorldBuilder
             spike
           
         }
+        public EnemyFreeObject()
+        {
+            FreeObjectType = FreeObjectTypes.enemy;
+        }
         public override void ItemSetup()
         {
             gameObject.transform.position = new Vector3(x, y, gameObject.transform.position.z);

@@ -1186,14 +1186,14 @@ MonoBehaviour:
   GraphBuildsMax: 10
   debugRoom:
   - gate:
-      type: 0
+      type: 4
       source: 1
       destination: 4
     gated:
       roomID: 0
       type: 0
     key:
-      type: 4
+      type: 0
       roomID: 0
     roomSize: {x: 20, y: 20}
     headroom: 2
@@ -1622,7 +1622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b6d51a813d446588db5ebf5c559f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDataPath: Room 20 x 20 Enemy Key Testing
+  testDataPath: Room 20 x 20 Enemy Gate Testing
 --- !u!1 &1402093249
 GameObject:
   m_ObjectHideFlags: 0
