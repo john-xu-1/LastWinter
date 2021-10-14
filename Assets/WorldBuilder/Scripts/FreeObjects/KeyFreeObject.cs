@@ -93,7 +93,8 @@ namespace WorldBuilder
                     code += $@"
                         
                         :- free_object(XX,YY,{FreeObjectTypes.key},_), not floor(XX,YY+1).
-                        %:- free_object(XX,YY,{FreeObjectTypes.key},_), not state(XX,YY,zero).
+                        :- free_object(XX,YY,{FreeObjectTypes.key},_), not floor(XX+1,YY+1).
+                        :- free_object(XX,YY,{FreeObjectTypes.key},_), not floor(XX-1,YY+1).
 
                     ";
                 }

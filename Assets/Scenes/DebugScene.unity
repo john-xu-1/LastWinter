@@ -1153,7 +1153,7 @@ MonoBehaviour:
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
   gates: 01000000020000000300000004000000
-  MapSource: 2
+  MapSource: 5
   world:
     name: 
     worldGraph:
@@ -1183,17 +1183,17 @@ MonoBehaviour:
   keyTypesDebugs: 02000000
   debugData: {fileID: 1369613144}
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 30
+  GraphBuildsMax: 10
   debugRoom:
   - gate:
-      type: 1
+      type: 0
       source: 1
       destination: 4
     gated:
       roomID: 0
       type: 0
     key:
-      type: 0
+      type: 4
       roomID: 0
     roomSize: {x: 20, y: 20}
     headroom: 2
@@ -1201,14 +1201,14 @@ MonoBehaviour:
     minCeilingHeight: 3
     cpus: 4
     connections:
-      upEgress: 1
-      upIngress: 1
-      rightEgress: 0
-      rightIngress: 0
-      downEgress: 1
-      downIngress: 1
-      leftEgress: 0
-      leftIngress: 0
+      upEgress: 0
+      upIngress: 0
+      rightEgress: 1
+      rightIngress: 1
+      downEgress: 0
+      downIngress: 0
+      leftEgress: 1
+      leftIngress: 1
     gates: 01000000020000000300000004000000
 --- !u!4 &837976641
 Transform:
@@ -1622,7 +1622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b6d51a813d446588db5ebf5c559f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDataPath: 'World 4 x 4 Rooms 20 x 20 '
+  testDataPath: Room 20 x 20 Enemy Key Testing
 --- !u!1 &1402093249
 GameObject:
   m_ObjectHideFlags: 0
