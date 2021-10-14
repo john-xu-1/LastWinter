@@ -1183,7 +1183,7 @@ MonoBehaviour:
   keyTypesDebugs: 02000000
   debugData: {fileID: 1369613144}
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 2
+  GraphBuildsMax: 10
   debugRoom:
   - gate:
       type: 0
@@ -1201,14 +1201,14 @@ MonoBehaviour:
     minCeilingHeight: 3
     cpus: 4
     connections:
-      upEgress: 0
-      upIngress: 0
-      rightEgress: 1
-      rightIngress: 1
-      downEgress: 0
-      downIngress: 0
-      leftEgress: 1
-      leftIngress: 1
+      upEgress: 1
+      upIngress: 1
+      rightEgress: 0
+      rightIngress: 0
+      downEgress: 1
+      downIngress: 1
+      leftEgress: 0
+      leftIngress: 0
     gates: 01000000020000000300000004000000
 --- !u!4 &837976641
 Transform:
@@ -1622,7 +1622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b6d51a813d446588db5ebf5c559f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDataPath: Testing
+  testDataPath: ASPSurfaceTest
 --- !u!1 &1402093249
 GameObject:
   m_ObjectHideFlags: 0

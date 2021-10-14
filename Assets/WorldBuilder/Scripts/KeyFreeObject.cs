@@ -86,6 +86,15 @@ namespace WorldBuilder
             if (key != null && key.type > 0)
             {
                 code += GetItemRules(FreeObjectTypes.key, gates[key.type - 1].ToString(), 1, 1);
+                if (gates[key.type - 1] == GateTypes.enemy)
+                {
+                    code += $@"
+                            :- free_object(XX,YY,{FreeObjectTypes.key},_), not floor(XX,YY+1).
+                            :- free_object(XX,YY,{FreeObjectTypes.key},_), not floor(XX+1,YY+1).
+                            :- free_object(XX,YY,{FreeObjectTypes.key},_), not floor(XX-1,YY+1).
+
+                        ";
+                }
                 code += $@"
                         
                         :- free_object(XX,YY,{FreeObjectTypes.key},_), not path(XX,YY+2,_).
