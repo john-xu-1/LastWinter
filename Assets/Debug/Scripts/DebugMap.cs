@@ -40,7 +40,7 @@ namespace Debugging
         int builtWorldIndex { get { return BuiltWorldIndex >= 0 ? Mathf.Min(BuiltWorldIndex, WorldBuilder.BuiltWorlds.Count - 1) : Mathf.Max(WorldBuilder.BuiltWorlds.Count + BuiltWorldIndex, 0); } }
         public int[] indices = { 1, 2, 3, 4 };
         public List<List<int>> permutations;
-        public GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
+        public GateTypes[] gates = { GateTypes.door, GateTypes.water, GateTypes.lava  };
         public enum MapSources
         {
             None,
@@ -413,7 +413,7 @@ namespace Debugging
             }
             else if (MapSource == MapSources.Room)
             {
-                debugData.RuntimeDataStart(22, GraphBuildsMax);
+                debugData.RuntimeDataStart(22);
                 
             }
 

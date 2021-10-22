@@ -8,6 +8,7 @@ namespace WorldBuilder
     [System.Serializable]
     public class Room
     {
+        public bool startRoom;
         public Vector2Int pos;
         public Dictionary<string, List<List<string>>> rawMap;
         public Map map;
@@ -110,6 +111,9 @@ namespace WorldBuilder
                         enemy.y = y;
                         enemy.variation = variation;
                         items.Add(enemy);
+                    }else if(type == FreeObject.FreeObjectTypes.environment)
+                    {
+
                     }
                     
                 }

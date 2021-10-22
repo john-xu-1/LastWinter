@@ -6,26 +6,33 @@ using WorldBuilder;
 namespace Debugging
 {
     
-    public class DebugUtility : WorldBuilder.SaveUtility
+    public class DebugUtility : SaveUtility
     {
         public static new string DataFilePath = @"Debug/Data";
 
-        public static string GetASCIRoom(WorldBuilder.Room room)
+        public static string GetASCIRoom(Room room)
         {
 
             string asciRoom = "";
             if (room.isDestroyed) return asciRoom;
             int width = room.map.dimensions.room_width;
             int height = room.map.dimensions.room_height;
-            List<WorldBuilder.FreeObject> freeObjects = room.items;
+            List<FreeObject> freeObjects = room.items;
+
+
             for(int j = 1; j <= height; j += 1)
             {
                 for(int i =1; i <= width; i += 1)
                 {
-                    WorldBuilder.FreeObject item = new FreeObject();
-                    foreach (WorldBuilder.FreeObject obj in freeObjects)
+                    FreeObject item = new FreeObject();
+                    foreach (FreeObject obj in freeObjects)
                     {
                         if (obj.x == i && obj.y == j) item = obj;
+                    }
+                    PathStart pathStart = null;
+                    foreach (PathStart start in room.map.pathStarts)
+                    {
+                        if (start.x == i && start.y == j) pathStart = start;
                     }
                     foreach (Tile tile in room.map.area)
                     {
@@ -33,20 +40,33 @@ namespace Debugging
                         if(item.x == i && item.y == j)
                         {
                             if(item.FreeObjectType == FreeObject.FreeObjectTypes.key) asciRoom += "K";
+                            else if (item.FreeObjectType == FreeObject.FreeObjectTypes.enemy) asciRoom += "E";
+                            else if (item.FreeObjectType == FreeObject.FreeObjectTypes.environment) asciRoom += "V";
+                            break;
+                        }else if (pathStart != null)
+                        {
+                            asciRoom += GetASCIRoomValue(pathStart.type, room);
                             break;
                         }
                         else if(tile.x == i && tile.y == j)
                         {
                             asciRoom += GetASCIRoomValue(tile.type);
-                            //if (tile.type == 0) asciRoom += "-";
-                            //else if (tile.type == 1) asciRoom += "X";
-                            //else if (tile.type == 2) asciRoom += "W";
-                            //else if (tile.type == 3) asciRoom += "L";
-                            //else if (tile.type == 4) asciRoom += "D";
+                           
                         }
                     }
                 }
             }
+            return asciRoom;
+        }
+        public static string GetASCIRoomValue(string type, Room room)
+        {
+            string asciRoom = "";
+            if (type == "top") asciRoom = "P";
+            else if (type == "bottom") asciRoom = "P";
+            else if (type == "left") asciRoom = "P";
+            else if (type == "right") asciRoom = "P";
+            else if (type == "middle" && !room.startRoom) asciRoom = "M";
+            else if (type == "middle" && room.startRoom) asciRoom = "S";
             return asciRoom;
         }
 

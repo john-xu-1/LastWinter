@@ -360,7 +360,9 @@ namespace WorldBuilder
         {
             string gatedPath = paths[0];
 
-            string code = FreeObject.GetItemRules(FreeObject.FreeObjectTypes.enemy, EnemyFreeObject.EnemyTypes.baseBoi.ToString(), 1, 1);
+            string code = "";
+            
+            code += EnemyFreeObject.GetEnemyRoomRules(paths);
             return code;
         }
     }

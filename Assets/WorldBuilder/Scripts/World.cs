@@ -148,6 +148,36 @@ namespace WorldBuilder
             }
             
         }
+        public int GetStartRoom()
+        {
+            return worldGraph.startRoomID;
+        }
+        public Vector2Int GetStartPos()
+        {
+            int startRoomID = GetStartRoom();
+            Room startRoom = GetRoom(startRoomID);
+            int x = 0;
+            int y = 0;
+            foreach(PathStart pathStart in startRoom.map.pathStarts)
+            {
+                if(pathStart.type == "middle")
+                {
+                    x = pathStart.x;
+                    y = pathStart.y;
+                    break;
+                }
+            }
+            int width = startRoom.map.dimensions.room_width;
+            int height = startRoom.map.dimensions.room_height;
+            return new Vector2Int(width * startRoom.pos.x + x, height * startRoom.pos.y + y);
+        }
+
+        public void FinishWorldBuild()
+        {
+            WorldState = World.WorldStates.Built;
+            startPos = GetStartPos();
+
+        }
     }
 
     public class Neighbors

@@ -70,7 +70,7 @@ namespace WorldBuilder
             world = new World(worldWidth, worldHeight);
             world.name = $"World {worldWidth}x{worldHeight} Rooms {roomWidth}x{roomHeight}";
 
-            if (DebugMode(Debugging.Debugger.DebugTypes.debugData) && FindObjectOfType<Debugging.DebugData>()) FindObjectOfType<Debugging.DebugData>().RuntimeDataStart(22, 0);
+            if (DebugMode(Debugging.Debugger.DebugTypes.debugData) && FindObjectOfType<Debugging.DebugData>()) FindObjectOfType<Debugging.DebugData>().RuntimeDataStart(22);
         }
 
         void BuildingWorld()
@@ -106,8 +106,10 @@ namespace WorldBuilder
                     break;
                 case BuildStates.solved:
                     //handle object clean up
-                    world.WorldState = World.WorldStates.Built;
+                    
+                    world.FinishWorldBuild();
                     Worlds.AddWorld(world);
+                    
                     if (DebugMode(Debugging.Debugger.DebugTypes.debugData))
                     {
                         FindObjectOfType<Debugging.DebugData>().FinishRuntimeData();
@@ -137,11 +139,11 @@ namespace WorldBuilder
                 Vector2Int keyRoom = Utility.roomID_to_index(key.roomID, worldWidth, worldHeight);
                 BuildQueue.Add(keyRoom);
             }
-            //foreach (Gate gate in world.worldGraph.gates)
-            //{
-            //    Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
-            //    BuildQueue.Add(gateRoom);
-            //}
+            foreach (Gate gate in world.worldGraph.gates)
+            {
+                Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
+                BuildQueue.Add(gateRoom);
+            }
             for (int y = 0; y < worldHeight; y += 1)
             {
                 for(int x = 0; x < worldWidth; x += 1)
@@ -195,6 +197,7 @@ namespace WorldBuilder
                 double buildTime = Solver.Duration;//Time.fixedTime - buildTimeStart;
                 //Debug.Log(roomID);
                 Room newRoom = world.GetRoom(roomID);
+                if (world.worldGraph.startRoomID == roomID) newRoom.startRoom = true;
                 newRoom.SetupRoom(Solver.answerSet);
 
                 //remove correct permutation

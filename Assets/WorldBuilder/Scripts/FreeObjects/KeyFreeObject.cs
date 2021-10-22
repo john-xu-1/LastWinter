@@ -19,6 +19,11 @@ namespace WorldBuilder
             { 5, Color.magenta }
         };
 
+        public KeyFreeObject()
+        {
+            FreeObjectType = FreeObjectTypes.key;
+        }
+
         public override void ItemSetup()
         {
             gameObject.transform.position = new Vector3(x, y, gameObject.transform.position.z);
@@ -37,7 +42,7 @@ namespace WorldBuilder
             SetupKeyType(keyType);
             this.x = x;
             this.y = y;
-            FreeObjectType = WorldBuilder.FreeObject.FreeObjectTypes.key;
+            //FreeObjectType = WorldBuilder.FreeObject.FreeObjectTypes.key;
             variation = keyType.ToString();
             //ItemSetup();
         }

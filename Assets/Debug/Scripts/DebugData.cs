@@ -9,10 +9,15 @@ namespace Debugging
         [SerializeField] string testDataPath = "GraphCSVTest1";
         string[,] runtimeData;
 
-        public void RuntimeDataStart(int col, int rows)
+        public void RuntimeDataStart(int col)
         {
             //runtimeData = new string[col, rows];
             runtimeData = new string[col, 0];
+        }
+        public void RuntimeDataStart(int col, int rows)
+        {
+            runtimeData = new string[col, rows];
+            
         }
         public void RuntimeDataBatchEnd()
         {

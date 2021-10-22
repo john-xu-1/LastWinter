@@ -53,6 +53,7 @@ namespace WorldBuilder
             }
             graph.bossRoom = new BossRoom();
             graph.bossRoom.bossRooms = Utility.GetArray(bossRooms);
+            graph.bossRoom.bossEntranceRoom = int.Parse(world["boss_room_entrance"][0][0]);
 
             List<Gated> gatedRooms = new List<Gated>();
             if (world.ContainsKey("gated_room"))

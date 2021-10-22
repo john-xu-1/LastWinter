@@ -375,8 +375,8 @@ namespace Clingo
             clingoConsoleError = "";
             duration = 0;
             totalSolutionsFound = -1;
-            answerSet.Clear();
-
+            //answerSet.Clear();
+            answerSet = new Dictionary<string, List<List<string>>>();
 
             status = Status.READY;
             return true;
