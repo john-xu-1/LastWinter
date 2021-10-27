@@ -14,8 +14,15 @@ namespace WorldBuilder
             baseBounce,
             shotgun,
             spike
-          
+
         }
+
+        public EnemyFreeObject()
+        {
+            FreeObjectType = FreeObjectTypes.enemy;
+        }
+
+
         public override void ItemSetup()
         {
             gameObject.transform.position = new Vector3(x, y, gameObject.transform.position.z);
@@ -36,6 +43,32 @@ namespace WorldBuilder
             enemyType = (EnemyTypes)System.Enum.Parse(typeof(EnemyTypes), variation);
             this.variation = variation;
         }
+        public static string GetEnemyRoomRules (List<string> paths)
+        {
+            EnemyTypes type = GetEnemyTypeFromPaths(paths);
+            int minCeilingHeight = 10;
+            string code = FreeObject.GetItemRules(FreeObject.FreeObjectTypes.enemy, EnemyFreeObject.EnemyTypes.baseBoi.ToString(), 1, 1);
+            code += $@"
+
+                :- free_object(XX,YY,{FreeObjectTypes.enemy},_), not floor(XX,YY+1).
+                :- free_object(XX,YY,{FreeObjectTypes.enemy},_), XX == max_width.
+                :- free_object(XX,YY,{FreeObjectTypes.enemy},_), XX == 1.
+
+                headroom_offset(1..{minCeilingHeight}).
+            
+            ";
+
+            return code;
+        }
+
+        static EnemyTypes GetEnemyTypeFromPaths(List<string> paths)
+        {
+            string gatedPath = paths[0];
+            int size = System.Enum.GetNames(typeof(EnemyTypes)).Length;
+            int rand = Random.Range(0, size);
+            return (EnemyTypes)rand;
+        }
+        
     }
 }
 

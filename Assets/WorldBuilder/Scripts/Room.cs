@@ -96,11 +96,23 @@ namespace WorldBuilder
                 {
                     int x = int.Parse(item[0]);
                     int y = int.Parse(item[1]);
-                    //Items.ItemTypes itemType = (Items.ItemTypes)item[2];
+                    FreeObject.FreeObjectTypes type = (FreeObject.FreeObjectTypes)System.Enum.Parse(typeof(FreeObject.FreeObjectTypes), item[2]);
                     string variation = item[3];
-                    KeyFreeObject key = new KeyFreeObject();
-                    key.SetupKey(x, y, (GateTypes)System.Enum.Parse(typeof(GateTypes), variation));
-                    items.Add(key);
+                    if (type == FreeObject.FreeObjectTypes.key)
+                    {
+                        KeyFreeObject key = new KeyFreeObject();
+                        key.SetupKey(x, y, (GateTypes)System.Enum.Parse(typeof(GateTypes), variation));
+                        items.Add(key);
+                    }
+                    else if (type == FreeObject.FreeObjectTypes.enemy)
+                    {
+                        EnemyFreeObject enemy = new EnemyFreeObject();
+                        enemy.x = x;
+                        enemy.y = y;
+                        enemy.variation = variation;
+                        items.Add(enemy);
+                    }
+                    
                 }
             }
             

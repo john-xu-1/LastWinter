@@ -33,6 +33,8 @@ namespace Debugging
                         if(item.x == i && item.y == j)
                         {
                             if(item.FreeObjectType == FreeObject.FreeObjectTypes.key) asciRoom += "K";
+                            else if (item.FreeObjectType == FreeObject.FreeObjectTypes.enemy) asciRoom += "E";
+                            else if (item.FreeObjectType == FreeObject.FreeObjectTypes.environment) asciRoom += "V";
                             break;
                         }
                         else if(tile.x == i && tile.y == j)

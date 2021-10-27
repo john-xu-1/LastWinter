@@ -32,7 +32,7 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     void Update()
     {
-        defaultAI();
+        if (p) defaultAI();
         inflictDamage();
 
     }

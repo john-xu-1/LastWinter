@@ -150,6 +150,11 @@ namespace WorldBuilder
             %#show door_bottom/2.
         ";
 
+        public static string enemy_rules = @"
+
+            
+
+        ";
         
 
         public static string gating_rules = @"
@@ -158,7 +163,7 @@ namespace WorldBuilder
             gated_path(XX,YY,Count) :- path(XX,YY,_), not fluid(XX,YY), not obstacle(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
             gated_path(XX,YY,Count + 1) :- path(XX,YY,_), fluid(XX,YY), not obstacle(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
             
-            gated_path(XX,YY,Count) :- path(XX,YY,_), not obstacle(XX,YY), not fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
+            %gated_path(XX,YY,Count) :- path(XX,YY,_), not obstacle(XX,YY), not fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR).
             gated_path(XX,YY,Count + 1) :- path(XX,YY,_), obstacle(XX,YY), not fluid(XX,YY), path(XX + LMR, YY+TMB, _), gated_path(XX+LMR,YY+TMB, Count), lmr_offset(TMB), lmr_offset(LMR), gated_max(Count + 1).
 
             %min_gated_path(XX,YY,Min) :- path(XX,YY,Type,Type), path_types(Type), Min = #min{Count: gated_path(XX,YY,Count)}.
@@ -246,7 +251,7 @@ namespace WorldBuilder
 
             return paths;
         }
-        static string GetGateASP(GateTypes gate)
+        static string GetGateASP(GateTypes gate) //for gated rooms
         {
             switch (gate)
             {
@@ -262,7 +267,7 @@ namespace WorldBuilder
             }
         }
 
-        static string GetGateASP(GateTypes gate, List<string> paths)
+        static string GetGateASP(GateTypes gate, List<string> paths) //for gate rooms
         {
             switch (gate)
             {
@@ -272,6 +277,8 @@ namespace WorldBuilder
                     return GetLavaASP(paths);
                 case GateTypes.door:
                     return GetDoorASP(paths);
+                case GateTypes.enemy:
+                    return GetEnemyASP(paths);
                 default:
                     return "";
 
@@ -348,6 +355,16 @@ namespace WorldBuilder
                 code += $":- not gated_path(XX,YY,0), path(XX,YY,{paths[i]},{paths[i]}).\n";
             }
             return code + door_rules + gating_rules;
+        }
+
+        public static string GetEnemyASP (List<string> paths)
+        {
+            string gatedPath = paths[0];
+
+            string code = "";
+            code += EnemyFreeObject.GetEnemyRoomRules(paths);
+
+            return code;
         }
     }
 

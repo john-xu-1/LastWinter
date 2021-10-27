@@ -1183,17 +1183,17 @@ MonoBehaviour:
   keyTypesDebugs: 02000000
   debugData: {fileID: 1369613144}
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 10
+  GraphBuildsMax: 3
   debugRoom:
   - gate:
-      type: 0
+      type: 4
       source: 1
       destination: 4
     gated:
       roomID: 0
       type: 0
     key:
-      type: 4
+      type: 0
       roomID: 0
     roomSize: {x: 20, y: 20}
     headroom: 2
