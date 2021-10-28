@@ -1153,7 +1153,7 @@ MonoBehaviour:
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
   gates: 010000000200000003000000
-  MapSource: 2
+  MapSource: 5
   world:
     name: 
     worldGraph:
@@ -1177,23 +1177,23 @@ MonoBehaviour:
       roomHistories: []
       roomHistoryAnalysis: []
       history: []
-  cpuDebugs: 0800000004000000
+  cpuDebugs: 04000000
   widthDebugs: 14000000
   heightDebugs: 14000000
   keyTypesDebugs: 02000000
   debugData: {fileID: 1369613144}
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 2
+  GraphBuildsMax: 1
   debugRoom:
   - gate:
-      type: 0
+      type: 4
       source: 1
       destination: 2
     gated:
       roomID: 0
       type: 0
     key:
-      type: 3
+      type: 0
       roomID: 0
     roomSize: {x: 20, y: 20}
     headroom: 2
@@ -1209,32 +1209,7 @@ MonoBehaviour:
       downIngress: 0
       leftEgress: 0
       leftIngress: 0
-    gates: 010000000200000003000000
-  - gate:
-      type: 0
-      source: 0
-      destination: 0
-    gated:
-      roomID: 0
-      type: 0
-    key:
-      type: 2
-      roomID: 0
-    roomSize: {x: 20, y: 20}
-    headroom: 2
-    shoulderroom: 3
-    minCeilingHeight: 3
-    cpus: 4
-    connections:
-      upEgress: 0
-      upIngress: 0
-      rightEgress: 0
-      rightIngress: 0
-      downEgress: 1
-      downIngress: 1
-      leftEgress: 1
-      leftIngress: 1
-    gates: 010000000200000003000000
+    gates: 01000000020000000300000004000000
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
@@ -2649,7 +2624,7 @@ PrefabInstance:
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: door
       value: 
-      objectReference: {fileID: 11400000, guid: 50f426c432da776488557fd844e28972, type: 2}
+      objectReference: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: lava
       value: 
@@ -2674,6 +2649,10 @@ PrefabInstance:
       propertyPath: debugMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
+      propertyPath: enemyDoor
+      value: 
+      objectReference: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: doorTilemap
       value: 
