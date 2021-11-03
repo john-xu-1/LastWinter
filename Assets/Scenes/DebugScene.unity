@@ -1153,7 +1153,7 @@ MonoBehaviour:
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
   gates: 04000000020000000100000003000000
-  MapSource: 2
+  MapSource: 3
   world:
     name: 
     worldGraph:
@@ -1186,7 +1186,7 @@ MonoBehaviour:
   GraphBuildsMax: 10
   debugRoom:
   - gate:
-      type: 0
+      type: 4
       source: 1
       destination: 4
     gated:
@@ -2624,7 +2624,7 @@ PrefabInstance:
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: door
       value: 
-      objectReference: {fileID: 11400000, guid: 50f426c432da776488557fd844e28972, type: 2}
+      objectReference: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: lava
       value: 
@@ -2649,6 +2649,10 @@ PrefabInstance:
       propertyPath: debugMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
+      propertyPath: enemydoor
+      value: 
+      objectReference: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: doorTilemap
       value: 

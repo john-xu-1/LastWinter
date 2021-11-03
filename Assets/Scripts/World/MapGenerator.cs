@@ -24,7 +24,7 @@ public class MapGenerator : MonoBehaviour
 
         room.tiles = ConvertMap(room.map, room);
         //print("Completed Map Json Load");
-        CMap.DebugPlaceTiles(room);
+        CMap.PlaceTiles(room);
     }
 
     public void RemoveMap(Room room)

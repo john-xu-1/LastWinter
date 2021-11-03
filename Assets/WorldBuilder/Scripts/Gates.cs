@@ -151,7 +151,23 @@ namespace WorldBuilder
         ";
 
         public static string enemy_rules = @"
+            tile_type (enemy_door).
+
+            border_tile (XX, YY) :- tile (XX, YY, _), XX == 1, path(_,_,left,left).
+            border_tile (XX, YY) :- tile (XX, YY, _), XX == max_width, path(_,_,right,right).
+            border_tile (XX, YY) :- tile (XX, YY, _), YY == 1, path(_,_,top,top).
+            border_tile (XX, YY) :- tile (XX, YY, _), YY == max_height, path(_,_,bottom,bottom).
+
             
+
+            1{gated_door(XX,YY) : path(_,_,Type,Type), tile (XX,YY, enemy_door)}1, gated_door(Type).
+            1{non_gated_door(XX,YY) : path(_,_,Type,Type), tile (XX,YY, enemy_door)}1, non_gated_door(Type).
+
+            :- tile (XX, YY, enemy_door), not border_tile(XX,YY).
+            :- tile (XX, YY, empty), border_tile (XX, YY).
+
+            #show gated_door/2.
+            #show non_gated_door/2.
         ";
         
 
@@ -363,6 +379,19 @@ namespace WorldBuilder
             string code = "";
             
             code += EnemyFreeObject.GetEnemyRoomRules(paths);
+
+            code += $@"
+
+                gated_door ({gatedPath}).
+                
+
+            ";
+            for (int i = 1; i < paths.Count; i += 1)
+            {
+                code += $"non_gated_door({paths[i]}).";
+            }
+            code += enemy_rules;
+
             return code;
         }
     }
