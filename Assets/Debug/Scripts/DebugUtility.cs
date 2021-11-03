@@ -78,6 +78,8 @@ namespace Debugging
             else if (index == 2) asciRoom += "W";
             else if (index == 3) asciRoom += "L";
             else if (index == 4) asciRoom += "D";
+            else if (index == 5) asciRoom += "R";
+
             return asciRoom;
         }
 
