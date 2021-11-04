@@ -65,3 +65,5 @@ MonoBehaviour:
   lavaTilemap: {fileID: 0}
   door: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
   doorTilemap: {fileID: 0}
+  enemyDoor: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
+  debugMode: 1

@@ -173,9 +173,7 @@ namespace Debugging
                     if(FindObjectOfType<Debugger>() && !FindObjectOfType<Debugger>().Debug("ignore TIMEOUT")) graphBuildsCount += 1;
                     CheckRoomDebug();
                 }
-
-
-                
+               
             }
             else if (MapSource == MapSources.History)
             {

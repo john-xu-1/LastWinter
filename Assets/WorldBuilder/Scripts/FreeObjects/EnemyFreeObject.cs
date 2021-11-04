@@ -13,7 +13,8 @@ namespace WorldBuilder
             baseBoi,
             baseBounce,
             shotgun,
-            spike
+            spike,
+            boss
           
         }
         public EnemyFreeObject()

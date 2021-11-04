@@ -54,6 +54,7 @@ namespace WorldBuilder
             graph.bossRoom = new BossRoom();
             graph.bossRoom.bossRooms = Utility.GetArray(bossRooms);
             graph.bossRoom.bossEntranceRoom = int.Parse(world["boss_room_entrance"][0][0]);
+            graph.bossRoom.bossStartRoom = int.Parse(world["boss_room_start"][0][0]);
 
             List<Gated> gatedRooms = new List<Gated>();
             if (world.ContainsKey("gated_room"))
@@ -630,6 +631,7 @@ namespace WorldBuilder
             :- boss_room(RoomID), {boss_room(Source):door(Source,RoomID)} == 0.
             boss_room_entrance(RoomID) :- boss_room(RoomID), door(Source, RoomID), not boss_room(Source).
             boss_room_exit(RoomID) :- boss_room(RoomID), door(RoomID, Source), not boss_room(Source).
+            1{boss_room_start(RoomID) : boss_room(RoomID), not boss_room_entrance(RoomID)}1.
             :- {boss_room_entrance(_)} > 1.
             :- {boss_room_exit(_)} > 1.
             :- boss_room_exit(R1), boss_room_entrance(R2), R1 != R2.

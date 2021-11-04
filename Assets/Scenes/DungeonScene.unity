@@ -2520,7 +2520,7 @@ GameObject:
   - component: {fileID: 1922578365}
   - component: {fileID: 1922578364}
   m_Layer: 0
-  m_Name: TilemapWaterDoor
+  m_Name: TilemapDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2920,7 +2920,7 @@ PrefabInstance:
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: door
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: lava
       value: 

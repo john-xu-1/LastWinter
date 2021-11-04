@@ -23,6 +23,10 @@ public class CollisionMap : MonoBehaviour
     public bool DebugMode(Debugging.Debugger.DebugTypes source) { if (FindObjectOfType<Debugging.Debugger>()) return FindObjectOfType<Debugging.Debugger>().Debug(source); else return debugMode; }
     [SerializeField] private bool debugMode;
 
+    [SerializeField] private List<Vector2Int> doorTiles = new List<Vector2Int>();
+    [SerializeField] private List<Vector2Int> enemyGateDoorTiles = new List<Vector2Int>();
+    [SerializeField] private List<Vector2Int> enemyNonGateDoorTiles = new List<Vector2Int>();
+
     //private int worldWidth, worldHeight;
 
     //public void newCollisionMap(int worldWidth, int worldHeight)
@@ -216,25 +220,42 @@ public class CollisionMap : MonoBehaviour
                 if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
+                    doorTiles.Add(tile.pos);
                 }
                 else
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
+                    doorTiles.Add(tile.pos);
                 }
                 
             }
-            else if(tile.type == 5) //enemy door
+            else if(tile.type == 5) //enemy door gated
             {
                 if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, enemyDoor);
+                    enemyGateDoorTiles.Add(tile.pos);
+                }
+                else
+                {
+                    //Debug.Log((Vector3Int)tile.pos);
+                    PlaceTile(doorTilemap, (Vector3Int)tile.pos, enemyDoor);
+                    enemyGateDoorTiles.Add(tile.pos);
+                }
+            }
+            else if (tile.type == 6) //enemy door non_gated
+            {
+                if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
+                {
+                    PlaceTile(doorTilemap, (Vector3Int)tile.pos, enemyDoor);
+                    enemyNonGateDoorTiles.Add(tile.pos);
                 }
                 else
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, enemyDoor);
+                    enemyNonGateDoorTiles.Add(tile.pos);
                 }
             }
-
 
         }
         

@@ -39,8 +39,22 @@ namespace Debugging
                         
                         if(item.x == i && item.y == j)
                         {
-                            if(item.FreeObjectType == FreeObject.FreeObjectTypes.key) asciRoom += "K";
-                            else if (item.FreeObjectType == FreeObject.FreeObjectTypes.enemy) asciRoom += "E";
+                            if (item.FreeObjectType == FreeObject.FreeObjectTypes.key)
+                            {
+                                asciRoom += "K";
+                            }
+                            else if (item.FreeObjectType == FreeObject.FreeObjectTypes.enemy)
+                            {
+                                if (((EnemyFreeObject)item).enemyType == EnemyFreeObject.EnemyTypes.boss)
+                                {
+                                    asciRoom += "B";
+                                }
+                                else
+                                {
+                                    asciRoom += "E";
+                                }
+
+                            }
                             else if (item.FreeObjectType == FreeObject.FreeObjectTypes.environment) asciRoom += "V";
                             break;
                         }else if (pathStart != null)

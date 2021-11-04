@@ -164,6 +164,7 @@ namespace WorldBuilder
                 else if (tile[2] == "orange_gate") newTile.type = 3;
                 else if (tile[2] == "brown_gate") newTile.type = 4;
                 else if (tile[2] == "enemy_door") newTile.type = 5;
+                else if (tile[2] == "enemy_non_gated_door") newTile.type = 6;
 
                 area[tileIndex] = newTile;
                 tileIndex += 1;
