@@ -143,7 +143,7 @@ namespace Debugging
         private void DebugBuildRoom(DebugRoom debugRoom)
         {
             FindObjectOfType<BuildWorld>().timeout = timeout;
-            FindObjectOfType<BuildWorld>().BuildRoom(debugRoom.gate, debugRoom.gated, debugRoom.key, 0, debugRoom.roomSize, debugRoom.headroom, debugRoom.shoulderroom, debugRoom.minCeilingHeight, debugRoom.cpus, debugRoom.connections, new Neighbors(), debugRoom.gates);
+            FindObjectOfType<BuildWorld>().BuildRoom(debugRoom.bossRoom, debugRoom.gate, debugRoom.gated, debugRoom.key, 0, debugRoom.roomSize, debugRoom.headroom, debugRoom.shoulderroom, debugRoom.minCeilingHeight, debugRoom.cpus, debugRoom.connections, new Neighbors(), debugRoom.gates);
         }
         private void Update()
         {
@@ -423,6 +423,7 @@ namespace Debugging
     [System.Serializable]
     public class DebugRoom
     {
+        public bool bossRoom;
         public Gate gate;
         public Gated gated;
         public Key key;

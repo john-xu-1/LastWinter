@@ -32,6 +32,11 @@ namespace WorldBuilder
             GameObject.Destroy(gameObject);
         }
 
+        public void Setup(float x, float y, string variation)
+        {
+            //this.
+        }
+
         public override string GetVariation()
         {
             return enemyType.ToString();
@@ -45,14 +50,26 @@ namespace WorldBuilder
         public static string GetEnemyRoomRules(List<string> paths)
         {
             EnemyTypes type = GetEnemyTypeFromPaths(paths);
+            while(type == EnemyTypes.boss)
+            {
+                type = GetEnemyTypeFromPaths(paths);
+            }
+            string code = GetEnemyRoomRules(type);
+
+            return code;
+        }
+
+        public static string GetEnemyRoomRules(EnemyTypes enemyType)
+        {
+           
             int minCeilingHeight = 10;
-            string code = FreeObject.GetItemRules(FreeObject.FreeObjectTypes.enemy, type.ToString(), 1, 1);
+            string code = FreeObject.GetItemRules(FreeObject.FreeObjectTypes.enemy, enemyType.ToString(), 1, 1);
             code += $@"
-                :- free_object(XX,YY,{FreeObjectTypes.enemy},{type}), not floor(XX,YY+1).
+                :- free_object(XX,YY,{FreeObjectTypes.enemy},{enemyType}), not floor(XX,YY+1).
 
                 
-                :- free_object(XX,YY,{FreeObjectTypes.enemy},{type}), XX == max_width.
-                :- free_object(XX,YY,{FreeObjectTypes.enemy},{type}), XX == 1.
+                :- free_object(XX,YY,{FreeObjectTypes.enemy},{enemyType}), XX == max_width.
+                :- free_object(XX,YY,{FreeObjectTypes.enemy},{enemyType}), XX == 1.
 
                 headroom_offset(1..{minCeilingHeight}).
             ";

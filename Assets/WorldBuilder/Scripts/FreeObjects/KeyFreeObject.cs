@@ -44,6 +44,7 @@ namespace WorldBuilder
             this.y = y;
             //FreeObjectType = WorldBuilder.FreeObject.FreeObjectTypes.key;
             variation = keyType.ToString();
+            //SetVariation(variation);
             //ItemSetup();
         }
         //public void SetupKey(float x, float y, WorldBuilder.GateTypes keyType, Color color)

@@ -1153,7 +1153,7 @@ MonoBehaviour:
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
   gates: 04000000020000000100000003000000
-  MapSource: 6
+  MapSource: 2
   world:
     name: 
     worldGraph:
@@ -1183,10 +1183,11 @@ MonoBehaviour:
   keyTypesDebugs: 02000000
   debugData: {fileID: 1369613144}
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 1
+  GraphBuildsMax: 2
   debugRoom:
-  - gate:
-      type: 4
+  - bossRoom: 1
+    gate:
+      type: 0
       source: 2
       destination: 1
     gated:
@@ -1622,7 +1623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b6d51a813d446588db5ebf5c559f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testDataPath: Room 20 x 20 Enemy gate sides
+  testDataPath: World 4x 4 Room 20 x 20 boss room 2
 --- !u!1 &1402093249
 GameObject:
   m_ObjectHideFlags: 0

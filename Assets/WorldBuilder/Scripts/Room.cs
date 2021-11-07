@@ -110,6 +110,7 @@ namespace WorldBuilder
                         enemy.x = x;
                         enemy.y = y;
                         enemy.variation = variation;
+                        enemy.SetVariation(variation);
                         items.Add(enemy);
                     }else if(type == FreeObject.FreeObjectTypes.environment)
                     {

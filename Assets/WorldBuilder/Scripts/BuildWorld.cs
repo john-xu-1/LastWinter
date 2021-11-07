@@ -183,7 +183,8 @@ namespace WorldBuilder
             Gate gate = Gates.GetGate(world.worldGraph, roomID);
             Gated gated = Gates.GetGated(world.worldGraph, roomID);
             Key key = KeyFreeObject.GetKey(world.worldGraph, roomID);
-            BuildRoom(gate,gated,key, roomID, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], neighbors, gates);
+            bool isBossRoom = world.worldGraph.bossRoom.bossStartRoom == roomID;
+            BuildRoom(isBossRoom, gate,gated,key, roomID, new Vector2Int(roomWidth, roomHeight), headroom, shoulderroom, jumpHeadroom, cpus, connections[roomID], neighbors, gates);
             //BuildState += 1;
         }
 
@@ -345,7 +346,7 @@ namespace WorldBuilder
         }
 
         float buildTimeStart = 0;
-        public void BuildRoom(Gate gate, Gated gated, Key key, int roomID,Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, int cpus, RoomConnections connections, Neighbors neighbors, GateTypes[] gates)
+        public void BuildRoom(bool bossRoom, Gate gate, Gated gated, Key key, int roomID,Vector2Int roomSize, int headroom, int shoulderroom, int minCeilingHeight, int cpus, RoomConnections connections, Neighbors neighbors, GateTypes[] gates)
         {
 
             //Debug.Log(WorldStructure.max_width + " " + WorldStructure.max_height);
@@ -357,6 +358,7 @@ namespace WorldBuilder
             aspCode += Pathfinding.movement_rules;
             aspCode += Pathfinding.platform_rules;
             aspCode += Pathfinding.path_rules;
+            
 
             //GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
             GateTypes[,] keys = { { GateTypes.door, GateTypes.enemy }, { GateTypes.lava, GateTypes.none }, { GateTypes.water, GateTypes.none } };
@@ -365,6 +367,7 @@ namespace WorldBuilder
             aspCode += WorldStructure.GetDoorRules(neighbors);
             aspCode += Gates.GetGateASP(gate, gated, gates,connections);
             aspCode += KeyFreeObject.GetKeyRoomRules(key, gates);
+            if (bossRoom) aspCode += EnemyFreeObject.GetEnemyRoomRules(EnemyFreeObject.EnemyTypes.boss);
 
             if ((connections.leftEgress || connections.leftIngress) && neighbors.left != null && !neighbors.left.isDestroyed)
             {

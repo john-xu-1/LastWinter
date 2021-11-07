@@ -62,4 +62,10 @@ MonoBehaviour:
     variation: 
     gameObject: {fileID: 1507855356422977492, guid: 8ee6e7c2b85cfad40bb1cf915b125fc9, type: 3}
     enemyType: 3
+  - x: 0
+    y: 0
+    FreeObjectType: 2
+    variation: 
+    gameObject: {fileID: 1507855356422977492, guid: 8ee6e7c2b85cfad40bb1cf915b125fc9, type: 3}
+    enemyType: 4
   environmentFreeObjects: []

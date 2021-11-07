@@ -45,6 +45,7 @@ namespace Debugging
                             }
                             else if (item.FreeObjectType == FreeObject.FreeObjectTypes.enemy)
                             {
+                                Debug.Log(((EnemyFreeObject)item).enemyType);
                                 if (((EnemyFreeObject)item).enemyType == EnemyFreeObject.EnemyTypes.boss)
                                 {
                                     asciRoom += "B";
