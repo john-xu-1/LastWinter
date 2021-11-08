@@ -140,6 +140,8 @@ namespace Debugging
         public DebugRoom[] debugRoom;
         private int debugRoomIndex = 0;
 
+        public string DebugFilename = "World 4x4 rooms 20 x 20";
+
         private void DebugBuildRoom(DebugRoom debugRoom)
         {
             FindObjectOfType<BuildWorld>().timeout = timeout;
@@ -174,6 +176,19 @@ namespace Debugging
                     CheckRoomDebug();
                 }
                
+            }
+            else if (MapSource == MapSources.Solver)
+            {
+                if(FindObjectOfType<BuildWorld>().BuildState == BuildWorld.BuildStates.complete)
+                {
+                    graphBuildsCount += 1;
+                    if(graphBuildsCount < GraphBuildsMax)
+                    {
+                        FindObjectOfType<DebugData>().SetTestDataPath($"{DebugFilename} ({graphBuildsCount})");
+                        FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus, gates);
+
+                    }
+                }
             }
             else if (MapSource == MapSources.History)
             {
@@ -356,6 +371,7 @@ namespace Debugging
             }
             else if (MapSource == MapSources.Solver)
             {
+                FindObjectOfType<DebugData>().SetTestDataPath($"{DebugFilename} ({graphBuildsCount})");
                 //Generator.ConvertMap(Solver.answerSet);
                 FindObjectOfType<BuildWorld>().Worlds = WorldBuilder;
                 FindObjectOfType<BuildWorld>().BuildAWorld(worldWidth, worldHeight, keyTypeCount, maxGatePerKey, minGatePerKey, bossGateKey, RoomSize.x, RoomSize.y, headroom, shoulderroom, jumpHeadroom, timeout, cpus, gates);
