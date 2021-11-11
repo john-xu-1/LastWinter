@@ -306,8 +306,16 @@ namespace WorldBuilder
 
                 
                 BuildState = BuildStates.roomBuilding;
-
-                Timedout();
+                bool gateTimedout = false;
+                foreach(Gate gate in world.worldGraph.gates)
+                {
+                    if (roomID == gate.source)
+                    {
+                        gateTimedout = true;
+                    }
+                }
+                
+                Timedout(gateTimedout);
             }
             else
             {
@@ -396,13 +404,25 @@ namespace WorldBuilder
             solver.maxDuration =  GetTimeout() + 10;
             solver.Solve(path, $" --parallel-mode {cpus} --time-limit={GetTimeout()}");
         }
-        int addedTimeoutMax = 1000;
+        int addedTimeoutMax = 2000;
         int addedTimeout = 0;
         int addedTimeoutStep = 100;
+        int addedTimeoutGateStep = 500;
 
         private int GetTimeout()
         {
             return timeout  + addedTimeout;
+        }
+        private void Timedout(bool timeoutGate)
+        {
+            if (timeoutGate)
+            {
+                addedTimeout = Mathf.Clamp(addedTimeout + addedTimeoutGateStep, 0, addedTimeoutMax);
+            }
+            else
+            {
+                Timedout();
+            }
         }
         private void Timedout()
         {
