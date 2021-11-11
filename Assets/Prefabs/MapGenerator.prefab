@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CMap: {fileID: 0}
+  freeObjects: {fileID: 11400000, guid: 5e608c3c897168244a79fcd9f11764c9, type: 2}

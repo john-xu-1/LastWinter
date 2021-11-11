@@ -151,6 +151,9 @@ namespace WorldBuilder
         ";
 
         public static string enemy_rules = @"
+
+            tile_type (enemy_door, enemy_non_gated_door).
+            
             tile_type(enemy_door).
 
             border_tile(XX,YY) :- tile(XX,YY,_), XX == 1, path(_,_,left,left).
@@ -158,10 +161,26 @@ namespace WorldBuilder
             border_tile(XX,YY) :- tile(XX,YY,_), YY == 1, path(_,_,top,top).
             border_tile(XX,YY) :- tile(XX,YY,_), YY == max_height, path(_,_,bottom,bottom).
 
-            1{gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_door)}1 :- gated_door(Type).
-            1{non_gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_door)}1 :- non_gated_door(Type).
+            1{gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_door), YY == 1}1 :- gated_door(top).
+            1{gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_door), XX == max_width}1 :- gated_door(right).
+            1{gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_door), YY == max_height}1 :- gated_door(bottom).
+            1{gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_door), XX == 1}1 :- gated_door(left).
+
+            1{non_gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_non_gated_door), YY == 1}1 :- non_gated_door(top).
+            1{non_gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_non_gated_door), XX == max_width}1 :- non_gated_door(right).
+            1{non_gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_non_gated_door), YY == max_height}1 :- non_gated_door(bottom).
+            1{non_gated_door(XX,YY) : path(_,_,Type,Type), tile(XX,YY,enemy_non_gated_door), XX == 1}1 :- non_gated_door(left).
+
+
+            :- non_gated_door (top), tile(_,1,enemy_door).
+            :- non_gated_door (right), tile(max_width,_,enemy_door).
+            :- non_gated_door (bottom), tile(_,max_height, enemy_door).
+            :- non_gated_door (left), tile(1,_,enemy_door).
+
+            
 
             :- tile(XX,YY,enemy_door), not border_tile(XX,YY).
+            :- tile(XX,YY,enemy_non_gated_door), not border_tile(XX,YY).
             :- tile(XX,YY,empty), border_tile(XX,YY).
 
             #show gated_door/2.

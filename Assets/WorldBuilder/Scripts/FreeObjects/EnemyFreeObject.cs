@@ -48,8 +48,9 @@ namespace WorldBuilder
             string code = FreeObject.GetItemRules(FreeObject.FreeObjectTypes.enemy, type.ToString(), 1, 1);
             code += $@"
                 :- free_object(XX,YY,{FreeObjectTypes.enemy},{type}), not floor(XX,YY+1).
-
                 
+                
+
                 :- free_object(XX,YY,{FreeObjectTypes.enemy},{type}), XX == max_width.
                 :- free_object(XX,YY,{FreeObjectTypes.enemy},{type}), XX == 1.
 

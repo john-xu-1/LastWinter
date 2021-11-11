@@ -32,6 +32,10 @@ public class CollisionMap : MonoBehaviour
     //    mapGrid = new CollisionTile[worldWidth,worldHeight];
     //}
 
+    private List<Vector2Int> doorTiles = new List<Vector2Int>();
+
+    private List<Vector2Int> enemyGateDoorTiles = new List<Vector2Int>();
+    private List<Vector2Int> enemyNonGateDoorTiles = new List<Vector2Int>();
 
 
     public CollisionTile AddCollisionTiles(Vector2Int pos, int type, Room room)
@@ -216,22 +220,39 @@ public class CollisionMap : MonoBehaviour
                 if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
+                    doorTiles.Add(tile.pos);
                 }
                 else
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, door);
+                    doorTiles.Add(tile.pos);
                 }
                 
             }
-            else if(tile.type == 5) //enemy door
+            else if(tile.type == 5) //enemy door gated
             {
                 if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, enemyDoor);
+                    enemyGateDoorTiles.Add(tile.pos);
                 }
                 else
                 {
                     PlaceTile(doorTilemap, (Vector3Int)tile.pos, enemyDoor);
+                    enemyGateDoorTiles.Add(tile.pos);
+                }
+            }
+            else if (tile.type == 6) //enemy door non-gated 
+            {
+                if (DebugMode(Debugging.Debugger.DebugTypes.tile_rules))
+                {
+                    PlaceTile(doorTilemap, (Vector3Int)tile.pos, enemyDoor);
+                    enemyNonGateDoorTiles.Add(tile.pos);
+                }
+                else
+                {
+                    PlaceTile(doorTilemap, (Vector3Int)tile.pos, enemyDoor);
+                    enemyNonGateDoorTiles.Add(tile.pos);
                 }
             }
 

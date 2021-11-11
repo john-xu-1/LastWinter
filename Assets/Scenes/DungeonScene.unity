@@ -2520,7 +2520,7 @@ GameObject:
   - component: {fileID: 1922578365}
   - component: {fileID: 1922578364}
   m_Layer: 0
-  m_Name: TilemapWaterDoor
+  m_Name: TilemapDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2920,31 +2920,15 @@ PrefabInstance:
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: door
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: lava
-      value: 
-      objectReference: {fileID: 11400000, guid: 2a18b69755f2649ff8a609653c40d93d, type: 2}
-    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: water
-      value: 
-      objectReference: {fileID: 11400000, guid: 945c4aa4acb1545ea9af81dc59a39ea6, type: 2}
-    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: lavaTop
-      value: 
-      objectReference: {fileID: 11400000, guid: 2208384aaf59746d892007f80244712d, type: 2}
+      objectReference: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 710373882}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: waterTop
+      propertyPath: enemyDoor
       value: 
-      objectReference: {fileID: 11400000, guid: 45d2951da076b4051be3866db2630d81, type: 2}
-    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
-      propertyPath: debugMode
-      value: 0
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: doorTilemap
       value: 
