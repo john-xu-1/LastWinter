@@ -42,11 +42,11 @@ public class EnemyBehaviorBase : MonoBehaviour
     public virtual void defaultAI()
     {
         Vector3 target = p.transform.position;
-        Vector2 direction = (target - transform.position).normalized;
+        Vector2 direction = ((target - transform.position) * Vector2.right).normalized;
 
         rb.AddForce(new Vector2(direction.x * 5, rb.velocity.y),ForceMode2D.Force);
 
-        
+        Debug.Log(direction);
 
     }
 
