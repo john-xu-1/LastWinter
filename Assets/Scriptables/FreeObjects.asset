@@ -66,6 +66,6 @@ MonoBehaviour:
     y: 0
     FreeObjectType: 2
     variation: 
-    gameObject: {fileID: 1507855356422977492, guid: 8ee6e7c2b85cfad40bb1cf915b125fc9, type: 3}
+    gameObject: {fileID: 2357665500223181813, guid: 3ebed6d9e63f7a444b66be4fc6243a53, type: 3}
     enemyType: 4
   environmentFreeObjects: []
