@@ -94,6 +94,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 8650846307083439780}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  traversingType: 0
 --- !u!1001 &2357665499474211541
 PrefabInstance:
   m_ObjectHideFlags: 0
