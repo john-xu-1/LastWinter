@@ -1233,11 +1233,11 @@ MonoBehaviour:
   minGatePerKey: 2
   bossGateKey: 1
   jumpHeadroom: 3
-  timeout: 1000
+  timeout: 45
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
-  gates: 01000000040000000300000002000000
-  MapSource: 5
+  gates: 02000000040000000300000001000000
+  MapSource: 2
   world:
     name: 
     worldGraph:
@@ -1267,7 +1267,7 @@ MonoBehaviour:
   keyTypesDebugs: 02000000
   debugData: {fileID: 1369613144}
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 5
+  GraphBuildsMax: 21
   debugRoom:
   - bossRoom: 0
     gate:
@@ -1295,7 +1295,7 @@ MonoBehaviour:
       leftEgress: 1
       leftIngress: 1
     gates: 01000000020000000300000004000000
-  DebugFilename: World 4x4 rooms 20 x 20 Water Test
+  DebugFilename: World 4x4 rooms 20 x 20 Lava Test 11_18_21
 --- !u!4 &837976641
 Transform:
   m_ObjectHideFlags: 0
