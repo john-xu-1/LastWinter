@@ -72,13 +72,13 @@ namespace WorldBuilder
 
             if (DebugMode(Debugging.Debugger.DebugTypes.debugData) && FindObjectOfType<Debugging.DebugData>()) FindObjectOfType<Debugging.DebugData>().RuntimeDataStart(22);
         }
-
+        [SerializeField] int graphTimeout = 1500;
         void BuildingWorld()
         {
             switch (BuildState)
             {
                 case BuildStates.graph:
-                    BuildGraph(worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, timeout,cpus);
+                    BuildGraph(worldWidth, worldHeight, keyCount, maxGatePerKey, minGatePerKey, bossGateKey, 3, graphTimeout,cpus);
                     BuildState += 1;
                     break;
                 case BuildStates.graphBuilding:

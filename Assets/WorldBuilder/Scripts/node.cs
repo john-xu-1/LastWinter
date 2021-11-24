@@ -34,5 +34,22 @@ namespace WorldBuilder
             //if (rightExit) rightExit.SetColor(color);
             //if (leftExit) leftExit.SetColor(color);
         }
+
+        public void removeUp()
+        {
+            upExit.gameObject.SetActive(false);
+        }
+        public void removeDown()
+        {
+            downExit.gameObject.SetActive(false);
+        }
+        public void removeLeft()
+        {
+            leftExit.gameObject.SetActive(false);
+        }
+        public void removeRight()
+        {
+            rightExit.gameObject.SetActive(false);
+        }
     }
 }

@@ -141,21 +141,27 @@ namespace WorldBuilder
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetType("gate");
 
+                Vector2Int destinationIndex = Utility.roomID_to_index(destination, worldWidth, worldHeight);
+
                 if (destination == source + 1)
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].rightExit.SetColor(gateColor);
+                    worldGrid[destinationIndex.x, destinationIndex.y].removeLeft();
                 }
                 else if (destination == source - 1)
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].leftExit.SetColor(gateColor);
+                    worldGrid[destinationIndex.x, destinationIndex.y].removeRight();
                 }
                 else if (destination > source)
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].downExit.SetColor(gateColor);
+                    worldGrid[destinationIndex.x, destinationIndex.y].removeUp();
                 }
                 else if (destination < source)
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].upExit.SetColor(gateColor);
+                    worldGrid[destinationIndex.x, destinationIndex.y].removeDown();
                 }
 
             }
