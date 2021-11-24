@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class BossBehaviorBase : MonoBehaviour
 {
+    [SerializeField] protected LayerMask mask;
 
-    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] protected Rigidbody2D rb;
+
+    [SerializeField] protected float jumpSpeed = 5;
+
+    private Vector2 direction;
 
     public enum AttackTypes
     {
@@ -33,7 +38,42 @@ public class BossBehaviorBase : MonoBehaviour
 
     private void handleMotion()
     {
-        rb.velocity = motion();
+        Vector2 movement = motion();
+
+        float wallHeight = getWallHeight(direction.x);
+
+       if (wallHeight > 0 && wallHeight < 4)
+        {
+            if (isGrounded()) movement = new Vector2(0, wallHeight * jumpSpeed);
+            else movement = new Vector2(0, movement.y);
+        }
+
+        rb.velocity = movement;
+    }
+
+    private float getWallHeight(float dir)
+    {
+        float rayDistance = 2;
+        for (int i = 3; i >= 0; i -= 1)
+        {
+            float hitDistance = PhysicsObject.raycast(transform.position + Vector3.up * (0.5f + i), dir * Vector3.right, rayDistance, mask);
+            if (hitDistance < rayDistance) return i + 1;
+        }
+        
+
+        return 0;
+    }
+
+    private bool isGrounded()
+    {
+        for (int i = 0; i < 3; i += 1)
+        {
+            float GroundDistance = PhysicsObject.raycast(transform.position + (-1 * i) *Vector3.right, Vector3.down, 0.1f, mask);
+            if (GroundDistance <= 0.1f) return true;
+        }
+        
+        
+        return false;
     }
 
     private Vector2 motion()
@@ -42,7 +82,7 @@ public class BossBehaviorBase : MonoBehaviour
         if (traversingType == TraversingTypes.following)
         {
             Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-            Vector2 direction = ((player.position - transform.position) * Vector2.right).normalized;
+            direction = ((player.position - transform.position) * Vector2.right).normalized;
             movement = new Vector2(direction.x * followSpeed(), rb.velocity.y);
 
         }

@@ -135,4 +135,18 @@ public class PhysicsObject : MonoBehaviour
 
         
     }
+
+    public static float raycast(Vector2 start, Vector2 dir, float length, LayerMask mask)
+    {
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(start, dir, length, mask);
+        if (raycastHit2D)
+        {
+            return raycastHit2D.distance;
+        }
+        else
+        {
+
+            return float.MaxValue;
+        }
+    }
 }
