@@ -75,6 +75,7 @@ public class PhysicsObject : MonoBehaviour
     private void Update()
     {
         doOnUpdate();
+        //Debug.Log(velocity);
     }
 
     protected virtual void doOnUpdate()
