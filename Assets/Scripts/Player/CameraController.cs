@@ -14,6 +14,8 @@ public class CameraController : MonoBehaviour
 
     private int worldWidth, worldHeight, roomWidth, roomHeight;
 
+    
+
     private void Start()
     {
 
@@ -41,11 +43,18 @@ public class CameraController : MonoBehaviour
         }
         else
         {
+            
             if (target)
             {
                 //transform.position = Vector3.Lerp(transform.position, target.position + target_Offset, 0.1f);
+                Vector2 cameraOffset = Vector2.zero;
+                if (target.position.y + gridSize.y / 2 > 0) cameraOffset.y = -target.position.y - gridSize.y / 2;
+                else if (target.position.y - gridSize.y / 2 < -worldHeight*roomHeight) cameraOffset.y = -target.position.y + gridSize.y / 2 - worldHeight * roomHeight;
 
-                transform.position = target.position + target_Offset;
+                if (target.position.x - gridSize.x / 2 < 1) cameraOffset.x = - target.position.x + gridSize.x / 2 + 1;
+                else if (target.position.x + gridSize.x / 2 > worldWidth*roomWidth + 1) cameraOffset.x = -target.position.x - gridSize.x / 2 + worldWidth * roomWidth + 1;
+
+                transform.position = target.position + target_Offset + (Vector3)cameraOffset ;
             }
         }
             

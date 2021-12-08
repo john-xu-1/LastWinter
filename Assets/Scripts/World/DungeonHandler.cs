@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 using WorldBuilder;
 
@@ -40,7 +41,7 @@ public class DungeonHandler : MonoBehaviour
 
     public void PlayerSetup()
     {
-        player = Instantiate(playerPrefab, new Vector3(dungeon.startPos.x, dungeon.startPos.y, 0), Quaternion.identity).transform;
+        player = Instantiate(playerPrefab, new Vector3(dungeon.startPos.x + 0.5f, -dungeon.startPos.y + 1, 0), Quaternion.identity).transform;
         player.GetComponent<InventorySystem>().wepChipPanel = wepChipPan;
         invPan.SetActive(true);
     }
@@ -59,5 +60,11 @@ public class DungeonHandler : MonoBehaviour
     {
         
         
+    }
+
+    public void ReloadSceneButton()
+    {
+        int sceneID = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(sceneID);
     }
 }
