@@ -22,6 +22,7 @@ public class DungeonHandler : MonoBehaviour
     public GameObject wepChipPan;
     public GameObject invPan;
 
+    public GameObject DebugMenu;
 
     private int worldWidth, worldHeight, roomWidth, roomHeight;
     private bool buildingMap;
@@ -68,6 +69,7 @@ public class DungeonHandler : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape)) DebugMenu.SetActive(!DebugMenu.activeSelf); 
         if(buildingMap && !mapG.BuildingRooms)
         {
             PlayerSetup();
@@ -81,5 +83,15 @@ public class DungeonHandler : MonoBehaviour
     {
         int sceneID = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(sceneID);
+    }
+
+    public void ToggelFullScreenButton()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+    }
+
+    public void SnapToRoomButton()
+    {
+        camControl.setUp(!camControl.CameraSnap);
     }
 }

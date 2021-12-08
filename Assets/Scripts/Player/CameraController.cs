@@ -42,7 +42,7 @@ public class CameraController : MonoBehaviour
     }
     void Update()
     {
-        if (CameraSnap)
+        if (CameraSnap && target)
         {
             float targetH = target.position.y - (origin.y - gridSize.y / 2);
             float targetW = target.position.x - (origin.x - gridSize.x / 2);
@@ -93,7 +93,7 @@ public class CameraController : MonoBehaviour
             }
             else
             {
-                camera.orthographicSize += targetOthographicSizeGrowthRate;
+                camera.orthographicSize += targetOthographicSizeGrowthRate * Time.time;
             }
             UpdateGridSize();
         }
@@ -105,7 +105,7 @@ public class CameraController : MonoBehaviour
             }
             else
             {
-                camera.orthographicSize -= targetOthographicSizeGrowthRate;
+                camera.orthographicSize -= targetOthographicSizeGrowthRate * Time.time;
             }
             UpdateGridSize();
         }
@@ -137,6 +137,18 @@ public class CameraController : MonoBehaviour
         if (camera.aspect > 1) return (worldWidth * roomWidth / 2) * (1 / camera.aspect);
         else return (worldWidth * roomWidth / 2);
     }
+    public void setUp( bool CameraSnap)
+    {
+        this.CameraSnap = CameraSnap;
+        setUp(worldWidth, worldHeight, roomWidth, roomHeight, target, CameraSnap);
+
+    }
+    public void setUp(int worldWidth, int worldHeight, int roomWidth, int roomHeight, Transform player, bool CameraSnap)
+    {
+        this.CameraSnap = CameraSnap;
+        setUp(worldWidth, worldHeight, roomWidth, roomHeight, player);
+
+    }
 
     public void setUp(int worldWidth, int worldHeight, int roomWidth, int roomHeight, Transform player)
     {
@@ -155,7 +167,29 @@ public class CameraController : MonoBehaviour
         float width = camera.aspect * height;
         gridSize = new Vector2(width, height);
 
-        targetOthographicSize = FindMinTargetOthographicSize();
-        Debug.Log((worldWidth * roomWidth / 2) * (1 / camera.aspect));
+        if (!CameraSnap) targetOthographicSize = FindMinTargetOthographicSize();
+        else SetCameraSnap();
+        
+    }
+    int screenHeight = 1080;
+    int screenWidth = 1920;
+
+    public void SetCameraSnap()
+    {
+
+        if(camera.aspect >= 1)
+        {
+            SetCameraSize(roomHeight/2, false);
+            targetOthographicSize = roomHeight / 2;
+            Screen.SetResolution(screenHeight, screenHeight, true);
+        }
+        else
+        {
+            SetCameraSize((roomWidth / 2)/camera.aspect, false);
+            targetOthographicSize = (roomWidth / 2) / camera.aspect;
+            Screen.SetResolution(screenWidth, screenWidth, true);
+        }
+        UpdateGridSize(new Vector2(roomWidth, roomHeight));
+        origin = new Vector2(1 + roomWidth / 2, -roomHeight / 2);
     }
 }
