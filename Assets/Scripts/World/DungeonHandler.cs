@@ -24,6 +24,7 @@ public class DungeonHandler : MonoBehaviour
 
 
     private int worldWidth, worldHeight, roomWidth, roomHeight;
+    private bool buildingMap;
 
     public void MapSetup(World map)
     {
@@ -37,12 +38,21 @@ public class DungeonHandler : MonoBehaviour
         worldHeight = dungeon.Height;
         roomWidth = dungeon.GetRooms()[0].map.dimensions.room_width;
         roomHeight = dungeon.GetRooms()[0].map.dimensions.room_height;
+
+        buildingMap = true;
+
     }
 
     public void PlayerSetup()
     {
+        Debug.Log("PlayerSetup()");
         player = Instantiate(playerPrefab, new Vector3(dungeon.startPos.x + 0.5f, -dungeon.startPos.y + 1, 0), Quaternion.identity).transform;
         player.GetComponent<InventorySystem>().wepChipPanel = wepChipPan;
+        //SetUpPlayerUI();
+    }
+
+    public void SetUpPlayerUI()
+    {
         invPan.SetActive(true);
     }
 
@@ -58,7 +68,12 @@ public class DungeonHandler : MonoBehaviour
 
     private void Update()
     {
-        
+        if(buildingMap && !mapG.BuildingRooms)
+        {
+            PlayerSetup();
+            camSetup();
+            buildingMap = false;
+        }
         
     }
 

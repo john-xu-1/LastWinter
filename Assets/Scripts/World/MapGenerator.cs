@@ -36,12 +36,14 @@ public class MapGenerator : MonoBehaviour
     public void BuildWorld(World world)
     {
         buildingRooms = new List<Room>();
+        BuildingRooms = true;
         foreach (Room room in world.GetRooms())
         {
             buildingRooms.Add(room);
         }
     }
     List<Room> buildingRooms;
+    public bool BuildingRooms;
     private void Update()
     {
         if (buildingRooms != null && buildingRooms.Count > 0)
@@ -49,6 +51,10 @@ public class MapGenerator : MonoBehaviour
             Room room = buildingRooms[0];
             buildingRooms.RemoveAt(0);
             BuildRoom(room);
+        }
+        else
+        {
+            BuildingRooms = false;
         }
     }
 
