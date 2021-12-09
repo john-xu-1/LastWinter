@@ -15,6 +15,11 @@ public static class UtilityTilemap
         tilemap.SetTile(pos, null);
     }
 
+    public static void DestroyTile(Tilemap tilemap, Vector2 pos)
+    {
+        tilemap.SetTile(tilemap.WorldToCell((Vector3)pos), null);
+    }
+
     public static void PlaceTiles(Tilemap tilemap, Vector3Int pos, float height, float width, TileBase tileType)
     {
         int xStart = pos.x - (int)(width / 2);

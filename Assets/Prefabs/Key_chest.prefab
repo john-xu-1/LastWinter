@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 5420208671632673230}
   - component: {fileID: 7527575133975175555}
   - component: {fileID: 5908709058437589723}
+  - component: {fileID: -6268564310982112886}
   m_Layer: 0
   m_Name: Key_chest
   m_TagString: Untagged
@@ -144,10 +145,10 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1236074848859744999}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -193,3 +194,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-6268564310982112886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236074848859744999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f218cdb54ac7034798c55286c6eef88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeyType: 4

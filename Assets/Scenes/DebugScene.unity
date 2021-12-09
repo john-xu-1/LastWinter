@@ -573,6 +573,8 @@ MonoBehaviour:
   target: {fileID: 731867796}
   target_Offset: {x: 0, y: 0, z: 0}
   CameraSnap: 0
+  targetOthographicSize: 31
+  targetOthographicSizeGrowthRate: 0.01
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1387,6 +1389,8 @@ GameObject:
   - component: {fileID: 1366984903}
   - component: {fileID: 1366984905}
   - component: {fileID: 1366984902}
+  - component: {fileID: 1366984907}
+  - component: {fileID: 1366984906}
   m_Layer: 8
   m_Name: Tilemap Water
   m_TagString: Ground
@@ -1547,6 +1551,41 @@ Tilemap:
     e32: 0
     e33: 1
 --- !u!114 &1366984905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366984900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464332a6a28e8b24eb550d991126717f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FluidType: 0
+--- !u!114 &1366984906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366984900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae2f0b01a24e4de0a0813d977151a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
+  maxDuration: 0
+  magnitude: 0
+  pc: {fileID: 0}
+  ph: {fileID: 0}
+  effectName: 
+  effectIcon: {fileID: 0}
+  damageRate: 0
+  isOutWater: 1
+  timer: 0
+--- !u!114 &1366984907
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1801,6 +1840,7 @@ GameObject:
   - component: {fileID: 1584184731}
   - component: {fileID: 1584184733}
   - component: {fileID: 1584184734}
+  - component: {fileID: 1584184735}
   m_Layer: 8
   m_Name: Tilemap Lava
   m_TagString: Ground
@@ -1974,6 +2014,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FluidType: 1
+--- !u!114 &1584184735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584184729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1203148bd60b4d5b8149a9c6ee28bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
+  maxDuration: 0
+  magnitude: 0
+  pc: {fileID: 0}
+  ph: {fileID: 0}
+  effectName: 
+  effectIcon: {fileID: 0}
+  damageRate: 0
 --- !u!1 &1691751156
 GameObject:
   m_ObjectHideFlags: 0

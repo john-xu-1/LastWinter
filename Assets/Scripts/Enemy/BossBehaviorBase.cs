@@ -13,6 +13,7 @@ public class BossBehaviorBase : PhysicsObject
     private Vector2 direction;
 
 
+
     public enum AttackTypes
     {
         none,
@@ -43,6 +44,8 @@ public class BossBehaviorBase : PhysicsObject
 
 
         velocity.y = targetVelocity.y;
+
+
     }
 
     private Vector2 handleMotion()
@@ -53,8 +56,11 @@ public class BossBehaviorBase : PhysicsObject
 
         if (wallHeight > 0 && wallHeight < 4)
         {
-            if (isGround()) movement = new Vector2(0,
-                Mathf.Sqrt(wallHeight) * jumpSpeed);
+            if (isGround())
+            {
+                movement = new Vector2(0, Mathf.Sqrt(wallHeight) * jumpSpeed);
+
+            }
             else movement = new Vector2(0, movement.y);
         }
 
@@ -79,7 +85,7 @@ public class BossBehaviorBase : PhysicsObject
     {
         for (int i = 0; i < 3; i += 1)
         {
-            float GroundDistance = PhysicsObject.raycast(transform.position + (-1 + i) * Vector3.right, Vector3.down, 0.1f, mask);
+            float GroundDistance = PhysicsObject.raycast(transform.position + (-1 + i) * Vector3.right, Vector3.down, 0.02f, mask);
             if (GroundDistance <= 0.1f) return true;
         }
 
@@ -97,12 +103,10 @@ public class BossBehaviorBase : PhysicsObject
                 movement = GetComponent<FollowBehaviorBase>().Use(ref direction, ref velocity);
 
                 break;
-            case TraversingTypes.avoiding:
-
-                break;
             case TraversingTypes.randomMoving:
-
                 movement = GetComponent<RandomMovingBehaviorBase>().Use(ref direction, ref velocity);
+                break;
+            case TraversingTypes.avoiding:
 
                 break;
             case TraversingTypes.relocate:
@@ -111,21 +115,14 @@ public class BossBehaviorBase : PhysicsObject
             default:
 
                 break;
-
         }
-        
-            
 
-        
-        
 
         return movement;
 
     }
 
 
-    
 
 }
 
-    
