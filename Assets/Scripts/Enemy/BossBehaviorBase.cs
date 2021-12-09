@@ -12,14 +12,13 @@ public class BossBehaviorBase : PhysicsObject
 
     private Vector2 direction;
 
-    [SerializeField] float xDistanceBuffer = 1;
 
     public enum AttackTypes
     {
         none,
         melee,
         range,
-        areea
+        area
     }
 
     public enum TraversingTypes
@@ -27,7 +26,7 @@ public class BossBehaviorBase : PhysicsObject
         none,
         following,
         randomMoving,
-        aoviding,
+        avoiding,
         relocate
     }
 
@@ -54,7 +53,8 @@ public class BossBehaviorBase : PhysicsObject
 
         if (wallHeight > 0 && wallHeight < 4)
         {
-            if (isGround()) movement = new Vector2(0, wallHeight * jumpSpeed);
+            if (isGround()) movement = new Vector2(0,
+                Mathf.Sqrt(wallHeight) * jumpSpeed);
             else movement = new Vector2(0, movement.y);
         }
 
@@ -90,24 +90,42 @@ public class BossBehaviorBase : PhysicsObject
     private Vector2 motion()
     {
         Vector2 movement = velocity;
-        if (traversingType == TraversingTypes.following)
+        switch (traversingType)
         {
-            Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-            direction = ((player.position - transform.position) * Vector2.right).normalized;
+            case TraversingTypes.following:
 
-            if (Mathf.Abs(player.position.x - transform.position.x) < xDistanceBuffer) direction.x = 0;
-            movement = new Vector2(direction.x * followSpeed(), velocity.y);
+                movement = GetComponent<FollowBehaviorBase>().Use(ref direction, ref velocity);
+
+                break;
+            case TraversingTypes.avoiding:
+
+                break;
+            case TraversingTypes.randomMoving:
+
+                movement = GetComponent<RandomMovingBehaviorBase>().Use(ref direction, ref velocity);
+
+                break;
+            case TraversingTypes.relocate:
+
+                break;
+            default:
+
+                break;
 
         }
+        
+            
+
+        
+        
 
         return movement;
 
     }
 
-    private float followSpeed()
-    {
-        return 10;
-    }
+
+    
 
 }
 
+    
