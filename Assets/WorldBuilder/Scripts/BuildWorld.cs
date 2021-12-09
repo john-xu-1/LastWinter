@@ -139,11 +139,11 @@ namespace WorldBuilder
                 Vector2Int keyRoom = Utility.roomID_to_index(key.roomID, worldWidth, worldHeight);
                 BuildQueue.Add(keyRoom);
             }
-            foreach (Gate gate in world.worldGraph.gates)
-            {
-                Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
-                BuildQueue.Add(gateRoom);
-            }
+            //foreach (Gate gate in world.worldGraph.gates)
+            //{
+            //    Vector2Int gateRoom = Utility.roomID_to_index(gate.source, worldWidth, worldHeight);
+            //    BuildQueue.Add(gateRoom);
+            //}
             for (int y = 0; y < worldHeight; y += 1)
             {
                 for(int x = 0; x < worldWidth; x += 1)

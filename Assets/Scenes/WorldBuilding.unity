@@ -1235,7 +1235,7 @@ MonoBehaviour:
   timeout: 45
   BuiltWorldIndex: -1
   indices: 01000000020000000300000004000000
-  gates: 04000000020000000300000001000000
+  gates: 01000000020000000300000004000000
   MapSource: 2
   world:
     name: 
@@ -1266,7 +1266,7 @@ MonoBehaviour:
   keyTypesDebugs: 02000000
   debugData: {fileID: 1369613144}
   MiniMap: {fileID: 19207587}
-  GraphBuildsMax: 30
+  GraphBuildsMax: 1
   debugRoom:
   - bossRoom: 0
     gate:
