@@ -428,6 +428,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
@@ -452,7 +453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   target_Offset: {x: 0, y: 0, z: 0}
-  CameraSnap: 1
+  CameraSnap: 0
   targetOthographicSize: 31
   targetOthographicSizeGrowthRate: 0.001
 --- !u!114 &198505482
