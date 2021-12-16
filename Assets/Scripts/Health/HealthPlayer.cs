@@ -6,7 +6,7 @@ public class HealthPlayer : HealthBase
 {
     public override void death()
     {
-        Debug.Log("Player die");
+        FindObjectOfType<DungeonHandler>().ReloadSceneButton();
 
     }
 }

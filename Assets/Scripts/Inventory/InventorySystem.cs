@@ -50,13 +50,13 @@ public class InventorySystem : MonoBehaviour
 
     public EffectBase eb;
 
-    
+
 
     private void Start()
     {
         wepChipPanelChild = wepChipPanel.transform.GetChild(0).gameObject;
         wepChipPanel.SetActive(false);
-        FindObjectOfType<InventoryUI>().updateSprite(items);
+        //FindObjectOfType<InventoryUI>().updateSprite(items);
     }
 
     public void AddItem(InventoryObjects item)
@@ -111,13 +111,13 @@ public class InventorySystem : MonoBehaviour
         index--;
     }
 
-    
+
     private void Update()
     {
-        
+
         int count = 0;
 
-        
+
         for (int i = 0; i < items.Count; i++)
         {
             if (items[i] == null)
@@ -135,7 +135,7 @@ public class InventorySystem : MonoBehaviour
         {
             isInvFull = true;
         }
-        
+
 
 
 
@@ -150,14 +150,14 @@ public class InventorySystem : MonoBehaviour
                 selectedItem = null;
             }
 
-            
+
             if (curSelectedKey != 1)
             {
                 acsSpawned = false;
                 curSelectedKey = 1;
             }
-            
-            
+
+
             weaponSpawnedTargetPrefab = null;
             acsSpawnedTargetPrefab = null;
         }
@@ -242,7 +242,7 @@ public class InventorySystem : MonoBehaviour
             acsSpawnedTargetPrefab = null;
         }
 
-        
+
 
         if (selectedItem != null)
         {
@@ -284,17 +284,17 @@ public class InventorySystem : MonoBehaviour
                     }
 
                 }
-                
+
 
                 bulletSwitch(weapon.spawnedPrefab1, weapon.spawnedPrefab2, weapon.isWeaponSwitchBullet);
             }
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Accesory)
             {
 
-                
+
                 acs = (InventoryAccessory)selectedItem;
-                
-                
+
+
                 setAcsPrefab(acs.spawnPrefab);
 
 
@@ -302,11 +302,11 @@ public class InventorySystem : MonoBehaviour
                 {
                     eb = Instantiate(acs.spawnPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, Quaternion.identity).GetComponent<EffectBase>();
                     FindObjectOfType<Effectable>().addEffect(eb.GetComponent<EffectBase>());
-                    
+
                     acsSpawned = true;
                 }
-                
-                
+
+
 
             }
             /*
@@ -378,7 +378,7 @@ public class InventorySystem : MonoBehaviour
 
                             }
                         }
-                        
+
                     }
 
                     /*
@@ -540,9 +540,10 @@ public class InventorySystem : MonoBehaviour
 
 
         wepChipPanel.SetActive(false);
-        
+
     }
 
 
 
 }
+
