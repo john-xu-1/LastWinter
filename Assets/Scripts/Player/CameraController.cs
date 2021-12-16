@@ -89,11 +89,11 @@ public class CameraController : MonoBehaviour
         {
             if (targetOthographicSize - camera.orthographicSize < targetOthographicSizeGrowthRate * Time.time)
             {
-                camera.orthographicSize = targetOthographicSize;
+                setCameraSize( targetOthographicSize);
             }
             else
             {
-                camera.orthographicSize += targetOthographicSizeGrowthRate * Time.time;
+                setCameraSize(camera.orthographicSize + targetOthographicSizeGrowthRate * Time.time);
             }
             UpdateGridSize();
         }
@@ -101,11 +101,11 @@ public class CameraController : MonoBehaviour
         {
             if (camera.orthographicSize - targetOthographicSize < targetOthographicSizeGrowthRate * Time.time)
             {
-                camera.orthographicSize = targetOthographicSize;
+                setCameraSize(targetOthographicSize);
             }
             else
             {
-                camera.orthographicSize -= targetOthographicSizeGrowthRate * Time.time;
+                setCameraSize(camera.orthographicSize - targetOthographicSizeGrowthRate * Time.time);
             }
             UpdateGridSize();
         }
@@ -122,13 +122,18 @@ public class CameraController : MonoBehaviour
         this.gridSize = gridSize;
     }
 
+    private void setCameraSize(float orthographicSize)
+    {
+        camera.orthographicSize = orthographicSize;
+    }
+
     public void SetCameraSize(float orthagraphicSize)
     {
-        camera.orthographicSize = orthagraphicSize;
+        setCameraSize(orthagraphicSize);
     }
     public void SetCameraSize(float orthagraphicSize, bool updateGridSize)
     {
-        SetCameraSize(orthagraphicSize);
+        setCameraSize(orthagraphicSize);
         if (updateGridSize) UpdateGridSize();
     }
 
@@ -162,7 +167,7 @@ public class CameraController : MonoBehaviour
 
         target_Offset = Vector3.forward * -10;
         origin = transform.position;
-        Camera camera = GetComponent<Camera>();
+        //Camera camera = GetComponent<Camera>();
         float height = camera.orthographicSize * 2;
         float width = camera.aspect * height;
         gridSize = new Vector2(width, height);

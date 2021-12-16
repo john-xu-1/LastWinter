@@ -9,7 +9,8 @@ public class InventoryObjects : ScriptableObject
     {
         Chip,
         Weapon,
-        Accesory
+        Accesory,
+        Key
     }
     public ItemTypes itemType;
     public Sprite itemSprite;

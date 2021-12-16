@@ -5,7 +5,11 @@ using UnityEngine.Tilemaps;
 
 public class DoorHandler : MonoBehaviour
 {
-    public bool hasDoorKey, hasWaterKey, hasLavaKey, hasEnemyKey;
+    private KeyHandler kh;
+    private void Start()
+    {
+        kh = FindObjectOfType<KeyHandler>();
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform.CompareTag("Player"))
@@ -29,7 +33,7 @@ public class DoorHandler : MonoBehaviour
     {
         TileBase tile = UtilityTilemap.GetTile(GetComponent<Tilemap>(), pos);
         Debug.Log(tile + " : " + pos);
-        if (tile && (tile == FindObjectOfType<CollisionMap>().door && hasDoorKey) || (tile == FindObjectOfType<CollisionMap>().enemyDoor && hasEnemyKey))
+        if (tile && (tile == FindObjectOfType<CollisionMap>().door && kh.hasDoorKey) || (tile == FindObjectOfType<CollisionMap>().enemyDoor && kh.hasEnemyKey))
         {
 
             Debug.Log("Destroy Tilebase: " + tile);

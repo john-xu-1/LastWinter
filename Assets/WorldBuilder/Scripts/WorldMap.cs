@@ -15,7 +15,7 @@ namespace WorldBuilder
             graph.height = Utility.Max(world["height"]);
 
             List<Door> doors = new List<Door>();
-            foreach(List<string> door in world["door"])
+            foreach (List<string> door in world["door"])
             {
                 Door newDoor = new Door();
                 newDoor.name = door[0] + "->" + door[1];
@@ -36,7 +36,7 @@ namespace WorldBuilder
             graph.keys = Utility.GetArray(keys);
 
             List<Gate> gates = new List<Gate>();
-            foreach(List<string> gate in world["gate"])
+            foreach (List<string> gate in world["gate"])
             {
                 Gate newGate = new Gate();
                 newGate.type = int.Parse(gate[0]);
@@ -47,7 +47,7 @@ namespace WorldBuilder
             graph.gates = Utility.GetArray(gates);
 
             List<int> bossRooms = new List<int>();
-            foreach(List<string> bossRoom in world["boss_room"])
+            foreach (List<string> bossRoom in world["boss_room"])
             {
                 bossRooms.Add(int.Parse(bossRoom[0]));
             }
@@ -58,7 +58,7 @@ namespace WorldBuilder
 
             List<Gated> gatedRooms = new List<Gated>();
             if (world.ContainsKey("gated_room"))
-            {              
+            {
                 foreach (List<string> gated in world["gated_room"])
                 {
                     Gated gatedRoom = new Gated();
@@ -141,26 +141,32 @@ namespace WorldBuilder
                 worldGrid[sourceIndex.x, sourceIndex.y].SetColor(gateColor);
                 worldGrid[sourceIndex.x, sourceIndex.y].SetType("gate");
 
+                Vector2Int destinationIndex = Utility.roomID_to_index(destination, worldWidth, worldHeight);
+
                 if (destination == source + 1)
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].rightExit.SetColor(gateColor);
+                    worldGrid[destinationIndex.x, destinationIndex.y].removeLeft();
                 }
                 else if (destination == source - 1)
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].leftExit.SetColor(gateColor);
+                    worldGrid[destinationIndex.x, destinationIndex.y].removeRight();
                 }
                 else if (destination > source)
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].downExit.SetColor(gateColor);
+                    worldGrid[destinationIndex.x, destinationIndex.y].removeUp();
                 }
                 else if (destination < source)
                 {
                     worldGrid[sourceIndex.x, sourceIndex.y].upExit.SetColor(gateColor);
+                    worldGrid[destinationIndex.x, destinationIndex.y].removeDown();
                 }
 
             }
 
-            foreach(Key key in world.keys)
+            foreach (Key key in world.keys)
             {
                 Debug.Log(key.roomID + " " + key.type);
                 int keyType = key.type;
@@ -180,14 +186,14 @@ namespace WorldBuilder
             Vector2Int startIndex = Utility.roomID_to_index(startRoomID, worldWidth, worldHeight);
             worldGrid[startIndex.x, startIndex.y].SetColor(Color.green);
 
-            
-            foreach(int bossRoom in world.bossRoom.bossRooms)
+
+            foreach (int bossRoom in world.bossRoom.bossRooms)
             {
                 Vector2Int bossRoomIndex = Utility.roomID_to_index(bossRoom, worldWidth, worldHeight);
                 worldGrid[bossRoomIndex.x, bossRoomIndex.y].SetColor(Color.gray);
             }
-            
-            if(world.gatedRooms != null)
+
+            if (world.gatedRooms != null)
             {
                 foreach (Gated gatedRoom in world.gatedRooms)
                 {
@@ -201,7 +207,7 @@ namespace WorldBuilder
                     worldGrid[gatedRoomID.x, gatedRoomID.y].SetColor(gateColor);
                 }
             }
-            
+
 
         }
         public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)

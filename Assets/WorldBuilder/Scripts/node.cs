@@ -9,7 +9,7 @@ namespace WorldBuilder
         public TextMesh text;
         public SpriteRenderer marker;
         public edge upExit, downExit, rightExit, leftExit;
-        public Sprite gate, key; 
+        public Sprite gate, key;
         public void SetText(string text)
         {
             this.text.text = text;
@@ -33,6 +33,23 @@ namespace WorldBuilder
             //if (downExit) downExit.SetColor(color);
             //if (rightExit) rightExit.SetColor(color);
             //if (leftExit) leftExit.SetColor(color);
+        }
+
+        public void removeUp()
+        {
+            upExit.gameObject.SetActive(false);
+        }
+        public void removeDown()
+        {
+            downExit.gameObject.SetActive(false);
+        }
+        public void removeLeft()
+        {
+            leftExit.gameObject.SetActive(false);
+        }
+        public void removeRight()
+        {
+            rightExit.gameObject.SetActive(false);
         }
     }
 }
