@@ -88,9 +88,27 @@ public class InventorySystem : MonoBehaviour
             Debug.Log("INVENTORY FULL");
 
         }
-
+        if (item.itemType == InventoryObjects.ItemTypes.Key)
+        {
+            addKey(item);
+        }
         FindObjectOfType<InventoryUI>().updateSprite(items);
 
+    }
+
+    private void handleHasKeys()
+    {
+
+    }
+
+    private void addKey (InventoryObjects key)
+    {
+        addKey(((InventoryKey)key).KeyType);
+    }
+
+    private void addKey(WorldBuilder.GateTypes keyType)
+    {
+        FindObjectOfType<keyHandler>().KeyFound(keyType);
     }
 
     public void removeItem(InventoryObjects item)

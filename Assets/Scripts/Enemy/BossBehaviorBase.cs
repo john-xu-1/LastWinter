@@ -93,7 +93,7 @@ public class BossBehaviorBase : PhysicsObject
         return false;
     }
 
-    private Vector2 motion()
+    protected Vector2 motion()
     {
         Vector2 movement = velocity;
         switch (traversingType)
@@ -110,7 +110,7 @@ public class BossBehaviorBase : PhysicsObject
 
                 break;
             case TraversingTypes.relocate:
-
+                movement = GetComponent<RelocateBehaviorBase>().Use();
                 break;
             default:
 

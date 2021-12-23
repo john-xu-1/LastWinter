@@ -4,15 +4,30 @@ using UnityEngine;
 
 public class RelocateBehaviorBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public float coolDown = 2f;
+    [SerializeField] float nextRelTime;
+    public Vector2 Use ()
     {
-        
+        if (Time.time >= nextRelTime)
+        {
+            Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+            float x = Random.Range(player.transform.position.x - range(), player.transform.position.x + range());
+            float y = Random.Range(player.transform.position.y - range(), player.transform.position.y + range());
+            teleport(new Vector2(x, y));
+            nextRelTime = Time.time + coolDown;
+        }
+
+        return Vector2.zero;
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void teleport(Vector2 destination)
     {
-        
+        transform.position = destination;
+    }
+
+    private float range()
+    {
+        return 10;
     }
 }

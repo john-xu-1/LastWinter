@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public static class UtilityTilemap
 {
-    public static void PlaceTile (Tilemap tilemap, Vector3Int pos, TileBase tileType)
+    public static void PlaceTile(Tilemap tilemap, Vector3Int pos, TileBase tileType)
     {
         tilemap.SetTile(pos, tileType);
     }
@@ -13,6 +13,11 @@ public static class UtilityTilemap
     public static void DestroyTile(Tilemap tilemap, Vector3Int pos)
     {
         tilemap.SetTile(pos, null);
+    }
+
+    public static void DestroyTile(Tilemap tilemap, Vector2 pos)
+    {
+        tilemap.SetTile(tilemap.WorldToCell((Vector3)pos), null);
     }
 
     public static void PlaceTiles(Tilemap tilemap, Vector3Int pos, float height, float width, TileBase tileType)
@@ -36,3 +41,4 @@ public static class UtilityTilemap
 
 
 }
+

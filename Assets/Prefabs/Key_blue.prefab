@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 5420208671632673230}
   - component: {fileID: 7527575133975175555}
   - component: {fileID: 5908709058437589723}
+  - component: {fileID: 4593651792891177979}
   m_Layer: 0
   m_Name: Key_blue
   m_TagString: Untagged
@@ -130,6 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
+  sr: {fileID: 0}
   hitSize: {x: 1, y: 1}
   rangeSize: {x: 4, y: 4}
   attractionSpeed: 5
@@ -192,3 +194,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &4593651792891177979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236074848859744999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 820748069152f468dbe2d1ad127a88aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 0}
+  sr: {fileID: 0}
+  hitSize: {x: 1, y: 1}
+  rangeSize: {x: 4, y: 4}
+  attractionSpeed: 5
+  torque: 5
+  startChase: 0
+  targ: {fileID: 0}
