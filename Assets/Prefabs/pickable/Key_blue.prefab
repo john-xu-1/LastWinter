@@ -69,10 +69,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1502304521
-  m_SortingLayer: -3
+  m_SortingLayer: -4
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: 6546814c062b145288bdfe967317f4bd, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -92,12 +92,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3458627215453204865}
   - component: {fileID: 1244970617033004467}
-  - component: {fileID: 5420208671632673230}
   - component: {fileID: 7527575133975175555}
   - component: {fileID: 5908709058437589723}
-  - component: {fileID: 587872550771676844}
   m_Layer: 0
-  m_Name: Key_red
+  m_Name: Key_blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,35 +123,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1236074848859744999}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 820748069152f468dbe2d1ad127a88aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
-  sr: {fileID: 0}
+  item: {fileID: 11400000, guid: 6393fc57f79cf9340ab4f340f8694e9a, type: 2}
+  sr: {fileID: 857679178997818720}
   hitSize: {x: 1, y: 1}
   rangeSize: {x: 4, y: 4}
   attractionSpeed: 5
   torque: 5
   startChase: 0
   targ: {fileID: 0}
---- !u!58 &5420208671632673230
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1236074848859744999}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!95 &7527575133975175555
 Animator:
   serializedVersion: 3
@@ -194,23 +176,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &587872550771676844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1236074848859744999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 820748069152f468dbe2d1ad127a88aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 0}
-  sr: {fileID: 0}
-  hitSize: {x: 1, y: 1}
-  rangeSize: {x: 4, y: 4}
-  attractionSpeed: 5
-  torque: 5
-  startChase: 0
-  targ: {fileID: 0}

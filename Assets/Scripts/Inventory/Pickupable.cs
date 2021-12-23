@@ -28,7 +28,7 @@ public class Pickupable : MonoBehaviour
 
     private void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
+        if(sr == null) sr = GetComponent<SpriteRenderer>();
         sr.sprite = item.itemSprite;
         orgTorq = torque;
         rb = GetComponent<Rigidbody2D>();
