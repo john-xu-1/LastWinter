@@ -124,7 +124,7 @@ public class PlatformerController : PhysicsObject
     {
         Vector2 horInput = Vector2.zero;
 
-        horInput.x = Input.GetAxis("Horizontal");
+        horInput.x = PlayerController.canMove? Input.GetAxis("Horizontal"): 0;
 
         //flip
         if (horInput.x < 0)
@@ -169,14 +169,14 @@ public class PlatformerController : PhysicsObject
 
             if (isDash == 0)
             {
-                if (Input.GetButtonDown("Jump") && isGrounded)  
+                if (PlayerController.canJump && Input.GetButtonDown("Jump") && isGrounded)  
                 {
                     velocity.y = takeOffSpeed;
                     isFalling = true;
                     anim.SetBool("isJump", true);
                     isJump = true;
                 }
-                else if (Input.GetButtonUp("Jump"))
+                else if (PlayerController.canJump && Input.GetButtonUp("Jump"))
                 {
                     if (velocity.y > 0)
                     {
@@ -200,7 +200,7 @@ public class PlatformerController : PhysicsObject
 
                 if (isDash == 0)
                 {
-                    if (Input.GetKeyDown(KeyCode.W))
+                    if (PlayerController.canMove && Input.GetKeyDown(KeyCode.W))
                     {
                         if (Time.time >= nextDashTime)
                         {
@@ -243,7 +243,7 @@ public class PlatformerController : PhysicsObject
         {
             if (EffectorState == EffectorStates.Lava || EffectorState == EffectorStates.LavaPartial) gravityModifer = gravityModifierLava;
             else gravityModifer = gravityModifierWater;
-            if (Input.GetButton("Jump"))
+            if (PlayerController.canJump && Input.GetButton("Jump"))
             {
                 velocity.y = Mathf.Clamp(velocity.y + EffectorAcceleration * Time.deltaTime, -SinkEffector, takeOffSpeed);
             }

@@ -40,7 +40,7 @@ public class CameraController : MonoBehaviour
         float width = camera.aspect * height;
         return new Vector2(width, height);
     }
-    void Update()
+    void FixedUpdate()
     {
         if (CameraSnap && target)
         {
