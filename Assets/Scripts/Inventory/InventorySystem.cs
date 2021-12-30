@@ -158,107 +158,25 @@ public class InventorySystem : MonoBehaviour
 
 
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (PlayerController.canGameUI && Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (items.Count > 0)
-            {
-                selectedItem = items[0];
-            }
-            else
-            {
-                selectedItem = null;
-            }
-
-
-            if (curSelectedKey != 1)
-            {
-                acsSpawned = false;
-                curSelectedKey = 1;
-            }
-
-
-            weaponSpawnedTargetPrefab = null;
-            acsSpawnedTargetPrefab = null;
+            selectInventory(1);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (PlayerController.canGameUI && Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (items.Count > 1)
-            {
-                selectedItem = items[1];
-            }
-            else
-            {
-                selectedItem = null;
-            }
-
-            if (curSelectedKey != 2)
-            {
-                acsSpawned = false;
-                curSelectedKey = 2;
-            }
-
-            weaponSpawnedTargetPrefab = null;
-            acsSpawnedTargetPrefab = null;
+            selectInventory(2);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (PlayerController.canGameUI && Input.GetKeyDown(KeyCode.Alpha3))
         {
-            if (items.Count > 2)
-            {
-                selectedItem = items[2];
-            }
-            else
-            {
-                selectedItem = null;
-            }
-
-            if (curSelectedKey != 3)
-            {
-                acsSpawned = false;
-                curSelectedKey = 3;
-            }
-
-            weaponSpawnedTargetPrefab = null;
-            acsSpawnedTargetPrefab = null;
+            selectInventory(3);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        else if (PlayerController.canGameUI && Input.GetKeyDown(KeyCode.Alpha4))
         {
-            if (items.Count > 3)
-            {
-                selectedItem = items[3];
-            }
-            else
-            {
-                selectedItem = null;
-            }
-
-            if (curSelectedKey != 4)
-            {
-                acsSpawned = false;
-                curSelectedKey = 4;
-            }
-
-            weaponSpawnedTargetPrefab = null;
-            acsSpawnedTargetPrefab = null;
+            selectInventory(4);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        else if (PlayerController.canGameUI && Input.GetKeyDown(KeyCode.Alpha5))
         {
-            if (items.Count > 4)
-            {
-                selectedItem = items[4];
-            }
-            else
-            {
-                selectedItem = null;
-            }
-
-            if (curSelectedKey != 5)
-            {
-                acsSpawned = false;
-                curSelectedKey = 5;
-            }
-
-            weaponSpawnedTargetPrefab = null;
-            acsSpawnedTargetPrefab = null;
+            selectInventory(5);
         }
 
 
@@ -286,93 +204,7 @@ public class InventorySystem : MonoBehaviour
             }
             
 
-            if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
-            {
-                weapon = (InventoryWeapon)selectedItem;
-                fireRate = weapon.coolDown;
-
-                if (Input.GetButtonDown("Fire1"))
-                {
-                    if (Time.time >= nextAttackTimes[weapon.CDIndex])
-                    {
-
-                        if (!weapon.isMelee)
-                        {
-                            bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
-                        }
-                        else
-                        {
-                            pa.melee();
-                        }
-
-
-                    }
-
-                }
-
-                if (!weapon.isMelee)
-                {
-                    if (Input.GetButton("Fire2"))
-                    {
-                        //if (damage < cap) damage += Time.deltaTime;
-                        Debug.Log("Charge Holding");
-                    }
-                    else if (Input.GetButtonUp("Fire2"))
-                    {
-                        bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
-                        Debug.Log("Charge Release");
-                    }
-                }
-                
-                
-
-                if (Input.GetButtonDown("Fire2"))
-                {
-                    if (Time.time >= nextAttackTimes[weapon.CDIndex])
-                    {
-
-                        if (weapon.isMelee)
-                        {
-                            pa.meleeHeavy();
-                        }
-                        
-
-                        nextAttackTimes[weapon.CDIndex] = Time.time + fireRate;
-
-                    }
-
-                }
-
-
-                
-                
-
-
-                //to eject chip outside when holding weapon
-                if (weapon.chip)
-                {
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        if (isInvFull == false)
-                        {
-                            AddItem(weapon.chip);
-                        }
-                        else
-                        {
-                            GameObject instance = Instantiate(emptyItem, new Vector2(transform.position.x + emptySpawnOffset.x, transform.position.y + emptySpawnOffset.y), Quaternion.identity);
-                            instance.GetComponent<Pickupable>().item = weapon.chip;
-                            instance.GetComponent<SpriteRenderer>().sprite = weapon.chip.itemSprite;
-                        }
-
-
-                        weapon.chip = null;
-                    }
-
-                }
-
-
-                bulletSwitch(weapon.spawnedPrefab1, weapon.spawnedPrefab2, weapon.isWeaponSwitchBullet);
-            }
+            
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Accesory)
             {
 
@@ -540,40 +372,69 @@ public class InventorySystem : MonoBehaviour
 
     }
 
+    private void selectInventory(int alpha)
+    {
+        if (items.Count > alpha-1)
+        {
+            selectedItem = items[alpha-1];
+            if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon) pa.weapon = (InventoryWeapon)selectedItem;
+            else
+            {
+                pa.setMelSr(null);
+                pa.weapon = null;
+            }
+        }
+        else
+        {
+            selectedItem = null;
+            pa.setMelSr(null);
+            pa.weapon = null;
+        }
+        //set weapon in PlayerAttack
+        if (curSelectedKey != alpha)
+        {
+            acsSpawned = false;
+            curSelectedKey = alpha;
+        }
+
+        weaponSpawnedTargetPrefab = null;
+        acsSpawnedTargetPrefab = null;
+    }
+
     public void setAcsPrefab(GameObject prefab)
     {
         if (!acsSpawnedTargetPrefab) acsSpawnedTargetPrefab = prefab;
     }
 
-    public void bulletSwitch(GameObject a, GameObject b, bool isSwitch)
-    {
-        if (isSwitch)
-        {
-            if (!weaponSpawnedTargetPrefab) weaponSpawnedTargetPrefab = a;
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                if (weaponSpawnedTargetPrefab == a)
-                {
-                    weaponSpawnedTargetPrefab = b;
-                }
-                else if (weaponSpawnedTargetPrefab == b)
-                {
-                    weaponSpawnedTargetPrefab = a;
-                }
-                else
-                {
-                    Debug.Log("Something Went Wrong");
-                }
-            }
-        }
-        else
-        {
-            if (!weaponSpawnedTargetPrefab) weaponSpawnedTargetPrefab = a;
-        }
+    //public void bulletSwitch(GameObject a, GameObject b, bool isSwitch)
+    //{
+    //    if (isSwitch)
+    //    {
+    //        if (!weaponSpawnedTargetPrefab) weaponSpawnedTargetPrefab = a;
+    //        if (Input.GetKeyDown(KeyCode.C))
+    //        {
+    //            if (weaponSpawnedTargetPrefab == a)
+    //            {
+    //                weaponSpawnedTargetPrefab = b;
+    //            }
+    //            else if (weaponSpawnedTargetPrefab == b)
+    //            {
+    //                weaponSpawnedTargetPrefab = a;
+    //            }
+    //            else
+    //            {
+    //                Debug.Log("Something Went Wrong");
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (!weaponSpawnedTargetPrefab) weaponSpawnedTargetPrefab = a;
+    //    }
 
 
 
-    }
+    //}
 
     public void setChip()
     {
