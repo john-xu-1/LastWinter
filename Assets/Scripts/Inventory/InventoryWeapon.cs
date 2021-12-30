@@ -16,13 +16,17 @@ public class InventoryWeapon : InventoryObjects
         Bottle,
         Old_Shotgun,
         BreakOfDawn,
-        Flamethrower
+        Flamethrower,
+        StabbySword,
+        Breaketh
     }
     public WeaponTypes weaponType;
 
     public GameObject spawnedPrefab1;
     public GameObject spawnedPrefab2;
     public float coolDown;
+
+    public bool isMelee = false;
 
     public float destroyAfterTime;
 

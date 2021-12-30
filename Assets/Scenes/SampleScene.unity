@@ -1104,6 +1104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CMap: {fileID: 76890016}
   freeObjects: {fileID: 0}
+  BuildingRooms: 0
 --- !u!1 &233918060
 GameObject:
   m_ObjectHideFlags: 0
@@ -1411,6 +1412,8 @@ MonoBehaviour:
   target: {fileID: 731867796}
   target_Offset: {x: 0, y: 0, z: 0}
   CameraSnap: 0
+  targetOthographicSize: 31
+  targetOthographicSizeGrowthRate: 0.01
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -17796,6 +17799,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 198491038, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.02162745
+      objectReference: {fileID: 0}
     - target: {fileID: 4952244571176048423, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: wepChipPanel
       value: 
@@ -17847,6 +17854,10 @@ PrefabInstance:
     - target: {fileID: 6154040031498853887, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174317057381277557, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.0062104934
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d021e07fd68584ae184f35db76284713, type: 3}

@@ -58,7 +58,7 @@ public class CameraController : MonoBehaviour
 
             if (target)
             {
-                //transform.position = Vector3.Lerp(transform.position, target.position + target_Offset, 0.1f);
+                transform.position = Vector3.Lerp(transform.position, target.position + target_Offset, 0.1f);
                 Vector2 cameraOffset = Vector2.zero;
                 if (resolution.x != Screen.width || resolution.y != Screen.height)
                 {
@@ -76,7 +76,7 @@ public class CameraController : MonoBehaviour
                 if (target.position.x - gridSize.x / 2 < 1) cameraOffset.x = -target.position.x + gridSize.x / 2 + 1;
                 else if (target.position.x + gridSize.x / 2 > worldWidth * roomWidth + 1) cameraOffset.x = -target.position.x - gridSize.x / 2 + worldWidth * roomWidth + 1;
 
-                transform.position = target.position + target_Offset + (Vector3)cameraOffset;
+                //transform.position = target.position + target_Offset + (Vector3)cameraOffset;
             }
         }
 

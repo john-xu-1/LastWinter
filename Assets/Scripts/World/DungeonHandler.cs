@@ -49,7 +49,7 @@ public class DungeonHandler : MonoBehaviour
         Debug.Log("PlayerSetup()");
         player = Instantiate(playerPrefab, new Vector3(dungeon.startPos.x + 0.5f, -dungeon.startPos.y + 1, 0), Quaternion.identity).transform;
         player.GetComponent<InventorySystem>().wepChipPanel = wepChipPan;
-        //SetUpPlayerUI();
+        SetUpPlayerUI();
     }
 
     public void SetUpPlayerUI()

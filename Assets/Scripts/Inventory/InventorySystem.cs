@@ -10,7 +10,7 @@ public class InventorySystem : MonoBehaviour
     public InventoryObjects selectedItem;
     public SpriteRenderer SelectedRenderer;
 
-    public InventoryWeapon iw;
+    
     private float fireRate;
     public float[] nextAttackTimes;
 
@@ -24,8 +24,6 @@ public class InventorySystem : MonoBehaviour
     GameObject acsSpawnedTargetPrefab;
 
     float Zfactor;
-
-    //bool isAcsSpawned;
 
     public int maxItemSize;
 
@@ -44,11 +42,14 @@ public class InventorySystem : MonoBehaviour
 
     private int curSelectedKey = 0;
 
+    public PlayerAttack pa;
+    
+
     List<InventoryWeapon> wep;
     Dropdown dpd;
 
 
-    public EffectBase eb;
+    [SerializeField] EffectBase eb;
 
 
 
@@ -264,22 +265,88 @@ public class InventorySystem : MonoBehaviour
 
         if (selectedItem != null)
         {
-            SelectedRenderer.sprite = selectedItem.itemSprite;
+            if (selectedItem.itemType != InventoryObjects.ItemTypes.Weapon)
+            {
+                SelectedRenderer.sprite = selectedItem.itemSprite;
+                pa.setMelSr(null);
+            }
+            else
+            {
+                InventoryWeapon w = (InventoryWeapon)selectedItem;
+                if (!w.isMelee)
+                {
+                    SelectedRenderer.sprite = selectedItem.itemSprite;
+                    pa.setMelSr(null);
+                }
+                else
+                {
+                    pa.setMelSr(selectedItem.itemSprite);
+                    SelectedRenderer.sprite = null;
+                }
+            }
+            
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
             {
                 weapon = (InventoryWeapon)selectedItem;
                 fireRate = weapon.coolDown;
 
-                if (Input.GetButton("Fire1"))
+                if (Input.GetButtonDown("Fire1"))
                 {
                     if (Time.time >= nextAttackTimes[weapon.CDIndex])
                     {
-                        bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
-                        nextAttackTimes[weapon.CDIndex] = Time.time + fireRate;
+
+                        if (!weapon.isMelee)
+                        {
+                            bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
+                        }
+                        else
+                        {
+                            pa.melee();
+                        }
+
+
                     }
 
                 }
+
+                if (!weapon.isMelee)
+                {
+                    if (Input.GetButton("Fire2"))
+                    {
+                        //if (damage < cap) damage += Time.deltaTime;
+                        Debug.Log("Charge Holding");
+                    }
+                    else if (Input.GetButtonUp("Fire2"))
+                    {
+                        bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
+                        Debug.Log("Charge Release");
+                    }
+                }
+                
+                
+
+                if (Input.GetButtonDown("Fire2"))
+                {
+                    if (Time.time >= nextAttackTimes[weapon.CDIndex])
+                    {
+
+                        if (weapon.isMelee)
+                        {
+                            pa.meleeHeavy();
+                        }
+                        
+
+                        nextAttackTimes[weapon.CDIndex] = Time.time + fireRate;
+
+                    }
+
+                }
+
+
+                
+                
+
 
                 //to eject chip outside when holding weapon
                 if (weapon.chip)
@@ -443,6 +510,8 @@ public class InventorySystem : MonoBehaviour
         if (bulletInstance) Destroy(bulletInstance, weapon.destroyAfterTime);
 
 
+        //turn with mouse
+
         Vector3 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
 
@@ -462,8 +531,9 @@ public class InventorySystem : MonoBehaviour
             Zfactor = 1;
             GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = false;
         }
-        GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90 * Zfactor)));
 
+        GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90 * Zfactor)));
+        
 
 
 
