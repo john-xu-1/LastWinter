@@ -12,7 +12,6 @@ public class InventorySystem : MonoBehaviour
 
     
     private float fireRate;
-    public float[] nextAttackTimes;
 
     public InventoryWeapon weapon;
     public InventoryAccessory acs;

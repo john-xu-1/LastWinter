@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Breaketh
+  m_Controller: {fileID: 9100000, guid: c962192a628bf4cd4b9c23b0b33ec42d, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 1401df2c63ae14e55a36441aff101ac3, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1401df2c63ae14e55a36441aff101ac3, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 29b53ab4d24a04882ae0a2458c85e58b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 29b53ab4d24a04882ae0a2458c85e58b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 0090b659965d546b4b5db6a3220d1cec, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0090b659965d546b4b5db6a3220d1cec, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 7ecd51933d3a24579ac0cfa20cf4281a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 7ecd51933d3a24579ac0cfa20cf4281a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: bed82250878a64503a7c9e0b162bf791, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: bed82250878a64503a7c9e0b162bf791, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 0190ea49941ef4ab49ebe6226de19dc4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0190ea49941ef4ab49ebe6226de19dc4, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 303ddad03cf3a4c14b8a26d8a43eca9e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 303ddad03cf3a4c14b8a26d8a43eca9e, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5b0c15bbbdbde455f95cfa4106a03fe4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 9140e9bc279fc4bdf9c09c99bc55ee74, type: 2}

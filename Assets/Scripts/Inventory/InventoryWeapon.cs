@@ -30,17 +30,21 @@ public class InventoryWeapon : InventoryObjects
 
     public float destroyAfterTime;
 
-    public int CDIndex;
+    public float curAttackTime;
 
     public bool isWeaponSwitchBullet;
 
     public InventoryChip chip;
 
+    public Ability1Base ab1;
+
 
     private void OnEnable()
     {
         chip = null;
+        curAttackTime = 0;
     }
+    
 
 
 }

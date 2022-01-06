@@ -22,7 +22,7 @@ public class BulletFlashlight : BulletBase
             gameObject.SetActive(false);
         }
         
-        Destroy(gameObject, weapon.CDIndex);
+        Destroy(gameObject, weapon.coolDown);
     }
 
 }

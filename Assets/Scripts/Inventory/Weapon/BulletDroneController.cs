@@ -33,7 +33,7 @@ public class BulletDroneController : BulletBase
                     Destroy(gameObject);
                     
                 }
-                FindObjectOfType<InventorySystem>().nextAttackTimes[weapon.CDIndex] = FindObjectOfType<InventorySystem>().nextAttackTimes[weapon.CDIndex] - cdMinus;
+                weapon.curAttackTime = weapon.curAttackTime - cdMinus;
                 collisionCheck = false;
             }
             

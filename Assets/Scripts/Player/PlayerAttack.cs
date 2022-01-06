@@ -12,8 +12,6 @@ public class PlayerAttack : MonoBehaviour
     public InventoryWeapon weapon;
     private float fireRate;
 
-    
-
     GameObject bulletInstance;
 
     GameObject weaponSpawnedTargetPrefab;
@@ -31,15 +29,17 @@ public class PlayerAttack : MonoBehaviour
         {
             fireRate = weapon.coolDown;
 
-            fire1Down();
-
+            ability1();
             if (!weapon.isMelee)
             {
+                fire1DownRange();
                 fire2();
                 fire2Up();
             }
             else
             {
+
+                fire1DownMelee();
                 fire2Down();
             }
 
@@ -75,6 +75,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
 
+
     public void melee()
     {
         anim.SetTrigger("isMelee");
@@ -90,24 +91,49 @@ public class PlayerAttack : MonoBehaviour
         melSr.sprite = sprite;
     }
 
-    private void fire1Down()
+    private void ability1()
+    {
+        if (PlayerController.canMelee && PlayerController.canRange && Input.GetKeyDown(KeyCode.F))
+        {
+            if (Time.time >= weapon.ab1.curAbility1Time)
+            {
+                weapon.ab1.action(anim);
+
+                anim.SetTrigger("isAbility1");
+
+                weapon.ab1.curAbility1Time = Time.time + weapon.ab1.coolDown;
+
+            }
+        }
+    }
+
+    private void fire1DownMelee()
     {
         if (PlayerController.canMelee && Input.GetButtonDown("Fire1"))
         {
-            if (Time.time >= inventorySystem.nextAttackTimes[weapon.CDIndex])
+            if (Time.time >= weapon.curAttackTime)
             {
-                if (!weapon.isMelee)
-                {
-                    bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
-                }
-                else
-                {
-                    melee();
-                }
+                melee();
+
+                weapon.curAttackTime = Time.time + fireRate;
 
             }
         }
         
+    }
+
+    private void fire1DownRange()
+    {
+        if (PlayerController.canMelee && Input.GetButtonDown("Fire1"))
+        {
+            if (Time.time >= weapon.curAttackTime)
+            {
+                bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
+
+                weapon.curAttackTime = Time.time + fireRate;
+
+            }
+        }
     }
 
     private void fire2()
@@ -127,11 +153,11 @@ public class PlayerAttack : MonoBehaviour
         {
             if (weapon.isMelee)
             {
-                if (Time.time >= inventorySystem.nextAttackTimes[weapon.CDIndex])
+                if (Time.time >= weapon.curAttackTime)
                 {
                     meleeHeavy();
 
-                    inventorySystem.nextAttackTimes[weapon.CDIndex] = Time.time + fireRate;
+                    weapon.curAttackTime = Time.time + fireRate;
 
                 }
             }
