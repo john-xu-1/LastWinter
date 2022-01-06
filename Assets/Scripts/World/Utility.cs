@@ -30,4 +30,27 @@ public static class Utility
         timeString += (int)seconds;
         return timeString;
     }
+
+    public static void SaveJsonToPlayerPrefs(string json, string key)
+    {
+        PlayerPrefs.SetString(key, json);
+    }
+
+    public static void SaveJsonToPlayerPrefs<T>(T obj, string key)
+    {
+        string json = JsonUtility.ToJson(obj);
+        PlayerPrefs.SetString(key, json);
+    }
+
+    public static string LoadJsonFromPlayerPrefs(string key)
+    {
+        if (PlayerPrefs.HasKey(key)) return PlayerPrefs.GetString(key);
+        else return null;
+    }
+
+    public static T LoadJsonFromPlayerPrefs<T>(string key)
+    {
+        if (PlayerPrefs.HasKey(key)) return JsonUtility.FromJson<T>(PlayerPrefs.GetString(key));
+        else return default;
+    }
 }

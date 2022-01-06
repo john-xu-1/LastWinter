@@ -21,6 +21,9 @@ public class CameraController : MonoBehaviour
     //private Vector2 gridSize { get { return new Vector2(camera.orthographicSize * 2, camera.aspect * camera.orthographicSize * 2); } }
     [SerializeField] private float targetOthographicSize = 31;
     [SerializeField] private float targetOthographicSizeGrowthRate = 0.01f;
+
+    [SerializeField] private bool debug;
+    [SerializeField] private int debugWorldHeight = 100, debugWorldWidth = 100;
     private void Start()
     {
 
@@ -31,6 +34,13 @@ public class CameraController : MonoBehaviour
         resolution = new Vector2(Screen.width, Screen.height);
         targetOthographicSize = camera.orthographicSize;
 
+        if(debug)
+        {
+            roomHeight = 1;
+            roomWidth = 1;
+            worldHeight = debugWorldHeight;
+            worldWidth = debugWorldWidth;
+        }
         //gridOffset = new Vector2(origin.x - gridSize.x / 2, origin.y - gridSize.y / 2);
     }
 
@@ -58,7 +68,7 @@ public class CameraController : MonoBehaviour
 
             if (target)
             {
-                transform.position = Vector3.Lerp(transform.position, target.position + target_Offset, 0.1f);
+                //transform.position = Vector3.Lerp(transform.position, target.position + target_Offset, 0.1f);
                 Vector2 cameraOffset = Vector2.zero;
                 if (resolution.x != Screen.width || resolution.y != Screen.height)
                 {
@@ -76,7 +86,8 @@ public class CameraController : MonoBehaviour
                 if (target.position.x - gridSize.x / 2 < 1) cameraOffset.x = -target.position.x + gridSize.x / 2 + 1;
                 else if (target.position.x + gridSize.x / 2 > worldWidth * roomWidth + 1) cameraOffset.x = -target.position.x - gridSize.x / 2 + worldWidth * roomWidth + 1;
 
-                //transform.position = target.position + target_Offset + (Vector3)cameraOffset;
+                transform.position = target.position + target_Offset + (Vector3)cameraOffset;
+                Debug.Log(cameraOffset + " " + gridSize);
             }
         }
 

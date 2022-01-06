@@ -530,9 +530,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   target_Offset: {x: 0, y: 0, z: 0}
-  CameraSnap: 0
+  CameraSnap: 1
   targetOthographicSize: 31
   targetOthographicSizeGrowthRate: 0.01
+  debug: 0
 --- !u!1 &129751980
 GameObject:
   m_ObjectHideFlags: 0
