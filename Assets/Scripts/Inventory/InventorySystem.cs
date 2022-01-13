@@ -50,13 +50,26 @@ public class InventorySystem : MonoBehaviour
 
     [SerializeField] EffectBase eb;
 
-
+    [SerializeField] private InventorySave inventorySave;
 
     private void Start()
     {
+
+        loadInventory();
         wepChipPanelChild = wepChipPanel.transform.GetChild(0).gameObject;
         wepChipPanel.SetActive(false);
+
         //FindObjectOfType<InventoryUI>().updateSprite(items);
+    }
+
+    private void loadInventory()
+    {
+        List <InventoryObjects> inventory = inventorySave.GetInventory();
+        foreach(InventoryObjects item in inventory)
+        {
+            Debug.Log($"item loaded: {item.itemName}");
+            AddItem(item);
+        }
     }
 
     public void AddItem(InventoryObjects item)
@@ -96,6 +109,12 @@ public class InventorySystem : MonoBehaviour
 
     }
 
+    public void SaveInventory()
+    {
+        inventorySave.SetInventory(items);
+        inventorySave.SaveInventory();
+    }
+
     private void handleHasKeys()
     {
 
@@ -132,6 +151,9 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
+
+        //for debugging
+        if (Input.GetKeyDown(KeyCode.LeftShift)) SaveInventory();
 
         int count = 0;
 
@@ -203,93 +225,7 @@ public class InventorySystem : MonoBehaviour
             }
 
 
-            //if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
-            //{
-            //    weapon = (InventoryWeapon)selectedItem;
-            //    fireRate = weapon.coolDown;
-
-            //    if (Input.GetButtonDown("Fire1"))
-            //    {
-            //        if (Time.time >= nextAttackTimes[weapon.CDIndex])
-            //        {
-
-            //            if (!weapon.isMelee)
-            //            {
-            //                bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
-            //            }
-            //            else
-            //            {
-            //                pa.melee();
-            //            }
-
-
-            //        }
-
-            //    }
-
-            //    if (!weapon.isMelee)
-            //    {
-            //        if (Input.GetButton("Fire2"))
-            //        {
-            //            //if (damage < cap) damage += Time.deltaTime;
-            //            Debug.Log("Charge Holding");
-            //        }
-            //        else if (Input.GetButtonUp("Fire2"))
-            //        {
-            //            bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
-            //            Debug.Log("Charge Release");
-            //        }
-            //    }
-
-
-
-            //    if (Input.GetButtonDown("Fire2"))
-            //    {
-            //        if (Time.time >= nextAttackTimes[weapon.CDIndex])
-            //        {
-
-            //            if (weapon.isMelee)
-            //            {
-            //                pa.meleeHeavy();
-            //            }
-
-
-            //            nextAttackTimes[weapon.CDIndex] = Time.time + fireRate;
-
-            //        }
-
-            //    }
-
-
-
-
-
-
-            //    //to eject chip outside when holding weapon
-            //    if (weapon.chip)
-            //    {
-            //        if (Input.GetKeyDown(KeyCode.E))
-            //        {
-            //            if (isInvFull == false)
-            //            {
-            //                AddItem(weapon.chip);
-            //            }
-            //            else
-            //            {
-            //                GameObject instance = Instantiate(emptyItem, new Vector2(transform.position.x + emptySpawnOffset.x, transform.position.y + emptySpawnOffset.y), Quaternion.identity);
-            //                instance.GetComponent<Pickupable>().item = weapon.chip;
-            //                instance.GetComponent<SpriteRenderer>().sprite = weapon.chip.itemSprite;
-            //            }
-
-
-            //            weapon.chip = null;
-            //        }
-
-            //    }
-
-
-            //    bulletSwitch(weapon.spawnedPrefab1, weapon.spawnedPrefab2, weapon.isWeaponSwitchBullet);
-            //}
+            
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Accesory)
             {
@@ -312,39 +248,7 @@ public class InventorySystem : MonoBehaviour
 
 
             }
-            /*
-            else
-            {
-
-
-                if (curAcsTime <= 0)
-                {
-                    if (isAcsUndo == false)
-                    {
-                        for(int i = 0; i < curEffectorInstances.Count; i++)
-                        {
-                            if (curEffectorInstances[i])
-                            {
-                                
-                                curEffectorInstances[i].GetComponent<AcsBase>().unDo();
-                                Destroy(curEffectorInstances[i]);
-                                
-
-                                isAcsUndo = true;
-                            }
-                            
-                        }
-                    }
-
-                }
-                else
-                {
-                    isAcsUndo = false;
-                    curAcsTime -= Time.deltaTime;
-
-                }
-            }
-            */
+           
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Chip)
             {
@@ -384,27 +288,7 @@ public class InventorySystem : MonoBehaviour
 
                     }
 
-                    /*
-                    if (dpd.options.Count > 1)
-                    {
-                        for (int i = 0; i < wepNames.Count; i++)
-                        {
-                            if (i > 0)
-                            {
-                                if (dpd.options[i].text != wepNames[i - 1] || i < dpd.options.Count)
-                                {
-                                    FindObjectOfType<InventoryUI>().setDropdown(dpd, wepNames);
-                                    break;
-                                }
-                                
-                            }
-                        }
-                    }
-                    else
-                    {
-                        FindObjectOfType<InventoryUI>().setDropdown(dpd, wepNames);
-                    }
-                    */
+                    
                     FindObjectOfType<InventoryUI>().setDropdown(dpd, wepNames);
 
 

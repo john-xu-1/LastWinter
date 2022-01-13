@@ -9,4 +9,9 @@ public class DebugSaveSystem : MonoBehaviour
     {
         IS.SaveInventory("Player 1");
     }
+
+    public void RemoveSaveButton()
+    {
+        PlayerSave.RemovePlayerSave("Player 1");
+    }
 }

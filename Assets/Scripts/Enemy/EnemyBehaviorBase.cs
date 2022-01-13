@@ -46,7 +46,7 @@ public class EnemyBehaviorBase : MonoBehaviour
 
         rb.AddForce(new Vector2(direction.x * 5, rb.velocity.y),ForceMode2D.Force);
 
-        Debug.Log(direction);
+        //Debug.Log(direction);
 
     }
 

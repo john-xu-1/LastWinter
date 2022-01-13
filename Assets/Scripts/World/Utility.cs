@@ -40,6 +40,7 @@ public static class Utility
     {
         string json = JsonUtility.ToJson(obj);
         PlayerPrefs.SetString(key, json);
+        Debug.Log(json);
     }
 
     public static string LoadJsonFromPlayerPrefs(string key)
