@@ -1414,6 +1414,9 @@ MonoBehaviour:
   CameraSnap: 0
   targetOthographicSize: 31
   targetOthographicSizeGrowthRate: 0.01
+  debug: 1
+  debugWorldHeight: 100
+  debugWorldWidth: 100
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -16427,7 +16430,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1634127854
 MonoBehaviour:
   m_ObjectHideFlags: 0
