@@ -13,4 +13,19 @@ MonoBehaviour:
   m_Name: InventorySave
   m_EditorClassIdentifier: 
   inventoryObjects: []
-  allInventoryObjects: []
+  allInventoryObjects:
+  - {fileID: 11400000, guid: 86c95cfffb7e047eead740a980da51c0, type: 2}
+  - {fileID: 11400000, guid: 0426c6632016a468c9843c64823e53ec, type: 2}
+  - {fileID: 11400000, guid: 7ac549215bddb4d4b9c40ee9566c966d, type: 2}
+  - {fileID: 11400000, guid: d76f885167e9d40318add99656023cef, type: 2}
+  - {fileID: 11400000, guid: 05ecb49bed0be4155889b5712e29a72a, type: 2}
+  - {fileID: 11400000, guid: 499fd970a8e88453cb00789082a40281, type: 2}
+  - {fileID: 11400000, guid: b7b6bbf58210145f3b8dcb87cafe0dc7, type: 2}
+  - {fileID: 11400000, guid: 8fbaace1f0cb14a33be1e64c0155d306, type: 2}
+  - {fileID: 11400000, guid: 29d4d93ee6dbf4300a3170b38257ffa4, type: 2}
+  - {fileID: 11400000, guid: fe82bc11bbb714a84806ed1bb015cf21, type: 2}
+  - {fileID: 11400000, guid: 64fec7eb0a0f044b99d3d6a1d5173918, type: 2}
+  - {fileID: 11400000, guid: 7cafe256347584bfcaa5848e148b39e3, type: 2}
+  - {fileID: 11400000, guid: 658e955a762744dfead012132a84e6c0, type: 2}
+  - {fileID: 11400000, guid: b192f45b9f3bd480f9614f7bc56c1f87, type: 2}
+  saveName: 

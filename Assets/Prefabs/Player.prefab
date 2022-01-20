@@ -1098,6 +1098,7 @@ MonoBehaviour:
   wepChipPanel: {fileID: 0}
   pa: {fileID: 7488151917620585007}
   eb: {fileID: 0}
+  inventorySave: {fileID: 11400000, guid: 37c0586d1c2a3421a856ddf00e808fb8, type: 2}
 --- !u!114 &7488151917620585007
 MonoBehaviour:
   m_ObjectHideFlags: 0

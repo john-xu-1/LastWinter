@@ -7,9 +7,11 @@ public class InventorySave : ScriptableObject
 {
     [SerializeField] private List<InventoryObjects> inventoryObjects;
     [SerializeField] private InventoryObjects[] allInventoryObjects;
+    [SerializeField] private string saveName;
 
     public List<InventoryObjects> GetInventory()
     {
+        LoadInventory(saveName);
         return inventoryObjects;
     }
 
@@ -19,6 +21,12 @@ public class InventorySave : ScriptableObject
     }
 
     public void SaveInventory(string saveName)
+    {
+        this.saveName = saveName;
+        SaveInventory();
+    }
+
+    public void SaveInventory()
     {
         bool[] inventory = new bool[allInventoryObjects.Length];
         for (int i = 0; i < allInventoryObjects.Length; i += 1)
@@ -33,51 +41,20 @@ public class InventorySave : ScriptableObject
 
     public void LoadInventory(string saveName)
     {
-
-    }
-}
-
-public class PlayerSaves
-{
-    public string[] SaveList;
-}
-
-public class PlayerSave
-{
-    public string saveName;
-    public PlayerStats playerStats;
-    public bool[] inventory;
-
-    public PlayerSave (string saveName, PlayerStats ps, bool[] inventory)
-    {
-        this.saveName = saveName;
-        this.playerStats = ps;
-        this.inventory = inventory;
-    }
-
-    public static void SaveInventory(string saveName, bool[] inventory)
-    {
-        //check for "SaveList"
-        PlayerSaves SaveList = Utility.LoadFromPlayerPrefs<PlayerSaves>("SaveList");
-        if (SaveList != null)
+        inventoryObjects.Clear();
+        bool[] inventory = PlayerSave.GetInventory(saveName);
+        if (inventory != null)
         {
-
+            for (int i = 0; i < inventory.Length; i++)
+            {
+                if (inventory[i])
+                {
+                    inventoryObjects.Add(allInventoryObjects[i]);
+                }
+            }
         }
-        else
-        {
-            Debug.Log("It is null");
-        }
-        //check for saveName
-        //load PlayerSave
-        //update PlayerSave
-        //save PlayerSave
     }
 }
 
-public class PlayerStats
-{
-    public int HP;
-    public Vector2 Pos;
-}
 
 
