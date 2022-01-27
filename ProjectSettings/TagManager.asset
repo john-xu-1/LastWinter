@@ -42,6 +42,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 3892048177
+    locked: 0
   - name: ColisionTiles
     uniqueID: 1651977835
     locked: 0
