@@ -70,7 +70,7 @@ TrailRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1651977835
-  m_SortingLayer: -4
+  m_SortingLayer: -5
   m_SortingOrder: 0
   m_Time: 0.75
   m_Parameters:
@@ -281,6 +281,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62b947b4df3a64d9ab153ee230d0be72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  xDistanceBuffer: 0.5
+  movingTimeOut: 5
+  xTranslationMax: 10
+  xTranslationMin: 2
+  xDestination: 0
 --- !u!114 &7633960117310926757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,6 +298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 074c2074bdd3447f19bb26a601815194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coolDown: 2
+  nextRelTime: 0
 --- !u!1001 &1007728892946234690
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -306,15 +313,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1507855356422977488, guid: 8ee6e7c2b85cfad40bb1cf915b125fc9, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1507855356422977488, guid: 8ee6e7c2b85cfad40bb1cf915b125fc9, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1507855356422977488, guid: 8ee6e7c2b85cfad40bb1cf915b125fc9, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1507855356422977488, guid: 8ee6e7c2b85cfad40bb1cf915b125fc9, type: 3}
       propertyPath: m_SortingOrder

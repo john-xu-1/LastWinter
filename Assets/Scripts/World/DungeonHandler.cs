@@ -75,6 +75,9 @@ public class DungeonHandler : MonoBehaviour
             PlayerSetup();
             camSetup();
             buildingMap = false;
+            int maxX = worldWidth * roomWidth;
+            int maxY = worldHeight * roomHeight;
+            if (FindObjectOfType<LightingLevelSetup>()) FindObjectOfType<LightingLevelSetup>().PlaceLights(1, maxX, 1, maxY);
         }
 
     }

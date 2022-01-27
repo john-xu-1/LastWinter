@@ -9,13 +9,19 @@ public class LightingLevelSetup : MonoBehaviour
     public int minX = 1, maxX = 160, minY = 1, maxY = 160;
 
     public GameObject[] lights;
+    [SerializeField] bool debugging;
     
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = minX; i < maxX; i += 1)
+        if (debugging) PlaceLights(minX, maxX, minY, maxY);
+    }
+
+    public void PlaceLights(int minX, int maxX, int minY, int maxY)
+    {
+        for (int i = minX; i < maxX; i += 1)
         {
-            for(int j = minY; j < maxY; j += 1)
+            for (int j = minY; j < maxY; j += 1)
             {
                 if (isGround(i, -j)) placeLight(i, -j);
             }

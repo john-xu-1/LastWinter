@@ -106,6 +106,7 @@ public class Pickupable : MonoBehaviour
     void chase(Collider2D target)
     {
         Vector2 direction = (target.transform.position - transform.position).normalized;
+        if(!rb) rb = GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(direction.x * attractionSpeed, direction.y * attractionSpeed);
         rb.AddTorque(torque);
     }
