@@ -33,6 +33,8 @@ public class HealthBase : MonoBehaviour
     {
         MaxHealth = health;
         orgMaxHealth = MaxHealth;
+        Debug.Log(gameObject.name + " " + health);
+        displayHealth();
     }
 
     public void revertToOrgMax()
@@ -54,6 +56,11 @@ public class HealthBase : MonoBehaviour
     {
         health -= damage;
         curDamageType = type;
+        displayHealth();
+    }
+    protected virtual void displayHealth()
+    {
+
     }
 
     private void Update()
