@@ -14,7 +14,7 @@ public class PlayerAttack : MonoBehaviour
 
     GameObject bulletInstance;
 
-    GameObject weaponSpawnedTargetPrefab;
+    public GameObject weaponSpawnedTargetPrefab;
 
     void Start()
     {

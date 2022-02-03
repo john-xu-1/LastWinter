@@ -406,6 +406,7 @@ public class InventorySystem : MonoBehaviour
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
             {
                 pa.weapon = (InventoryWeapon)selectedItem;
+                pa.weaponSpawnedTargetPrefab = pa.weapon.spawnedPrefab1;
             }
             else
             {
