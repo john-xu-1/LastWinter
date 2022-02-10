@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealthBase : MonoBehaviour
 {
-    float MaxHealth = 0;
+    protected float MaxHealth = 0;
 
     float orgMaxHealth = 0;
 
@@ -27,6 +27,7 @@ public class HealthBase : MonoBehaviour
     private void Awake()
     {
         doOnAwake();
+        displayHealth();
     }
 
     public virtual void doOnAwake()
@@ -54,6 +55,8 @@ public class HealthBase : MonoBehaviour
     {
         health -= damage;
         curDamageType = type;
+
+        displayHealth();
     }
 
     private void Update()
@@ -99,6 +102,11 @@ public class HealthBase : MonoBehaviour
         {
             regen();
         }
+    }
+
+    protected virtual void displayHealth()
+    {
+
     }
 
     public virtual void regen()

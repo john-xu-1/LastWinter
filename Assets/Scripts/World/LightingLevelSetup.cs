@@ -10,8 +10,22 @@ public class LightingLevelSetup : MonoBehaviour
 
     public GameObject[] lightPlants;
 
+    [SerializeField] bool isTestLight;
+
     // Start is called before the first frame update
     void Start()
+    {
+        if (isTestLight) setupLighting();
+    }
+
+    public void setupLighting(int maxX, int maxY)
+    {
+        this.maxX = maxX;
+        this.maxY = maxY;
+        setupLighting();
+    }
+
+    public void setupLighting()
     {
         for (int i = minX; i < maxX; i += 1)
         {

@@ -75,6 +75,7 @@ public class DungeonHandler : MonoBehaviour
             PlayerSetup();
             camSetup();
             buildingMap = false;
+            FindObjectOfType<LightingLevelSetup>().setupLighting(worldWidth * roomWidth, worldHeight * roomHeight);
         }
 
     }
