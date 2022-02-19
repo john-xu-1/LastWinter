@@ -6,23 +6,23 @@ public class HealthBase : MonoBehaviour
 {
     protected float MaxHealth = 0;
 
-    float orgMaxHealth = 0;
+    //protected float orgMaxHealth = 0;
 
     public float health = 20;
 
     public bool isDead;
 
     public float combatCD = 5f;
-    public float nextCombatTime;
+    protected float nextCombatTime;
 
 
     public float RegenMagnitude;
 
-    public bool isCombat;
+    [SerializeField] protected bool isCombat;
 
     private string curDamageType;
 
-    bool regGapHealth = false;
+    
 
     private void Awake()
     {
@@ -33,12 +33,12 @@ public class HealthBase : MonoBehaviour
     public virtual void doOnAwake()
     {
         MaxHealth = health;
-        orgMaxHealth = MaxHealth;
+        //orgMaxHealth = MaxHealth;
     }
 
     public void revertToOrgMax()
     {
-        SetMaxHealth(orgMaxHealth);
+        //SetMaxHealth(orgMaxHealth);
     }
 
     public float GetMaxHealth()
@@ -83,25 +83,19 @@ public class HealthBase : MonoBehaviour
             }
         }
 
-        if (health > MaxHealth)
-        {
-            health = MaxHealth;
-        }
+        //if (health > MaxHealth)
+        //{
+        //    health = MaxHealth;
+        //}
 
-        if (health >= orgMaxHealth && health < MaxHealth)
-        {
-            regGapHealth = true;
-        }
-        else
-        {
-            regGapHealth = false;
-        }
+       
 
+        childUpdate();
+    }
 
-        if ((health < MaxHealth && isDead == false && isCombat == false) || regGapHealth == true)
-        {
-            regen();
-        }
+    protected virtual void childUpdate()
+    {
+
     }
 
     protected virtual void displayHealth()
@@ -109,15 +103,7 @@ public class HealthBase : MonoBehaviour
 
     }
 
-    public virtual void regen()
-    {
-        health += RegenMagnitude * Time.deltaTime;
-
-        if (health > MaxHealth)
-        {
-            health = MaxHealth;
-        }
-    }
+    
 
     /*
     public virtual float regenLine(float m, float x)

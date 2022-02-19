@@ -29,7 +29,7 @@ public class AcsHeartFlower : EffectBase
     public override void unDo()
     {
 
-        ph.revertToOrgMax();
+        //ph.revertToOrgMax();
 
         FindObjectOfType<Effectable>().effects.RemoveAt(FindObjectOfType<Effectable>().effects.IndexOf(GetComponent<AcsHeartFlower>()));
         Destroy(gameObject);

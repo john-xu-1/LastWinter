@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 64387565851223270}
   - component: {fileID: 64387565851223271}
   - component: {fileID: 2602266503938622737}
-  m_Layer: 0
+  - component: {fileID: 4244436760409001853}
+  m_Layer: 13
   m_Name: EnemyShotgunBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1744876415
-  m_SortingLayer: 2
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: fef3d16f8342341b4bd40c2a008cf163, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
@@ -131,7 +132,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64387565851223267}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7cbc84a7b27c742bb939db05a7eb4778, type: 3}
   m_Name: 
@@ -142,6 +143,26 @@ MonoBehaviour:
   whichcanhit:
     serializedVersion: 2
     m_Bits: 1024
+--- !u!114 &4244436760409001853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64387565851223267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b75864a3df8bf439c9c75d9eb624bac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 5
+  type: Enemy
+  hitpoint: {fileID: 64387565851223265}
+  range: 0.15
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 4096
+  isMelee: 0
 --- !u!1 &868686211827322469
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +173,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3872329125549690084}
   - component: {fileID: 4626992207848887008}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Point Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8485076477876282546}
   - component: {fileID: 9100150714361567991}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

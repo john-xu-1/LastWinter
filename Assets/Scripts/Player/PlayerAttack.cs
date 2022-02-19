@@ -16,6 +16,16 @@ public class PlayerAttack : MonoBehaviour
 
     public GameObject weaponSpawnedTargetPrefab;
 
+    [SerializeField] private DoDamage dd;
+
+    [SerializeField] private float curDmg;
+
+    public void setCurDmg(float d)
+    {
+        curDmg = d;
+    }
+
+
     void Start()
     {
         inventorySystem = GetComponent<InventorySystem>();
@@ -45,26 +55,26 @@ public class PlayerAttack : MonoBehaviour
 
 
             //to eject chip outside when holding weapon
-            if (weapon.chip)
-            {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    if (inventorySystem.isInvFull == false)
-                    {
-                        inventorySystem.AddItem(weapon.chip);
-                    }
-                    else
-                    {
-                        GameObject instance = Instantiate(inventorySystem.emptyItem, new Vector2(transform.position.x + inventorySystem.emptySpawnOffset.x, transform.position.y + inventorySystem.emptySpawnOffset.y), Quaternion.identity);
-                        instance.GetComponent<Pickupable>().item = weapon.chip;
-                        instance.GetComponent<SpriteRenderer>().sprite = weapon.chip.itemSprite;
-                    }
+            //if (weapon.chip)
+            //{
+            //    if (Input.GetKeyDown(KeyCode.E))
+            //    {
+            //        if (inventorySystem.isInvFull == false)
+            //        {
+            //            inventorySystem.AddItem(weapon.chip);
+            //        }
+            //        else
+            //        {
+            //            GameObject instance = Instantiate(inventorySystem.emptyItem, new Vector2(transform.position.x + inventorySystem.emptySpawnOffset.x, transform.position.y + inventorySystem.emptySpawnOffset.y), Quaternion.identity);
+            //            instance.GetComponent<Pickupable>().item = weapon.chip;
+            //            instance.GetComponent<SpriteRenderer>().sprite = weapon.chip.itemSprite;
+            //        }
 
 
-                    weapon.chip = null;
-                }
+            //        weapon.chip = null;
+            //    }
 
-            }
+            //}
 
 
             bulletSwitch(weapon.spawnedPrefab1, weapon.spawnedPrefab2, weapon.isWeaponSwitchBullet);
@@ -74,8 +84,13 @@ public class PlayerAttack : MonoBehaviour
 
     }
 
+    public void damageInflict()
+    {
+        dd.setDamage(curDmg);
+        dd.DamageInflict();
+    }
 
-
+    
     public void melee()
     {
         anim.SetTrigger("isMelee");

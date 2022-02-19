@@ -23,7 +23,8 @@ MonoBehaviour:
   coolDown: 1
   isMelee: 1
   destroyAfterTime: 0
-  curAttackTime: 0
+  curAttackTime: 26.032408
   isWeaponSwitchBullet: 0
   chip: {fileID: 0}
   ab1: {fileID: 11400000, guid: 419a85768cfc64ee5bfd78eccd53b90f, type: 2}
+  damage: 5

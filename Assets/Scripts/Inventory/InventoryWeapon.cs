@@ -38,6 +38,8 @@ public class InventoryWeapon : InventoryObjects
 
     public Ability1Base ab1;
 
+    public float damage;
+
 
     private void OnEnable()
     {

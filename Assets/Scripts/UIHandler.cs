@@ -15,7 +15,19 @@ public class UIHandler : MonoBehaviour
         playerHealthHandler.Display(playerHealth);
     }
 
-    public void setOrgHealth(float maxHealth)
+
+    public void DisplayEnemyHealth(float enemyHealthValue, UIEnemyHealthHandler enemyHandler)
+    {
+        enemyHandler.Display(enemyHealthValue);
+    }
+
+    public void setEnemyOrgHealth (float maxHealth, UIEnemyHealthHandler enemyHandler)
+    {
+        enemyHandler.setMaxDisplay(maxHealth);
+        enemyHandler.Display(maxHealth);
+    }
+
+    public void setPlayerOrgHealth(float maxHealth)
     {
         playerHealthHandler.setMaxDisplay(maxHealth);
         playerHealthHandler.Display(playerHealth);
