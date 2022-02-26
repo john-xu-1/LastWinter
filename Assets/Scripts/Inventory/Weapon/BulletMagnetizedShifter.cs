@@ -21,12 +21,12 @@ public class BulletMagnetizedShifter : BulletBase
 
     public override void triggerEnterBehavior(Collider2D collision)
     {
-        base.triggerEnterBehavior(collision);
+        
         if (collision.transform.CompareTag("bullet"))
         {
 
             SpriteRenderer sr = transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
-            SpriteRenderer sr2 = collision.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
+            SpriteRenderer sr2 = collision.transform.GetComponent<SpriteRenderer>();
 
             Vector2 direction = (collision.transform.position - transform.position).normalized;
             if (sr.sprite == sr2.sprite)
@@ -46,20 +46,20 @@ public class BulletMagnetizedShifter : BulletBase
             {
 
                 Vector2 direction = GetComponent<Rigidbody2D>().velocity.normalized;
-                collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x * speed * 5, direction.y * speed * 5);
+                collision.transform.parent.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x * speed * 5, direction.y * speed * 5);
             }
         }
     }
     public override void triggerExitBehavior(Collider2D collision)
     {
         base.triggerExitBehavior(collision);
-        if (collision.transform.CompareTag("bullet"))
+        if (collision.transform.parent.CompareTag("bullet"))
         {
-            if (collision.gameObject.GetComponent<BulletMagnetizedShifter>().weapon.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
+            if (collision.transform.parent.gameObject.GetComponent<BulletMagnetizedShifter>().weapon.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
             {
 
                 Destroy(gameObject, 0.5f);
-                Destroy(collision.gameObject, 0.5f);
+                Destroy(collision.transform.parent.gameObject, 0.5f);
             }
         }
     }

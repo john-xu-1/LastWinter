@@ -143,7 +143,12 @@ public class PlayerAttack : MonoBehaviour
         {
             if (Time.time >= weapon.curAttackTime)
             {
+
+
                 bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
+
+
+                bulletInstance.GetComponent<DoDamage>().setDamage(curDmg);
 
                 weapon.curAttackTime = Time.time + fireRate;
 

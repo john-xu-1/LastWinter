@@ -69,7 +69,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1744876415
-  m_SortingLayer: 2
+  m_SortingLayer: -2
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 90ce8510b469e40889ac79772770d452, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -151,7 +151,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1744876415
-  m_SortingLayer: 2
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4da4aa62e6dea46da8456e0cc327f33d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -233,7 +233,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1744876415
-  m_SortingLayer: 2
+  m_SortingLayer: -2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 6abb88147cb2f41d6afca6a75960da2d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -259,7 +259,8 @@ GameObject:
   - component: {fileID: 6195000860026508025}
   - component: {fileID: 3130182598144361897}
   - component: {fileID: 6572611072541343280}
-  m_Layer: 11
+  - component: {fileID: 51566873583618827}
+  m_Layer: 12
   m_Name: DroneControllerBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -358,6 +359,26 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
+--- !u!114 &51566873583618827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6104214910540336568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b75864a3df8bf439c9c75d9eb624bac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  type: Player
+  hitpoint: {fileID: 6104214910540336571}
+  range: 0.3
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 8192
+  isMelee: 0
 --- !u!1 &6104214910562325658
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,7 +448,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1744876415
-  m_SortingLayer: 2
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4da4aa62e6dea46da8456e0cc327f33d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -509,7 +530,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1744876415
-  m_SortingLayer: 2
+  m_SortingLayer: -2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: c6f7c4488188842b291bde41f60b7c7c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -591,7 +612,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1744876415
-  m_SortingLayer: 2
+  m_SortingLayer: -2
   m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: bc7a2f0dc617549658bd4bac1d9cf9f1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

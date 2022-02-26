@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 3050451465836025870}
   - component: {fileID: 3050451465836025869}
   - component: {fileID: 3050451465836025906}
-  m_Layer: 0
+  - component: {fileID: -675309743288568206}
+  m_Layer: 12
   m_Name: BreakofDawnBulletSub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,3 +150,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-675309743288568206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3050451465836025865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b75864a3df8bf439c9c75d9eb624bac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  type: Player
+  hitpoint: {fileID: 3050451465836025868}
+  range: 0.2
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 8192
+  isMelee: 0

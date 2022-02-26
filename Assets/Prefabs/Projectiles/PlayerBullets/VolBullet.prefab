@@ -85,7 +85,8 @@ GameObject:
   - component: {fileID: 7190382864366687553}
   - component: {fileID: 8016845385255410238}
   - component: {fileID: 555511711162202207}
-  m_Layer: 11
+  - component: {fileID: 5030603640912576175}
+  m_Layer: 12
   m_Name: VolBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +147,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1744876415
-  m_SortingLayer: 2
+  m_SortingLayer: -2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 9649387312ba3483c8e4741fa0a5a24d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -218,6 +219,26 @@ MonoBehaviour:
   subBullet: {fileID: 1264778190397573501, guid: dbf98894ba9fd44f6941e751653dad25, type: 3}
   isSub: 0
   KB: 25
+--- !u!114 &5030603640912576175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2891621919610108023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b75864a3df8bf439c9c75d9eb624bac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  type: Player
+  hitpoint: {fileID: 2891621919610108017}
+  range: 0.15
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 8192
+  isMelee: 0
 --- !u!1 &4440748887184078937
 GameObject:
   m_ObjectHideFlags: 0

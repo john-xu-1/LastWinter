@@ -15,6 +15,8 @@ public class EnemyBehaviorSpikes : EnemyBehaviorBase
 
     public int xIncrement = 1;
 
+    public float attackRange;
+
     int dir;
 
     List<Vector3Int> POSs = new List<Vector3Int>();

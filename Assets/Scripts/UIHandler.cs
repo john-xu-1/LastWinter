@@ -18,7 +18,7 @@ public class UIHandler : MonoBehaviour
 
     public void DisplayEnemyHealth(float enemyHealthValue, UIEnemyHealthHandler enemyHandler)
     {
-        enemyHandler.Display(enemyHealthValue);
+        if (enemyHandler) enemyHandler.Display(enemyHealthValue);
     }
 
     public void setEnemyOrgHealth (float maxHealth, UIEnemyHealthHandler enemyHandler)

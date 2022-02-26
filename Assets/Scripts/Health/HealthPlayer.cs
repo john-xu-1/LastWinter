@@ -34,7 +34,7 @@ public class HealthPlayer : HealthBase
         //    regGapHealth = false;
         //}
 
-        if ((health < MaxHealth && isDead == false && isCombat == false)/* || regGapHealth == true*/)
+        if (health < MaxHealth && isDead == false && isCombat == false/* || regGapHealth == true*/)
         {
             regen();
         }

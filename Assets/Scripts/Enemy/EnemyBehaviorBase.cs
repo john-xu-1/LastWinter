@@ -9,17 +9,12 @@ public class EnemyBehaviorBase : MonoBehaviour
     public float angerRange = 2;
     public float speed = 5;
 
-    public float damage = 5;
-
-    public float attackRange = 1;
-
-    public Transform hitPoint;
-
-    public LayerMask whichcanhit;
-
     float nextAttackTime;
 
     public float attackCD = 2;
+
+
+    public DoDamage dd;
 
     
 
@@ -33,7 +28,7 @@ public class EnemyBehaviorBase : MonoBehaviour
     void Update()
     {
         if (p) defaultAI();
-        inflictDamage();
+        //inflictDamage();
 
     }
 
@@ -54,12 +49,7 @@ public class EnemyBehaviorBase : MonoBehaviour
     {
         if (Time.time >= nextAttackTime)
         {
-            bool isHit = Physics2D.OverlapCircle(hitPoint.position, attackRange, whichcanhit);
-
-            if (isHit)
-            {
-                toDamage(damage);
-            }
+            dd.DamageInflict();
 
             nextAttackTime = Time.time + attackCD;
         }
@@ -67,17 +57,7 @@ public class EnemyBehaviorBase : MonoBehaviour
         
     }
 
-    public virtual void toDamage(float damage)
-    {
-        if (p.GetComponent<HealthBase>())
-        {
-            p.GetComponent<HealthBase>().TakeDamage(damage, "Enemy" );
-        }
-        else
-        {
-            Debug.Log("healthbase not found");
-        }
-    }
+    
 
     public float getDistX(Transform player, Transform self)
     {

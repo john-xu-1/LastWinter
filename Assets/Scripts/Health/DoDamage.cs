@@ -41,7 +41,10 @@ public class DoDamage : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isMelee) collision.transform.GetComponent<TakeDamage>().Damage(damage, type);
+        if (!isMelee && !collision.transform.CompareTag("bullet") && collision.transform.GetComponent<TakeDamage>())
+        {
+            collision.transform.GetComponent<TakeDamage>().Damage(damage, type);
+        }
     }
 
 

@@ -19,6 +19,8 @@ public class EnemyBehaviorBounceBoi : EnemyBehaviorBase
         {
             rb.velocity = Vector2.up * speed;
         }
+
+        inflictDamage();
     }
 
     

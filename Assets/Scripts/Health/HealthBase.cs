@@ -18,7 +18,7 @@ public class HealthBase : MonoBehaviour
 
     public float RegenMagnitude;
 
-    [SerializeField] protected bool isCombat;
+    [SerializeField] protected bool isCombat = false;
 
     private string curDamageType;
 
@@ -74,10 +74,12 @@ public class HealthBase : MonoBehaviour
             {
                 nextCombatTime = Time.time + combatCD;
                 isCombat = false;
+                Debug.Log("not combat");
                 curDamageType = "";
             }
             else
             {
+                Debug.Log("combat");
                 isCombat = true;
                 
             }
