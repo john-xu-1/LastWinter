@@ -67,21 +67,24 @@ public class Pickupable : MonoBehaviour
                 torque = 0f;
             }
         }
-        
-        
-        if (FindObjectOfType<InventorySystem>().isInvFull == false && startChase)
-        {
-            chase(targ);
-            torque = orgTorq;
-            Debug.Log("chase");
-        }
 
-        if (FindObjectOfType<InventorySystem>().isInvFull == true && startChase)
+        if (FindObjectOfType<InventorySystem>())
         {
-            rb.velocity = Vector2.zero;
-            startChase = false;
-            torque = 0f;
+            if (FindObjectOfType<InventorySystem>().isInvFull == false && startChase)
+            {
+                chase(targ);
+                torque = orgTorq;
+                Debug.Log("chase");
+            }
+
+            if (FindObjectOfType<InventorySystem>().isInvFull == true && startChase)
+            {
+                rb.velocity = Vector2.zero;
+                startChase = false;
+                torque = 0f;
+            }
         }
+        
         
 
         foreach (Collider2D hit in hits)

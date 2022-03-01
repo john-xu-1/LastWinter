@@ -128,10 +128,10 @@ namespace WorldBuilder
             return chamber_rule;
         }
 
-        public static List<Tile> get_exits(int width, int height, Dictionary<string, List<List<string>>> map, string side)
+        public static List<Tile> get_exits(int width, int height, Clingo.AnswerSet map, string side)
         {
             List<Tile> wall = new List<Tile>();
-            foreach (List<string> tile in map["tile"])
+            foreach (List<string> tile in map.Value["tile"])
             {
                 if (side == "up" && tile[1] == "1" || side == "down" && tile[1] == height.ToString() || side == "left" && tile[0] == "1" || side == "right" && tile[0] == width.ToString())
                 {
@@ -146,7 +146,7 @@ namespace WorldBuilder
             return wall;
         }
 
-        public static List<Tile> get_entrances(int width, int height, Dictionary<string, List<List<string>>> map, string side)
+        public static List<Tile> get_entrances(int width, int height, Clingo.AnswerSet map, string side)
         {
             List<Tile> wall = new List<Tile>();
             if (side == "up")

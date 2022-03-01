@@ -326,7 +326,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1651977835
-  m_SortingLayer: -4
+  m_SortingLayer: -5
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -573,6 +573,11 @@ MonoBehaviour:
   target: {fileID: 731867796}
   target_Offset: {x: 0, y: 0, z: 0}
   CameraSnap: 0
+  targetOthographicSize: 31
+  targetOthographicSizeGrowthRate: 0.01
+  debug: 1
+  debugWorldHeight: 100
+  debugWorldWidth: 100
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1122,7 +1127,7 @@ MonoBehaviour:
   JsonMapName: World 4x4 Rooms 25x15
   jsonFile: {fileID: 0}
   BuildOnStart: 1
-  Solver: {fileID: 1490995698}
+  Solver: {fileID: 0}
   cpus: 4
   WorldBuilder: {fileID: 11400000, guid: e69a65c60634ac64c97170e6c4ed09e1, type: 2}
   WorldsSource: {fileID: 0}
@@ -1168,6 +1173,20 @@ MonoBehaviour:
         bossRooms: 
         bossEntranceRoom: 0
         bossStartRoom: 0
+    rawGraph:
+      Solver: 
+      Input: []
+      Call:
+        Witnesses:
+          Value:
+            RawValue: []
+      Result: 
+      Time:
+        Total: 0
+        Solve: 0
+        Model: 0
+        Unsat: 0
+        CPU: 0
     width: 0
     height: 0
     RoomsArray: []
@@ -1462,7 +1481,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1651977835
-  m_SortingLayer: -4
+  m_SortingLayer: -5
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -1775,19 +1794,51 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 966846d471b1243b686278851e4dfb17, type: 3}
---- !u!114 &1490995698 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4243523052385139476, guid: 966846d471b1243b686278851e4dfb17, type: 3}
+--- !u!1 &1490995698 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4243523052385139477, guid: 966846d471b1243b686278851e4dfb17, type: 3}
   m_PrefabInstance: {fileID: 1490995697}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &1490995699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490995698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a099bab5c874424087a23890eae1a8e, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f2351d64e3c24c8691248f2b1720589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threadPriority: 32
+  aspFilePath: DataFiles/ASPFiles/queens.txt
+  clingoExecutablePathMacOS: ASP/ClingoBinaries/MacOS/clingo
+  clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
+  AdditionalArguments: 
+  maxDuration: 1200
+  FindMultipleSolutions: 0
+  numOfSolutionsWanted: 1
+  _seed: 42
+  useRandomSeed: 1
+  saveToFile: 1
+  answerSet:
+    Solver: 
+    Input: []
+    Call:
+      Witnesses:
+        Value:
+          RawValue: []
+    Result: 
+    Time:
+      Total: 0
+      Solve: 0
+      Model: 0
+      Unsat: 0
+      CPU: 0
 --- !u!1 &1584184729
 GameObject:
   m_ObjectHideFlags: 0
@@ -1861,7 +1912,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1651977835
-  m_SortingLayer: -4
+  m_SortingLayer: -5
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -2232,7 +2283,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1651977835
-  m_SortingLayer: -4
+  m_SortingLayer: -5
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -2375,6 +2426,20 @@ MonoBehaviour:
         bossRooms: 
         bossEntranceRoom: 0
         bossStartRoom: 0
+    rawGraph:
+      Solver: 
+      Input: []
+      Call:
+        Witnesses:
+          Value:
+            RawValue: []
+      Result: 
+      Time:
+        Total: 0
+        Solve: 0
+        Model: 0
+        Unsat: 0
+        CPU: 0
     width: 0
     height: 0
     RoomsArray: []
@@ -2384,7 +2449,7 @@ MonoBehaviour:
       roomHistories: []
       roomHistoryAnalysis: []
       history: []
-  Solver: {fileID: 1490995698}
+  Solver: {fileID: 1490995699}
   SolvingWorld: 0
   nodePrefab: {fileID: 5843542490171734866, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
   edgePrefab: {fileID: 4894238030931249867, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}

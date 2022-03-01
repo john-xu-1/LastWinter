@@ -67,16 +67,16 @@ namespace WorldBuilder
             }
             return permutations;
         }
-        public static bool has_opening(Dictionary<string, List<List<string>>> map, string side)
+        public static bool has_opening(Clingo.AnswerSet map, string side)
         {
             int height = 0;
             int width = 0;
-            foreach (List<string> tile in map["tile"])
+            foreach (List<string> tile in map.Value["tile"])
             {
                 width = Mathf.Max(width, int.Parse(tile[0]));
                 height = Mathf.Max(width, int.Parse(tile[1]));
             }
-            foreach (List<string> tile in map["state"])
+            foreach (List<string> tile in map.Value["state"])
             {
                 int x = int.Parse(tile[0]);
                 int y = int.Parse(tile[1]);
@@ -125,19 +125,19 @@ namespace WorldBuilder
             return max;
         }
 
-        public static Dimensions GetDimensions(Dictionary<string, List<List<string>>> world)
+        public static Dimensions GetDimensions(Clingo.AnswerSet world)
         {
             Dimensions dimensions = new Dimensions();
 
 
-            if (world.ContainsKey("dimensions"))
+            //if (world.ContainsKey("dimensions"))
+            //{
+            //    //dimensions.room_count_width = int.Parse(world["dimensions"]["room_count_width"][0]);
+            //}
+            //else
             {
-                //dimensions.room_count_width = int.Parse(world["dimensions"]["room_count_width"][0]);
-            }
-            else
-            {
-                dimensions.room_width = Max(world["width"]);
-                dimensions.room_height = Max(world["height"]);
+                dimensions.room_width = Max(world.Value["width"]);
+                dimensions.room_height = Max(world.Value["height"]);
                 dimensions.room_count_width = 1;
                 dimensions.room_count_height = 1;
             }
@@ -146,14 +146,14 @@ namespace WorldBuilder
             return dimensions;
         }
 
-        public static Tile[] GetTiles(Dictionary<string, List<List<string>>> world)
+        public static Tile[] GetTiles(Clingo.AnswerSet world)
         {
-            int height = Max(world["height"]);
-            int width = Max(world["width"]);
+            int height = Max(world.Value["height"]);
+            int width = Max(world.Value["width"]);
 
             Tile[] area = new Tile[height * width];
             int tileIndex = 0;
-            foreach (List<string> tile in world["tile"])
+            foreach (List<string> tile in world.Value["tile"])
             {
                 Tile newTile = new Tile();
                 newTile.x = int.Parse(tile[0]);
@@ -170,9 +170,9 @@ namespace WorldBuilder
                 tileIndex += 1;
             }
 
-            if (world.ContainsKey("tile_fluid"))
+            //if (world.ContainsKey("tile_fluid"))
             {
-                foreach (List<string> tileFluid in world["tile_fluid"])
+                foreach (List<string> tileFluid in world.Value["tile_fluid"])
                 {
                     
                     int x = int.Parse(tileFluid[0]);

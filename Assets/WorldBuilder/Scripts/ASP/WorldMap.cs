@@ -6,16 +6,17 @@ namespace WorldBuilder
 {
     public class WorldMap
     {
-        public static Graph ConvertGraph(Dictionary<string, List<List<string>>> world)
+        //public static Graph ConvertGraph(Dictionary<string, List<List<string>>> world)
+        public static Graph ConvertGraph(Clingo.AnswerSet world)
         {
             Graph graph = new Graph();
 
-            graph.startRoomID = int.Parse(world["start"][0][0]);
-            graph.width = Utility.Max(world["width"]);
-            graph.height = Utility.Max(world["height"]);
+            graph.startRoomID = int.Parse(world.Value["start"][0][0]);
+            graph.width = Utility.Max(world.Value["width"]);
+            graph.height = Utility.Max(world.Value["height"]);
 
             List<Door> doors = new List<Door>();
-            foreach (List<string> door in world["door"])
+            foreach (List<string> door in world.Value["door"])
             {
                 Door newDoor = new Door();
                 newDoor.name = door[0] + "->" + door[1];
@@ -26,7 +27,7 @@ namespace WorldBuilder
             graph.doors = Utility.GetArray(doors);
 
             List<Key> keys = new List<Key>();
-            foreach (List<string> key in world["key"])
+            foreach (List<string> key in world.Value["key"])
             {
                 Key newKey = new Key();
                 newKey.type = int.Parse(key[0]);
@@ -36,7 +37,7 @@ namespace WorldBuilder
             graph.keys = Utility.GetArray(keys);
 
             List<Gate> gates = new List<Gate>();
-            foreach (List<string> gate in world["gate"])
+            foreach (List<string> gate in world.Value["gate"])
             {
                 Gate newGate = new Gate();
                 newGate.type = int.Parse(gate[0]);
@@ -47,19 +48,19 @@ namespace WorldBuilder
             graph.gates = Utility.GetArray(gates);
 
             List<int> bossRooms = new List<int>();
-            foreach (List<string> bossRoom in world["boss_room"])
+            foreach (List<string> bossRoom in world.Value["boss_room"])
             {
                 bossRooms.Add(int.Parse(bossRoom[0]));
             }
             graph.bossRoom = new BossRoom();
             graph.bossRoom.bossRooms = Utility.GetArray(bossRooms);
-            graph.bossRoom.bossEntranceRoom = int.Parse(world["boss_room_entrance"][0][0]);
-            graph.bossRoom.bossStartRoom = int.Parse(world["boss_room_start"][0][0]);
+            graph.bossRoom.bossEntranceRoom = int.Parse(world.Value["boss_room_entrance"][0][0]);
+            graph.bossRoom.bossStartRoom = int.Parse(world.Value["boss_room_start"][0][0]);
 
             List<Gated> gatedRooms = new List<Gated>();
-            if (world.ContainsKey("gated_room"))
+            //if (world.ContainsKey("gated_room"))
             {
-                foreach (List<string> gated in world["gated_room"])
+                foreach (List<string> gated in world.Value["gated_room"])
                 {
                     Gated gatedRoom = new Gated();
                     gatedRoom.roomID = int.Parse(gated[0]);
@@ -210,12 +211,13 @@ namespace WorldBuilder
 
 
         }
-        public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
+        //public static void DisplayGraph(Dictionary<string, List<List<string>>> world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
+        public static void DisplayGraph(Clingo.AnswerSet world, GameObject nodePrefab, GameObject edgePrefab, Transform miniMap)
         {
-            int worldWidth = Utility.Max(world["width"]);
-            int worldHeight = Utility.Max(world["height"]);
+            int worldWidth = Utility.Max(world.Value["width"]);
+            int worldHeight = Utility.Max(world.Value["height"]);
             node[,] worldGrid = new node[worldWidth, worldHeight];
-            foreach (List<string> room in world["room"])
+            foreach (List<string> room in world.Value["room"])
             {
                 int roomID = int.Parse(room[0]);
                 Vector2Int index = Utility.roomID_to_index(roomID, worldWidth, worldHeight);
@@ -226,7 +228,7 @@ namespace WorldBuilder
                 worldGrid[index.x, index.y] = node;
             }
 
-            foreach (List<string> door in world["door"])
+            foreach (List<string> door in world.Value["door"])
             {
                 Vector2Int sourceIndex = Utility.roomID_to_index(int.Parse(door[0]), worldWidth, worldHeight);
                 Vector2Int destinationIndex = Utility.roomID_to_index(int.Parse(door[1]), worldWidth, worldHeight);
@@ -264,7 +266,7 @@ namespace WorldBuilder
                     worldGrid[sourceIndex.x, sourceIndex.y].downExit = edge;
                 }
             }
-            foreach (List<string> gate in world["gate"])
+            foreach (List<string> gate in world.Value["gate"])
             {
                 int key = int.Parse(gate[0]);
                 int source = int.Parse(gate[1]);
@@ -310,12 +312,12 @@ namespace WorldBuilder
             return boolConnection;
         }
 
-        public static RoomConnections[] get_room_connections(Dictionary<string, List<List<string>>> world_graph)
+        public static RoomConnections[] get_room_connections(Clingo.AnswerSet world_graph)
         {
-            int height = Utility.Max(world_graph["height"]);
-            int width = Utility.Max(world_graph["width"]);
+            int height = Utility.Max(world_graph.Value["height"]);
+            int width = Utility.Max(world_graph.Value["width"]);
             RoomConnections[] connections = RoomConnections.GetRoomConnectionsArray(height * width + 1);
-            foreach (List<string> door in world_graph["door"])
+            foreach (List<string> door in world_graph.Value["door"])
             {
                 int source = int.Parse(door[0]);
                 int destination = int.Parse(door[1]);

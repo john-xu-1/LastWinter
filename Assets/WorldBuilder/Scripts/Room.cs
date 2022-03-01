@@ -10,7 +10,7 @@ namespace WorldBuilder
     {
         public bool startRoom;
         public Vector2Int pos;
-        public Dictionary<string, List<List<string>>> rawMap;
+        public Clingo.AnswerSet rawMap;
         public Map map;
         //public List<Map> destroyedMaps = new List<Map>();
         public bool isDestroyed;
@@ -30,11 +30,13 @@ namespace WorldBuilder
             
             
         }
-        public void SetupRoom(Dictionary<string, List<List<string>>> rawMap)
+        //public void SetupRoom(Dictionary<string, List<List<string>>> rawMap)
+        public void SetupRoom(Clingo.AnswerSet rawMap)
         {
             isDestroyed = false;
-            this.rawMap = new Dictionary<string, List<List<string>>>(rawMap);
-            map = ConvertMap(this.rawMap);
+            this.rawMap = rawMap;
+            //this.rawMap = new Dictionary<string, List<List<string>>>(rawMap);
+            map = ConvertMap(rawMap);
             //map = ConvertMap(rawMap);
             items = ConvertItems(rawMap);
             SetupRoom(map);
@@ -88,12 +90,13 @@ namespace WorldBuilder
             }
         }
 
-        private List<FreeObject> ConvertItems(Dictionary<string, List<List<string>>> dict)
+        //private List<FreeObject> ConvertItems(Dictionary<string, List<List<string>>> dict)
+        private List<FreeObject> ConvertItems(Clingo.AnswerSet dict)
         {
             List<FreeObject> items = new List<FreeObject>();
-            if (dict.ContainsKey("free_object"))
+            //if (dict.ContainsKey("free_object"))
             {
-                foreach (List<string> item in dict["free_object"])
+                foreach (List<string> item in dict.Value["free_object"])
                 {
                     int x = int.Parse(item[0]);
                     int y = int.Parse(item[1]);
@@ -123,7 +126,8 @@ namespace WorldBuilder
             return items;
         }
 
-        public Map ConvertMap(Dictionary<string, List<List<string>>> dict)
+        //public Map ConvertMap(Dictionary<string, List<List<string>>> dict)
+        public Map ConvertMap(Clingo.AnswerSet dict)
         {
             Map map = new Map();
             map.dimensions = Utility.GetDimensions(dict);
@@ -137,7 +141,7 @@ namespace WorldBuilder
 
             List<Path> paths = new List<Path>();
             List<PathStart> pathStarts = new List<PathStart>();
-            foreach (List<string> path in dict["path"])
+            foreach (List<string> path in dict.Value["path"])
             {
                 if (path.Count == 4 && path[3] == "middle")
                 {
