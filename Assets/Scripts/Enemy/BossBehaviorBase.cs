@@ -100,7 +100,8 @@ public class BossBehaviorBase : PhysicsObject
         {
             case TraversingTypes.following:
 
-                movement = GetComponent<FollowBehaviorBase>().Use(ref direction, ref velocity);
+                if (GameObject.FindGameObjectWithTag("Player"))
+                    movement = GetComponent<FollowBehaviorBase>().Use(ref direction, ref velocity);
 
                 break;
             case TraversingTypes.randomMoving:

@@ -79,7 +79,7 @@ namespace Clingo
 
 
 
-            print("Wating");
+            print("Waiting");
             if (clingoProcess.WaitForExit(maxDuration * 1000))
             {
                 print("finished in time");
