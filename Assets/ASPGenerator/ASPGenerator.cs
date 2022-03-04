@@ -12,6 +12,7 @@ namespace ASPGenerator
         [SerializeField] protected ASPMap.ASPMapKey mapKey;
         protected bool waitingOnClingo;
 
+
         private void Start()
         {
             //startJob();

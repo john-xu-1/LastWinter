@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace ASPGenerator
 {
-    public class WorldGraphGenerator : ASPGenerator
+    public class WorldGraphGenerator : ASPFileGenerator
     {
         [SerializeField] protected int width = 4, height = 4, keyCount = 1, minGateTypeCount = 1, maxGateTypeCount = 2, bossRoomGateType = 1;
+        
 
         protected override string getASPCode()
         {
@@ -20,8 +21,13 @@ namespace ASPGenerator
 
         protected override void SATISFIABLE()
         {
+
             base.SATISFIABLE();
+            
+            
         }
+
+        
     }
 }
 
