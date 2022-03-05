@@ -17,10 +17,11 @@ public class EnemyBehaviorBounceBoi : EnemyBehaviorBase
 
         if (isGrounded)
         {
+            inflictDamage();
             rb.velocity = Vector2.up * speed;
         }
 
-        inflictDamage();
+        
     }
 
     

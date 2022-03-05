@@ -210,6 +210,10 @@ PrefabInstance:
       value: 0.95
       objectReference: {fileID: 0}
     - target: {fileID: 42491549, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
+      propertyPath: damage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 42491549, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
       propertyPath: isMelee
       value: 1
       objectReference: {fileID: 0}
@@ -243,12 +247,28 @@ PrefabInstance:
       objectReference: {fileID: 42491549}
     - target: {fileID: 1173827562917520581, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
       propertyPath: attackCD
-      value: 2.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1173827562917520582, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 2cfe49221fb954056bb9cd9b00232d80, type: 3}
+    - target: {fileID: 1173827562917520582, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1173827562917520582, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1173827562917520582, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1173827562917520583, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1173827562917520584, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
       propertyPath: m_Size.x
       value: 2.2417645
