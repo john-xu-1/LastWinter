@@ -12,6 +12,7 @@ namespace ASPGenerator
         [SerializeField] protected ASPMap.ASPMapKey mapKey;
         protected bool waitingOnClingo;
 
+        protected System.Action<Clingo.AnswerSet, ASPMap.ASPMapKey> callback;
 
         private void Start()
         {
@@ -84,7 +85,6 @@ namespace ASPGenerator
         {
             string aspCode = @"
 
-        
                 #const max_width = 40.
                 #const max_height = 40.
 
@@ -103,7 +103,6 @@ namespace ASPGenerator
                 :- tile(X1,Y1, filled), tile(X2,Y2,filled), X1 == X2 + Offset, Y1 == Y2 + Offset, width(Offset).
                 :- tile(X1,Y1, filled), tile(X2,Y2,filled), X1 == X2 + Offset, Y1 == Y2 - Offset, width(Offset).
 
-
             ";
 
             return aspCode;
@@ -116,6 +115,7 @@ namespace ASPGenerator
 
         virtual protected void startGenerator()
         {
+            callback = map.DisplayMap;
             string filename = Clingo.ClingoUtil.CreateFile(aspCode);
             solver.maxDuration = timeout + 10;
             solver.Solve(filename,getAdditionalParameters());
@@ -134,8 +134,9 @@ namespace ASPGenerator
 
         virtual protected void SATISFIABLE()
         {
-            map.DisplayMap(solver.answerSet, mapKey);
-            map.AdjustCamera();
+            callback(solver.answerSet, mapKey);
+            //map.DisplayMap(solver.answerSet, mapKey);
+            //map.AdjustCamera();
             Debug.LogWarning("SATISFIABLE unimplemented");
         }
 
