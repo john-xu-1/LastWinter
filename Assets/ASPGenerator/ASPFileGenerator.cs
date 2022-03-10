@@ -14,6 +14,10 @@ namespace ASPGenerator{
             saveToFile,
             generateFromFile
         }
+        public void InitializeGenerator(ASPGeneratorBehavior generatorBehavior)
+        {
+            this.generatorBehavior = generatorBehavior;
+        }
 
         protected override void startGenerator()
         {
@@ -25,22 +29,22 @@ namespace ASPGenerator{
             }
         }
 
-        protected override void SATISFIABLE()
+        protected override void finalizeGenerator()
         {
-
-            base.SATISFIABLE();
             if (generatorBehavior == ASPGeneratorBehavior.saveToFile)
             {
                 saveToJson();
             }
-
+            base.finalizeGenerator();
         }
+
+        
 
         protected virtual void generateFromJson(string jsonFilename)
         {
             string answersetJson = WorldBuilder.SaveUtility.GetFile(jsonFilename);
             Clingo.AnswerSet answerSet = JsonUtility.FromJson<Clingo.AnswerSet>(answersetJson);
-            map.DisplayMap(answerSet, mapKey);
+            satifiableCallBack(answerSet,"");
         }
 
         protected virtual void saveToJson()

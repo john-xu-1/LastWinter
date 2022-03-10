@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomGenerator : ASPGenerator.ASPFileGenerator
+namespace ASPGenerator
 {
-    protected override string getASPCode()
+    public class RoomGenerator : ASPFileGenerator
     {
-        return base.getASPCode();
+        protected override string getASPCode()
+        {
+            return base.getASPCode();
+        }
     }
 }
+

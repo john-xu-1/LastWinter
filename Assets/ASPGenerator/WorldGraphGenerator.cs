@@ -8,7 +8,16 @@ namespace ASPGenerator
     {
         [SerializeField] protected int width = 4, height = 4, keyCount = 1, minGateTypeCount = 1, maxGateTypeCount = 2, bossRoomGateType = 1;
         
-
+        
+        public void StartGenerator(int width, int height, int keyCount, int minGateTypeCount, int bossRoomGateType)
+        {
+            
+            this.width = width;
+            this.height = height;
+            this.keyCount = keyCount;
+            this.minGateTypeCount = minGateTypeCount;
+            this.bossRoomGateType = bossRoomGateType;
+        }
         protected override string getASPCode()
         {
             return WorldBuilder.WorldMap.test_text + WorldBuilder.WorldMap.bidirectional_rules + WorldBuilder.WorldMap.gate_key_rules;
@@ -19,13 +28,7 @@ namespace ASPGenerator
             return $" -c max_width={width} -c max_height={height} -c key_count={keyCount} -c max_gate_type_count={maxGateTypeCount} -c min_gate_type_count={minGateTypeCount} -c boss_gate_type={bossRoomGateType}  " + base.getAdditionalParameters();
         }
 
-        protected override void SATISFIABLE()
-        {
-
-            base.SATISFIABLE();
-            
-            
-        }
+        
 
         
     }

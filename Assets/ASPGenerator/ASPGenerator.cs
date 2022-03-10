@@ -8,16 +8,22 @@ namespace ASPGenerator
     {
         [SerializeField] protected int cpus = 4, timeout = 100;
         [SerializeField] protected Clingo.ClingoSolver solver;
-        [SerializeField] protected ASPMap.ASPMap map;
-        [SerializeField] protected ASPMap.ASPMapKey mapKey;
+        //[SerializeField] protected ASPMap.ASPMap map;
+        //[SerializeField] protected ASPMap.ASPMapKey mapKey;
         protected bool waitingOnClingo;
 
-        protected System.Action<Clingo.AnswerSet, ASPMap.ASPMapKey> callback;
+        protected System.Action<Clingo.ClingoSolver.Status,Clingo.AnswerSet, string> callback;
+        protected System.Action<Clingo.AnswerSet, string> satifiableCallBack;
+        protected System.Action<string> unsatifiableCallBack;
+        protected System.Action<int, string> timedoutCallBack;
+        protected System.Action<string, string> errorCallBack;
+        protected string filename;
+        protected string jobID = "";
 
         private void Start()
         {
-            //startJob();
-            startGenerator();
+            //InitializeGenerator(SATISFIABLE, UNSATISFIABLE, TIMEDOUT, ERROR);
+            //startGenerator();
         }
         // Update is called once per frame
         void Update()
@@ -27,56 +33,68 @@ namespace ASPGenerator
                 if (solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
                 {
                     //map.DisplayMap(Solver.answerSet,mapKey);
-                    SATISFIABLE();
-                    waitingOnClingo = false;
+                    satifiableCallBack(solver.answerSet, jobID);
+                    //waitingOnClingo = false;
+                    finalizeGenerator();
                 }
                 else if (solver.SolverStatus == Clingo.ClingoSolver.Status.UNSATISFIABLE)
                 {
 
-                    UNSATISFIABLE();
-                    waitingOnClingo = false;
+                    unsatifiableCallBack(jobID);
+                    //waitingOnClingo = false;
+                    finalizeGenerator();
                 }
                 else if (solver.SolverStatus == Clingo.ClingoSolver.Status.ERROR)
                 {
 
-                    ERROR();
-                    waitingOnClingo = false;
+                    errorCallBack(solver.ClingoConsoleError, jobID);
+                    //waitingOnClingo = false;
+                    finalizeGenerator();
                 }
                 else if (solver.SolverStatus == Clingo.ClingoSolver.Status.TIMEDOUT)
                 {
 
-                    TIMEDOUT();
-                    waitingOnClingo = false;
+                    timedoutCallBack(timeout, jobID);
+                    //waitingOnClingo = false;
+                    finalizeGenerator();
                 }
+
+                //if (!waitingOnClingo) finalizeGenerator();
             }
         }
 
-        void startJob()
-        {
-            string filename = Clingo.ClingoUtil.CreateFile(aspCode);
-            solver.Solve(filename);
-            waitingOnClingo = true;
-        }
+        //void startJob()
+        //{
+        //    string filename = Clingo.ClingoUtil.CreateFile(aspCode);
+        //    solver.Solve(filename);
+        //    waitingOnClingo = true;
+        //}
 
-        void startJob(string clingoArguments)
-        {
-            string filename = Clingo.ClingoUtil.CreateFile(aspCode);
-            solver.Solve(filename, clingoArguments);
-            waitingOnClingo = true;
-        }
+        //void startJob(string clingoArguments)
+        //{
+        //    string filename = Clingo.ClingoUtil.CreateFile(aspCode);
+        //    solver.Solve(filename, clingoArguments);
+        //    waitingOnClingo = true;
+        //}
 
-        void startJob<T>(ASPMemory<T> memory)
-        {
-            string filename = Clingo.ClingoUtil.CreateFile(aspCode + memory.ASPCode);
-            solver.Solve(filename);
-            waitingOnClingo = true;
-        }
+        //void startJob<T>(ASPMemory<T> memory)
+        //{
+        //    string filename = Clingo.ClingoUtil.CreateFile(aspCode + memory.ASPCode);
+        //    solver.Solve(filename);
+        //    waitingOnClingo = true;
+        //}
 
-        void startJob<T>(string clingoArguments, ASPMemory<T> memory)
+        //void startJob<T>(string clingoArguments, ASPMemory<T> memory)
+        //{
+        //    string filename = Clingo.ClingoUtil.CreateFile(aspCode + memory.ASPCode);
+        //    solver.Solve(filename, clingoArguments);
+        //    waitingOnClingo = true;
+        //}
+        public void StartGenerator()
         {
-            string filename = Clingo.ClingoUtil.CreateFile(aspCode + memory.ASPCode);
-            solver.Solve(filename, clingoArguments);
-            waitingOnClingo = true;
+            
+            initializeGenerator();
+            startGenerator();
         }
 
         private string aspCode { get { return getASPCode(); } }
@@ -107,24 +125,35 @@ namespace ASPGenerator
 
             return aspCode;
         }
+        public void InitializeGenerator(System.Action<Clingo.AnswerSet, string> satifiableCallBack, System.Action<string> unsatifiableCallBack, System.Action<int, string> timedoutCallBack, System.Action<string, string> errorCallBack)
+        {
+            this.satifiableCallBack = satifiableCallBack;
+            this.unsatifiableCallBack = unsatifiableCallBack;
+            this.timedoutCallBack = timedoutCallBack;
+            this.errorCallBack = errorCallBack;
+
+        }
+        public void InitializeGenerator(int cpus, int timeout)
+        {
+            this.cpus = cpus;
+            this.timeout = timeout;
+        }
 
         virtual protected void initializeGenerator()
         {
-
+            filename = Clingo.ClingoUtil.CreateFile(aspCode);
+            solver.maxDuration = timeout + 10;
         }
 
         virtual protected void startGenerator()
         {
-            callback = map.DisplayMap;
-            string filename = Clingo.ClingoUtil.CreateFile(aspCode);
-            solver.maxDuration = timeout + 10;
             solver.Solve(filename,getAdditionalParameters());
             waitingOnClingo = true;
         }
 
         virtual protected void finalizeGenerator()
         {
-
+            waitingOnClingo = false;
         }
 
         virtual protected string getAdditionalParameters()
@@ -132,25 +161,22 @@ namespace ASPGenerator
             return $" --parallel-mode {cpus} --time-limit={timeout}";
         }
 
-        virtual protected void SATISFIABLE()
+        virtual protected void SATISFIABLE(Clingo.AnswerSet answerSet, string jobID)
         {
-            callback(solver.answerSet, mapKey);
-            //map.DisplayMap(solver.answerSet, mapKey);
-            //map.AdjustCamera();
             Debug.LogWarning("SATISFIABLE unimplemented");
         }
 
-        virtual protected void UNSATISFIABLE()
+        virtual protected void UNSATISFIABLE(string jobID)
         {
             Debug.LogWarning("UNSATISFIABLE unimplemented");
         }
 
-        virtual protected void TIMEDOUT()
+        virtual protected void TIMEDOUT(int time, string jobID)
         {
             Debug.LogWarning("TIMEDOUT unimplemented");
         }
 
-        virtual protected void ERROR()
+        virtual protected void ERROR(string error, string jobID)
         {
             Debug.LogWarning("ERROR unimplemented");
         }
