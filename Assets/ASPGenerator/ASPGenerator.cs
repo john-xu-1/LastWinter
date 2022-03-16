@@ -20,10 +20,16 @@ namespace ASPGenerator
         protected string filename;
         protected string jobID = "";
 
+        [SerializeField] protected bool runOnStart = false;
+
         private void Start()
         {
-            //InitializeGenerator(SATISFIABLE, UNSATISFIABLE, TIMEDOUT, ERROR);
-            //startGenerator();
+            if (runOnStart)
+            {
+                InitializeGenerator(SATISFIABLE, UNSATISFIABLE, TIMEDOUT, ERROR);
+                StartGenerator();
+            }
+
         }
         // Update is called once per frame
         void Update()

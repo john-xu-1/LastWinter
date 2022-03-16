@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f52f34552b27f644caac752890ea4679, type: 3}
+  m_Name: MapKeyTileRule
+  m_EditorClassIdentifier: 
+  widthKey: width
+  heightKey: height
+  tileKey: tile
+  xIndex: 0
+  yIndex: 1
+  tileTypeIndex: 2
+  dict:
+    mapObjects:
+    - key: filled
+      obj: {fileID: 11400000, guid: 667d7c35df75d1b4ba8dd3df79c02929, type: 2}
+    - key: empty
+      obj: {fileID: 11400000, guid: f3144ba1cb9931a47ab3c9e2dc15671c, type: 2}
