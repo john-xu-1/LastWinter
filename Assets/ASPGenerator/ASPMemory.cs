@@ -1,9 +1,11 @@
 
-[System.Serializable]
-public class ASPMemory<T>
+
+using UnityEngine;
+
+public abstract class ASPMemory : ScriptableObject
 {
-    public T Events;
-    public float Weight;
-    public string ASPCode;
+    
+    public string ASPCode { get { return getASPCode(); } }
+    protected abstract string getASPCode();
 
 }

@@ -10,9 +10,27 @@ namespace ASPGenerator
         [SerializeField] int width = 20, height = 20, headroom = 3, shoulderroom = 2, minCeilingHeight = 2;
         [SerializeField] TileBaseTileRules tileRules;
         [SerializeField] ASPMap.MapKeyTileRule mapKeyTileRule;
+
+        [SerializeField] WorldGraphMemory worldGraphMemory;
         protected override string getASPCode()
         {
-            return world_gen + tile_rules;
+            string aspCode = "";
+            aspCode += world_gen;
+            aspCode += tile_rules;
+
+            aspCode += WorldBuilder.WorldStructure.get_floor_rules(headroom, shoulderroom);
+            aspCode += WorldBuilder.WorldStructure.get_chamber_rule(minCeilingHeight);
+
+            aspCode += WorldBuilder.Pathfinding.movement_rules;
+            aspCode += WorldBuilder.Pathfinding.platform_rules;
+            aspCode += WorldBuilder.Pathfinding.path_rules;
+
+
+            //------ASPMemory--------
+            aspCode += worldGraphMemory.ASPCode;
+            //aspCode += WorldStructure.GetDoorRules(neighbors);
+
+            return aspCode;
         }
 
         protected string world_gen = $@"

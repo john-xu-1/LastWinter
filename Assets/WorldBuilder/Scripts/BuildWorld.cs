@@ -363,16 +363,20 @@ namespace WorldBuilder
             if(!DebugMode(Debugging.Debugger.DebugTypes.tile_rules)) aspCode += WorldStructure.tile_rules;
             aspCode += WorldStructure.get_floor_rules(headroom, shoulderroom);
             aspCode += WorldStructure.get_chamber_rule(minCeilingHeight);
+
             aspCode += Pathfinding.movement_rules;
             aspCode += Pathfinding.platform_rules;
             aspCode += Pathfinding.path_rules;
-            
+
+
+            //------ASPMemory--------
+            aspCode += Pathfinding.set_openings(connections.boolArray);
+            aspCode += WorldStructure.GetDoorRules(neighbors);
 
             //GateTypes[] gates = { GateTypes.water, GateTypes.lava, GateTypes.door };
             GateTypes[,] keys = { { GateTypes.door, GateTypes.enemy }, { GateTypes.lava, GateTypes.none }, { GateTypes.water, GateTypes.none } };
 
-            aspCode += Pathfinding.set_openings(connections.boolArray);
-            aspCode += WorldStructure.GetDoorRules(neighbors);
+
             aspCode += Gates.GetGateASP(gate, gated, gates,connections);
             aspCode += KeyFreeObject.GetKeyRoomRules(key, gates);
             if (bossRoom) aspCode += EnemyFreeObject.GetEnemyRoomRules(EnemyFreeObject.EnemyTypes.boss);

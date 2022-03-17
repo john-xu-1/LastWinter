@@ -160,8 +160,10 @@ namespace WorldBuilder
         public static string set_openings(bool[] connections)
         {
             string connection_rules = @"
-            %:- {path(XX,YY,middle,middle): width(XX), height(YY)} == 0.
-        ";
+
+                %:- {path(XX,YY,middle,middle): width(XX), height(YY)} == 0.
+
+            ";
             connection_rules += set_opening(connections[0], connections[1], "top");
             connection_rules += set_opening(connections[2], connections[3], "right");
             connection_rules += set_opening(connections[4], connections[5], "bottom");
