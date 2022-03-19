@@ -1,0 +1,17 @@
+/* CSS Document */
+
+body{
+	height: 1500px;
+	
+	background-color: rgba(2,36,54,1.00);
+	background-image: url("../images/cool.png");
+	
+	background-size: cover;
+	
+	background-repeat: no-repeat;
+}
+
+*{
+	font-family: Constantia, "Lucida Bright", "DejaVu Serif", Georgia, "serif";
+}
+
