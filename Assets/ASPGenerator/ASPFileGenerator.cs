@@ -31,7 +31,7 @@ namespace ASPGenerator{
 
         protected override void finalizeGenerator()
         {
-            if (generatorBehavior == ASPGeneratorBehavior.saveToFile)
+            if (solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE && generatorBehavior == ASPGeneratorBehavior.saveToFile)
             {
                 saveToJson();
             }

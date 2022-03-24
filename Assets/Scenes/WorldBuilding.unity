@@ -658,6 +658,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
@@ -1140,7 +1141,7 @@ MonoBehaviour:
     downIngress: 0
     leftEgress: 0
     leftIngress: 0
-  RoomSize: {x: 20, y: 20}
+  RoomSize: {x: 32, y: 16}
   headroom: 2
   shoulderroom: 3
   minCeilingHeight: 3

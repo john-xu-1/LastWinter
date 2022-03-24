@@ -51,8 +51,8 @@ namespace WorldBuilder
       #show state/3.
 
       %tiles must have a neighbor
-      :- state(XX,YY, one), state(XX-1, YY, zero), state(XX+1, YY, zero).
-      :- state(XX,YY, one), state(XX, YY-1, zero), state(XX, YY+1, zero).
+      :- state(XX,YY, one), state(XX-1, YY, zero), state(XX+1, YY, zero). %% 1:[x,x,x,0,0,x,x,x]        
+      :- state(XX,YY, one), state(XX, YY-1, zero), state(XX, YY+1, zero). %% 1:[x,0,x,x,x,x,0,x]
 
       %:- state(XX,YY, one), state(XX-1, YY, zero), XX == max_width.
       %:- state(XX,YY, one), XX == 1, state(XX+1, YY, zero).
@@ -61,12 +61,12 @@ namespace WorldBuilder
 
 
       %no empty diagonals with adjencent filled diagonals (no checkers pattern)
-      :- state(XX, YY, zero), state(XX+1, YY + 1, zero), state(XX, YY +1, one), state(XX+1, YY, one).
-      :- state(XX, YY, zero), state(XX+1, YY - 1, zero), state(XX+1, YY, one), state(XX, YY-1, one).
+      :- state(XX, YY, zero), state(XX+1, YY + 1, zero), state(XX, YY +1, one), state(XX+1, YY, one). %% 0:[x,1,0,x,1,x,x,x]
+      :- state(XX, YY, zero), state(XX+1, YY - 1, zero), state(XX+1, YY, one), state(XX, YY-1, one). %% 0:[x,x,x,x,1,x,1,0]
 
       %no knight move from empty to empty
-      :- state(XX,YY,one), state(XX-1, YY, zero), state(XX, YY+1, one), state(XX +1, YY+1, zero).
-      :- state(XX,YY,one), state(XX-1, YY, one), state(XX, YY -1, zero), state(XX-1,YY +1, zero).
+      :- state(XX,YY,one), state(XX-1, YY, zero), state(XX, YY+1, one), state(XX +1, YY+1, zero). %% 1:[x,1,0,0,x,x,x,x]
+      :- state(XX,YY,one), state(XX-1, YY, one), state(XX, YY -1, zero), state(XX-1,YY +1, zero). %% 1:[
       :- state(XX,YY,one), state(XX,YY-1, one), state(XX+1, YY, zero), state(XX-1, YY-1, zero).
       :- state(XX,YY,one), state(XX+1,YY, one), state(XX, YY+1, zero), state(XX+1, YY-1, zero).
 

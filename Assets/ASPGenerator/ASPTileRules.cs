@@ -41,12 +41,31 @@ public class ASPTileRules<T> : ScriptableObject
         List<bool[]> missingRules = getMissingTiles(Tiles);
 
         Debug.Log("missingRules.Count: " + missingRules.Count);
-
+        List<string[]> truncatedRules = new List<string[]>();
 
         foreach (bool[] missingTile in missingRules)
         {
+            string[] ruleSet = new string[8];
+            for(int i = 0; i < 8; i += 1)
+            {
+                ruleSet[i] = missingTile[i]? "1":"0";
+            }
+            truncatedRules.Add(ruleSet);
+
+            //tile_rules += $@"
+            //    :- tile(XX,YY,{getCenterTileType()}),
+            //    {getNot(missingTile[0])} tile(XX-1, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[1])} tile(XX, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[2])} tile(XX+1, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[3])} tile(XX-1, YY, {getNeighborTileType()}),
+            //    {getNot(missingTile[4])} tile(XX+1, YY, {getNeighborTileType()}),
+            //    {getNot(missingTile[5])} tile(XX-1, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[6])} tile(XX, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[7])} tile(XX+1, YY-1, {getNeighborTileType()}).
+
+            //";
             tile_rules += $@"
-                :- tile(XX,YY,{getCenterTileType()}),
+                :- tile(XX,YY,{getCenterTileType()}), XX > 1, XX < max_width, YY > 1, YY < max_height,
                 {getNot(missingTile[0])} tile(XX-1, YY+1, {getNeighborTileType()}),
                 {getNot(missingTile[1])} tile(XX, YY+1, {getNeighborTileType()}),
                 {getNot(missingTile[2])} tile(XX+1, YY+1, {getNeighborTileType()}),
@@ -55,8 +74,98 @@ public class ASPTileRules<T> : ScriptableObject
                 {getNot(missingTile[5])} tile(XX-1, YY-1, {getNeighborTileType()}),
                 {getNot(missingTile[6])} tile(XX, YY-1, {getNeighborTileType()}),
                 {getNot(missingTile[7])} tile(XX+1, YY-1, {getNeighborTileType()}).
-                
+
             ";
+            //tile_rules += $@"
+
+            //    %% 1 %%
+            //    :- tile(XX,YY,{getCenterTileType()}), XX > 1, XX < max_width, YY > 1, YY < max_height,
+            //    {getNot(missingTile[0])} tile(XX-1, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[1])} tile(XX, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[2])} tile(XX+1, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[3])} tile(XX-1, YY, {getNeighborTileType()}),
+            //    {getNot(missingTile[4])} tile(XX+1, YY, {getNeighborTileType()}),
+            //    {getNot(missingTile[5])} tile(XX-1, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[6])} tile(XX, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[7])} tile(XX+1, YY-1, {getNeighborTileType()}).
+
+            //    %% 2 %%
+            //    :- tile(XX,YY,{getCenterTileType()}), XX == 1, YY == max_height,
+            //    {getNot(missingTile[4])} tile(XX+1, YY, {getNeighborTileType()}),
+            //    {getNot(missingTile[6])} tile(XX, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[7])} tile(XX+1, YY-1, {getNeighborTileType()}).
+            //    %% 3 %%
+            //    :- tile(XX,YY,{getCenterTileType()}), YY == max_height,
+            //    {getNot(missingTile[3])} tile(XX-1, YY, {getNeighborTileType()}),
+            //    {getNot(missingTile[4])} tile(XX+1, YY, {getNeighborTileType()}),
+            //    {getNot(missingTile[5])} tile(XX-1, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[6])} tile(XX, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[7])} tile(XX+1, YY-1, {getNeighborTileType()}).
+            //    %% 4 %%
+            //    :- tile(XX,YY,{getCenterTileType()}), XX == max_width, YY == max_height,
+            //    {getNot(missingTile[3])} tile(XX-1, YY, {getNeighborTileType()}),
+            //    {getNot(missingTile[5])} tile(XX-1, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[6])} tile(XX, YY-1, {getNeighborTileType()}).
+
+            //    %% 5 %%
+            //    :- tile(XX,YY,{getCenterTileType()}), XX == 1,
+
+            //    {getNot(missingTile[1])} tile(XX, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[2])} tile(XX+1, YY+1, {getNeighborTileType()}),
+
+            //    {getNot(missingTile[4])} tile(XX+1, YY, {getNeighborTileType()}),
+
+            //    {getNot(missingTile[6])} tile(XX, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[7])} tile(XX+1, YY-1, {getNeighborTileType()}).
+
+            //    %% 6 %%
+            //    :- tile(XX,YY,{getCenterTileType()}), XX == max_width,
+            //    {getNot(missingTile[0])} tile(XX-1, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[1])} tile(XX, YY+1, {getNeighborTileType()}),
+
+            //    {getNot(missingTile[3])} tile(XX-1, YY, {getNeighborTileType()}),
+
+            //    {getNot(missingTile[5])} tile(XX-1, YY-1, {getNeighborTileType()}),
+            //    {getNot(missingTile[6])} tile(XX, YY-1, {getNeighborTileType()}).
+
+            //    %% 7 %%
+            //    :- tile(XX,YY,{getCenterTileType()}), XX == 1, YY == 1,
+
+            //    {getNot(missingTile[1])} tile(XX, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[2])} tile(XX+1, YY+1, {getNeighborTileType()}),
+
+            //    {getNot(missingTile[4])} tile(XX+1, YY, {getNeighborTileType()}).
+
+
+            //    %% 8 %%
+            //    :- tile(XX,YY,{getCenterTileType()}), YY == 1,
+            //    {getNot(missingTile[0])} tile(XX-1, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[1])} tile(XX, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[2])} tile(XX+1, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[3])} tile(XX-1, YY, {getNeighborTileType()}),
+            //    {getNot(missingTile[4])} tile(XX+1, YY, {getNeighborTileType()}).
+
+            //    %% 9 %%
+            //    :- tile(XX,YY,{getCenterTileType()}), XX == max_width, YY == 1,
+            //    {getNot(missingTile[0])} tile(XX-1, YY+1, {getNeighborTileType()}),
+            //    {getNot(missingTile[1])} tile(XX, YY+1, {getNeighborTileType()}),
+
+            //    {getNot(missingTile[3])} tile(XX-1, YY, {getNeighborTileType()}).
+
+
+
+            //";
+        }
+
+        foreach(string[] rule in truncatedRules)
+        {
+            string line = $"{getCenterTileType()}:[";
+            for(int i = 0; i < 8; i+=1)
+            {
+                if(i < 7)line += $"{rule[i]},";
+                else line += $"{rule[i]}]";
+            }
+            Debug.Log(line);
         }
 
         return tile_rules;

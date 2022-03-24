@@ -153,6 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TileSpacing: 1.1
+  InvertY: 0
+  InvertX: 0
   PixelPrefab: {fileID: 1634755102698978591, guid: 2ccb11837ba0241618b9a8f8e8557a51, type: 3}
 --- !u!4 &87311716
 Transform:
@@ -315,6 +317,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TileSpacing: 1
+  InvertY: 0
+  InvertX: 0
   nodePrefab: {fileID: 1630707679222594354, guid: 7cb7dd73835444bf5840f8b6c105d63a, type: 3}
   edgePrefab: {fileID: 945820464816708024, guid: 42b19d253849449088b1efbe07ba4b4d, type: 3}
   edgeOffset: 0.5
@@ -364,6 +368,7 @@ MonoBehaviour:
   cpus: 4
   timeout: 100
   solver: {fileID: 1296249627}
+  waitingOnClingo: 0
   runOnStart: 0
 --- !u!4 &297420700
 Transform:
@@ -395,7 +400,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &710933818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,14 +575,15 @@ MonoBehaviour:
   cpus: 4
   timeout: 100
   solver: {fileID: 1296249627}
-  runOnStart: 1
-  generatorBehavior: 2
+  waitingOnClingo: 0
+  runOnStart: 0
+  generatorBehavior: 1
   jsonFilename: answersetJsonTest2.txt
   width: 20
   height: 20
-  headroom: 3
-  shoulderroom: 2
-  minCeilingHeight: 2
+  headroom: 2
+  shoulderroom: 3
+  minCeilingHeight: 3
   tileRules: {fileID: 11400000, guid: 667d7c35df75d1b4ba8dd3df79c02929, type: 2}
   mapKeyTileRule: {fileID: 11400000, guid: 9d921ee048965094f938fe6a4a07c3c7, type: 2}
   worldGraphMemory: {fileID: 11400000, guid: 90d0fd50f93414752988f5f41ea77f05, type: 2}
@@ -611,7 +617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1530426737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -683,7 +689,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1533734054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,6 +775,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TileSpacing: 1
+  InvertY: 1
+  InvertX: 0
   grid: {fileID: 1987917736}
 --- !u!4 &1618610956
 Transform:
@@ -800,7 +808,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1648343116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,8 +824,9 @@ MonoBehaviour:
   cpus: 4
   timeout: 100
   solver: {fileID: 1296249627}
+  waitingOnClingo: 0
   runOnStart: 0
-  generatorBehavior: 1
+  generatorBehavior: 2
   jsonFilename: answersetJsonTest1.txt
   width: 5
   height: 5
@@ -957,3 +966,57 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &2003925840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2003925842}
+  - component: {fileID: 2003925841}
+  m_Layer: 0
+  m_Name: RoomLevelHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2003925841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003925840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7783b6fd25abd41b49d93eebc39503c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldGraphMemory: {fileID: 11400000, guid: 90d0fd50f93414752988f5f41ea77f05, type: 2}
+  roomGenerator: {fileID: 1326733440}
+  mapTilemap: {fileID: 1618610955}
+  mapKeyTileRule: {fileID: 11400000, guid: 9d921ee048965094f938fe6a4a07c3c7, type: 2}
+  roomWidth: 20
+  roomHeight: 20
+  headroom: 2
+  shoulderroom: 3
+  minCeilingHeight: 3
+  roomIDs: 
+  roomStack: 
+--- !u!4 &2003925842
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003925840}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 38.243847, y: 12.774027, z: -74.78491}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

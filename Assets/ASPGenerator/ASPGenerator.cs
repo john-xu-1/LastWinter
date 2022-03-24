@@ -10,7 +10,7 @@ namespace ASPGenerator
         [SerializeField] protected Clingo.ClingoSolver solver;
         //[SerializeField] protected ASPMap.ASPMap map;
         //[SerializeField] protected ASPMap.ASPMapKey mapKey;
-        protected bool waitingOnClingo;
+        [SerializeField]protected bool waitingOnClingo;
 
         protected System.Action<Clingo.ClingoSolver.Status,Clingo.AnswerSet, string> callback;
         protected System.Action<Clingo.AnswerSet, string> satifiableCallBack;
@@ -38,31 +38,32 @@ namespace ASPGenerator
             {
                 if (solver.SolverStatus == Clingo.ClingoSolver.Status.SATISFIABLE)
                 {
+                    finalizeGenerator();
                     //map.DisplayMap(Solver.answerSet,mapKey);
                     satifiableCallBack(solver.answerSet, jobID);
                     //waitingOnClingo = false;
-                    finalizeGenerator();
+                    
                 }
                 else if (solver.SolverStatus == Clingo.ClingoSolver.Status.UNSATISFIABLE)
                 {
-
+                    finalizeGenerator();
                     unsatifiableCallBack(jobID);
                     //waitingOnClingo = false;
-                    finalizeGenerator();
+                    
                 }
                 else if (solver.SolverStatus == Clingo.ClingoSolver.Status.ERROR)
                 {
-
+                    finalizeGenerator();
                     errorCallBack(solver.ClingoConsoleError, jobID);
                     //waitingOnClingo = false;
-                    finalizeGenerator();
+                    
                 }
                 else if (solver.SolverStatus == Clingo.ClingoSolver.Status.TIMEDOUT)
                 {
-
+                    finalizeGenerator();
                     timedoutCallBack(timeout, jobID);
                     //waitingOnClingo = false;
-                    finalizeGenerator();
+                    
                 }
 
                 //if (!waitingOnClingo) finalizeGenerator();

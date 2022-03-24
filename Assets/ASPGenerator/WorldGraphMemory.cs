@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="WorldGraphMemory", menuName = "ASP/ASPMemory/WorldGraphMemory")]
+[CreateAssetMenu(fileName = "WorldGraphMemory", menuName = "ASP/ASPMemory/WorldGraphMemory")]
 public class WorldGraphMemory : ASPMemory
 {
     [SerializeField] string worldGraphJson;
@@ -34,9 +34,39 @@ public class WorldGraphMemory : ASPMemory
     protected override string getASPCode()
     {
         //if (answerSet == null)
-            setup(worldGraphJson);
+        setup(worldGraphJson);
         Debug.Log($"roomConnections.Length {roomConnections.Length}");
         return WorldBuilder.Pathfinding.set_openings(roomConnections[roomID].boolArray);
+    }
+
+    public int[] GetRoomIDs(string roomIDKey)
+    {
+        List<int> roomIDs = new List<int>();
+
+        foreach (List<string> room in answerSet.Value[roomIDKey])
+        {
+            roomIDs.Add(int.Parse(room[0]));
+        }
+        return roomIDs.ToArray();
+    }
+
+    public Vector2Int GetRoomDisplacement(/*int roomID, */string widthKey/*, string heightKey*/)
+    {
+        int width = int.MinValue;
+        
+        foreach (List<string> widths in answerSet.Value[widthKey])
+        {
+            if (int.Parse(widths[0]) > width) width = int.Parse(widths[0]);
+        }
+        
+        int y = (roomID - 1) / width;
+        int x = (roomID - 1) % width;
+        return new Vector2Int(x, y);
+    }
+
+    public void SetRoomID(int roomID)
+    {
+        this.roomID = roomID;
     }
 
 }
