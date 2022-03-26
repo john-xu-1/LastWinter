@@ -16,6 +16,7 @@ public class RoomLevelHandler : ASPLevelHandler
     void Start()
     {
         roomIDs = worldGraphMemory.GetRoomIDs("room");
+        Debug.Log(roomIDs.Length);
         roomStack = new List<int>(roomIDs);
         roomGenerator.InitializeGenerator(SATISFIABLE, UNSATISFIABLE, TIMEDOUT, ERROR);
         

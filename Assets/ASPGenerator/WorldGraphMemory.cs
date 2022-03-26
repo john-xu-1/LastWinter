@@ -33,8 +33,7 @@ public class WorldGraphMemory : ASPMemory
 
     protected override string getASPCode()
     {
-        //if (answerSet == null)
-        setup(worldGraphJson);
+        if (answerSet == default(Clingo.AnswerSet)) setup(worldGraphJson);
         Debug.Log($"roomConnections.Length {roomConnections.Length}");
         return WorldBuilder.Pathfinding.set_openings(roomConnections[roomID].boolArray);
     }
@@ -42,7 +41,7 @@ public class WorldGraphMemory : ASPMemory
     public int[] GetRoomIDs(string roomIDKey)
     {
         List<int> roomIDs = new List<int>();
-
+        if (answerSet == default(Clingo.AnswerSet)) setup(worldGraphJson);
         foreach (List<string> room in answerSet.Value[roomIDKey])
         {
             roomIDs.Add(int.Parse(room[0]));
