@@ -1,0 +1,131 @@
+@charset "UTF-8";
+/* CSS Document */
+
+
+
+#menu {
+	position:relative; 
+	z-index:500; 
+	width:560px;
+	}
+
+#menu ul {
+	 
+	margin:0; 
+	list-style:none; 
+	padding:5px; 
+	/*background:#da4;*/
+	}
+
+#menu ul.level1 {height:30px;}
+
+#menu ul ul {
+	position:absolute; 
+	left:-9999px; 
+	width:122px; 
+	top:31px;
+	}
+
+#menu ul ul ul {
+	position:absolute; 
+	left:-9999px; 
+	width:122px; 
+	top:-5px;
+	}
+
+
+
+#menu ul li {
+	background:rgba(9,40,57,0.78); 
+	margin-right:5px; 
+	float:left;
+	position:relative;
+	}
+
+#menu ul li a {
+	display:block; 
+	float:left; 
+	padding:8px 10px 8px 5px; 
+	font:normal 11px verdana, sans-serif; 
+	color:rgba(95,158,160,1.00); 
+	text-decoration:none; 
+	background:rgba(9,40,57,0.78); 
+	border:1px solid #888; 
+	/*border-color:#96868F #160810 #F10088 #160810;*/
+	border-color:rgba(13,52,72,1.00);
+	border-radius:5px;
+	}
+
+#menu ul li a.fly {
+	background:rgba(9,40,57,0.78); /*url(../../css/click-drop-fly/arrow.gif) no-repeat right center;*/ 
+	padding-right:10px;
+	}
+#menu ul li a.fly:after{
+	content:" ->";
+	}
+
+
+#menu ul ul li {margin:0;}
+
+#menu ul ul li a {width:85px;}
+
+#menu ul ul li ul li a {width: 115px;}
+
+#menu ul ul li a.fly {padding-right:10px;}
+
+
+
+
+#menu ul li:hover > a {
+	background-color:rgba(9,40,57,0.78); 
+	color:#160810; 
+	border-color:#DDC7E6;
+	}
+
+
+
+#menu ul li a:focus {outline:0;}
+
+
+
+#menu ul li a:active + ul.dropdown {left:-5px}
+
+
+#menu ul li a:focus + ul.d1,
+
+#menu ul li a:focus + ul.d2,
+
+#menu ul li a:focus + ul.d3,
+
+#menu ul li a:focus + ul.d4 {left:-5px}
+
+
+
+#menu ul li ul.dropdown:hover {left:-5px}
+
+
+
+#menu ul li a:active + ul.flyout {left:102px;}
+
+
+#menu ul li a:focus + ul.f1,
+
+#menu ul li a:focus + ul.f2,
+
+#menu ul li a:focus + ul.f3,
+
+#menu ul li a:focus + ul.f4,
+#menu ul li a:focus + ul.f5,
+#menu ul li a:focus + ul.f6,
+#menu ul li a:focus + ul.f7,
+#menu ul li a:focus + ul.f8,
+#menu ul li a:focus + ul.f9,
+#menu ul li a:focus + ul.f10,
+#menu ul li a:focus + ul.f11,
+
+#menu ul li a:focus + ul.ff1 {left:102px;}
+
+
+
+#menu ul li ul.flyout:hover {left:102px;}
+

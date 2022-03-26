@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Artistic Design</title>
-	<link href="css/default.css" type="text/css" rel="stylesheet"/>
+	<link href="css/LWdefault.css" type="text/css" rel="stylesheet"/>
 	<style>
-		li{
+		.Artistic li{
 			padding: 10px 0px 5px 0px;
 		}
-		h1{
+		.Artistic h1{
 			text-align: center;
 			font-size: 40px;
 			font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", "Arial Black", "sans-serif";
@@ -20,12 +20,18 @@
 		}
 	
 	</style>
+	<link href="css/LWDropDown.css" type="text/css" rel="stylesheet"/>
+	<script src="js/DropDown.js"></script>
 </head>
 	
 	
 
 
 <body>
+	<div id="menuBarWrapper"> 
+				<span><div id="menu"></div></span> 
+		</div>
+		<script>loadMenu()</script>
 	<div class="Artistic">
 		<h1> Artistic Design </h1>
 		<h2> Target: Post-apocalyptic,Winter, Dungeon / Cave </h2>
