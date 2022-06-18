@@ -70,25 +70,25 @@ public class CameraController : MonoBehaviour
 
             if (target)
             {
-                //transform.position = Vector3.Lerp(transform.position, target.position + target_Offset, 0.1f);
-                Vector2 cameraOffset = Vector2.zero;
-                if (resolution.x != Screen.width || resolution.y != Screen.height)
-                {
-                    targetOthographicSize = FindMinTargetOthographicSize();
-                    SetCameraSize(targetOthographicSize, true);
-                    resolution = new Vector2(Screen.width, Screen.height);
-                }
-                UpdateOthographicSize();
+                transform.position = Vector3.Lerp(transform.position, target.position + target_Offset, 0.1f);
+                //Vector2 cameraOffset = Vector2.zero;
+                //if (resolution.x != Screen.width || resolution.y != Screen.height)
+                //{
+                //    targetOthographicSize = FindMinTargetOthographicSize();
+                //    SetCameraSize(targetOthographicSize, true);
+                //    resolution = new Vector2(Screen.width, Screen.height);
+                //}
+                //UpdateOthographicSize();
 
 
 
-                if (target.position.y + gridSize.y / 2 > 0) cameraOffset.y = -target.position.y - gridSize.y / 2;
-                else if (target.position.y - gridSize.y / 2 < -worldHeight * roomHeight) cameraOffset.y = -target.position.y + gridSize.y / 2 - worldHeight * roomHeight;
+                //if (target.position.y + gridSize.y / 2 > 0) cameraOffset.y = -target.position.y - gridSize.y / 2;
+                //else if (target.position.y - gridSize.y / 2 < -worldHeight * roomHeight) cameraOffset.y = -target.position.y + gridSize.y / 2 - worldHeight * roomHeight;
 
-                if (target.position.x - gridSize.x / 2 < 1) cameraOffset.x = -target.position.x + gridSize.x / 2 + 1;
-                else if (target.position.x + gridSize.x / 2 > worldWidth * roomWidth + 1) cameraOffset.x = -target.position.x - gridSize.x / 2 + worldWidth * roomWidth + 1;
+                //if (target.position.x - gridSize.x / 2 < 1) cameraOffset.x = -target.position.x + gridSize.x / 2 + 1;
+                //else if (target.position.x + gridSize.x / 2 > worldWidth * roomWidth + 1) cameraOffset.x = -target.position.x - gridSize.x / 2 + worldWidth * roomWidth + 1;
 
-                transform.position = target.position + target_Offset + (Vector3)cameraOffset;
+                //transform.position = target.position + target_Offset + (Vector3)cameraOffset;
             }
         }
 

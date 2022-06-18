@@ -25,7 +25,10 @@ MonoBehaviour:
   spawnedPrefab1: {fileID: 4982714832543282875, guid: b74a29294fa5f484bb4b479805dc8633, type: 3}
   spawnedPrefab2: {fileID: 0}
   coolDown: 1
+  isMelee: 0
   destroyAfterTime: 0.25
-  CDIndex: 6
+  curAttackTime: 0
   isWeaponSwitchBullet: 0
   chip: {fileID: 0}
+  ab1: {fileID: 0}
+  damage: 10

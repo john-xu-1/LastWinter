@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75864a3df8bf439c9c75d9eb624bac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
+  damage: 5
   type: Player
   hitpoint: {fileID: 6104214910540336571}
   range: 0.3

@@ -34,6 +34,7 @@ public class BulletDroneController : BulletBase
                     
                 }
                 weapon.curAttackTime = weapon.curAttackTime - cdMinus;
+                Debug.Log(weapon.curAttackTime);
                 collisionCheck = false;
             }
             
