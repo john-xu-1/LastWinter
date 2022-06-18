@@ -13,6 +13,7 @@ public class PlayerSave
     public string saveName;
     public PlayerStats playerStats;
     public bool[] inventory;
+    public int[] inventorySelection;
 
     public PlayerSave(string saveName, PlayerStats ps, bool[] inventory)
     {
@@ -71,7 +72,7 @@ public class PlayerSave
         Utility.SaveJasonToPlayerPrefs<PlayerSave>(playerSave, saveName);
     }
 
-    public static void SaveInventory(string saveName, bool[] inventory)
+    public static void SaveInventory(string saveName, bool[] inventory, int[] inventorySelection)
     {
         checkSaveList(saveName);
         //check for saveName & load PlayerSave
@@ -83,7 +84,7 @@ public class PlayerSave
         //update PlayerSave
 
         playerSave.inventory = inventory;
-
+        playerSave.inventorySelection = inventorySelection;
 
         //save PlayerSave
         Utility.SaveJasonToPlayerPrefs<PlayerSave>(playerSave, saveName);
@@ -93,6 +94,13 @@ public class PlayerSave
     {
         PlayerSave playerSave = Utility.LoadFromPlayerPrefs<PlayerSave>(saveName);
         if (playerSave != null) return playerSave.inventory;
+        else return null;
+    }
+
+    public static int[] GetInventorySelection(string saveName)
+    {
+        PlayerSave playerSave = Utility.LoadFromPlayerPrefs<PlayerSave>(saveName);
+        if (playerSave != null) return playerSave.inventorySelection;
         else return null;
     }
 }

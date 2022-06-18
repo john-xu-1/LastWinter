@@ -441,3 +441,13 @@ public class InventorySystem : MonoBehaviour
 
 }
 
+public class InventoryStorage
+{
+
+}
+
+
+public class InventorySelection
+{
+
+}
