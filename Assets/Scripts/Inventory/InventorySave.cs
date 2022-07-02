@@ -28,7 +28,16 @@ public class InventorySave : ScriptableObject
 
     public void SaveInventory()
     {
+        int[] inventorySelection = new int[inventoryObjects.Count];
+        for (int i = 0; i < inventorySelection.Length; i += 1)
+        {
+            inventorySelection[i] = GetItemID(inventoryObjects[i]);
+        }
+
+
         bool[] inventory = new bool[allInventoryObjects.Length];
+       
+        
         for (int i = 0; i < allInventoryObjects.Length; i += 1)
         {
             if (inventoryObjects.Contains(allInventoryObjects[i]))
@@ -36,23 +45,47 @@ public class InventorySave : ScriptableObject
                 inventory[i] = true;
             }
         }
-        PlayerSave.SaveInventory(saveName, inventory);
+        PlayerSave.SaveInventory(saveName, inventory, inventorySelection);
+    }
+
+    private int GetItemID(InventoryObjects item)
+    {
+        for (int i = 0; i < allInventoryObjects.Length; i += 1)
+        {
+            if (item == allInventoryObjects[i])
+            {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     public void LoadInventory(string saveName)
     {
         inventoryObjects.Clear();
         bool[] inventory = PlayerSave.GetInventory(saveName);
-        if (inventory != null)
+        int[] inventorySelection = PlayerSave.GetInventorySelection(saveName);
+        //if (inventory != null)
+        //{
+        //    for (int i = 0; i < inventory.Length; i++)
+        //    {
+        //        if (inventory[i])
+        //        {
+        //            inventoryObjects.Add(allInventoryObjects[i]);
+        //        }
+        //    }
+        //}
+
+        if (inventorySelection != null)
         {
-            for (int i = 0; i < inventory.Length; i++)
+            for (int i = 0; i < inventorySelection.Length; i++)
             {
-                if (inventory[i])
-                {
-                    inventoryObjects.Add(allInventoryObjects[i]);
-                }
+                inventoryObjects.Add(allInventoryObjects[inventorySelection[i]]);
             }
         }
+
+        
     }
 }
 

@@ -457,7 +457,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0014858246, y: -0.049823254}
+  m_Offset: {x: -0.015210152, y: -0.049823284}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -468,7 +468,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.7039833, y: 1.8835025}
+  m_Size: {x: 3.14155, y: 1.8835025}
   m_EdgeRadius: 0
 --- !u!58 &8550681332488643671
 CircleCollider2D:
@@ -576,8 +576,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bdabb4ee8fecd40a996540895867f32e, type: 3}
-  m_Color: {r: 1, g: 0.5235849, b: 0.5235849, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 2cfe49221fb954056bb9cd9b00232d80, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -621,18 +621,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.004173279, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2}
+    oldSize: {x: 3.75, y: 3.75}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 2.2104378, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &9034532965937968618
 MonoBehaviour:
@@ -650,13 +650,8 @@ MonoBehaviour:
   rb: {fileID: 0}
   angerRange: 7
   speed: 5
-  damage: 5
-  attackRange: 1
-  hitPoint: {fileID: 0}
-  whichcanhit:
-    serializedVersion: 2
-    m_Bits: 0
   attackCD: 2
+  dd: {fileID: 0}
   bulletPrefab: {fileID: 64387565851223267, guid: e066623fe5cd143c5b3485f1b6eb6b48, type: 3}
   fireCD: 3
   amountOfBullets: 3
