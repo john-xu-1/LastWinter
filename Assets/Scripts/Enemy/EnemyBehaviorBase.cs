@@ -25,7 +25,7 @@ public class EnemyBehaviorBase : MonoBehaviour
         ChildStart();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (p) defaultAI();
         //inflictDamage();
