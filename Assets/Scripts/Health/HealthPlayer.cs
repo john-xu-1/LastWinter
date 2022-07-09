@@ -6,15 +6,20 @@ public class HealthPlayer : HealthBase
 {
     //bool regGapHealth = false;
 
+    public GameObject GH;
 
     private void Start()
     {
         FindObjectOfType<UIHandler>().setPlayerOrgHealth(MaxHealth);
+
+        GH = GameObject.FindGameObjectWithTag("GameHandler");
     }
 
     public override void death()
     {
-        FindObjectOfType<GameHandler>().PlayerDied(gameObject);
+        GH.GetComponent<GameHandler>().PlayerDied(gameObject);
+
+        Debug.Log("deaht");
     }
 
     protected override void displayHealth()

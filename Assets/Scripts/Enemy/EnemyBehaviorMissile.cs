@@ -8,10 +8,7 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 	public float rotateSpeed = 200f;
 
 	
-	void Start()
-	{
-		rb = GetComponent<Rigidbody2D>();
-	}
+	
 
     public override void defaultAI()
     {
@@ -24,11 +21,21 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 		rb.angularVelocity = -rotateAmount * rotateSpeed;
 
 		rb.velocity = transform.up * speed;
+
+		
 	}
 
-    void OnTriggerEnter2D()
+    void OnTriggerEnter2D(Collider2D collision)
 	{
 		
-		Destroy(gameObject);
+
+		if (collision.transform.CompareTag("Ground"))
+        {
+			Destroy(gameObject);
+		}
+		
+		
+		
+
 	}
 }

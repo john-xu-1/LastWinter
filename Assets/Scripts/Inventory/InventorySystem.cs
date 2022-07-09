@@ -56,8 +56,12 @@ public class InventorySystem : MonoBehaviour
     private void Start()
     {
         loadInventory();
-        wepChipPanelChild = wepChipPanel.transform.GetChild(0).gameObject;
-        wepChipPanel.SetActive(false);
+        if (wepChipPanel)
+        {
+            wepChipPanelChild = wepChipPanel.transform.GetChild(0).gameObject;
+            wepChipPanel.SetActive(false);
+        }
+        
         //FindObjectOfType<InventoryUI>().updateSprite(items);
     }
 

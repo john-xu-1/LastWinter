@@ -12,6 +12,8 @@ public class DoDamage : MonoBehaviour
     [SerializeField] protected float range;
     [SerializeField] public LayerMask enemyLayers;
 
+    [SerializeField] public bool isEnemy = false;
+
 
     public bool isMelee = false;
 
@@ -44,6 +46,10 @@ public class DoDamage : MonoBehaviour
         if (!isMelee && !collision.transform.CompareTag("bullet") && collision.transform.GetComponent<TakeDamage>())
         {
             collision.transform.GetComponent<TakeDamage>().Damage(damage, type);
+
+            if (isEnemy) Destroy(transform.parent.gameObject);
+
+            Debug.Log("bullet hit " + gameObject.name);
         }
     }
 

@@ -25,9 +25,15 @@ public class EnemyBehaviorBase : MonoBehaviour
         ChildStart();
     }
 
-    void Update()
+    
+
+    void FixedUpdate()
     {
-        if (p) defaultAI();
+        if (p)
+        {
+            defaultAI();
+        }
+        
         //inflictDamage();
 
     }
@@ -41,7 +47,7 @@ public class EnemyBehaviorBase : MonoBehaviour
 
         rb.AddForce(new Vector2(direction.x * 5, rb.velocity.y),ForceMode2D.Force);
 
-        Debug.Log(direction);
+        //Debug.Log(direction);
 
     }
 
@@ -57,7 +63,24 @@ public class EnemyBehaviorBase : MonoBehaviour
         
     }
 
-    
+    public int getDistX(Transform self)
+    {
+        float dif = p.transform.position.x - self.position.x;
+
+        if (dif > 0)
+        {
+            return 1;
+        }
+        else if (dif < 0)
+        {
+            return -1;
+        }
+        else
+        {
+            return 0;
+        }
+        
+    }
 
     public float getDistX(Transform player, Transform self)
     {

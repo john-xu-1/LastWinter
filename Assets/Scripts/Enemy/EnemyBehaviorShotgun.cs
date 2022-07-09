@@ -42,6 +42,19 @@ public class EnemyBehaviorShotgun : EnemyBehaviorBase
                 nextShootTime = Time.time + fireCD;
             }
         }
+        else
+        {
+            Vector3 target = p.transform.position;
+            Vector2 direction = ((target - transform.position) * Vector2.right).normalized;
+
+
+            Vector2 vel = new Vector2(direction.x * speed, 0);
+
+
+            rb.velocity = vel;
+                
+            Debug.Log(vel);
+        }
     }
 
     public override void inflictDamage()

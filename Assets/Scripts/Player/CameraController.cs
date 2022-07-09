@@ -27,8 +27,8 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-
-        target_Offset = Vector3.forward * -10;
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+        //target_Offset = Vector3.forward * -10;
         origin = transform.position;
         camera = GetComponent<Camera>();
         gridSize = FindGridSize();
@@ -70,7 +70,11 @@ public class CameraController : MonoBehaviour
 
             if (target)
             {
-                transform.position = Vector3.Lerp(transform.position, target.position + target_Offset, 0.1f);
+
+
+                transform.position = target.position + target_Offset;
+
+
                 //Vector2 cameraOffset = Vector2.zero;
                 //if (resolution.x != Screen.width || resolution.y != Screen.height)
                 //{

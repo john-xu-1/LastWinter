@@ -9,6 +9,8 @@ public class EnemyBehaviorBounceBoi : EnemyBehaviorBase
     public float checkRadius;
     public LayerMask whatIsGround;
 
+    public SpriteRenderer sr;
+
     public override void defaultAI()
     {
         base.defaultAI();
@@ -19,6 +21,15 @@ public class EnemyBehaviorBounceBoi : EnemyBehaviorBase
         {
             inflictDamage();
             rb.velocity = Vector2.up * speed;
+        }
+
+        if (getDistX(transform) > 0)
+        {
+            sr.flipX = true;
+        }
+        else if (getDistX(transform) < 0)
+        {
+            sr.flipX = false;
         }
 
         
