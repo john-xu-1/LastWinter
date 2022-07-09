@@ -6,8 +6,8 @@ public class CameraController : MonoBehaviour
 {
     public Transform target;
     public Vector3 target_Offset;
-    public bool CameraSnap = true;
-
+    public CameraFollow followType = CameraFollow.snap;
+    public enum CameraFollow { snap, follow, lab}
     private Vector2 origin;
 
     private Vector2 gridOffset;
@@ -54,7 +54,9 @@ public class CameraController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (CameraSnap && target)
+        if(!target) target = GameObject.FindGameObjectWithTag("Player").transform;
+
+        if (followType == CameraFollow.snap && target)
         {
             float targetH = target.position.y - (origin.y - gridSize.y / 2);
             float targetW = target.position.x - (origin.x - gridSize.x / 2);
@@ -65,7 +67,7 @@ public class CameraController : MonoBehaviour
 
             transform.position = new Vector3(origin.x + gridW * gridSize.x, origin.y + gridH * gridSize.y, transform.position.z);
         }
-        else
+        else if(followType == CameraFollow.follow)
         {
 
             if (target)
@@ -95,9 +97,26 @@ public class CameraController : MonoBehaviour
                 //transform.position = target.position + target_Offset + (Vector3)cameraOffset;
             }
         }
+        else if(followType == CameraFollow.lab)
+        {
+            float minX = bound.bounds.min.x + camera.aspect * camera.orthographicSize;
+            float minY = bound.bounds.min.y + camera.orthographicSize;
+            float maxX = bound.bounds.max.x - camera.aspect * camera.orthographicSize;
+            float maxY = bound.bounds.max.y - camera.orthographicSize;
+
+            float x = target.position.x;
+            float y = target.position.y;
+            float z = transform.position.z;
+            if (x < minX) x = minX;
+            if (x > maxX) x = maxX;
+            if (y < minY) y = minY;
+            if (y > maxY) y = maxY;
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(x, y, z),  followSmoothing * Vector2.Distance(transform.position, target.position) * Time.deltaTime);
+        }
 
     }
-
+    public BoxCollider2D bound;
+    public float followSmoothing = 10;
 
     public void UpdateOthographicSize()
     {
@@ -161,13 +180,13 @@ public class CameraController : MonoBehaviour
     }
     public void setUp(bool CameraSnap)
     {
-        this.CameraSnap = CameraSnap;
+        this.followType = CameraSnap? CameraFollow.snap: CameraFollow.follow;
         setUp(worldWidth, worldHeight, roomWidth, roomHeight, target, CameraSnap);
 
     }
     public void setUp(int worldWidth, int worldHeight, int roomWidth, int roomHeight, Transform player, bool CameraSnap)
     {
-        this.CameraSnap = CameraSnap;
+        this.followType = CameraSnap ? CameraFollow.snap : CameraFollow.follow;
         setUp(worldWidth, worldHeight, roomWidth, roomHeight, player);
 
     }
@@ -189,7 +208,7 @@ public class CameraController : MonoBehaviour
         float width = camera.aspect * height;
         gridSize = new Vector2(width, height);
 
-        if (!CameraSnap) targetOthographicSize = FindMinTargetOthographicSize();
+        if (followType == CameraFollow.follow) targetOthographicSize = FindMinTargetOthographicSize();
         else SetCameraSnap();
 
     }

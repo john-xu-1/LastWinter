@@ -39,6 +39,10 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
                     rb.AddForce(gravity);
                     rb.velocity = Vector2.right * speed;
                 }
+                else if(hitRight && hitDown)
+                {
+
+                }
                 else if (!hitDown && !hitRight && !hitLeft)
                 {
                     rb.AddForce(gravity * speed);

@@ -9,6 +9,11 @@ public class InventorySave : ScriptableObject
     [SerializeField] private InventoryObjects[] allInventoryObjects;
     [SerializeField] private string saveName;
 
+    public void SetSaveName(string saveName)
+    {
+        this.saveName = saveName;
+    }
+
     public List<InventoryObjects> GetInventory()
     {
         LoadInventory(saveName);

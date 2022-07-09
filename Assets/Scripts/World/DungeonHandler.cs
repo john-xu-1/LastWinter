@@ -93,7 +93,7 @@ public class DungeonHandler : MonoBehaviour
 
     public void SnapToRoomButton()
     {
-        camControl.setUp(!camControl.CameraSnap);
+        camControl.setUp(camControl.followType != CameraController.CameraFollow.follow);
     }
 }
 

@@ -427,7 +427,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Remove Player 1
+  m_Text: Remove Player Save
 --- !u!222 &590425778
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -637,7 +637,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1838747182}
         m_TargetAssemblyTypeName: DebugSaveSystem, Assembly-CSharp
-        m_MethodName: SaveInventoryButton
+        m_MethodName: LoadLabButon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -755,7 +755,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Add Player 1
+  m_Text: Load Lab
 --- !u!222 &1379551174
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -874,3 +874,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IS: {fileID: 11400000, guid: 37c0586d1c2a3421a856ddf00e808fb8, type: 2}
+  saveName: Player 2
