@@ -142,7 +142,7 @@ GameObject:
   - component: {fileID: 433661611330215307}
   m_Layer: 13
   m_Name: TakeDamage
-  m_TagString: enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -422,7 +422,7 @@ GameObject:
   - component: {fileID: 433661612054039830}
   m_Layer: 13
   m_Name: DoDamage
-  m_TagString: enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

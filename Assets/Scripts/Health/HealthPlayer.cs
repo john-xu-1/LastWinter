@@ -6,11 +6,13 @@ public class HealthPlayer : HealthBase
 {
     //bool regGapHealth = false;
 
+    public bool isLab = false;
+
     public GameObject GH;
 
     private void Start()
     {
-        FindObjectOfType<UIHandler>().setPlayerOrgHealth(MaxHealth);
+        if (!isLab) FindObjectOfType<UIHandler>().setPlayerOrgHealth(MaxHealth);
 
         GH = GameObject.FindGameObjectWithTag("GameHandler");
     }
@@ -24,8 +26,12 @@ public class HealthPlayer : HealthBase
 
     protected override void displayHealth()
     {
-        FindObjectOfType<UIHandler>().PlayerHealth = health;
-        FindObjectOfType<UIHandler>().DisplayPlayerHealth();
+        if (!isLab)
+        {
+            FindObjectOfType<UIHandler>().PlayerHealth = health;
+            FindObjectOfType<UIHandler>().DisplayPlayerHealth();
+        }
+        
     }
 
     protected override void childUpdate()
