@@ -36,6 +36,7 @@ public class InventorySystem : MonoBehaviour
     private GameObject wepChipPanelChild;
 
     private InventoryWeapon selectedWeapon;
+    public int equippedItem;
 
     private bool acsSpawned;
 
@@ -69,10 +70,12 @@ public class InventorySystem : MonoBehaviour
     private void loadInventory()
     {
         List<InventoryObjects> inventory = inventorySave.GetInventory();
+        equippedItem = inventorySave.currentItem;
         foreach (InventoryObjects item in inventory)
         {
             AddItem(item);
         }
+        selectInventory(equippedItem + 1);
     }
 
     public void AddItem(InventoryObjects item)
@@ -114,7 +117,7 @@ public class InventorySystem : MonoBehaviour
 
     public void SaveInventory()
     {
-        inventorySave.SetInventory(items);
+        inventorySave.SetInventory(items, equippedItem);
         inventorySave.SaveInventory();
     }
 
@@ -382,21 +385,13 @@ public class InventorySystem : MonoBehaviour
                     instance.GetComponent<SpriteRenderer>().sprite = selectedWeapon.chip.itemSprite;
                 }
 
-
                 //sets original chip to current chip
                 Debug.Log("switch");
                 selectedWeapon.chip = chip;
 
                 removeItem(chip);
-
-
-
-
             }
         }
-
-
-
 
         wepChipPanel.SetActive(false);
 
@@ -404,9 +399,11 @@ public class InventorySystem : MonoBehaviour
 
     private void selectInventory(int alpha)
     {
-        if (items.Count > alpha - 1)
+        equippedItem = alpha - 1;
+        if (items.Count > alpha - 1 && alpha >= 1)
         {
             selectedItem = items[alpha - 1];
+            
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
             {

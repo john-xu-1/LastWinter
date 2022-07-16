@@ -14,13 +14,20 @@ public class PlayerSave
     public PlayerStats playerStats;
     public bool[] inventory;
     public int[] inventorySelection;
+    public int equipedItem = -1;
 
-    public PlayerSave(string saveName, PlayerStats ps, bool[] inventory)
+    public PlayerSave(string saveName, PlayerStats ps, bool[] inventory, int equipedItem)
     {
         this.saveName = saveName;
         this.playerStats = ps;
         this.inventory = inventory;
+        this.equipedItem = equipedItem;
     }
+
+    //public static PlayerSave GetPlayerSave(string saveName)
+    //{
+
+    //}
 
     private static void checkSaveList(string saveName)
     {
@@ -40,6 +47,23 @@ public class PlayerSave
             SaveList = new PlayerSaves();
             SaveList.SaveList.Add(saveName);
             Utility.SaveJasonToPlayerPrefs<PlayerSaves>(SaveList, "SaveList");
+        }
+    }
+    public static string[] GetPlayerSaveList()
+    {
+        PlayerSaves SaveList = Utility.LoadFromPlayerPrefs<PlayerSaves>("SaveList");
+        if(SaveList != null)
+        {
+            string[] saveList = new string[SaveList.SaveList.Count];
+            for(int i = 0; i < SaveList.SaveList.Count; i += 1)
+            {
+                saveList[i] = SaveList.SaveList[i];
+            }
+            return saveList;
+        }
+        else
+        {
+            return new string[0];
         }
     }
 
@@ -63,7 +87,7 @@ public class PlayerSave
         PlayerSave playerSave = Utility.LoadFromPlayerPrefs<PlayerSave>(saveName);
         if (playerSave == null)
         {
-            playerSave = new PlayerSave(saveName, playerStats, new bool[0]);
+            playerSave = new PlayerSave(saveName, playerStats, new bool[0], playerSave.equipedItem);
         }
 
         playerSave.playerStats = playerStats;
@@ -72,19 +96,20 @@ public class PlayerSave
         Utility.SaveJasonToPlayerPrefs<PlayerSave>(playerSave, saveName);
     }
 
-    public static void SaveInventory(string saveName, bool[] inventory, int[] inventorySelection)
+    public static void SaveInventory(string saveName, bool[] inventory, int[] inventorySelection, int equipedItem)
     {
         checkSaveList(saveName);
         //check for saveName & load PlayerSave
         PlayerSave playerSave = Utility.LoadFromPlayerPrefs<PlayerSave>(saveName);
         if (playerSave == null)
         {
-            playerSave = new PlayerSave(saveName, new PlayerStats(), inventory);
+            playerSave = new PlayerSave(saveName, new PlayerStats(), inventory, equipedItem);
         }
         //update PlayerSave
 
         playerSave.inventory = inventory;
         playerSave.inventorySelection = inventorySelection;
+        playerSave.equipedItem = equipedItem;
 
         //save PlayerSave
         Utility.SaveJasonToPlayerPrefs<PlayerSave>(playerSave, saveName);
@@ -102,6 +127,12 @@ public class PlayerSave
         PlayerSave playerSave = Utility.LoadFromPlayerPrefs<PlayerSave>(saveName);
         if (playerSave != null) return playerSave.inventorySelection;
         else return null;
+    }
+    public static int GetEquipedItem(string saveName)
+    {
+        PlayerSave playerSave = Utility.LoadFromPlayerPrefs<PlayerSave>(saveName);
+        if (playerSave != null) return playerSave.equipedItem;
+        else return -1;
     }
 }
 
