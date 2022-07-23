@@ -8,11 +8,14 @@ public class CameraController : MonoBehaviour
     public Vector3 target_Offset;
     public CameraFollow FollowType = CameraFollow.snap;
 
+    public MenuUIHandler MUH;
+
     public enum CameraFollow
     {
         snap,
         follow,
-        lab
+        lab,
+        menu_selection
     }
 
     private Vector2 origin;
@@ -23,6 +26,8 @@ public class CameraController : MonoBehaviour
 
     private Camera camera;
 
+    private List<Color32> colors = new List<Color32>();
+
     private Vector2 gridSize;
     private Vector2 resolution;
     //private Vector2 gridSize { get { return new Vector2(camera.orthographicSize * 2, camera.aspect * camera.orthographicSize * 2); } }
@@ -31,6 +36,12 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private bool debug = true;
     [SerializeField] private int debugWorldHeight = 100, debugWorldWidth = 100;
+    int index = 0;
+
+    private float nextInputTime;
+
+    public float inputRate = 0.15f;
+
 
     private void Start()
     {
@@ -40,6 +51,18 @@ public class CameraController : MonoBehaviour
         gridSize = FindGridSize();
         resolution = new Vector2(Screen.width, Screen.height);
         targetOthographicSize = camera.orthographicSize;
+
+        if (FollowType == CameraFollow.menu_selection)
+        {
+            for (int i = 0; i < MUH.getArray().Count; i += 1)
+            {
+                Color32 c = Random.ColorHSV();
+                colors.Add(c);
+            }
+
+            GetComponent<Camera>().backgroundColor = colors[0];
+
+        }
 
         if (debug)
         {
@@ -60,7 +83,7 @@ public class CameraController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (!target) target = GameObject.FindGameObjectWithTag("Player").transform;
+        if (!target && FollowType != CameraFollow.menu_selection) target = GameObject.FindGameObjectWithTag("Player").transform;
         if (FollowType == CameraFollow.snap && target)
         {
             float targetH = target.position.y - (origin.y - gridSize.y / 2);
@@ -119,6 +142,53 @@ public class CameraController : MonoBehaviour
             if (y > minY) y = maxY;
 
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(x, y, z), Vector3.Distance(transform.position, target.position) * Time.deltaTime * labSmoothing);
+        }
+        else if (FollowType == CameraFollow.menu_selection)
+        {
+            
+            if (transform.position.x < MUH.InstantiateInterval * (MUH.getArray().Count - 1))
+            {
+                
+                
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    if (Time.time >= nextInputTime)
+                    {
+                        index++;
+                        transform.position = new Vector3(transform.position.x + MUH.InstantiateInterval, transform.transform.position.y, transform.position.z);
+                        GetComponent<Camera>().backgroundColor = colors[index];
+                        //Debug.Log(index - 1 + " + 1");
+
+                        MUH.setSaveName(index);
+
+                        nextInputTime = Time.time + inputRate;
+                    }
+                    
+                }
+                
+            }
+            if (transform.position.x > 0)
+            {
+                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    if (Time.time >= nextInputTime)
+                    {
+                        index--;
+                        transform.position = new Vector3(transform.position.x - MUH.InstantiateInterval, transform.transform.position.y, transform.position.z);
+                        GetComponent<Camera>().backgroundColor = colors[index];
+
+                        MUH.setSaveName(index);
+
+                        nextInputTime = Time.time + inputRate;
+                    }
+                    
+                }
+            }
+
+
+
+            //Debug.Log(index);
+
         }
 
     }

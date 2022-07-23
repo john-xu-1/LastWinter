@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TakeDamage : MonoBehaviour
 {
+    public bool canCrit = false;
+
     public void Damage (float damage, string type)
     {
         transform.parent.GetComponent<HealthBase>().TakeDamage(damage, type);

@@ -95,6 +95,8 @@ public class Pickupable : MonoBehaviour
                     Destroy(gameObject);
                 }
 
+                break;
+
             }
         }
         

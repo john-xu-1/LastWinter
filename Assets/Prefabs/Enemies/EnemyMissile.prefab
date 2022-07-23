@@ -486,6 +486,9 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 4096
+  enemyCriticalLayer:
+    serializedVersion: 2
+    m_Bits: 0
   isEnemy: 1
   isMelee: 0
 --- !u!1 &433661612277936041
@@ -593,7 +596,7 @@ GameObject:
   - component: {fileID: 433661612410558446}
   - component: {fileID: 433661612410558444}
   - component: {fileID: 433661612410558443}
-  m_Layer: 13
+  m_Layer: 9
   m_Name: EnemyMissile
   m_TagString: enemy
   m_Icon: {fileID: 0}

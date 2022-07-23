@@ -8,6 +8,7 @@ public class InventorySave : ScriptableObject
     [SerializeField] private List<InventoryObjects> inventoryObjects;
     [SerializeField] private InventoryObjects[] allInventoryObjects;
     [SerializeField] private string saveName;
+    public int currentItem = -1;
 
 
     public void SaveName (string saveName)
@@ -15,15 +16,25 @@ public class InventorySave : ScriptableObject
         this.saveName = saveName;
     }
 
+    
+
     public List<InventoryObjects> GetInventory()
     {
         LoadInventory(saveName);
         return inventoryObjects;
     }
 
-    public void SetInventory(List<InventoryObjects> inventoryObjects)
+    
+
+    public InventoryObjects[] getAllObjects()
+    {
+        return allInventoryObjects;
+    }
+
+    public void SetInventory(List<InventoryObjects> inventoryObjects, int currentItem)
     {
         this.inventoryObjects = inventoryObjects;
+        this.currentItem = currentItem;
     }
 
     public void SaveInventory(string saveName)
@@ -51,7 +62,7 @@ public class InventorySave : ScriptableObject
                 inventory[i] = true;
             }
         }
-        PlayerSave.SaveInventory(saveName, inventory, inventorySelection);
+        PlayerSave.SaveInventory(saveName, inventory, inventorySelection, currentItem);
     }
 
     private int GetItemID(InventoryObjects item)
@@ -72,16 +83,7 @@ public class InventorySave : ScriptableObject
         inventoryObjects.Clear();
         bool[] inventory = PlayerSave.GetInventory(saveName);
         int[] inventorySelection = PlayerSave.GetInventorySelection(saveName);
-        //if (inventory != null)
-        //{
-        //    for (int i = 0; i < inventory.Length; i++)
-        //    {
-        //        if (inventory[i])
-        //        {
-        //            inventoryObjects.Add(allInventoryObjects[i]);
-        //        }
-        //    }
-        //}
+        currentItem = PlayerSave.GetEquipedItem(saveName);
 
         if (inventorySelection != null)
         {
@@ -92,6 +94,11 @@ public class InventorySave : ScriptableObject
         }
 
         
+    }
+
+    public string GetSaveName()
+    {
+        return saveName;
     }
 }
 

@@ -239,6 +239,10 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 8192
+  enemyCriticalLayer:
+    serializedVersion: 2
+    m_Bits: 16384
+  isEnemy: 0
   isMelee: 0
 --- !u!1 &4553391551835179609
 GameObject:

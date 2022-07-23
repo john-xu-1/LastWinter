@@ -37,6 +37,8 @@ public class InventorySystem : MonoBehaviour
 
     private InventoryWeapon selectedWeapon;
 
+    public int equipedItem;
+
     private bool acsSpawned;
 
     private int curSelectedKey = 0;
@@ -69,10 +71,13 @@ public class InventorySystem : MonoBehaviour
     private void loadInventory()
     {
         List<InventoryObjects> inventory = inventorySave.GetInventory();
+        equipedItem = inventorySave.currentItem;
         foreach (InventoryObjects item in inventory)
         {
             AddItem(item);
         }
+
+        selectInventory(equipedItem + 1);
     }
 
     public void AddItem(InventoryObjects item)
@@ -114,7 +119,7 @@ public class InventorySystem : MonoBehaviour
 
     public void SaveInventory()
     {
-        inventorySave.SetInventory(items);
+        inventorySave.SetInventory(items, equipedItem);
         inventorySave.SaveInventory();
     }
 
@@ -404,9 +409,11 @@ public class InventorySystem : MonoBehaviour
 
     private void selectInventory(int alpha)
     {
-        if (items.Count > alpha - 1)
+        equipedItem = alpha - 1;
+        if (items.Count > alpha - 1 && alpha >= 1)
         {
             selectedItem = items[alpha - 1];
+            
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
             {
@@ -425,6 +432,7 @@ public class InventorySystem : MonoBehaviour
         }
         else
         {
+
             selectedItem = null;
             pa.setMelSr(null);
             pa.weapon = null;

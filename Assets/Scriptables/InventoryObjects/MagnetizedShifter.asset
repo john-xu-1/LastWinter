@@ -16,7 +16,7 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 33734601b5e024d16b88e005613daec3, type: 3}
   itemName: MagnetizedShifter
   itemRare: A
-  tooltip: 'Fates is kind of like a magnet, sometimes.
+  tooltip: 'Fate is kind of like a magnet, sometimes.
 
 
     Enemy receives knockback
@@ -27,8 +27,8 @@ MonoBehaviour:
   spawnedPrefab2: {fileID: 4553391551309091969, guid: f88441b671b154bee8f3d7c621646c6a, type: 3}
   coolDown: 1
   isMelee: 0
-  destroyAfterTime: 15
-  curAttackTime: 8.012875
+  destroyAfterTime: 5
+  curAttackTime: 9.473224
   isWeaponSwitchBullet: 1
   chip: {fileID: 0}
   ab1: {fileID: 0}

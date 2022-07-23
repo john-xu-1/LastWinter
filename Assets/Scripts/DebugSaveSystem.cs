@@ -24,9 +24,9 @@ public class DebugSaveSystem : MonoBehaviour
         PlayerSave.RemovePlayerSave (saveName);
     }
 
-    public void setSaveName(string s)
-    {
+    //public void setSaveName(string s)
+    //{
 
-        saveName = s;
-    }
+    //    saveName = s;
+    //}
 }

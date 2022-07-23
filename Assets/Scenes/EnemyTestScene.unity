@@ -363,11 +363,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 811798860, guid: 0ea9748bf53670245a441e38bf510be0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9034532965937968619, guid: 0ea9748bf53670245a441e38bf510be0, type: 3}
       propertyPath: m_Name
       value: EnemyShotgun
+      objectReference: {fileID: 0}
+    - target: {fileID: 9034532965937968619, guid: 0ea9748bf53670245a441e38bf510be0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9034532965937968622, guid: 0ea9748bf53670245a441e38bf510be0, type: 3}
       propertyPath: m_RootOrder
@@ -7630,11 +7634,13 @@ MonoBehaviour:
   target: {fileID: 1436411425}
   target_Offset: {x: 0, y: 2, z: -10}
   FollowType: 1
+  MUH: {fileID: 0}
   targetOthographicSize: 31
   targetOthographicSizeGrowthRate: 0.01
   debug: 1
   debugWorldHeight: 100
   debugWorldWidth: 100
+  inputRate: 0.15
   bound: {fileID: 0}
   labSmoothing: 2
 --- !u!1 &1545743223
@@ -7736,7 +7742,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2034966450, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1173827562917520578, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
       propertyPath: m_Name
@@ -7744,7 +7750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1173827562917520578, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1173827562917520585, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
       propertyPath: m_RootOrder
@@ -7959,7 +7965,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 341972518147192716, guid: d1d6e714273274acb853a2157a70b6c2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 341972518879934232, guid: d1d6e714273274acb853a2157a70b6c2, type: 3}
       propertyPath: m_RootOrder
@@ -8008,6 +8014,10 @@ PrefabInstance:
     - target: {fileID: 341972518879934238, guid: d1d6e714273274acb853a2157a70b6c2, type: 3}
       propertyPath: m_Name
       value: EnemyMissileLauncher
+      objectReference: {fileID: 0}
+    - target: {fileID: 341972518879934238, guid: d1d6e714273274acb853a2157a70b6c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1d6e714273274acb853a2157a70b6c2, type: 3}
@@ -8070,9 +8080,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyMissile
       objectReference: {fileID: 0}
+    - target: {fileID: 433661612410558450, guid: 44b33de053f4c43bc92602dc6160b6ca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 433661612643541899, guid: 44b33de053f4c43bc92602dc6160b6ca, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44b33de053f4c43bc92602dc6160b6ca, type: 3}
@@ -8085,11 +8099,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8387131396987147012, guid: cc7a7600fbb8f48e7aadd34381960201, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8387131397387960704, guid: cc7a7600fbb8f48e7aadd34381960201, type: 3}
       propertyPath: m_Name
       value: EnemyRollaBoi
+      objectReference: {fileID: 0}
+    - target: {fileID: 8387131397387960704, guid: cc7a7600fbb8f48e7aadd34381960201, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8387131397387960706, guid: cc7a7600fbb8f48e7aadd34381960201, type: 3}
       propertyPath: m_RootOrder

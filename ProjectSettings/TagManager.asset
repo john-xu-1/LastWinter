@@ -9,6 +9,7 @@ TagManager:
   - bullet
   - enemy
   - GameHandler
+  - crit
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - Bullet
   - PlayerHitBox
   - EnemyHitBox
-  - 
+  - EnemyCritBox
   - 
   - 
   - 
