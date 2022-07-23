@@ -59,7 +59,7 @@ public class DungeonHandler : MonoBehaviour
 
     private void Start()
     {
-        invPan.SetActive(false);
+        //invPan.SetActive(false);
     }
 
     public void camSetup()

@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89ade8b7cf8bc4a6fa723673ac1a5847, type: 3}
   m_Name: InventorySave
   m_EditorClassIdentifier: 
-  inventoryObjects: []
+  inventoryObjects:
+  - {fileID: 11400000, guid: 8fbaace1f0cb14a33be1e64c0155d306, type: 2}
+  - {fileID: 11400000, guid: 8fbaace1f0cb14a33be1e64c0155d306, type: 2}
+  - {fileID: 11400000, guid: 8fbaace1f0cb14a33be1e64c0155d306, type: 2}
+  - {fileID: 11400000, guid: 8fbaace1f0cb14a33be1e64c0155d306, type: 2}
   allInventoryObjects:
   - {fileID: 11400000, guid: 86c95cfffb7e047eead740a980da51c0, type: 2}
   - {fileID: 11400000, guid: 0426c6632016a468c9843c64823e53ec, type: 2}
@@ -28,4 +32,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7cafe256347584bfcaa5848e148b39e3, type: 2}
   - {fileID: 11400000, guid: 658e955a762744dfead012132a84e6c0, type: 2}
   - {fileID: 11400000, guid: b192f45b9f3bd480f9614f7bc56c1f87, type: 2}
-  saveName: test
+  saveName: Player 2
+  currentItem: 0
