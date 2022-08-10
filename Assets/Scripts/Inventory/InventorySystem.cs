@@ -63,6 +63,8 @@ public class InventorySystem : MonoBehaviour
             wepChipPanelChild = wepChipPanel.transform.GetChild(0).gameObject;
             wepChipPanel.SetActive(false);
         }
+
+        FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
         
         //FindObjectOfType<InventoryUI>().updateSprite(items);
     }
@@ -113,7 +115,7 @@ public class InventorySystem : MonoBehaviour
         {
             addKey(item);
         }
-        FindObjectOfType<InventoryUI>().updateSprite(items);
+        FindObjectOfType<InventoryUI>().updateSprite(items, selectedWeapon);
 
     }
 
@@ -151,7 +153,7 @@ public class InventorySystem : MonoBehaviour
             selectedItem = null;
         }
 
-        FindObjectOfType<InventoryUI>().updateSprite(items);
+        FindObjectOfType<InventoryUI>().updateSprite(items, selectedWeapon);
 
         index--;
     }
@@ -413,7 +415,9 @@ public class InventorySystem : MonoBehaviour
         if (items.Count > alpha - 1 && alpha >= 1)
         {
             selectedItem = items[alpha - 1];
-            
+
+            FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
+
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
             {
@@ -432,13 +436,14 @@ public class InventorySystem : MonoBehaviour
         }
         else
         {
-
             selectedItem = null;
             pa.setMelSr(null);
             pa.weapon = null;
         }
 
-        
+
+        FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
+
         if (curSelectedKey != alpha)
         {
             acsSpawned = false;

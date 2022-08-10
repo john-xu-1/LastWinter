@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
 
     private int worldWidth, worldHeight, roomWidth, roomHeight;
 
-    private Camera camera;
+    private Camera myCamera;
 
     private List<Color32> colors = new List<Color32>();
 
@@ -47,10 +47,10 @@ public class CameraController : MonoBehaviour
     {
         //target_Offset = Vector3.forward * -10;
         origin = transform.position;
-        camera = GetComponent<Camera>();
+        myCamera = GetComponent<Camera>();
         gridSize = FindGridSize();
         resolution = new Vector2(Screen.width, Screen.height);
-        targetOthographicSize = camera.orthographicSize;
+        targetOthographicSize = myCamera.orthographicSize;
 
         if (FollowType == CameraFollow.menu_selection)
         {
@@ -77,8 +77,8 @@ public class CameraController : MonoBehaviour
 
     Vector2 FindGridSize()
     {
-        float height = camera.orthographicSize * 2;
-        float width = camera.aspect * height;
+        float height = myCamera.orthographicSize * 2;
+        float width = myCamera.aspect * height;
         return new Vector2(width, height);
     }
     void FixedUpdate()
@@ -127,11 +127,11 @@ public class CameraController : MonoBehaviour
         }
         else if (FollowType == CameraFollow.lab)
         {
-            float minX = bound.bounds.min.x + camera.aspect * camera.orthographicSize;
-            float minY = bound.bounds.min.y + camera.orthographicSize;  
+            float minX = bound.bounds.min.x + myCamera.aspect * myCamera.orthographicSize;
+            float minY = bound.bounds.min.y + myCamera.orthographicSize;  
 
-            float maxX = bound.bounds.max.x - camera.aspect * camera.orthographicSize;
-            float maxY = bound.bounds.max.y - camera.orthographicSize;
+            float maxX = bound.bounds.max.x - myCamera.aspect * myCamera.orthographicSize;
+            float maxY = bound.bounds.max.y - myCamera.orthographicSize;
 
             float x = target.position.x;
             float y = target.position.y;
@@ -143,13 +143,19 @@ public class CameraController : MonoBehaviour
 
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(x, y, z), Vector3.Distance(transform.position, target.position) * Time.deltaTime * labSmoothing);
         }
-        else if (FollowType == CameraFollow.menu_selection)
+        
+
+    }
+
+    private void Update()
+    {
+        if (FollowType == CameraFollow.menu_selection)
         {
-            
+
             if (transform.position.x < MUH.InstantiateInterval * (MUH.getArray().Count - 1))
             {
-                
-                
+
+
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
                     if (Time.time >= nextInputTime)
@@ -163,9 +169,9 @@ public class CameraController : MonoBehaviour
 
                         nextInputTime = Time.time + inputRate;
                     }
-                    
+
                 }
-                
+
             }
             if (transform.position.x > 0)
             {
@@ -181,7 +187,7 @@ public class CameraController : MonoBehaviour
 
                         nextInputTime = Time.time + inputRate;
                     }
-                    
+
                 }
             }
 
@@ -190,7 +196,6 @@ public class CameraController : MonoBehaviour
             //Debug.Log(index);
 
         }
-
     }
 
     public BoxCollider2D bound;
@@ -199,21 +204,21 @@ public class CameraController : MonoBehaviour
 
     public void UpdateOthographicSize()
     {
-        if (camera.orthographicSize < targetOthographicSize)
+        if (myCamera.orthographicSize < targetOthographicSize)
         {
-            if (targetOthographicSize - camera.orthographicSize < targetOthographicSizeGrowthRate * Time.time)
+            if (targetOthographicSize - myCamera.orthographicSize < targetOthographicSizeGrowthRate * Time.time)
             {
                 setCameraSize (targetOthographicSize);
             }
             else
             {
-                camera.orthographicSize += targetOthographicSizeGrowthRate * Time.time;
+                myCamera.orthographicSize += targetOthographicSizeGrowthRate * Time.time;
             }
             UpdateGridSize();
         }
-        else if (camera.orthographicSize > targetOthographicSize)
+        else if (myCamera.orthographicSize > targetOthographicSize)
         {
-            if (camera.orthographicSize - targetOthographicSize < targetOthographicSizeGrowthRate * Time.time)
+            if (myCamera.orthographicSize - targetOthographicSize < targetOthographicSizeGrowthRate * Time.time)
             {
                 setCameraSize(targetOthographicSize);
             }
@@ -239,7 +244,7 @@ public class CameraController : MonoBehaviour
 
     private void setCameraSize (float orthagraphicSize)
     {
-        camera.orthographicSize = orthagraphicSize;
+        myCamera.orthographicSize = orthagraphicSize;
     }
 
     public void SetCameraSize(float orthagraphicSize)
@@ -254,7 +259,7 @@ public class CameraController : MonoBehaviour
 
     public float FindMinTargetOthographicSize()
     {
-        if (camera.aspect > 1) return (worldWidth * roomWidth / 2) * (1 / camera.aspect);
+        if (myCamera.aspect > 1) return (worldWidth * roomWidth / 2) * (1 / myCamera.aspect);
         else return (worldWidth * roomWidth / 2);
     }
     public void setUp(bool CameraSnap)
@@ -283,8 +288,8 @@ public class CameraController : MonoBehaviour
         target_Offset = Vector3.forward * -10;
         origin = transform.position;
         //Camera camera = GetComponent<Camera>();
-        float height = camera.orthographicSize * 2;
-        float width = camera.aspect * height;
+        float height = myCamera.orthographicSize * 2;
+        float width = myCamera.aspect * height;
         gridSize = new Vector2(width, height);
 
         if (FollowType == CameraFollow.follow) targetOthographicSize = FindMinTargetOthographicSize();
@@ -297,7 +302,7 @@ public class CameraController : MonoBehaviour
     public void SetCameraSnap()
     {
 
-        if (camera.aspect >= 1)
+        if (myCamera.aspect >= 1)
         {
             SetCameraSize(roomHeight / 2, false);
             targetOthographicSize = roomHeight / 2;
@@ -305,8 +310,8 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            SetCameraSize((roomWidth / 2) / camera.aspect, false);
-            targetOthographicSize = (roomWidth / 2) / camera.aspect;
+            SetCameraSize((roomWidth / 2) / myCamera.aspect, false);
+            targetOthographicSize = (roomWidth / 2) / myCamera.aspect;
             Screen.SetResolution(screenWidth, screenWidth, true);
         }
         UpdateGridSize(new Vector2(roomWidth, roomHeight));

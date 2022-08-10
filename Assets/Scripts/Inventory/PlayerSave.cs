@@ -78,7 +78,11 @@ public class PlayerSave
         PlayerSaves SaveList = Utility.LoadFromPlayerPrefs<PlayerSaves>("SaveList");
         if (SaveList != null)
         {
-            if (SaveList.SaveList.Contains (key)) SaveList.SaveList.Remove(key);
+            if (SaveList.SaveList.Contains(key))
+            {
+                SaveList.SaveList.Remove(key);
+                Utility.SaveJasonToPlayerPrefs<PlayerSaves>(SaveList, "SaveList");
+            }
         }
 
         PlayerSave playerSave = Utility.LoadFromPlayerPrefs<PlayerSave>(key);

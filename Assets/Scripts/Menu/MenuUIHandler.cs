@@ -75,12 +75,19 @@ public class MenuUIHandler : MonoBehaviour
     {
         int ind = array.IndexOf(name);
 
-        int size = allContent[ind].transform.childCount;
+        int size = 0;
 
-        for (int i = 0; i < size; i += 1)
+        if (allContent[ind].transform.GetChild(0).gameObject) size = allContent[ind].transform.childCount;
+
+        if (size > 0)
         {
-            Destroy(allContent[ind].transform.GetChild(i).gameObject);
+            for (int i = 0; i < size; i += 1)
+            {
+                Destroy(allContent[ind].transform.GetChild(i).gameObject);
+            }
         }
+
+        
     }
 
     public void setSaveName(int i)
