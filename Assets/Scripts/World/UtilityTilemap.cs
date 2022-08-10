@@ -39,6 +39,12 @@ public static class UtilityTilemap
         return tilemap.GetTile(tilePos);
     }
 
-
+    public static bool isGround(int x, int y, Tilemap collisionMap)
+    {
+        TileBase ground = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y));
+        TileBase air = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y + 1));
+        TileBase air2 = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y + 2));
+        return ground != null && air == null && air2 == null;
+    }
 }
 

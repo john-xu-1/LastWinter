@@ -12,6 +12,8 @@ public class LightingLevelSetup : MonoBehaviour
 
     [SerializeField] bool isTestLight;
 
+    public bool setupComplete = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,21 +24,24 @@ public class LightingLevelSetup : MonoBehaviour
     {
         this.maxX = maxX;
         this.maxY = maxY;
-        setupLighting();
+        StartCoroutine(setupLighting());
     }
 
-    public void setupLighting()
+    public IEnumerator setupLighting()
     {
         for (int i = minX; i < maxX; i += 1)
         {
             for (int j = minY; j < maxY; j += 1)
             {
+                Debug.Log($"lighting {i} {j}");
                 if (isGround(i, -j))
                 {
-                    placeLight(i, -j);
+                    if (placeLight(i, -j)) yield return null;
                 }
             }
         }
+
+        setupComplete = true;
     }
 
     bool isGround(int x, int y)
@@ -46,13 +51,15 @@ public class LightingLevelSetup : MonoBehaviour
         return ground != null && air == null;
     }
 
-    void placeLight (int x, int y)
+    bool placeLight (int x, int y)
     {
         int random = Random.Range(0, 10);
         if (random == 9)
         {
             random = Random.Range(0, lightPlants.Length);
             Instantiate(lightPlants[random], new Vector3(x, y+1, 0), Quaternion.identity);
+            return true;
         }
+        return false;
     }
 }

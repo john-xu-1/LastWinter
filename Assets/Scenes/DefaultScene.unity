@@ -14152,6 +14152,65 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1231520251
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1231520253}
+  - component: {fileID: 1231520252}
+  m_Layer: 0
+  m_Name: LightingLevelSetup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1231520252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231520251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cfd934e36d3246d8b8bc62f98ebb34b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionMap: {fileID: 590074636}
+  lavaMap: {fileID: 0}
+  waterMap: {fileID: 0}
+  doorMap: {fileID: 0}
+  minX: 1
+  maxX: 160
+  minY: 1
+  maxY: 160
+  lightPlants:
+  - {fileID: 1878425208490984512, guid: 0d1a68255a9fd444991a177ac1196862, type: 3}
+  - {fileID: 5096268923625411613, guid: ce929718a010c44a5ae5b5797b494ee2, type: 3}
+  - {fileID: 152263522882030602, guid: eaf3d061e583f48018a02ea619970140, type: 3}
+  - {fileID: 4474247521491633647, guid: 346ba84ac33a740a58ef6a2e50456132, type: 3}
+  - {fileID: 3118390037909646410, guid: 589c0a58c25ad440eb91e4c1f35fa6b8, type: 3}
+  isTestLight: 0
+  setupComplete: 0
+--- !u!4 &1231520253
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231520251}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 72.72226, y: -44.10008, z: -16.2516}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1256627064
 GameObject:
   m_ObjectHideFlags: 0
@@ -21184,6 +21243,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoadingScreen: {fileID: 0}
   dungeonHandler: {fileID: 1495851078}
+  playerSetup:
+    setupComplete: 0
+    playerPrefab: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
+    collsionMap: {fileID: 590074636}
+  enemySetup:
+    setupComplete: 0
+    collsionMap: {fileID: 590074636}
+    enemies:
+    - {fileID: 1173827562917520578, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
+    - {fileID: 341972518879934238, guid: d1d6e714273274acb853a2157a70b6c2, type: 3}
+    - {fileID: 9034532965937968619, guid: 0ea9748bf53670245a441e38bf510be0, type: 3}
+    - {fileID: 1507855356422977492, guid: 8ee6e7c2b85cfad40bb1cf915b125fc9, type: 3}
+    enemyCount: 10
 --- !u!4 &1406625054
 Transform:
   m_ObjectHideFlags: 0
@@ -21217,7 +21289,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &1436931337
 AudioListener:
   m_ObjectHideFlags: 0
@@ -21322,7 +21394,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436931336}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a026310ccbc114288815fbe291759665, type: 3}
   m_Name: 
@@ -21385,13 +21457,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worlds: {fileID: 11400000, guid: 6f564d747cecf3448ae2dc787f363a74, type: 2}
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
   allItems: []
-  camControl: {fileID: 0}
+  camControl: {fileID: 1436931341}
   mapG: {fileID: 1495851077}
   wepChipPan: {fileID: 0}
   invPan: {fileID: 0}
   DebugMenu: {fileID: 0}
+  setupComplete: 0
+  debugging: 1
 --- !u!4 &1495851079
 Transform:
   m_ObjectHideFlags: 0
@@ -28397,6 +28471,10 @@ PrefabInstance:
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 590074636}
+    - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
+      propertyPath: debugMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8959447840444131708, guid: fc523a761a7b6490886f94f26a378c1a, type: 3}
       propertyPath: doorTilemap
       value: 

@@ -31,7 +31,7 @@ public class DoDamage : MonoBehaviour
 
     public void DamageInflict()
     {
-
+        
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(hitpoint.position, range, enemyLayers);
         Collider2D[] hitCrits = Physics2D.OverlapCircleAll(hitpoint.position, range, enemyCriticalLayer);
         List<Collider2D> hitCritList = new List<Collider2D>();
@@ -51,7 +51,7 @@ public class DoDamage : MonoBehaviour
             //Debug.Log("aaaaaa " + enemy.name);
             if (!enemy.transform.CompareTag("bullet"))
             {
-                if (enemy.gameObject.GetComponent<TakeDamage>().canCrit)
+                //if (enemy.gameObject.GetComponent<TakeDamage>().canCrit)
                 {
                     enemy.transform.GetComponent<TakeDamage>().Damage(damage, type);
                 }
