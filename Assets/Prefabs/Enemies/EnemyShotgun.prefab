@@ -628,7 +628,7 @@ MonoBehaviour:
   attackCD: 2
   dd: {fileID: 0}
   bulletPrefab: {fileID: 64387565851223267, guid: e066623fe5cd143c5b3485f1b6eb6b48, type: 3}
-  fireCD: 3
+  fireCD: 10
   amountOfBullets: 3
   minMax: {x: -0.25, y: 0.25}
   bulletSpeed: 7.5

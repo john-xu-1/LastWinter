@@ -10,4 +10,5 @@ public abstract class GameHandler : MonoBehaviour
     public abstract void EnemyDied(GameObject enemy);
     [SerializeField] protected Vector3 playerSpawnPoint;
     public abstract void ReAssignPlayer(GameObject player);
+    public abstract void StartGameHandler(GameObject player);
 }

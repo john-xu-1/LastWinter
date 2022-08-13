@@ -16,22 +16,27 @@ public class WeaponSceneHandler : GameHandler
         //FindObjectOfType<InventorySystem>().SaveInventory();
         Destroy(player);
 
-        lives -= 1;
 
-        if (lives > 0)
-        {
-            GameObject instance = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
+        GameObject instance = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
 
-            ReAssignPlayer(instance);
-        }
-        else
-        {
-            FindObjectOfType<InventorySystem>().SaveInventory();
-            SceneManager.LoadScene(1);
-        }
+        ReAssignPlayer(instance);
+
+        //lives -= 1;
+
+        //if (lives > 0)
+        //{
+        //    GameObject instance = Instantiate(playerPrefab, playerSpawnPoint, Quaternion.identity);
+
+        //    ReAssignPlayer(instance);
+        //}
+        //else
+        //{
+        //    FindObjectOfType<InventorySystem>().SaveInventory();
+        //    SceneManager.LoadScene(1);
+        //}
 
 
-       
+
     }
 
     public override void ReAssignPlayer(GameObject player)
@@ -51,15 +56,10 @@ public class WeaponSceneHandler : GameHandler
 
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public override void StartGameHandler(GameObject player)
     {
-        
+        playerSpawnPoint = player.transform.position;
+
     }
 }

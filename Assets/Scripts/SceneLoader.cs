@@ -6,9 +6,17 @@ public class SceneLoader : MonoBehaviour
 {
     public GameObject LoadingScreen;
     public DungeonHandler dungeonHandler;
+
+    public GameHandler gameHandler;
     public PlayerSetup playerSetup;
+
     public EnemySetup enemySetup;
     public ItemSetup itemSetup;
+
+    public float progression = 0;
+
+    public int progressionItemsCount = 9;
+
 
     void Start()
     {
@@ -32,22 +40,26 @@ public class SceneLoader : MonoBehaviour
         {
             yield return null;
         }
+        progression += 1 / (float)progressionItemsCount;
         Debug.Log("TilemapSetupComplete");
         StartCoroutine(UISetup());
     }
     IEnumerator UISetup()
     {
         yield return null;
+        progression += 1 / (float)progressionItemsCount;
         StartCoroutine(CameraSetup());
     }
     IEnumerator CameraSetup()
     {
         yield return null;
+        progression += 1 / (float)progressionItemsCount;
         StartCoroutine(AudioSetup());
     }
     IEnumerator AudioSetup()
     {
         yield return null;
+        progression += 1 / (float)progressionItemsCount;
         StartCoroutine(EnvironmentSetup());
     }
     IEnumerator EnvironmentSetup()
@@ -58,11 +70,13 @@ public class SceneLoader : MonoBehaviour
         {
             yield return null;
         }
+        progression += 1 / (float)progressionItemsCount;
         StartCoroutine(ObstaclesSetup());
     }
     IEnumerator ObstaclesSetup()
     {
         yield return null;
+        progression += 1 / (float)progressionItemsCount;
         StartCoroutine(PickablesSetup());
     }
     IEnumerator PickablesSetup()
@@ -72,6 +86,7 @@ public class SceneLoader : MonoBehaviour
         {
             yield return null;
         }
+        progression += 1 / (float)progressionItemsCount;
         StartCoroutine(EnemiesSetup());
     }
     IEnumerator EnemiesSetup()
@@ -81,6 +96,7 @@ public class SceneLoader : MonoBehaviour
         {
             yield return null;
         }
+        progression += 1 / (float)progressionItemsCount;
         StartCoroutine(PlayerSetup());
     }
 
@@ -91,6 +107,7 @@ public class SceneLoader : MonoBehaviour
         {
             yield return null;
         }
+        progression += 1 / (float)progressionItemsCount;
         StartCoroutine(GameStartSetup());
     }
 
@@ -116,13 +133,15 @@ public class PlayerSetup
 
         int x = Random.Range(minX, maxX);
         int y = Random.Range(minY, maxY);
-        while (UtilityTilemap.isGround(x, -y, collsionMap))
+        while (!UtilityTilemap.isGround(x, -y, collsionMap))
         {
             x = Random.Range(minX, maxX);
             y = Random.Range(minY, maxY);
         }
         GameObject player = GameObject.Instantiate(playerPrefab);
-        player.transform.position = new Vector2(x + 0.5f, -y);
+        player.transform.position = new Vector2(x + 0.5f, -y + 1);
+        GameObject.FindObjectOfType<GameHandler>().StartGameHandler(player);
+        player.GetComponent<HealthPlayer>().GH = GameObject.FindObjectOfType<GameHandler>().gameObject;
         setupComplete = true;
     }
 }
@@ -145,14 +164,14 @@ public class EnemySetup
         {
             int x = Random.Range(minX, maxX);
             int y = Random.Range(minY, maxY);
-            while (UtilityTilemap.isGround(x, -y, collsionMap))
+            while (!UtilityTilemap.isGround(x, -y, collsionMap))
             {
                 x = Random.Range(minX, maxX);
                 y = Random.Range(minY, maxY);
             }
             int rand = Random.Range(0, enemies.Length);
             GameObject enemy = GameObject.Instantiate(enemies[rand]);
-            enemy.transform.position = new Vector2(x + 0.5f, -y);
+            enemy.transform.position = new Vector2(x + 0.5f, -y + 1);
             enemyCount -= 1;
         }
         setupComplete = true;
@@ -177,14 +196,14 @@ public class ItemSetup
         {
             int x = Random.Range(minX, maxX);
             int y = Random.Range(minY, maxY);
-            while (UtilityTilemap.isGround(x, -y, collsionMap))
+            while (!UtilityTilemap.isGround(x, -y, collsionMap))
             {
                 x = Random.Range(minX, maxX);
                 y = Random.Range(minY, maxY);
             }
             int rand = Random.Range(0, items.Length);
             GameObject enemy = GameObject.Instantiate(items[rand]);
-            enemy.transform.position = new Vector2(x + 0.5f, -y);
+            enemy.transform.position = new Vector2(x + 0.5f, -y + 2);
             itemCount -= 1;
         }
         setupComplete = true;

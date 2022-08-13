@@ -16,6 +16,8 @@ public class EnemyBehaviorShotgun : EnemyBehaviorBase
     public float bulletSpeed;
     public GameObject[] instances;
 
+    public float destroyTime = 2;
+
 
     public override void defaultAI()
     {
@@ -36,7 +38,7 @@ public class EnemyBehaviorShotgun : EnemyBehaviorBase
                     float j = Random.Range(minMax.x, minMax.y);
                     direction = new Vector2(direction.x + j, direction.y + j);
                     instance.GetComponent<Rigidbody2D>().velocity = new Vector2(bulletSpeed * direction.x, bulletSpeed * direction.y);
-                    Destroy(instance, 5);
+                    Destroy(instance, destroyTime);
                 }
                 
                 nextShootTime = Time.time + fireCD;
