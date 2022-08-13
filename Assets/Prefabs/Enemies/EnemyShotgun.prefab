@@ -236,7 +236,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.16, y: 1.86}
+  m_AnchoredPosition: {x: 0.13, y: 3.26}
   m_SizeDelta: {x: 5.5833, y: 1.311}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1033128785
@@ -438,7 +438,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 832872243011660082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.13, y: 1.94, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9034532965937968622}
@@ -510,10 +510,10 @@ GameObject:
   - component: {fileID: 9034532965937968622}
   - component: {fileID: 9034532965937968623}
   - component: {fileID: 9034532965937968620}
-  - component: {fileID: 9034532965937968621}
   - component: {fileID: 9034532965937968618}
   - component: {fileID: 169099509}
   - component: {fileID: 186070950}
+  - component: {fileID: 1967048351183113834}
   m_Layer: 9
   m_Name: EnemyShotgun
   m_TagString: enemy
@@ -609,32 +609,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &9034532965937968621
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9034532965937968619}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.004173279, y: 0.032346368}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.75, y: 3.75}
-    newSize: {x: 1, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2.2104378, y: 1.5950224}
-  m_EdgeRadius: 0
 --- !u!114 &9034532965937968618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -692,3 +666,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sd: {fileID: 402672638}
+--- !u!61 &1967048351183113834
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9034532965937968619}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 1.9417324}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 3.75, y: 3.75}
+    newSize: {x: 1, y: 2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2, y: 1.3665352}
+  m_EdgeRadius: 0

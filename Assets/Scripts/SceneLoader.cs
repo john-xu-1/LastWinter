@@ -122,7 +122,7 @@ public class PlayerSetup
             y = Random.Range(minY, maxY);
         }
         GameObject player = GameObject.Instantiate(playerPrefab);
-        player.transform.position = new Vector2(x, -y);
+        player.transform.position = new Vector2(x + 0.5f, -y);
         setupComplete = true;
     }
 }
@@ -152,7 +152,7 @@ public class EnemySetup
             }
             int rand = Random.Range(0, enemies.Length);
             GameObject enemy = GameObject.Instantiate(enemies[rand]);
-            enemy.transform.position = new Vector2(x, -y);
+            enemy.transform.position = new Vector2(x + 0.5f, -y);
             enemyCount -= 1;
         }
         setupComplete = true;
@@ -184,7 +184,7 @@ public class ItemSetup
             }
             int rand = Random.Range(0, items.Length);
             GameObject enemy = GameObject.Instantiate(items[rand]);
-            enemy.transform.position = new Vector2(x, -y);
+            enemy.transform.position = new Vector2(x + 0.5f, -y);
             itemCount -= 1;
         }
         setupComplete = true;

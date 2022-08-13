@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 341972518879934180}
   - component: {fileID: 341972518879934235}
   - component: {fileID: 341972518879934181}
-  - component: {fileID: 3555310125448254114}
+  - component: {fileID: 5759604087075670191}
   m_Layer: 9
   m_Name: EnemyMissileLauncher
   m_TagString: enemy
@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 341972518879934238}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.54, y: 4.21, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8281113498883784436}
@@ -161,7 +161,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 433661612410558450, guid: 44b33de053f4c43bc92602dc6160b6ca, type: 3}
   fireCD: 1
   destroyTime: 10
---- !u!61 &3555310125448254114
+--- !u!61 &5759604087075670191
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -174,10 +174,10 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1, y: 2}
+  m_Offset: {x: 0, y: 1.3962705}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
+    pivot: {x: 0.5, y: 0}
     oldSize: {x: 2, y: 4}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
@@ -185,7 +185,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 4}
+  m_Size: {x: 2, y: 2.792541}
   m_EdgeRadius: 0
 --- !u!1 &1951385101970848859
 GameObject:
@@ -223,7 +223,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1.06, y: 2.95}
+  m_AnchoredPosition: {x: 0.01, y: 3.3}
   m_SizeDelta: {x: 2.3265, y: 0.5067}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &212542862537587322
@@ -513,7 +513,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7173136976163931220}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.98, y: 2.2, z: 0}
+  m_LocalPosition: {x: 0, y: 1.99, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 341972518879934232}
