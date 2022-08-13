@@ -7810,6 +7810,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 618275142717560422, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
+      propertyPath: canCrit
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1173827562917520578, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
       propertyPath: m_Name
       value: EnemyBounceBoi
@@ -7875,6 +7879,10 @@ PrefabInstance:
       propertyPath: GH
       value: 
       objectReference: {fileID: 1545743223}
+    - target: {fileID: 2824200790236858551, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_Name
       value: Player

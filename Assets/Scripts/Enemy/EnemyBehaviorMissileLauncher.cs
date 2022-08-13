@@ -17,20 +17,17 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
     public override void defaultAI()
     {
 
-        if (getDistX(p.transform, transform) <= angerRange)
+        if (Time.time >= nextShootTime)
         {
-            if (Time.time >= nextShootTime)
-            {
-                instance = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            instance = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
 
-                
-                
-                Destroy(instance, destroyTime);
 
-                nextShootTime = Time.time + fireCD;
-            }
+
+            Destroy(instance, destroyTime);
+
+            nextShootTime = Time.time + fireCD;
         }
-        
+
     }
 
     public override void inflictDamage()

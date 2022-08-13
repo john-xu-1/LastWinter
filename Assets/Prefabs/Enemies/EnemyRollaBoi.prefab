@@ -235,7 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   p: {fileID: 0}
   rb: {fileID: 8387131397387960716}
-  angerRange: 2
+  angerRange: 100
   speed: 1
   attackCD: 0.25
   dd: {fileID: 8387131398469716254}
@@ -438,6 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1485b44dfeb4d4b28aaa63d80d09126b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canCrit: 0
 --- !u!61 &8387131397688651987
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -667,6 +668,9 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 4096
+  enemyCriticalLayer:
+    serializedVersion: 2
+    m_Bits: 0
   isEnemy: 1
   isMelee: 1
 --- !u!1 &8387131398647876087

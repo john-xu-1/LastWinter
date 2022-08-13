@@ -27,6 +27,10 @@ public class DungeonHandler : MonoBehaviour
     private int worldWidth, worldHeight, roomWidth, roomHeight;
     private bool buildingMap;
 
+    public bool setupComplete = false;
+
+    public bool debugging = false;
+
     public void MapSetup(World map)
     {
         //dungeon = worlds.GetWorld();
@@ -54,7 +58,7 @@ public class DungeonHandler : MonoBehaviour
 
     public void SetUpPlayerUI()
     {
-        invPan.SetActive(true);
+        if (invPan) invPan.SetActive(true);
     }
 
     private void Start()
@@ -72,10 +76,18 @@ public class DungeonHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) DebugMenu.SetActive(!DebugMenu.activeSelf);
         if (buildingMap && !mapG.BuildingRooms)
         {
-            PlayerSetup();
-            camSetup();
+            setupComplete = true;
+            if (!debugging)
+            {
+                PlayerSetup();
+                camSetup();
+                FindObjectOfType<LightingLevelSetup>().setupLighting(worldWidth * roomWidth, worldHeight * roomHeight);
+            }
+
+
+            
             buildingMap = false;
-            FindObjectOfType<LightingLevelSetup>().setupLighting(worldWidth * roomWidth, worldHeight * roomHeight);
+            
         }
 
     }

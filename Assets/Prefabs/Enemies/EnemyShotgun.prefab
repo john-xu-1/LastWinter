@@ -498,6 +498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1485b44dfeb4d4b28aaa63d80d09126b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canCrit: 0
 --- !u!1 &9034532965937968619
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,7 +649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   p: {fileID: 0}
   rb: {fileID: 9034532965937968620}
-  angerRange: 7
+  angerRange: 25
   speed: 5
   attackCD: 2
   dd: {fileID: 0}

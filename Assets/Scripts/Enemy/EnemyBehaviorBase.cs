@@ -29,7 +29,7 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (p)
+        if (p && getDistX(p.transform, transform) <= angerRange && getDistY(p.transform, transform) <= angerRange)
         {
             defaultAI();
         }
