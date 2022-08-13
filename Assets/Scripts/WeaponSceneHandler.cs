@@ -51,15 +51,8 @@ public class WeaponSceneHandler : GameHandler
 
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public override void StartGameHandler(GameObject player)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        playerSpawnPoint = player.transform.position;
     }
 }
