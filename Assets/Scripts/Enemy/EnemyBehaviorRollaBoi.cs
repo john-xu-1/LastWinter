@@ -36,7 +36,7 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
             {
                 if (!hitRight && hitDown)
                 {
-                    rb.AddForce(gravity);
+                    //rb.AddForce(gravity);
                     rb.velocity = Vector2.right * speed;
                 }
                 else if (!hitDown && !hitRight && !hitLeft)
@@ -65,7 +65,7 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
             {
                 if (!hitLeft && hitUp)
                 {
-                    rb.AddForce(gravity);
+                    //rb.AddForce(gravity);
                     rb.velocity = Vector2.left * speed;
                 }
                 else if (!hitLeft && !hitUp && !hitRight)
@@ -90,14 +90,14 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
             {
                 if (!hitDown && hitLeft)
                 {
-                    rb.AddForce(gravity);
+                    //rb.AddForce(gravity);
                     rb.velocity = Vector2.down * speed;
                 }
                 else if (!hitDown && !hitLeft && !hitUp)
                 {
                     Debug.Log("!hitDown && !hitLeft");
                     rb.AddForce(gravity * speed);
-                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + Time.fixedDeltaTime);
+                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + Time.fixedDeltaTime * 1.5f);
                 }
                 else if (hitUp)
                 {
@@ -115,14 +115,14 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
             {
                 if (!hitUp && hitRight)
                 {
-                    rb.AddForce(gravity);
+                    //rb.AddForce(gravity);
                     rb.velocity = Vector2.up * speed;
                 }
                 else if (!hitUp && !hitRight && !hitDown)
                 {
                     Debug.Log("!hitDown && !hitLeft");
                     rb.AddForce(gravity * speed);
-                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - Time.fixedDeltaTime);
+                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - Time.fixedDeltaTime * 1.5f);
                 }
                 else if (hitDown)
                 {
