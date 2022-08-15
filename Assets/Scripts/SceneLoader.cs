@@ -126,8 +126,8 @@ public class PlayerSetup
     public UnityEngine.Tilemaps.Tilemap collsionMap;
     public void Setup()
     {
-        int minX = 1;
-        int minY = 1;
+        int minX = 2;
+        int minY = 2;
         int maxX = 200;
         int maxY = 100;
 
@@ -155,8 +155,8 @@ public class EnemySetup
     public int enemyCount = 10;
     public void Setup()
     {
-        int minX = 1;
-        int minY = 1;
+        int minX = 2;
+        int minY = 2;
         int maxX = 200;
         int maxY = 100;
 
@@ -171,7 +171,7 @@ public class EnemySetup
             }
             int rand = Random.Range(0, enemies.Length);
             GameObject enemy = GameObject.Instantiate(enemies[rand]);
-            enemy.transform.position = new Vector2(x + 0.5f, -y + 1);
+            enemy.transform.position = new Vector2(x + 0.5f, -y + 1.6f);
             enemyCount -= 1;
         }
         setupComplete = true;
@@ -185,14 +185,16 @@ public class ItemSetup
     public UnityEngine.Tilemaps.Tilemap collsionMap;
     public GameObject[] items;
     public int itemCount = 5;
+
+    public List<int> placedItems = new List<int>();
     public void Setup()
     {
-        int minX = 1;
-        int minY = 1;
+        int minX = 2;
+        int minY = 2;
         int maxX = 200;
         int maxY = 100;
 
-        while (itemCount > 0)
+        while (itemCount > 0 && placedItems.Count < items.Length)
         {
             int x = Random.Range(minX, maxX);
             int y = Random.Range(minY, maxY);
@@ -202,9 +204,14 @@ public class ItemSetup
                 y = Random.Range(minY, maxY);
             }
             int rand = Random.Range(0, items.Length);
-            GameObject enemy = GameObject.Instantiate(items[rand]);
-            enemy.transform.position = new Vector2(x + 0.5f, -y + 2);
-            itemCount -= 1;
+            if (!placedItems.Contains(rand))
+            {
+                GameObject enemy = GameObject.Instantiate(items[rand]);
+                enemy.transform.position = new Vector2(x + 0.5f, -y + 2.0f);
+                itemCount -= 1;
+                placedItems.Add(rand);
+            }
+            
         }
         setupComplete = true;
     }

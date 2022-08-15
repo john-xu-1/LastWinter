@@ -32,7 +32,7 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
 
         if (gravity.y < 0) //down
         {
-            if (movingRight)
+            if (movingRight) ///movingRight
             {
                 if (!hitRight && hitDown)
                 {
@@ -48,6 +48,10 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
                 {
                     gravity = Vector2.left;
                     rb.velocity = Vector2.left * speed + Vector2.down * speed;
+                }else if (hitRight)
+                {
+                    gravity = Vector2.right;
+                    //rb.velocity 
                 }
             }
             else
@@ -57,7 +61,7 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
         }
         else if (gravity.y > 0)//up
         {
-            if (movingRight)
+            if (movingRight) //movingLeft
             {
                 if (!hitLeft && hitUp)
                 {
@@ -73,13 +77,16 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
                 {
                     gravity = Vector2.right;
                     rb.velocity = Vector2.right * speed + Vector2.up * speed;
+                }else if (hitLeft)
+                {
+                    gravity = Vector2.left;
                 }
             }
 
         }
         else if (gravity.x < 0)//left
         {
-            if (movingRight)
+            if (movingRight) //movingDown
             {
                 if (!hitDown && hitLeft)
                 {
@@ -96,12 +103,15 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
                 {
                     gravity = Vector2.up;
                     rb.velocity = Vector2.left * speed + Vector2.up * speed;
+                }else if (hitDown)
+                {
+                    gravity = Vector2.down;
                 }
             }
         }
         else if (gravity.x > 0)//right
         {
-            if (movingRight)
+            if (movingRight) //movingUp
             {
                 if (!hitUp && hitRight)
                 {
@@ -118,6 +128,9 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
                 {
                     gravity = Vector2.down;
                     rb.velocity = Vector2.down * speed + Vector2.right * speed;
+                }else if (hitUp)
+                {
+                    gravity = Vector2.up;
                 }
             }
         }

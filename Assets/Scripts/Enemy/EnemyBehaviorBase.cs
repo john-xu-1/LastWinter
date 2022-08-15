@@ -29,11 +29,19 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!p)
+        {
+            p = GameObject.FindGameObjectWithTag("Player");
+            rb = GetComponent<Rigidbody2D>();
+            ChildStart();
+        }
         if (p && getDistX(p.transform, transform) <= angerRange && getDistY(p.transform, transform) <= angerRange)
         {
             defaultAI();
         }
+
         
+
         //inflictDamage();
 
     }
