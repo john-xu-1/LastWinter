@@ -40,13 +40,14 @@ public class BulletMagnetizedShifter : BulletBase
                 Debug.Log("Attract");
             }
         }
-        if(collision.transform.CompareTag("enemy"))
+        if(collision.gameObject.layer == 13 && !collision.transform.CompareTag ("TrailMarker"))
         {
             if (weapon.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
             {
 
                 Vector2 direction = GetComponent<Rigidbody2D>().velocity.normalized;
-                collision.transform.parent.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x * speed * 5, direction.y * speed * 5);
+                collision.transform.parent.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(direction.x * speed * 2, direction.y * speed * 2), ForceMode2D.Impulse);
+                
             }
         }
     }

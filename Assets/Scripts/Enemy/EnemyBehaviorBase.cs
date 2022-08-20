@@ -18,6 +18,8 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     
 
+    
+
     void Start()
     {
         p = GameObject.FindGameObjectWithTag("Player");
@@ -45,6 +47,7 @@ public class EnemyBehaviorBase : MonoBehaviour
         //inflictDamage();
 
     }
+
 
     protected virtual void ChildStart() { }
 

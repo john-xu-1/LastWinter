@@ -10,6 +10,7 @@ TagManager:
   - enemy
   - GameHandler
   - crit
+  - TrailMarker
   layers:
   - Default
   - TransparentFX

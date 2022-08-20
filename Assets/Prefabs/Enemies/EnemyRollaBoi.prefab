@@ -407,7 +407,7 @@ GameObject:
   - component: {fileID: 8387131397688651987}
   m_Layer: 13
   m_Name: TakeDamage
-  m_TagString: Untagged
+  m_TagString: TrailMarker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
