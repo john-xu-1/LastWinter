@@ -666,6 +666,11 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &657115593 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6843248306668466673, guid: 008dc1390e9d240149e029252007d690, type: 3}
+  m_PrefabInstance: {fileID: 6843248305299137793}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &702276763
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -687,11 +692,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8387131397387960706, guid: cc7a7600fbb8f48e7aadd34381960201, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.1
+      value: 14.69
       objectReference: {fileID: 0}
     - target: {fileID: 8387131397387960706, guid: cc7a7600fbb8f48e7aadd34381960201, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.42
+      value: 9.44
       objectReference: {fileID: 0}
     - target: {fileID: 8387131397387960706, guid: cc7a7600fbb8f48e7aadd34381960201, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1195,12 +1200,23 @@ MonoBehaviour:
   LoadingScreen: {fileID: 0}
   dungeonHandler: {fileID: 1495851078}
   gameHandler: {fileID: 0}
+  uiSetup:
+    setupComplete: 0
+    finalizeComplete: 0
+    FinalizeUIGameObjects:
+    - {fileID: 657115593}
+  cameraSetup:
+    setupComplete: 0
+    finalizeComplete: 0
+    cameraController: {fileID: 1436931341}
   playerSetup:
     setupComplete: 0
+    finalizeComplete: 0
     playerPrefab: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
     collsionMap: {fileID: 590074636}
   enemySetup:
     setupComplete: 0
+    finalizeComplete: 0
     collsionMap: {fileID: 590074636}
     enemies:
     - {fileID: 1173827562917520578, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
@@ -1210,6 +1226,7 @@ MonoBehaviour:
     enemyCount: 10
   itemSetup:
     setupComplete: 0
+    finalizeComplete: 0
     collsionMap: {fileID: 590074636}
     items:
     - {fileID: 3756520863527365484, guid: 47c5251d3aa1a4ac9bdad6bf6cc87a2e, type: 3}
@@ -1373,6 +1390,7 @@ MonoBehaviour:
   debugWorldHeight: 100
   debugWorldWidth: 100
   inputRate: 0.15
+  active: 0
   bound: {fileID: 0}
   labSmoothing: 2
 --- !u!1 &1495851076
@@ -1901,6 +1919,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6843248305036704243, guid: 008dc1390e9d240149e029252007d690, type: 3}
+      propertyPath: m_Pivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6843248305036704243, guid: 008dc1390e9d240149e029252007d690, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6843248305036704243, guid: 008dc1390e9d240149e029252007d690, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6843248305036704243, guid: 008dc1390e9d240149e029252007d690, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6843248305036704243, guid: 008dc1390e9d240149e029252007d690, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6843248305036704243, guid: 008dc1390e9d240149e029252007d690, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6843248306668466673, guid: 008dc1390e9d240149e029252007d690, type: 3}
       propertyPath: m_Name
       value: ButtonUICanvas
