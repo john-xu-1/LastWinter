@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PathFinder : MonoBehaviour
 {
@@ -16,6 +17,44 @@ public class PathFinder : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public List<GridNode> GetGridMap(UnityEngine.Tilemaps.Tilemap tilemap, int minX, int minY, int maxX, int maxY)
+    {
+        List<GridNode> gridMap = new List<GridNode>();
+        GridNode[,] gridLayout = new GridNode[maxX - minX + 1, maxY - minY + 1];
+
+        for(int x = minX; x <= maxX; x += 1)
+        {
+            for (int y = minY; y <= maxY; y += 1)
+            {
+                if(UtilityTilemap.GetTile(tilemap, new Vector2(x, y)) == null)
+                {
+                    GridNode node = new GridNode(new Vector2Int(x, y));
+                    gridLayout[x - minX, y - minY] = node;
+                    gridMap.Add(node);
+                }
+                
+            }
+        }
+
+        for (int x = minX; x <= maxX; x += 1)
+        {
+            for (int y = minY; y <= maxY; y += 1)
+            {
+                if (x > minX && gridLayout[x - 1, y] != null) gridLayout[x - minX, y - minY].left = gridLayout[x - 1 - minX, y - minY];
+                if (x < maxX && gridLayout[x + 1, y] != null) gridLayout[x - minX, y - minY].right = gridLayout[x + 1 - minX, y - minY];
+                if (y > minX && gridLayout[x, y - 1] != null) gridLayout[x - minX, y - minY].down = gridLayout[x - minX, y - 1 - minY];
+                if (y < maxX && gridLayout[x, y + 1] != null) gridLayout[x - minX, y - minY].up = gridLayout[x - minX, y + 1 - minY];
+            }
+        }
+
+        return gridMap;
+    }
+
+    public List<Vector2Int> FindPath(GridNode start, GridNode end, UnityEngine.Tilemaps.Tilemap tilemap, int minX, int minY, int maxX, int maxY)
+    {
+        return FindPath(start, end, GetGridMap(tilemap, minX, minY, maxX, maxY));
     }
 
     public List<Vector2Int> FindPath(GridNode start, GridNode end, List<GridNode> gridMap)
@@ -56,6 +95,11 @@ public class GridNode
     public int cost = -1;
     public Vector2Int pos;
     public GridNode up, right, down, left;
+
+    public GridNode(Vector2Int pos)
+    {
+        this.pos = pos;
+    }
 
     public GridNode GetConnectedNeighbor()
     {

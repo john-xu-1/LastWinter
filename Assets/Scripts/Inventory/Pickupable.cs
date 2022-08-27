@@ -23,8 +23,8 @@ public class Pickupable : MonoBehaviour
     public bool startChase;
     public Collider2D targ;
 
-    
-
+    private InventorySystem inventorySystem;
+    public void SetInventorySystem(InventorySystem inventorySystem) { this.inventorySystem = inventorySystem; }
 
     private void Start()
     {
@@ -36,6 +36,8 @@ public class Pickupable : MonoBehaviour
     }
     private void Update()
     {
+        if (inventorySystem == null) return;
+
         Collider2D[] hits = Physics2D.OverlapBoxAll(transform.position, hitSize, 0f);
 
         Collider2D[] ranges = Physics2D.OverlapBoxAll(transform.position, rangeSize, 0f);
@@ -69,14 +71,14 @@ public class Pickupable : MonoBehaviour
         }
         
         
-        if (FindObjectOfType<InventorySystem>().isInvFull == false && startChase)
+        if (inventorySystem.isInvFull == false && startChase)
         {
             chase(targ);
             torque = orgTorq;
             Debug.Log("chase");
         }
 
-        if (FindObjectOfType<InventorySystem>().isInvFull == true && startChase)
+        if (inventorySystem.isInvFull == true && startChase)
         {
             rb.velocity = Vector2.zero;
             startChase = false;
@@ -89,9 +91,9 @@ public class Pickupable : MonoBehaviour
             if (hit.transform.CompareTag("Player"))
             {
                 startChase = false;
-                if (!FindObjectOfType<InventorySystem>().isInvFull)
+                if (!inventorySystem.isInvFull)
                 {
-                    FindObjectOfType<InventorySystem>().AddItem(item);
+                    inventorySystem.AddItem(item);
                     Destroy(gameObject);
                 }
 
