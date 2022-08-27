@@ -42,6 +42,8 @@ public class CameraController : MonoBehaviour
 
     public float inputRate = 0.15f;
 
+    public bool active = false;
+
 
     private void Start()
     {
@@ -83,6 +85,7 @@ public class CameraController : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if (!active) return;
         if (!target && FollowType != CameraFollow.menu_selection) target = GameObject.FindGameObjectWithTag("Player").transform;
         if (FollowType == CameraFollow.snap && target)
         {

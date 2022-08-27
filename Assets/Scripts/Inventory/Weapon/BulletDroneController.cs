@@ -17,13 +17,16 @@ public class BulletDroneController : BulletBase
             Vector2 direction = (target - transform.position).normalized;
             GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x * speed, direction.y * speed);
 
+            speed += (Time.deltaTime * 5);
+
+            Debug.Log(collisionCheck);
         }
     }
 
     public override void triggerEnterBehavior(Collider2D collision)
     {
         base.triggerEnterBehavior(collision);
-        if (collision.transform.CompareTag("enemy"))
+        if (collision.gameObject.layer == 13)
         {
             if (collisionCheck)
             {
@@ -33,14 +36,26 @@ public class BulletDroneController : BulletBase
                     Destroy(gameObject);
                     
                 }
-                weapon.curAttackTime = weapon.curAttackTime - cdMinus;
+                
                 Debug.Log(weapon.curAttackTime);
                 collisionCheck = false;
             }
             
 
         }
+
+        
     }
+
+    public override void collideEnterBehavior(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Ground"))
+        {
+            if (speed >= 0) speed -= 5;
+        }
+    }
+
+
     public override void triggerExitBehavior(Collider2D collision)
     {
         base.triggerExitBehavior(collision);

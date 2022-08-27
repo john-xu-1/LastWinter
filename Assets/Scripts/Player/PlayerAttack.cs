@@ -20,6 +20,9 @@ public class PlayerAttack : MonoBehaviour
 
     [SerializeField] private float curDmg;
 
+    public float disappearCD = 2;
+    private float nextDisappearTime;
+
     public void setCurDmg(float d)
     {
         curDmg = d;
@@ -29,6 +32,10 @@ public class PlayerAttack : MonoBehaviour
     void Start()
     {
         inventorySystem = GetComponent<InventorySystem>();
+
+
+        nextDisappearTime = disappearCD;
+        GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().sprite = null;
     }
 
     
@@ -90,6 +97,51 @@ public class PlayerAttack : MonoBehaviour
         dd.DamageInflict();
     }
 
+    private float Zfactor = 0;
+
+    public void pivotFire()
+    {
+        GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().sprite = weapon.itemSprite;
+
+        Vector3 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+
+        Vector2 objectPos = GameObject.FindGameObjectWithTag("SelectedItem").transform.position;
+        target.x = target.x - objectPos.x;
+        target.y = target.y - objectPos.y;
+
+        float Zangle = Mathf.Atan2(target.x, target.y) * Mathf.Rad2Deg;
+
+        if (transform.rotation.y >= 0)
+        {
+            Zfactor = -1;
+            GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else
+        {
+            Zfactor = 1;
+            GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = false;
+        }
+
+        Debug.Log("pivotting");
+
+
+        GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90 * Zfactor)));
+
+
+    }
+
+    public void offFire()
+    {
+        if (GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().sprite != null)
+        {
+            GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().sprite = null;
+
+            Debug.Log("offing");
+        }
+        
+    }
+
     
     public void melee()
     {
@@ -130,30 +182,42 @@ public class PlayerAttack : MonoBehaviour
             {
                 melee();
 
+                //pivotFire();
+
                 weapon.curAttackTime = Time.time + fireRate;
 
             }
         }
-        
+
+        //offFire();
+
     }
 
     private void fire1DownRange()
     {
+
         if (PlayerController.canMelee && Input.GetButtonDown("Fire1"))
         {
             if (Time.time >= weapon.curAttackTime)
             {
-
+                nextDisappearTime = disappearCD;
 
                 bulletInstance = Instantiate(weaponSpawnedTargetPrefab, GameObject.FindGameObjectWithTag("SelectedItem").transform.position, GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation);
+
+                pivotFire();
 
 
                 bulletInstance.GetComponent<DoDamage>().setDamage(curDmg);
 
+                Invoke("offFire", 2);
+
                 weapon.curAttackTime = Time.time + fireRate;
 
             }
+            
         }
+
+        
     }
 
     private void fire2()

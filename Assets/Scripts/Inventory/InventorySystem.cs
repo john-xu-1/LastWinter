@@ -218,7 +218,7 @@ public class InventorySystem : MonoBehaviour
         {
             if (selectedItem.itemType != InventoryObjects.ItemTypes.Weapon)
             {
-                SelectedRenderer.sprite = selectedItem.itemSprite;
+                //SelectedRenderer.sprite = selectedItem.itemSprite;
                 pa.setMelSr(null);
             }
             else
@@ -226,13 +226,13 @@ public class InventorySystem : MonoBehaviour
                 InventoryWeapon w = (InventoryWeapon)selectedItem;
                 if (!w.isMelee)
                 {
-                    SelectedRenderer.sprite = selectedItem.itemSprite;
+                    //SelectedRenderer.sprite = selectedItem.itemSprite;
                     pa.setMelSr(null);
                 }
                 else
                 {
                     pa.setMelSr(selectedItem.itemSprite);
-                    SelectedRenderer.sprite = null;
+                    //SelectedRenderer.sprite = null;
                 }
             }
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Accesory)
@@ -316,27 +316,27 @@ public class InventorySystem : MonoBehaviour
 
         //turn with mouse
 
-        Vector3 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //Vector3 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
 
-        Vector2 objectPos = GameObject.FindGameObjectWithTag("SelectedItem").transform.position;
-        target.x = target.x - objectPos.x;
-        target.y = target.y - objectPos.y;
+        //Vector2 objectPos = GameObject.FindGameObjectWithTag("SelectedItem").transform.position;
+        //target.x = target.x - objectPos.x;
+        //target.y = target.y - objectPos.y;
 
-        float Zangle = Mathf.Atan2(target.x, target.y) * Mathf.Rad2Deg;
+        //float Zangle = Mathf.Atan2(target.x, target.y) * Mathf.Rad2Deg;
 
-        if (transform.rotation.y >= 0)
-        {
-            Zfactor = -1;
-            GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else
-        {
-            Zfactor = 1;
-            GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = false;
-        }
+        //if (transform.rotation.y >= 0)
+        //{
+        //    Zfactor = -1;
+        //    GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = true;
+        //}
+        //else
+        //{
+        //    Zfactor = 1;
+        //    GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>().flipX = false;
+        //}
 
-        GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90 * Zfactor)));
+        //GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90 * Zfactor)));
         
 
 

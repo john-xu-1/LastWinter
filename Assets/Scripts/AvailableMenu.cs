@@ -12,28 +12,42 @@ public class AvailableMenu : MonoBehaviour
     public Sprite COff, WOff, FOff, AimingOff;
     public Sprite COn, WOn, FOn, AimingOn;
 
+    private bool active = false;
 
+    public void FinalizeSetup()
+    {
+        active = true;
+    }
    
 
 
     void Update()
     {
-        if (invSys)
+        if (!active)
         {
-            InventoryWeapon wep = (InventoryWeapon)invSys.selectedItem;
-            if (wep.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
+            if (invSys)
             {
-                C.GetComponent<Image>().sprite = COn;
+                if (invSys.selectedItem)
+                {
+                    InventoryWeapon wep = (InventoryWeapon)invSys.selectedItem;
+
+                    if (wep.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
+                    {
+                        C.GetComponent<Image>().sprite = COn;
+                    }
+                    else
+                    {
+                        C.GetComponent<Image>().sprite = COff;
+                    }
+                }
+
             }
             else
             {
-                C.GetComponent<Image>().sprite = COff;
+                if (GameObject.FindGameObjectWithTag("Player")) invSys = GameObject.FindGameObjectWithTag("Player").GetComponent<InventorySystem>();
             }
         }
-        else
-        {
-            invSys = GameObject.FindGameObjectWithTag("Player").GetComponent<InventorySystem>();
-        }
+        
         
     }
 }

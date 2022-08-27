@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 3130182598144361897}
   - component: {fileID: 6572611072541343280}
   - component: {fileID: 51566873583618827}
-  m_Layer: 12
+  m_Layer: 15
   m_Name: DroneControllerBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -295,7 +295,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6104214910540336568}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -303,7 +303,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.16
 --- !u!50 &6195000860026508025
 Rigidbody2D:
   serializedVersion: 4
@@ -378,6 +378,10 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 8192
+  enemyCriticalLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isEnemy: 0
   isMelee: 0
 --- !u!1 &6104214910562325658
 GameObject:

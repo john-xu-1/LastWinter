@@ -1195,12 +1195,23 @@ MonoBehaviour:
   LoadingScreen: {fileID: 0}
   dungeonHandler: {fileID: 1495851078}
   gameHandler: {fileID: 0}
+  uiSetup:
+    setupComplete: 0
+    finalizedComplete: 0
+    FinalizeUIGameObjects:
+    - {fileID: 1674830209}
+  cameraSetup:
+    setupComplete: 0
+    finalizedComplete: 0
+    camController: {fileID: 1436931341}
   playerSetup:
     setupComplete: 0
+    finalizedComplete: 0
     playerPrefab: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
     collsionMap: {fileID: 590074636}
   enemySetup:
     setupComplete: 0
+    finalizedComplete: 0
     collsionMap: {fileID: 590074636}
     enemies:
     - {fileID: 1173827562917520578, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
@@ -1210,6 +1221,7 @@ MonoBehaviour:
     enemyCount: 10
   itemSetup:
     setupComplete: 0
+    finalizedComplete: 0
     collsionMap: {fileID: 590074636}
     items:
     - {fileID: 3756520863527365484, guid: 47c5251d3aa1a4ac9bdad6bf6cc87a2e, type: 3}
@@ -1373,6 +1385,7 @@ MonoBehaviour:
   debugWorldHeight: 100
   debugWorldWidth: 100
   inputRate: 0.15
+  active: 0
   bound: {fileID: 0}
   labSmoothing: 2
 --- !u!1 &1495851076
@@ -1709,6 +1722,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1674830209 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6843248306668466673, guid: 008dc1390e9d240149e029252007d690, type: 3}
+  m_PrefabInstance: {fileID: 6843248305299137793}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1828950508
 PrefabInstance:
   m_ObjectHideFlags: 0

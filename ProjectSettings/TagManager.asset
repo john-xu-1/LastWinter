@@ -27,7 +27,7 @@ TagManager:
   - PlayerHitBox
   - EnemyHitBox
   - EnemyCritBox
-  - 
+  - PlayerHitBoxWall
   - 
   - 
   - 
