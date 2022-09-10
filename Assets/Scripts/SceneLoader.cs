@@ -44,6 +44,14 @@ public class SceneLoader : MonoBehaviour
         }
         progression += 1 / (float)progressionItemsCount;
         Debug.Log("TilemapSetupComplete");
+
+        //List<GridNode> gridMap = FindObjectOfType<PathFinder>().GetGridMap(FindObjectOfType<PathFinder>().tilemap,0, -160, 160, 0);
+        //foreach(GridNode gridNode in gridMap)
+        //{
+        //    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //    cube.transform.position = new Vector3(gridNode.pos.x, gridNode.pos.y, 0);
+        //}
+
         StartCoroutine(UISetup());
     }
     IEnumerator UISetup()

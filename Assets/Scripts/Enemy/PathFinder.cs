@@ -5,23 +5,15 @@ using UnityEngine.Tilemaps;
 
 public class PathFinder : MonoBehaviour
 {
+    List<GridNode> gridMap;
+    public Tilemap tilemap;
+    public int minX = 0, minY = -160, maxX = 160, maxY = 0;
 
-
-    // Start is called before the first frame update
-    void Start()
+    public List<GridNode> GetGridMap(Tilemap tilemap, int minX, int minY, int maxX, int maxY)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public List<GridNode> GetGridMap(UnityEngine.Tilemaps.Tilemap tilemap, int minX, int minY, int maxX, int maxY)
-    {
-        List<GridNode> gridMap = new List<GridNode>();
+        if (this.gridMap != null) return this.gridMap;
+        Debug.Log("GetGridMap");
+        gridMap = new List<GridNode>();
         GridNode[,] gridLayout = new GridNode[maxX - minX + 1, maxY - minY + 1];
 
         for(int x = minX; x <= maxX; x += 1)
@@ -42,19 +34,35 @@ public class PathFinder : MonoBehaviour
         {
             for (int y = minY; y <= maxY; y += 1)
             {
-                if (x > minX && gridLayout[x - 1, y] != null) gridLayout[x - minX, y - minY].left = gridLayout[x - 1 - minX, y - minY];
-                if (x < maxX && gridLayout[x + 1, y] != null) gridLayout[x - minX, y - minY].right = gridLayout[x + 1 - minX, y - minY];
-                if (y > minX && gridLayout[x, y - 1] != null) gridLayout[x - minX, y - minY].down = gridLayout[x - minX, y - 1 - minY];
-                if (y < maxX && gridLayout[x, y + 1] != null) gridLayout[x - minX, y - minY].up = gridLayout[x - minX, y + 1 - minY];
+                if (gridLayout[x - minX, y - minY] != null && x > minX && gridLayout[x - 1 - minX, y - minY] != null)
+                    gridLayout[x - minX, y - minY].left = gridLayout[x - 1 - minX, y - minY];
+                if (gridLayout[x - minX, y - minY] != null && x < maxX && gridLayout[x + 1 - minX, y - minY] != null)
+                    gridLayout[x - minX, y - minY].right = gridLayout[x + 1 - minX, y - minY];
+                if (gridLayout[x - minX, y - minY] != null && y > minY && gridLayout[x - minX, y - 1 - minY] != null)
+                    gridLayout[x - minX, y - minY].down = gridLayout[x - minX, y - 1 - minY];
+                if (gridLayout[x - minX, y - minY] != null && y < maxY && gridLayout[x - minX, y + 1 - minY] != null)
+                    gridLayout[x - minX, y - minY].up = gridLayout[x - minX, y + 1 - minY];
             }
         }
 
         return gridMap;
     }
-
-    public List<Vector2Int> FindPath(GridNode start, GridNode end, UnityEngine.Tilemaps.Tilemap tilemap, int minX, int minY, int maxX, int maxY)
+    public List<Vector2Int> FindPath(Vector2Int start, Vector2Int end)
     {
-        return FindPath(start, end, GetGridMap(tilemap, minX, minY, maxX, maxY));
+        return FindPath(start, end, tilemap, minX, minY, maxX, maxY);
+    }
+
+        public List<Vector2Int> FindPath(Vector2Int start, Vector2Int end, Tilemap tilemap, int minX, int minY, int maxX, int maxY)
+    {
+        GridNode startNode = null;
+        GridNode endNode = null;
+        List<GridNode> gridMap = GetGridMap(tilemap, minX, minY, maxX, maxY);
+        foreach(GridNode gridNode in gridMap)
+        {
+            if (gridNode.pos.x == start.x && gridNode.pos.y == start.y) startNode = gridNode;
+            if (gridNode.pos.x == end.x && gridNode.pos.y == end.y) endNode = gridNode;
+        }
+        return FindPath(startNode, endNode, gridMap);
     }
 
     public List<Vector2Int> FindPath(GridNode start, GridNode end, List<GridNode> gridMap)

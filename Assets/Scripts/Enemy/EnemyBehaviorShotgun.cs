@@ -22,7 +22,7 @@ public class EnemyBehaviorShotgun : EnemyBehaviorBase
     public override void defaultAI()
     {
 
-        if (getDistX(p.transform, transform) <= angerRange)
+        if (getDistX(player.transform, transform) <= angerRange)
         {
             if (Time.time >= nextShootTime)
             {
@@ -33,7 +33,7 @@ public class EnemyBehaviorShotgun : EnemyBehaviorBase
 
                 foreach(GameObject instance in instances)
                 {
-                    Vector3 target = p.transform.position;
+                    Vector3 target = player.transform.position;
                     Vector2 direction = (target - transform.position).normalized;
                     float j = Random.Range(minMax.x, minMax.y);
                     direction = new Vector2(direction.x + j, direction.y + j);
@@ -46,7 +46,7 @@ public class EnemyBehaviorShotgun : EnemyBehaviorBase
         }
         else
         {
-            Vector3 target = p.transform.position;
+            Vector3 target = player.transform.position;
             Vector2 direction = ((target - transform.position) * Vector2.right).normalized;
 
 

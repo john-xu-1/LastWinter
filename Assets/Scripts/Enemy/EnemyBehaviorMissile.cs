@@ -6,13 +6,37 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 {
 	
 	public float rotateSpeed = 200f;
+   
+    private int pathIndex = 0;
+    public float pathNodeBuffer = 0.1f;
+    public EnemyBehaviorMissileLauncher mother;
 
-	
-	
+    private Vector2 targetPos
+    {
+        get
+        {
+            return mother.path[pathIndex];
+        }
+    }
+
+    protected override void ChildStart()
+    {
+        
+    }
+
+    
 
     public override void defaultAI()
     {
-		Vector2 direction = (Vector2)p.transform.position - rb.position;
+        if(Vector2.Distance(targetPos, transform.position) < pathNodeBuffer)
+        {
+            if (pathIndex < mother.path.Count - 1) pathIndex += 1;
+            else
+            {
+                //FindPath();
+            }
+        }
+		Vector2 direction = targetPos - rb.position;
 
 		direction.Normalize();
 
