@@ -741,13 +741,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a39283e8f6f8493db6312959d4ee39a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  p: {fileID: 0}
+  player: {fileID: 0}
   rb: {fileID: 433661612410558443}
   angerRange: 50
   speed: 5
   attackCD: 2
   dd: {fileID: 433661612054039830}
-  rotateSpeed: 200
+  rotateSpeed: 600
+  pathIndex: 0
+  pathNodeBuffer: 1
+  mother: {fileID: 0}
+  pathChanged: 0
 --- !u!50 &433661612410558443
 Rigidbody2D:
   serializedVersion: 4

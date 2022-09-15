@@ -7,9 +7,10 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 	
 	public float rotateSpeed = 200f;
    
-    private int pathIndex = 0;
+    public int pathIndex = 0;
     public float pathNodeBuffer = 0.1f;
     public EnemyBehaviorMissileLauncher mother;
+    public bool pathChanged;
 
     private Vector2 targetPos
     {
@@ -28,7 +29,13 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 
     public override void defaultAI()
     {
-        if(Vector2.Distance(targetPos, transform.position) < pathNodeBuffer)
+        if (pathChanged)
+        {
+            pathIndex = mother.GetClosestIndex(transform.position);
+            pathChanged = false;
+        }
+        Vector2 targetPos = this.targetPos + Vector2.up * 0.5f + Vector2.right * 0.5f;
+        if (Vector2.Distance(targetPos, transform.position) < pathNodeBuffer)
         {
             if (pathIndex < mother.path.Count - 1) pathIndex += 1;
             else
@@ -36,18 +43,22 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
                 //FindPath();
             }
         }
-		Vector2 direction = targetPos - rb.position;
 
-		direction.Normalize();
+        Vector2 direction = targetPos - rb.position;
+        //Debug.Log($"targetPos: {targetPos}");
 
-		float rotateAmount = Vector3.Cross(direction, transform.up).z;
+        direction.Normalize();
 
-		rb.angularVelocity = -rotateAmount * rotateSpeed;
+        float rotateAmount = Vector3.Cross(direction, transform.up).z;
 
-		rb.velocity = transform.up * speed;
+        rb.angularVelocity = -rotateAmount * rotateSpeed;
 
-		
-	}
+        rb.velocity = transform.up * speed;
+
+
+
+
+    }
 
     void OnTriggerEnter2D(Collider2D collision)
 	{
