@@ -11,12 +11,14 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
     public float pathNodeBuffer = 0.1f;
     public EnemyBehaviorMissileLauncher mother;
     public bool pathChanged;
+    private List<Vector2Int> path;
 
     private Vector2 targetPos
     {
         get
         {
-            return mother.path[pathIndex];
+            if (path == null) path = mother.path;
+            return path[pathIndex];
         }
     }
 
@@ -29,8 +31,9 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 
     public override void defaultAI()
     {
-        if (pathChanged)
+        if (pathChanged && mother.path.Count > 0)
         {
+            path = mother.path;
             pathIndex = mother.GetClosestIndex(transform.position);
             pathChanged = false;
         }
@@ -59,7 +62,13 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 
 
     }
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.transform.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
+    }
     void OnTriggerEnter2D(Collider2D collision)
 	{
 		

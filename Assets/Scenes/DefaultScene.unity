@@ -421,8 +421,25 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.9625108
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4952244571176048423, guid: d021e07fd68584ae184f35db76284713, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d021e07fd68584ae184f35db76284713, type: 3}
+--- !u!114 &570936435 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7488151917620585007, guid: d021e07fd68584ae184f35db76284713, type: 3}
+  m_PrefabInstance: {fileID: 570936434}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e9ac43ba4224f7fbba032f11f835f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!212 &570936436 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 6154040032705298549, guid: d021e07fd68584ae184f35db76284713, type: 3}
+  m_PrefabInstance: {fileID: 570936434}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &590074632
 GameObject:
   m_ObjectHideFlags: 0
@@ -1960,6 +1977,65 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73bf209e5347a4d11897cfca7cca26ba, type: 3}
+--- !u!1 &2009831709
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2009831711}
+  - component: {fileID: 2009831710}
+  m_Layer: 0
+  m_Name: InventorySystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2009831710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009831709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cba40d81bfbe45ba8f75dbdbadee7b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items: []
+  index: 0
+  selectedItem: {fileID: 0}
+  SelectedRenderer: {fileID: 570936436}
+  weapon: {fileID: 0}
+  acs: {fileID: 0}
+  chip: {fileID: 0}
+  maxItemSize: 5
+  isInvFull: 0
+  emptyItem: {fileID: 3067545174209583482, guid: 72bd658676c14467b8d311fe84ccffe5, type: 3}
+  emptySpawnOffset: {x: 0.5, y: 0}
+  wepChipPanel: {fileID: 0}
+  equipedItem: 0
+  pa: {fileID: 570936435}
+  eb: {fileID: 0}
+  inventorySave: {fileID: 11400000, guid: 37c0586d1c2a3421a856ddf00e808fb8, type: 2}
+--- !u!4 &2009831711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009831709}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.032477096, y: 1.3747599, z: -20.862444}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6843248305299137793
 PrefabInstance:
   m_ObjectHideFlags: 0

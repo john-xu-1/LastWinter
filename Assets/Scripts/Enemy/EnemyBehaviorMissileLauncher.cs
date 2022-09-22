@@ -15,7 +15,7 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
 
     public List<Vector2Int> path;
     public Vector2Int playerPrevPos;
-    public Vector2Int playerPosInt { get { return new Vector2Int((int)(player.transform.position.x /*- player.transform.position.x < 0? 1:0*/), (int)(player.transform.position.y + 0.1f)); } }
+    public Vector2Int playerPosInt { get { return new Vector2Int((int)(player.transform.position.x /*- player.transform.position.x < 0 ? 1 : 0*/), (int)(player.transform.position.y + 0.1f)); } }
 
     public override void defaultAI()
     {
@@ -25,7 +25,7 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
             FindPath();
             playerPrevPos = playerPosInt;
         }
-        if (Time.time >= nextShootTime)
+        if (path.Count > 0 && Time.time >= nextShootTime)
         {
 
             instance = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
@@ -49,17 +49,22 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
     {
         path = FindObjectOfType<PathFinder>().FindPath( new Vector2Int((int)transform.position.x, (int)transform.position.y), new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y));
         
-        foreach(EnemyBehaviorMissile missile in FindObjectsOfType<EnemyBehaviorMissile>())
+        if(path.Count > 0)
         {
-            missile.pathChanged = true;
-        }
+            
+            foreach (EnemyBehaviorMissile missile in FindObjectsOfType<EnemyBehaviorMissile>())
+            {
+                missile.pathChanged = true;
+            }
 
-        string pathString = "";
-        foreach (Vector2Int node in path)
-        {
-            pathString += $" ({node.x}, {node.y})";
+            string pathString = "";
+            foreach (Vector2Int node in path)
+            {
+                pathString += $" ({node.x}, {node.y})";
+            }
+            Debug.Log(pathString);
         }
-        Debug.Log(pathString);
+        
     }
 
     public int GetClosestIndex(Vector2 pos)

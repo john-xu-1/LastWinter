@@ -81,18 +81,23 @@ public class PathFinder : MonoBehaviour
 
         start.cost = 0;
         int loops = 0;
-        while (frontier.Count > 0 && loops < 10000)
+        bool targetFound = false;
+        while (frontier.Count > 0 && loops < 100)
         {
             loops += 1;
             GridNode current = frontier[0];
             frontier.RemoveAt(0);
             visited.Add(current);
             current.GetFrontier(frontier, visited, end.pos);
-            if (current == end) break;
+            if (current == end)
+            {
+                targetFound = true;
+                break;
+            }
         }
         Debug.Log($"loops: {loops}");
 
-        while (end != start)
+        while (targetFound && end != start)
         {
             path.Insert(0, end.pos);
             //path.Add(end.pos);
