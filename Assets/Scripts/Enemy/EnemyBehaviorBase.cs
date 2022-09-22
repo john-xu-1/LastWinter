@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyBehaviorBase : MonoBehaviour
 {
-    public GameObject p;
+    public GameObject player;
     public Rigidbody2D rb;
     public float angerRange = 2;
     public float speed = 5;
@@ -22,7 +22,7 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     void Start()
     {
-        p = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
         ChildStart();
     }
@@ -31,13 +31,13 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!p)
+        if (!player)
         {
-            p = GameObject.FindGameObjectWithTag("Player");
+            player = GameObject.FindGameObjectWithTag("Player");
             rb = GetComponent<Rigidbody2D>();
             ChildStart();
         }
-        if (p && getDistX(p.transform, transform) <= angerRange && getDistY(p.transform, transform) <= angerRange)
+        if (player && getDistX(player.transform, transform) <= angerRange && getDistY(player.transform, transform) <= angerRange)
         {
             defaultAI();
         }
@@ -53,7 +53,7 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     public virtual void defaultAI()
     {
-        Vector3 target = p.transform.position;
+        Vector3 target = player.transform.position;
         Vector2 direction = ((target - transform.position) * Vector2.right).normalized;
 
         rb.AddForce(new Vector2(direction.x * 5, rb.velocity.y),ForceMode2D.Force);
@@ -76,7 +76,7 @@ public class EnemyBehaviorBase : MonoBehaviour
 
     public int getDistX(Transform self)
     {
-        float dif = p.transform.position.x - self.position.x;
+        float dif = player.transform.position.x - self.position.x;
 
         if (dif > 0)
         {

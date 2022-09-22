@@ -44,11 +44,22 @@ public class SceneLoader : MonoBehaviour
         }
         progression += 1 / (float)progressionItemsCount;
         Debug.Log("TilemapSetupComplete");
+
+        //List<GridNode> gridMap = FindObjectOfType<PathFinder>().GetGridMap(FindObjectOfType<PathFinder>().tilemap, 0, -169, 160, 0);
+
+        //foreach (GridNode node in gridMap)
+        //{
+        //    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //    cube.transform.position = new Vector3(node.pos.x, node.pos.y, 0);
+        //}
+
+
+
         StartCoroutine(UISetup());
     }
     IEnumerator UISetup()
     {
-        uiSetup.InitializeSetup();
+        StartCoroutine(uiSetup.InitializeSetup());
         while (!uiSetup.setupComplete)
         {
             yield return null;
@@ -88,7 +99,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator PickablesSetup()
     {
-        itemSetup.InitializeSetup();
+        StartCoroutine(itemSetup.InitializeSetup());
         while (!itemSetup.setupComplete)
         {
             yield return null;
@@ -98,7 +109,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator EnemiesSetup()
     {
-        enemySetup.InitializeSetup();
+        StartCoroutine(enemySetup.InitializeSetup());
         while (!enemySetup.setupComplete)
         {
             yield return null;
@@ -109,7 +120,7 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator PlayerSetup()
     {
-        playerSetup.InitializeSetup();
+        StartCoroutine(playerSetup.InitializeSetup());
         while (!playerSetup.setupComplete)
         {
             yield return null;
@@ -120,14 +131,20 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator GameStartSetup()
     {
-        uiSetup.FinalizeSetup();
+        StartCoroutine(uiSetup.FinalizeSetup());
         while (!uiSetup.finalizedComplete)
         {
             yield return null;
         }
 
-        cameraSetup.FinalizeSetup();
+        StartCoroutine(cameraSetup.FinalizeSetup());
         while (!cameraSetup.finalizedComplete)
+        {
+            yield return null;
+        }
+
+        StartCoroutine(itemSetup.FinalizeSetup());
+        while (!itemSetup.finalizedComplete)
         {
             yield return null;
         }
@@ -140,43 +157,50 @@ public abstract class Setup
 {
     public bool setupComplete;
     public bool finalizedComplete;
-    public abstract void InitializeSetup();
-    public abstract void FinalizeSetup();
+    public abstract IEnumerator InitializeSetup();
+    public abstract IEnumerator FinalizeSetup();
 }
 
 
 [System.Serializable]
 public class UISetup : Setup
 {
-    public override void InitializeSetup()
+    public override IEnumerator InitializeSetup()
     {
         //setup the world's width and height
         setupComplete = true;
+
+        yield return null;
     }
 
     public GameObject[] FinalizeUIGameObjects;
-    public override void FinalizeSetup()
+    public override IEnumerator FinalizeSetup()
     {
+        
         foreach (GameObject UI in FinalizeUIGameObjects)
         {
             UI.SendMessage("FinalizeSetup");
         }
         finalizedComplete = true;
+
+        yield return null;
     }
 }
 
 [System.Serializable]
 public class CameraSetup : Setup
 {
-    public override void InitializeSetup()
+    public override IEnumerator InitializeSetup()
     {
         setupComplete = true;
+        yield return null;
     }
     public CameraController camController;
-    public override void FinalizeSetup()
+    public override IEnumerator FinalizeSetup()
     {
         camController.active = true;
         finalizedComplete = true;
+        yield return null;
     }
 }
 
@@ -187,12 +211,12 @@ public class PlayerSetup : Setup
     public GameObject playerPrefab;
     public UnityEngine.Tilemaps.Tilemap collsionMap;
 
-    public override void FinalizeSetup()
+    public override IEnumerator FinalizeSetup()
     {
         throw new System.NotImplementedException();
     }
 
-    public override void InitializeSetup()
+    public override IEnumerator InitializeSetup()
     {
         int minX = 2;
         int minY = 2;
@@ -211,6 +235,8 @@ public class PlayerSetup : Setup
         GameObject.FindObjectOfType<GameHandler>().StartGameHandler(player);
         player.GetComponent<HealthPlayer>().GH = GameObject.FindObjectOfType<GameHandler>().gameObject;
         setupComplete = true;
+
+        yield return null;
     }
 }
 
@@ -220,7 +246,8 @@ public class EnemySetup : Setup
     public UnityEngine.Tilemaps.Tilemap collsionMap;
     public GameObject[] enemies;
     public int enemyCount = 10;
-    public override void InitializeSetup()
+    
+    public override IEnumerator InitializeSetup()
     {
         int minX = 2;
         int minY = 2;
@@ -240,10 +267,12 @@ public class EnemySetup : Setup
             GameObject enemy = GameObject.Instantiate(enemies[rand]);
             enemy.transform.position = new Vector2(x + 0.5f, -y + 1.6f);
             enemyCount -= 1;
+
+            yield return null;
         }
         setupComplete = true;
     }
-    public override void FinalizeSetup()
+    public override IEnumerator FinalizeSetup()
     {
         throw new System.NotImplementedException();
     }
@@ -257,12 +286,20 @@ public class ItemSetup : Setup
     public int itemCount = 5;
 
     public List<int> placedItems = new List<int>();
-    public override void InitializeSetup()
+
+    
+
+
+    public override IEnumerator InitializeSetup()
     {
+        yield return null;
+
         int minX = 2;
         int minY = 2;
         int maxX = 200;
         int maxY = 100;
+
+        
 
         while (itemCount > 0 && placedItems.Count < items.Length)
         {
@@ -281,12 +318,26 @@ public class ItemSetup : Setup
                 itemCount -= 1;
                 placedItems.Add(rand);
             }
+
+
             
         }
+
         setupComplete = true;
+
+        
     }
-    public override void FinalizeSetup()
+    public override IEnumerator FinalizeSetup()
     {
-        throw new System.NotImplementedException();
+        yield return null;
+
+        InventorySystem inventorySystem = GameObject.FindObjectOfType<InventorySystem>();
+
+        foreach (Pickupable pickupable in GameObject.FindObjectsOfType<Pickupable>())
+        {
+            pickupable.setInventorySystem(inventorySystem);
+        }
+
+        finalizedComplete = true;
     }
 }

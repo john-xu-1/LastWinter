@@ -28,7 +28,7 @@ public class EnemyBehaviorSpikes : EnemyBehaviorBase
 
     public override void defaultAI()
     {
-        Vector3 target = p.transform.position;
+        Vector3 target = player.transform.position;
         Vector2 direction = (target - transform.position).normalized;
 
 
@@ -44,7 +44,7 @@ public class EnemyBehaviorSpikes : EnemyBehaviorBase
         }
 
 
-        if (Vector2.Distance(transform.position, p.transform.position) <= angerRange)
+        if (Vector2.Distance(transform.position, player.transform.position) <= angerRange)
         {
             isAttack = true;
         }
@@ -58,11 +58,11 @@ public class EnemyBehaviorSpikes : EnemyBehaviorBase
             
             for (int i = 1; i < attackRange; i += xIncrement)
             {
-                TileBase curTile = UtilityTilemap.GetTile(tmap, new Vector2(transform.  position.x + i, p.transform.position.y + yOffset));
+                TileBase curTile = UtilityTilemap.GetTile(tmap, new Vector2(transform.  position.x + i, player.transform.position.y + yOffset));
 
                 if (curTile == null)
                 {
-                    Vector3Int pos = tmap.WorldToCell(new Vector2(transform.position.x + i * dir, p.transform.position.y + yOffset));
+                    Vector3Int pos = tmap.WorldToCell(new Vector2(transform.position.x + i * dir, player.transform.position.y + yOffset));
                     UtilityTilemap.PlaceTile(tmap, pos, tb);
 
                     POSs.Add(pos);

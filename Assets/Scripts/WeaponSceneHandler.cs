@@ -46,7 +46,7 @@ public class WeaponSceneHandler : GameHandler
 
         foreach (EnemyBehaviorBase enemy in enemies)
         {
-            if (enemy && player) enemy.p = player;
+            if (enemy && player) enemy.player = player;
         }
 
 

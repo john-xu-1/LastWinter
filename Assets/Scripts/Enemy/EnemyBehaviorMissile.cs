@@ -4,15 +4,48 @@ using UnityEngine;
 
 public class EnemyBehaviorMissile : EnemyBehaviorBase
 {
-	
+
 	public float rotateSpeed = 200f;
+	public int pathIndex;
+	public float pathNodeBuffer = 0.1f;
+	public EnemyBehaviorMissileLauncher mother;
+	public bool pathChanged;
 
-	
-	
+	private Vector2 targetPos
+	{
+		get
+		{
+			return mother.path[pathIndex];
+		}
 
-    public override void defaultAI()
-    {
-		Vector2 direction = (Vector2)p.transform.position - rb.position;
+	}
+
+	protected override void ChildStart()
+	{
+
+	}
+
+
+
+	public override void defaultAI()
+	{
+		if (pathChanged)
+        {
+			pathIndex = mother.GetClosestIndex(transform.position);
+			pathChanged = false;
+        }
+
+		Vector2 targetPos = this.targetPos + Vector2.up * 0.5f + Vector2.right * 0.5f;
+		if (Vector2.Distance(targetPos, transform.position) < pathNodeBuffer)
+		{
+			if (pathIndex < mother.path.Count - 1) pathIndex += 1;
+			else
+			{
+				//FindPath();
+			}
+		}
+		Vector2 direction = targetPos - rb.position;
+
 
 		direction.Normalize();
 
@@ -22,7 +55,8 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 
 		rb.velocity = transform.up * speed;
 
-		
+
+
 	}
 
     void OnTriggerEnter2D(Collider2D collision)
