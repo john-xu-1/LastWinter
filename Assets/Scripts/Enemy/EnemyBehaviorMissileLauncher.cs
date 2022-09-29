@@ -44,7 +44,7 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
 
     void FindPath()
     {
-        path = FindObjectOfType<PathFinder>().FindPath(new Vector2Int((int)transform.position.x, (int)transform.position.y), new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y));
+        path = FindObjectOfType<PathFinder>().FindPath(new Vector2Int((int)firepoint.position.x, (int)firepoint.position.y), new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y));
         if (path.Count > 0)
         {
             foreach (EnemyBehaviorMissile missile in FindObjectsOfType<EnemyBehaviorMissile>())
@@ -61,7 +61,7 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
         float distance = Vector2.Distance(pos, path[closest]);
         for (int i = 1; i < path.Count; i += 1)
         {
-            if (Vector2.Distance(pos, path[closest]) < distance)
+            if (Vector2.Distance(pos, path[i]) < distance)
             {
                 distance = Vector2.Distance(pos, path[closest]);
                 closest = i;

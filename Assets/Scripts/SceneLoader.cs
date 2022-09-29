@@ -210,6 +210,7 @@ public class PlayerSetup : Setup
 {
     public GameObject playerPrefab;
     public UnityEngine.Tilemaps.Tilemap collsionMap;
+    public InventorySystem inventorySystemPrefab;
 
     public override IEnumerator FinalizeSetup()
     {
@@ -234,6 +235,11 @@ public class PlayerSetup : Setup
         player.transform.position = new Vector2(x + 0.5f, -y + 1);
         GameObject.FindObjectOfType<GameHandler>().StartGameHandler(player);
         player.GetComponent<HealthPlayer>().GH = GameObject.FindObjectOfType<GameHandler>().gameObject;
+
+        //load inventorySystem
+        GameObject.Instantiate(inventorySystemPrefab);
+
+        Debug.Log("PlayerSetup Complete");
         setupComplete = true;
 
         yield return null;
@@ -330,6 +336,7 @@ public class ItemSetup : Setup
     public override IEnumerator FinalizeSetup()
     {
         yield return null;
+        Debug.Log("ItemFinalize Start");
 
         InventorySystem inventorySystem = GameObject.FindObjectOfType<InventorySystem>();
 

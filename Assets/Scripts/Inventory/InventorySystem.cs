@@ -65,7 +65,7 @@ public class InventorySystem : MonoBehaviour
         }
 
         FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
-        
+
         //FindObjectOfType<InventoryUI>().updateSprite(items);
     }
 
@@ -162,7 +162,12 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
-
+        if (!pa)
+        {
+            pa = FindObjectOfType<PlayerAttack>();
+            selectInventory(equipedItem + 1);
+        }
+        if (!SelectedRenderer) SelectedRenderer = GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>();
         //for debugging
 
         if (Input.GetKeyDown(KeyCode.LeftShift)) SaveInventory();
@@ -411,12 +416,17 @@ public class InventorySystem : MonoBehaviour
 
     private void selectInventory(int alpha)
     {
+        if (!pa)
+        {
+            pa = FindObjectOfType<PlayerAttack>();
+            if (!pa) return;
+        }
         equipedItem = alpha - 1;
         if (items.Count > alpha - 1 && alpha >= 1)
         {
             selectedItem = items[alpha - 1];
 
-            FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
+            //FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
 
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
