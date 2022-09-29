@@ -864,11 +864,14 @@ MonoBehaviour:
   target: {fileID: 939704802}
   target_Offset: {x: 0, y: -0.5, z: -10}
   FollowType: 2
+  MUH: {fileID: 0}
   targetOthographicSize: 31
   targetOthographicSizeGrowthRate: 0.01
   debug: 1
   debugWorldHeight: 100
   debugWorldWidth: 100
+  inputRate: 0.15
+  active: 0
   bound: {fileID: 1415084491}
   labSmoothing: 2
 --- !u!1001 &959160187

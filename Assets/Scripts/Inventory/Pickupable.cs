@@ -37,7 +37,7 @@ public class Pickupable : MonoBehaviour
     private void Update()
     {
 
-        if (inventorySystem == null) return;
+        if (inventorySystem == null) inventorySystem = FindObjectOfType<InventorySystem>();
 
         Collider2D[] hits = Physics2D.OverlapBoxAll(transform.position, hitSize, 0f);
 
@@ -85,7 +85,6 @@ public class Pickupable : MonoBehaviour
             startChase = false;
             torque = 0f;
         }
-        
 
         foreach (Collider2D hit in hits)
         {

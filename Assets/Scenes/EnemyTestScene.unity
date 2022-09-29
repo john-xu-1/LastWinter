@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 116830531}
   - component: {fileID: 116830530}
   - component: {fileID: 116830529}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: MagnetizedShifterItem
   m_TagString: Untagged
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
@@ -7560,7 +7560,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1075647737}
   - component: {fileID: 1075647738}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Point Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
