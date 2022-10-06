@@ -1257,6 +1257,7 @@ MonoBehaviour:
     finalizedComplete: 0
     playerPrefab: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
     collsionMap: {fileID: 590074636}
+    inventorySystemPrefab: {fileID: 3882649369527959882, guid: 673f81f9484ba4eba9f15b052b62b141, type: 3}
   enemySetup:
     setupComplete: 0
     finalizedComplete: 0

@@ -95,7 +95,7 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
                 }
                 else if (!hitDown && !hitLeft && !hitUp)
                 {
-                    Debug.Log("!hitDown && !hitLeft");
+//                    Debug.Log("!hitDown && !hitLeft");
                     rb.AddForce(gravity * speed);
                     rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + Time.fixedDeltaTime * 1.5f);
                 }
@@ -120,7 +120,7 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
                 }
                 else if (!hitUp && !hitRight && !hitDown)
                 {
-                    Debug.Log("!hitDown && !hitLeft");
+//                    Debug.Log("!hitDown && !hitLeft");
                     rb.AddForce(gravity * speed);
                     rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - Time.fixedDeltaTime * 1.5f);
                 }

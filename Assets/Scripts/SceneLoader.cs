@@ -64,7 +64,7 @@ public class SceneLoader : MonoBehaviour
         {
             yield return null;
         }
-        
+
         progression += 1 / (float)progressionItemsCount;
         StartCoroutine(CameraSetup());
     }
@@ -149,7 +149,7 @@ public class SceneLoader : MonoBehaviour
             yield return null;
         }
 
-        
+
     }
 
 }
@@ -176,7 +176,7 @@ public class UISetup : Setup
     public GameObject[] FinalizeUIGameObjects;
     public override IEnumerator FinalizeSetup()
     {
-        
+
         foreach (GameObject UI in FinalizeUIGameObjects)
         {
             UI.SendMessage("FinalizeSetup");
@@ -210,6 +210,7 @@ public class PlayerSetup : Setup
 {
     public GameObject playerPrefab;
     public UnityEngine.Tilemaps.Tilemap collsionMap;
+    public InventorySystem inventorySystemPrefab;
 
     public override IEnumerator FinalizeSetup()
     {
@@ -234,6 +235,11 @@ public class PlayerSetup : Setup
         player.transform.position = new Vector2(x + 0.5f, -y + 1);
         GameObject.FindObjectOfType<GameHandler>().StartGameHandler(player);
         player.GetComponent<HealthPlayer>().GH = GameObject.FindObjectOfType<GameHandler>().gameObject;
+
+        //load inventorySystem
+        GameObject.Instantiate(inventorySystemPrefab);
+
+        Debug.Log("PlayerSetup Complete");
         setupComplete = true;
 
         yield return null;
@@ -246,7 +252,7 @@ public class EnemySetup : Setup
     public UnityEngine.Tilemaps.Tilemap collsionMap;
     public GameObject[] enemies;
     public int enemyCount = 10;
-    
+
     public override IEnumerator InitializeSetup()
     {
         int minX = 2;
@@ -287,7 +293,7 @@ public class ItemSetup : Setup
 
     public List<int> placedItems = new List<int>();
 
-    
+
 
 
     public override IEnumerator InitializeSetup()
@@ -299,7 +305,7 @@ public class ItemSetup : Setup
         int maxX = 200;
         int maxY = 100;
 
-        
+
 
         while (itemCount > 0 && placedItems.Count < items.Length)
         {
@@ -320,16 +326,17 @@ public class ItemSetup : Setup
             }
 
 
-            
+
         }
 
         setupComplete = true;
 
-        
+
     }
     public override IEnumerator FinalizeSetup()
     {
         yield return null;
+        Debug.Log("ItemFinalize Start");
 
         InventorySystem inventorySystem = GameObject.FindObjectOfType<InventorySystem>();
 

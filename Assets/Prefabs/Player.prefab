@@ -200,6 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1485b44dfeb4d4b28aaa63d80d09126b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canCrit: 0
 --- !u!58 &2963811236988422097
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1098,6 +1099,10 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 8192
+  enemyCriticalLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isEnemy: 0
   isMelee: 1
 --- !u!114 &313179073
 MonoBehaviour:
@@ -1141,7 +1146,6 @@ GameObject:
   - component: {fileID: 6154040031860930413}
   - component: {fileID: 1288998866}
   - component: {fileID: 6848640476687598549}
-  - component: {fileID: 4952244571176048423}
   - component: {fileID: 7488151917620585007}
   - component: {fileID: 294944347346429806}
   m_Layer: 10
@@ -1292,6 +1296,8 @@ MonoBehaviour:
   combatCD: 5
   RegenMagnitude: 0.4
   isCombat: 0
+  isLab: 0
+  GH: {fileID: 0}
 --- !u!95 &6848640476687598549
 Animator:
   serializedVersion: 3
@@ -1311,33 +1317,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4952244571176048423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6154040031498853860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cba40d81bfbe45ba8f75dbdbadee7b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  items: []
-  index: 0
-  selectedItem: {fileID: 0}
-  SelectedRenderer: {fileID: 6154040032705298549}
-  weapon: {fileID: 0}
-  acs: {fileID: 0}
-  chip: {fileID: 0}
-  maxItemSize: 5
-  isInvFull: 0
-  emptyItem: {fileID: 3067545174209583482, guid: 72bd658676c14467b8d311fe84ccffe5, type: 3}
-  emptySpawnOffset: {x: 0.5, y: 0}
-  wepChipPanel: {fileID: 0}
-  pa: {fileID: 7488151917620585007}
-  eb: {fileID: 0}
-  inventorySave: {fileID: 11400000, guid: 37c0586d1c2a3421a856ddf00e808fb8, type: 2}
 --- !u!114 &7488151917620585007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1356,6 +1335,7 @@ MonoBehaviour:
   weaponSpawnedTargetPrefab: {fileID: 0}
   dd: {fileID: 8892731915295198226}
   curDmg: 0
+  disappearCD: 2
 --- !u!114 &294944347346429806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1604,7 +1584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4159783340350776731, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.x
-      value: 0.0041333437
+      value: 0.0041337013
       objectReference: {fileID: 0}
     - target: {fileID: -4159783340350776731, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.y
@@ -1612,7 +1592,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4159783340350776731, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 0.09323545
+      value: 0.09323557
       objectReference: {fileID: 0}
     - target: {fileID: -4159783340350776731, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Extent.y
@@ -1620,7 +1600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3421225715001131417, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.x
-      value: -0.0045323316
+      value: -0.004532885
       objectReference: {fileID: 0}
     - target: {fileID: -3421225715001131417, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.y
@@ -1628,7 +1608,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3421225715001131417, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 0.025226722
+      value: 0.025226645
       objectReference: {fileID: 0}
     - target: {fileID: -3421225715001131417, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Extent.y
@@ -1740,7 +1720,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1118830648899067419, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.x
-      value: 0.00643678
+      value: 0.0064368844
       objectReference: {fileID: 0}
     - target: {fileID: 1118830648899067419, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.y
@@ -1748,7 +1728,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1118830648899067419, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 0.16060139
+      value: 0.16060126
       objectReference: {fileID: 0}
     - target: {fileID: 1118830648899067419, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Extent.y
@@ -1884,7 +1864,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7188868088044817007, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.x
-      value: -0.016646788
+      value: -0.016647026
       objectReference: {fileID: 0}
     - target: {fileID: 7188868088044817007, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.y
@@ -1900,7 +1880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7662719432651416181, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.x
-      value: 0.007952299
+      value: 0.007952061
       objectReference: {fileID: 0}
     - target: {fileID: 7662719432651416181, guid: 386faabe5355c4f1f8d1b2a8cd7a57bc, type: 3}
       propertyPath: m_Bounds.m_Center.y

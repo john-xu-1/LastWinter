@@ -10,7 +10,7 @@ public class InventorySystem : MonoBehaviour
     public InventoryObjects selectedItem;
     public SpriteRenderer SelectedRenderer;
 
-    
+
     private float fireRate;
 
     public InventoryWeapon weapon;
@@ -44,7 +44,7 @@ public class InventorySystem : MonoBehaviour
     private int curSelectedKey = 0;
 
     public PlayerAttack pa;
-    
+
 
     List<InventoryWeapon> wep;
     Dropdown dpd;
@@ -55,19 +55,19 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private InventorySave inventorySave;
 
 
-    private void Start()
-    {
-        loadInventory();
-        if (wepChipPanel)
-        {
-            wepChipPanelChild = wepChipPanel.transform.GetChild(0).gameObject;
-            wepChipPanel.SetActive(false);
-        }
+    //private void Start()
+    //{
+    //    loadInventory();
+    //    if (wepChipPanel)
+    //    {
+    //        wepChipPanelChild = wepChipPanel.transform.GetChild(0).gameObject;
+    //        wepChipPanel.SetActive(false);
+    //    }
 
-        FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
-        
-        //FindObjectOfType<InventoryUI>().updateSprite(items);
-    }
+    //    FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
+
+    //    //FindObjectOfType<InventoryUI>().updateSprite(items);
+    //}
 
 
     private void loadInventory()
@@ -130,7 +130,7 @@ public class InventorySystem : MonoBehaviour
 
     }
 
-    private void addKey (InventoryObjects key)
+    private void addKey(InventoryObjects key)
     {
         addKey(((InventoryKey)key).KeyType);
     }
@@ -162,7 +162,12 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
-
+        if (!pa)
+        {
+            pa = FindObjectOfType<PlayerAttack>();
+            selectInventory(equipedItem + 1);
+        }
+        if (!SelectedRenderer) SelectedRenderer = GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>();
         //for debugging
 
         if (Input.GetKeyDown(KeyCode.LeftShift)) SaveInventory();
@@ -337,7 +342,7 @@ public class InventorySystem : MonoBehaviour
         //}
 
         //GameObject.FindGameObjectWithTag("SelectedItem").transform.rotation = Quaternion.Euler(new Vector3(0, 0, -Zangle - (90 * Zfactor)));
-        
+
 
 
 
@@ -349,7 +354,7 @@ public class InventorySystem : MonoBehaviour
         if (!acsSpawnedTargetPrefab) acsSpawnedTargetPrefab = prefab;
     }
 
-    
+
 
     public void setChip()
     {
@@ -411,19 +416,24 @@ public class InventorySystem : MonoBehaviour
 
     private void selectInventory(int alpha)
     {
+        if (!pa)
+        {
+            pa = FindObjectOfType<PlayerAttack>();
+            if (!pa) return;
+        }
         equipedItem = alpha - 1;
         if (items.Count > alpha - 1 && alpha >= 1)
         {
             selectedItem = items[alpha - 1];
 
-            FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
+            //FindObjectOfType<InventoryUI>().updateSelectedUI(items, selectedItem);
 
 
             if (selectedItem.itemType == InventoryObjects.ItemTypes.Weapon)
             {
                 InventoryWeapon wep = (InventoryWeapon)selectedItem;
                 pa.weapon = wep;
-                pa.setCurDmg (wep.damage); 
+                pa.setCurDmg(wep.damage);
                 pa.weaponSpawnedTargetPrefab = pa.weapon.spawnedPrefab1;
             }
             else
@@ -475,6 +485,7 @@ public class InventorySelection
 {
 
 }
+
 
 
 

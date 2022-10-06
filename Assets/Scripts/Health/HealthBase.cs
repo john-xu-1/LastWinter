@@ -74,12 +74,12 @@ public class HealthBase : MonoBehaviour
             {
                 nextCombatTime = Time.time + combatCD;
                 isCombat = false;
-                Debug.Log("not combat");
+//                Debug.Log("not combat");
                 curDamageType = "";
             }
             else
             {
-                Debug.Log("combat");
+//                Debug.Log("combat");
                 isCombat = true;
                 
             }
