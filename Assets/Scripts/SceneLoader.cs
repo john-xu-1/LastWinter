@@ -6,6 +6,7 @@ public class SceneLoader : MonoBehaviour
 {
     public GameObject LoadingScreen;
     public DungeonHandler dungeonHandler;
+    public NoiseTerrain.MapGenerator noiseMapGenerator;
 
     public GameHandler gameHandler;
     public UISetup uiSetup;
@@ -37,11 +38,18 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator TilemapSetup()
     {
-        dungeonHandler.MapSetup(dungeonHandler.worlds.BuiltWorlds[0]);
-        while (!dungeonHandler.setupComplete)
+        //dungeonHandler.MapSetup(dungeonHandler.worlds.BuiltWorlds[0]);
+        //while (!dungeonHandler.setupComplete)
+        //{
+        //    yield return null;
+        //}
+
+        StartCoroutine(noiseMapGenerator.GenerateMap(noiseMapGenerator.seed));
+        while (!noiseMapGenerator.setupComplete)
         {
             yield return null;
         }
+
         progression += 1 / (float)progressionItemsCount;
         Debug.Log("TilemapSetupComplete");
 
