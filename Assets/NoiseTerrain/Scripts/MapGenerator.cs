@@ -20,13 +20,25 @@ namespace NoiseTerrain
         public float lacunarity;
         public int seed;
         public Vector2 offset;
+        private Vector2 _offset { get { return GetOffset(); } }
+        protected virtual Vector2 GetOffset() { return offset; }
 
         public bool autoUpdate = false;
 
-        public void GenerateMap()
+        public virtual void ClearMap()
+        {
+            for (int y = 0; y < height; y += 1)
+            {
+                for (int x = 0; x < width; x += 1)
+                {
+                    SetTile(new Vector3Int(x, -y, 0), null);
+                }
+            }
+        }
+        public virtual void GenerateMap()
         {
             //Debug.Log("GenerateMap");
-            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(width, height, seed, noiseScale, octaves, persistance, lacunarity, offset);
+            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(width, height, seed, noiseScale, octaves, persistance, lacunarity, _offset);
 
             for(int y = 0; y < height; y += 1)
             {
@@ -35,16 +47,21 @@ namespace NoiseTerrain
                     float noiseHeight = noiseMap[x, y];
                     if(noiseHeight > 0)
                     {
-                        fullTilemap.SetTile(new Vector3Int(x, -y, 0), fullTile);
+                        SetTile(new Vector3Int(x, -y, 0), fullTile);
                     }
                     else
                     {
-                        fullTilemap.SetTile(new Vector3Int(x, -y, 0), null);
+                        SetTile(new Vector3Int(x, -y, 0), null);
                     }
                 }
             }
 
             setupComplete = true;
+        }
+
+        protected virtual void SetTile(Vector3Int pos, TileBase tileType)
+        {
+            fullTilemap.SetTile(pos, tileType);
         }
 
         public bool setupComplete = false;

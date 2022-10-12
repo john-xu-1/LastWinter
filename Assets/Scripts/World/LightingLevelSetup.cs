@@ -17,11 +17,12 @@ public class LightingLevelSetup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (isTestLight) setupLighting();
+        if (isTestLight) StartCoroutine(setupLighting());
     }
 
     public void setupLighting(int maxX, int maxY)
     {
+        
         this.maxX = maxX;
         this.maxY = maxY;
         StartCoroutine(setupLighting());

@@ -23,6 +23,13 @@ namespace NoiseTerrain
             {
                 mapGenerator.GenerateMap();
             }
+            if (GUILayout.Button("Clear Map"))
+            {
+                mapGenerator.ClearMap();
+            }
         }
     }
+
+    [CustomEditor(typeof(ProceduralMapGenerator))]
+    public class ProceduralMapGeneratorEditor : MapGeneratorEditor { }
 }
