@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2019248583843668855
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2019248583843668853}
+  - component: {fileID: 2019248583843668852}
+  - component: {fileID: 2019248583843668858}
+  m_Layer: 0
+  m_Name: Procedural MapGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2019248583843668853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019248583843668855}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2019248583843668852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019248583843668855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3763718c21786343a420e9c02ab874e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullTile: {fileID: 11400000, guid: f69676981cfef4bbaa7f13d1d70e1f52, type: 2}
+  fullTilemap: {fileID: 0}
+  width: 50
+  height: 50
+  noiseScale: 8
+  octaves: 4
+  persistance: 1
+  lacunarity: 0.52
+  seed: 0
+  offset: {x: 6.25, y: 0}
+  autoUpdate: 0
+  setupComplete: 0
+--- !u!114 &2019248583843668858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019248583843668855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1194077e52174b04aa75d2d2ac054ce6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullTile: {fileID: 11400000, guid: f69676981cfef4bbaa7f13d1d70e1f52, type: 2}
+  fullTilemap: {fileID: 0}
+  width: 20
+  height: 20
+  noiseScale: 8
+  octaves: 4
+  persistance: 0.279
+  lacunarity: 0.52
+  seed: 0
+  offset: {x: 0, y: 0}
+  autoUpdate: 0
+  setupComplete: 1
+  chunkID: {x: 20, y: 0}
+  chunkRadius: {x: 2, y: 1}
+  visibleChunkIDs: []
+  target: {fileID: 0}
+  lighting: {fileID: 0}
+  enemies:
+    setupComplete: 0
+    finalizedComplete: 0
+    collsionMap: {fileID: 0}
+    enemies:
+    - {fileID: 1173827562917520578, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
+    - {fileID: 8387131397387960704, guid: cc7a7600fbb8f48e7aadd34381960201, type: 3}
+    - {fileID: 9034532965937968619, guid: 0ea9748bf53670245a441e38bf510be0, type: 3}
+    enemyCount: 1
+  items:
+    setupComplete: 0
+    finalizedComplete: 0
+    collsionMap: {fileID: 0}
+    items:
+    - {fileID: 3756520863527365484, guid: 47c5251d3aa1a4ac9bdad6bf6cc87a2e, type: 3}
+    - {fileID: 6700226986815469580, guid: ea57df54d3fcf4e18979a42a05e3b19f, type: 3}
+    - {fileID: 4189447176845886604, guid: be7dff808398a40d3b8e6d8e7de20ded, type: 3}
+    - {fileID: 1264434555977984627, guid: c54968ee1e2b7493ab666e433baa828c, type: 3}
+    itemCount: 1
+    placedItems: 

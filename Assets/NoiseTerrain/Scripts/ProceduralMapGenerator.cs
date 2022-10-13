@@ -14,6 +14,10 @@ namespace NoiseTerrain
         public Transform target;
 
         public LightingLevelSetup lighting;
+        public EnemySetup enemies;
+        public ItemSetup items;
+
+        public List<Chunk> chunks = new List<Chunk>();
 
         private void Update()
         {
@@ -21,15 +25,28 @@ namespace NoiseTerrain
             DisplayMap(chunkID);
         }
 
+        Chunk GetChunk(Vector2Int chunkID)
+        {
+            foreach(Chunk chunk in chunks)
+            {
+                if (chunk.chunkID == chunkID) return chunk;
+            }
+            return null;
+        }
         public Vector2Int GetChunkID(Vector2 pos)
         {
-            return new Vector2Int((int)pos.x / width, -(int)pos.y / height);
+            int xOffset = pos.x < 0 ? -1 : 0;
+            int yOffset = pos.y > 0 ? 1 : 0;
+            
+            
+            return new Vector2Int(xOffset + (int)pos.x / width, -yOffset -(int)pos.y / height);
         }
 
         public void DisplayMap(Vector2Int chunkID)
         {
             if(chunkID != this.chunkID)
             {
+                this.chunkID = chunkID;
                 List<Vector2Int> toDisplayChunks = new List<Vector2Int>();
                 for(int x = -chunkRadius.x; x <= chunkRadius.x; x += 1)
                 {
@@ -74,7 +91,22 @@ namespace NoiseTerrain
             int minY = chunkID.y * height;
             int maxY = (chunkID.y + 1) * height - 1;
             GenerateMap(minX, maxX, minY, maxY);
-            lighting.setupLighting(minX, maxX, minY, maxY, seed);
+            Chunk chunk = GetChunk(chunkID);
+            if (chunk == null)
+            {
+                LightingLevelSetup.LightingChunk<GameObject> lightingChunk = lighting.setupLighting(minX, maxX, minY, maxY, seed);
+                StartCoroutine(enemies.InitializeSetup(minX, maxX, minY, maxY, seed));
+                StartCoroutine(items.InitializeSetup(minX, maxX, minY, maxY, seed));
+                chunk = new Chunk();
+                chunk.chunkID = chunkID;
+                chunk.lightingChunk = lightingChunk;
+                chunks.Add(chunk);
+            }
+            else
+            {
+                chunk.LoadChunk(lighting);
+            }
+            
         }
 
         public void ClearMap(Vector2Int chunkID)
@@ -84,6 +116,8 @@ namespace NoiseTerrain
             int minY = chunkID.y * height;
             int maxY = (chunkID.y + 1) * height - 1;
             ClearMap(minX, maxX, minY, maxY);
+            Chunk chunk = GetChunk(chunkID);
+            chunk.ClearChunk(lighting);
         }
 
         public override void ClearMap()
