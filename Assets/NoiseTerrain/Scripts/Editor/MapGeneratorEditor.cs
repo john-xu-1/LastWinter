@@ -19,10 +19,17 @@ namespace NoiseTerrain
                     mapGenerator.GenerateMap();
                 }
             }
-            if (GUILayout.Button("Generate"))
+            if (GUILayout.Button("Generate Map"))
             {
                 mapGenerator.GenerateMap();
             }
+            if (GUILayout.Button("Clear Map"))
+            {
+                mapGenerator.ClearMap();
+            }
         }
     }
+
+    [CustomEditor(typeof(ProceduralMapGenerator))]
+    public class ProceduralMapGeneratorEditor : MapGeneratorEditor { }
 }
