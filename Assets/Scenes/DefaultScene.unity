@@ -1913,8 +1913,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullTile: {fileID: 11400000, guid: f69676981cfef4bbaa7f13d1d70e1f52, type: 2}
   fullTilemap: {fileID: 590074636}
-  width: 160
-  height: 160
+  width: 200
+  height: 100
   noiseScale: 10
   octaves: 1
   persistance: 0

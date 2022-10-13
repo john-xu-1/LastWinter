@@ -16,7 +16,7 @@ public class BulletMagnetizedShifter : BulletBase
     public override void updateBehavior()
     {
         base.updateBehavior();
-        GetComponent<Rigidbody2D>().drag += Time.deltaTime * (1 / speed);
+        GetComponent<Rigidbody2D>().drag += Time.deltaTime / speed;
     }
 
     public override void triggerEnterBehavior(Collider2D collision)
@@ -54,15 +54,15 @@ public class BulletMagnetizedShifter : BulletBase
     public override void triggerExitBehavior(Collider2D collision)
     {
         base.triggerExitBehavior(collision);
-        //if (collision.transform.parent.CompareTag("bullet"))
-        //{
-        //    if (collision.transform.parent.gameObject.GetComponent<BulletMagnetizedShifter>().weapon.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
-        //    {
+        if (collision.transform.parent.CompareTag("bullet"))
+        {
+            if (collision.transform.parent.gameObject.GetComponent<BulletMagnetizedShifter>().weapon.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
+            {
 
-        //        Destroy(gameObject, 0.5f);
-        //        Destroy(collision.transform.parent.gameObject, 0.5f);
-        //    }
-        //}
+                Destroy(gameObject, 0.5f);
+                Destroy(collision.transform.parent.gameObject, 0.5f);
+            }
+        }
     }
 }
 
