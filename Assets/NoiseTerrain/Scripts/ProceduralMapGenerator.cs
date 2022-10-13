@@ -26,12 +26,12 @@ namespace NoiseTerrain
             {
                 chunkID = targetPos;
                 List<Vector2Int> toDisplayChunks = new List<Vector2Int>();
-                if (targetPos.x > 0 && targetPos.y > 0 && targetPos.x < width / chunkSize.x && targetPos.y < height / chunkSize.y) toDisplayChunks.Add(targetPos);
+                if (targetPos.x >= 0 && targetPos.y >= 0 && targetPos.x < width / chunkSize.x && targetPos.y < height / chunkSize.y) toDisplayChunks.Add(targetPos);
                 for (int x = -chunkRadius.x; x <= chunkRadius.x; x += 1)
                 {
                     for (int y = -chunkRadius.y; y <= chunkRadius.y; y += 1)
                     {
-                        if ((x != 0 || y != 0) && (targetPos.x + x >= 0 && targetPos.y + y >= 0 && targetPos.x + x < width / chunkSize.x && targetPos.y + y < height /chunkSize.y))
+                        if ((x != 0 || y != 0) /*&& Vector2.Distance(targetPos, new Vector2(x,y)) <= chunkRadius.magnitude*/ && (targetPos.x + x >= 0 && targetPos.y + y >= 0 && targetPos.x + x < width / chunkSize.x && targetPos.y + y < height /chunkSize.y))
                         {
                             toDisplayChunks.Add(new Vector2Int(x, y) + targetPos);
                         }
