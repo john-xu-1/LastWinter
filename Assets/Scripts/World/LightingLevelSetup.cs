@@ -26,6 +26,26 @@ public class LightingLevelSetup : MonoBehaviour
         this.maxY = maxY;
         StartCoroutine(setupLighting());
     }
+    public void setupLighting(int minX, int maxX, int minY, int maxY, int seed)
+    {
+        System.Random random = new System.Random(seed);
+
+        for (int i = minX; i < maxX; i += 1)
+        {
+            for (int j = minY; j < maxY; j += 1)
+            {
+                if (isGround(i, -j))
+                {
+                    if (random.Next(0, 10) == 9)
+                    {
+                        int index = random.Next(0, lightPlants.Length);
+                        Instantiate(lightPlants[index], new Vector3(i, -j + 1, 0), Quaternion.identity);
+
+                    }
+                }
+            }
+        }
+    }
 
     public IEnumerator setupLighting()
     {
@@ -50,13 +70,13 @@ public class LightingLevelSetup : MonoBehaviour
         return ground != null && air == null;
     }
 
-    bool placeLight (int x, int y)
+    bool placeLight(int x, int y)
     {
         int random = Random.Range(0, 10);
         if (random == 9)
         {
             random = Random.Range(0, lightPlants.Length);
-            Instantiate(lightPlants[random], new Vector3(x, y+1, 0), Quaternion.identity);
+            Instantiate(lightPlants[random], new Vector3(x, y + 1, 0), Quaternion.identity);
             return true;
         }
         else
@@ -65,3 +85,4 @@ public class LightingLevelSetup : MonoBehaviour
         }
     }
 }
+
