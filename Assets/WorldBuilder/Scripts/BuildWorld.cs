@@ -84,8 +84,8 @@ namespace WorldBuilder
                 case BuildStates.graphBuilding:
                     if (Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE)
                     {
-                        world.worldGraph = WorldMap.ConvertGraph(Solver.answerSet);
-                        world.rawGraph = Solver.answerSet;
+                        world.worldGraph = WorldMap.ConvertGraph(Solver.answerSetDict);
+                        world.rawGraph = Solver.answerSetDict;
                         WorldMap.DisplayGraph(world.worldGraph, nodePrefab, edgePrefab, MiniMap.transform);
                         BuildState += 1;
                     }
@@ -199,7 +199,7 @@ namespace WorldBuilder
                 //Debug.Log(roomID);
                 Room newRoom = world.GetRoom(roomID);
                 if (world.worldGraph.startRoomID == roomID) newRoom.startRoom = true;
-                newRoom.SetupRoom(Solver.answerSet);
+                newRoom.SetupRoom(Solver.answerSetDict);
 
                 //remove correct permutation
                 if(newRoom.buidStatus == ClingoSolver.Status.UNSATISFIABLE)
@@ -400,7 +400,7 @@ namespace WorldBuilder
             ClingoSolver solver = FindObjectOfType<ClingoSolver>();
 
             string path = ClingoUtil.CreateFile(aspCode);
-            buildTimeStart = Time.fixedTime;
+            buildTimeStart = UnityEngine.Time.fixedTime;
             solver.maxDuration =  GetTimeout() + 10;
             solver.Solve(path, $" --parallel-mode {cpus} --time-limit={GetTimeout()}");
         }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace NoiseTerrain
 {
@@ -23,6 +24,24 @@ namespace NoiseTerrain
         {
             Vector2Int chunkID = GetChunkID(target.position);
             DisplayMap(chunkID);
+        }
+
+        public ASP.ASPTileRules tileRules;
+        protected override TileBase GetTile(float[,] heightMap, int x, int y)
+        {
+            bool[] neighbors = new bool[8];
+            int xMax = heightMap.GetLength(0) - 1;
+            int yMax = heightMap.GetLength(1) - 1;
+            if (x > 0 && y > 0 && heightMap[x-1, y-1] > 0) neighbors[0] = true;
+            if (y > 0 && heightMap[x, y-1] > 0) neighbors[1] = true;
+            if (x < xMax && y > 0 && heightMap[x+1, y-1] > 0) neighbors[2] = true;
+            if (x > 0 && heightMap[x-1, y] > 0) neighbors[3] = true;
+            if (x < xMax && heightMap[x+1, y] > 0) neighbors[4] = true;
+            if (x > 0 && y < yMax && heightMap[x-1, y+1] > 0) neighbors[5] = true;
+            if (y < yMax && heightMap[x, y+1] > 0) neighbors[6] = true;
+            if (x < xMax && y < yMax && heightMap[x+1, y+1] > 0) neighbors[7] = true;
+
+            return tileRules.GetSprite(neighbors);
         }
 
         Chunk GetChunk(Vector2Int chunkID)
@@ -94,9 +113,9 @@ namespace NoiseTerrain
             Chunk chunk = GetChunk(chunkID);
             if (chunk == null)
             {
-                LightingLevelSetup.LightingChunk<GameObject> lightingChunk = lighting.setupLighting(minX, maxX, minY, maxY, seed);
-                StartCoroutine(enemies.InitializeSetup(minX, maxX, minY, maxY, seed));
-                StartCoroutine(items.InitializeSetup(minX, maxX, minY, maxY, seed));
+                LightingLevelSetup.LightingChunk<GameObject> lightingChunk = lighting.setupLighting(minX, maxX, minY + 1, maxY, seed);
+                StartCoroutine(enemies.InitializeSetup(minX, maxX, minY + 1, maxY, seed));
+                StartCoroutine(items.InitializeSetup(minX, maxX, minY + 1, maxY, seed));
                 chunk = new Chunk();
                 chunk.chunkID = chunkID;
                 chunk.lightingChunk = lightingChunk;

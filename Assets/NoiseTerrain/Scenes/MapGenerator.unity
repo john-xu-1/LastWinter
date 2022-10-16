@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &527118235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
@@ -332,7 +332,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 750085808}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 47.4, y: -9.7, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -464,36 +464,84 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileSpriteArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileMatrixArray:
   - m_RefCount: 0
     m_Data:
-      e00: 1.39e-43
-      e01: 0
-      e02: -3.8403473
-      e03: -3.8403473
+      e00: 0
+      e01: -1.2361437e-29
+      e02: -1.2360775e-29
+      e03: -1.2360775e-29
       e10: 0
-      e11: 0
-      e12: 2.8e-44
-      e13: 2.8e-44
-      e20: 2.5012668e+22
-      e21: 8.859365e-23
-      e22: -14.556007
-      e23: 1.6304087e+29
-      e30: 4.5904e-41
-      e31: 6.77e-43
-      e32: 6.74e-43
-      e33: 6.77e-43
+      e11: 3.8e-44
+      e12: 3.8e-44
+      e13: 3.8e-44
+      e20: -5.7386646e-29
+      e21: -2.55956e-40
+      e22: -9.996529
+      e23: -2.55956e-40
+      e30: 4.5905e-41
+      e31: 5.52e-43
+      e32: 5.5e-43
+      e33: 5.52e-43
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: 1.6317325e+29, g: 1.6317325e+29, b: 1.6317325e+29, a: 1.6317325e+29}
+    m_Data: {r: -1.0688e-40, g: -1.0688e-40, b: -1.0688e-40, a: -1.0688e-40}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -85, y: -299, z: 0}
-  m_Size: {x: 685, y: 563, z: 1}
+  m_Origin: {x: -299, y: -299, z: 0}
+  m_Size: {x: 899, y: 563, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -9899,21 +9947,53 @@ PrefabInstance:
       value: MapGenerator
       objectReference: {fileID: 0}
     - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
+      propertyPath: width
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
+      propertyPath: height
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 750085811}
+    - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
+      propertyPath: fullTile
+      value: 
+      objectReference: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
     - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
       propertyPath: lighting
       value: 
       objectReference: {fileID: 624780207}
     - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
+      propertyPath: chunkID.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
+      propertyPath: tileRules
+      value: 
+      objectReference: {fileID: 11400000, guid: 336d96b8b87585742a59d0ee43d9be81, type: 2}
+    - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
       propertyPath: fullTilemap
       value: 
       objectReference: {fileID: 1398139181}
     - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
+      propertyPath: persistance
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
+      propertyPath: items.itemCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
       propertyPath: items.collsionMap
       value: 
       objectReference: {fileID: 1398139181}
+    - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
+      propertyPath: enemies.enemyCount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2019248583843668858, guid: 91e34da2323e59c4c80adeab5dafbd1b, type: 3}
       propertyPath: enemies.collsionMap
       value: 

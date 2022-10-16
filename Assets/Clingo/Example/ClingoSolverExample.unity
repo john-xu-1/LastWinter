@@ -1563,19 +1563,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 1953376941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a099bab5c874424087a23890eae1a8e, type: 3}
+  m_Script: {fileID: 11500000, guid: b473fdfdcbb38a84f89e1371e5c5f620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   threadPriority: 32
-  aspFilePath: DataFiles/temp/20210608171639487.txt
-  clingoExecutablePathMacOS: ASP/ClingoBinaries/MacOS/clingo
+  aspFilePath: DataFiles/ASPFiles/queens.txt
+  clingoExecutablePathMacOS: DataFiles/Clingo/clingo
   clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
-  AdditionalArguments: -c n=8 --parallel-mode 7
-  maxDuration: 120
+  AdditionalArguments: 
+  maxDuration: 10
   FindMultipleSolutions: 0
-  numOfSolutionsWanted: 400
-  seed: 875532435
+  numOfSolutionsWanted: 1
+  _seed: 42
   useRandomSeed: 1
+  saveToFile: 1
+  answerSet:
+    Solver: 
+    Input: []
+    Call:
+      Witnesses:
+        Value:
+          RawValue: []
+    Result: 
+    Time:
+      Total: 0
+      Solve: 0
+      Model: 0
+      Unsat: 0
+      CPU: 0
 --- !u!4 &1953376943
 Transform:
   m_ObjectHideFlags: 0

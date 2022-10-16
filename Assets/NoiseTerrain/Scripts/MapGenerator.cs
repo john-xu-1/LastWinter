@@ -55,25 +55,30 @@ namespace NoiseTerrain
 
             
 
-            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(width, height, seed, noiseScale, octaves, persistance, lacunarity, scaleOffset);
+            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(width+2, height+2, seed, noiseScale, octaves, persistance, lacunarity, scaleOffset);
 
-            for (int y = 0; y < height; y += 1)
+            for (int y = 1; y < height+1; y += 1)
             {
-                for (int x = 0; x < width; x += 1)
+                for (int x = 1; x < width+1; x += 1)
                 {
                     float noiseHeight = noiseMap[x, y];
+                    TileBase tileBase = null;
                     if (noiseHeight > 0)
                     {
-                        fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), fullTile);
+                        tileBase = GetTile(noiseMap, x, y);
+                        if (tileBase == null) tileBase = fullTile;
                     }
-                    else
-                    {
-                        fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), null);
-                    }
+                    
+                    fullTilemap.SetTile(new Vector3Int(x + minX - 1, -y - minY + 1, 0), tileBase);
                 }
             }
 
             setupComplete = true;
+        }
+
+        protected virtual TileBase GetTile(float[,] hieghtMap, int x, int y)
+        {
+            return fullTile;
         }
 
         public virtual void GenerateMap()

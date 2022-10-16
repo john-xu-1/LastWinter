@@ -158,7 +158,7 @@ namespace Debugging
                 else if (Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE)
                 {
                     Room room = new Room(new Vector2Int(graphBuildsCount, debugRoomIndex));
-                    room.SetupRoom(Solver.answerSet);
+                    room.SetupRoom(Solver.answerSetDict);
                     Generator.BuildRoom(room);
                     debugData.RoomRuntimeData(graphBuildsCount, (float)Solver.Duration, debugRoom[debugRoomIndex], room, Solver.SolverStatus);
                     Debug.Log($"------------------------number {graphBuildsCount + 1 + debugRoomIndex * GraphBuildsMax} : SATISFIABLE : {Solver.Duration} seconds-------------------------");
@@ -248,7 +248,7 @@ namespace Debugging
             }
             else if (MapSource == MapSources.Graph && Solver.SolverStatus == ClingoSolver.Status.SATISFIABLE && !testDone)
             {
-                Graph worldGraph = WorldMap.ConvertGraph(Solver.answerSet);
+                Graph worldGraph = WorldMap.ConvertGraph(Solver.answerSetDict);
                 Transform miniMap = Instantiate(MiniMap, MiniMap.transform.position + new Vector3(graphBuildsCount * worldWidth, -cpuDebugsIndex * worldHeight, 0), Quaternion.identity).transform;
                 WorldMap.DisplayGraph(worldGraph, nodePrefab, edgePrefab, miniMap);
                 debugData.RuntimeData((float)Solver.Duration, graphBuildsCount, cpuDebugsIndex, 0, 0, 0);
