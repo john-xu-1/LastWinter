@@ -14,11 +14,23 @@ namespace NoiseTerrain
         public Transform target;
 
         public LightingLevelSetup lighting;
+        public TileRules tileRules;
+
+        List<Chunk> chunks = new List<Chunk>();
 
         private void Update()
         {
             Vector2Int chunkID = GetChunkID(target.position);
             DisplayMap(chunkID);
+        }
+
+        public Chunk GetChunk(Vector2Int chunkID)
+        {
+            foreach(Chunk chunk in chunks)
+            {
+                if (chunk.chunkID == chunkID) return chunk;
+            }
+            return null;
         }
 
         public Vector2Int GetChunkID(Vector2 pos)
@@ -30,6 +42,8 @@ namespace NoiseTerrain
         {
             if(chunkID != this.chunkID)
             {
+                this.chunkID = chunkID;
+
                 List<Vector2Int> toDisplayChunks = new List<Vector2Int>();
                 for(int x = -chunkRadius.x; x <= chunkRadius.x; x += 1)
                 {
