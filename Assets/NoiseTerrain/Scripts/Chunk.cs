@@ -33,7 +33,7 @@ namespace NoiseTerrain
 
         public bool[] GetTileNeighbors(int x, int y)
         {
-            if (boolMap[x, y])
+            if (boolMap[x,y])
             {
                 
                 bool[] neighbors = new bool[8];
@@ -63,9 +63,9 @@ namespace NoiseTerrain
 
                 //downleft
                 if (x > 0 && y < height - 1) neighbors[5] = boolMap[x - 1, y + 1];
-                else if (x > 0) neighbors[5] = GetNeighborChunk(5).GetTile(x - 1, 0);
+                else if (x > 0) neighbors[5] = GetNeighborChunk(6).GetTile(x - 1, 0);
                 else if (y < height - 1) neighbors[5] = GetNeighborChunk(3).GetTile(width - 1, y+1);
-                else neighbors[5] = GetNeighborChunk(6).GetTile(width - 1, 0);
+                else neighbors[5] = GetNeighborChunk(5).GetTile(width - 1, 0);
 
                 //down
                 if (y < height - 1) neighbors[6] = boolMap[x, y + 1];
@@ -76,6 +76,9 @@ namespace NoiseTerrain
                 else if (x < width - 1) neighbors[7] = GetNeighborChunk(6).GetTile(x + 1, 0);
                 else if (y < height - 1) neighbors[7] = GetNeighborChunk(4).GetTile(0, y + 1);
                 else neighbors[7] = GetNeighborChunk(7).GetTile(0, 0);
+
+                //string display = $"{neighbors[0]} {neighbors[1]} {neighbors[2]}\n{neighbors[3]} {boolMap[x, y]} {neighbors[4]}\n{neighbors[5]} {neighbors[6]} {neighbors[7]}";
+                //Debug.Log(display);
 
                 return neighbors;
             }

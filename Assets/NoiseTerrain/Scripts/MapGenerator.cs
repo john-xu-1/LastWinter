@@ -44,6 +44,28 @@ namespace NoiseTerrain
             }
         }
 
+        public bool[,] GenerateBoolMap(int minX, int maxX, int minY, int maxY)
+        {
+            //Debug.Log("GenerateMap");
+            int chunkSizeX = width;
+            int chunkSizeY = height;
+
+            Vector2 scaleOffset = new Vector2(minX / noiseScale, minY / noiseScale);
+
+            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(width, height, seed, noiseScale, octaves, persistance, lacunarity, scaleOffset);
+            bool[,] boolMap = new bool[width, height];
+            for (int y = 0; y < height; y += 1)
+            {
+                for (int x = 0; x < width; x += 1)
+                {
+                    
+                    boolMap[x, y] = noiseMap[x, y] > 0;
+                }
+            }
+
+            return boolMap;
+        }
+
         public void GenerateMap(int minX, int maxX, int minY, int maxY)
         {
             //Debug.Log("GenerateMap");

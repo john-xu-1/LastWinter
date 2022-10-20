@@ -17,6 +17,32 @@ namespace NoiseTerrain
         }
 
         public TileRule[] Tiles;
+
+        public virtual UnityEngine.Tilemaps.TileBase GetSprite(bool[] neighbors)
+        {
+            UnityEngine.Tilemaps.TileBase sprite = null;
+            foreach (TileRule tileRule in Tiles)
+            {
+                if (isMatching(tileRule, neighbors) && !sprite) sprite = tileRule.tileSprite;
+                else if (isMatching(tileRule, neighbors)) Debug.LogWarning("Multiple sprites matching.");
+
+                if (sprite) break;
+            }
+
+            if (sprite == null) Debug.LogWarning("Tile missing");
+            return sprite;
+        }
+
+        bool isMatching(TileRule tile, bool[] neighbors)
+        {
+            
+            bool match = true;
+            for (int i = 0; i < 8; i += 1)
+            {
+                if (tile.neighbors[i] != TileNeighbors.State.none && neighbors[i] != (tile.neighbors[i] == TileNeighbors.State.filled)) match = false;
+            }
+            return match;
+        }
     }
 
     [System.Serializable]
