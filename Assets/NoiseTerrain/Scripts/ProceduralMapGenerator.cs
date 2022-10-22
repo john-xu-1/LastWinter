@@ -8,7 +8,9 @@ namespace NoiseTerrain
     public class ProceduralMapGenerator : MapGenerator
     {
         public Vector2Int chunkID;
-        public Vector2Int chunkRadius = new Vector2Int(4, 2);
+        public Vector2Int chunkRadius = new Vector2Int(5, 4);
+        public Vector2Int tileRulesRadius = new Vector2Int(4, 3);
+        public Vector2Int tileRulesFixRadius = new Vector2Int(3, 2);
         public Vector2Int tileRadius = new Vector2Int(2, 1);
 
         public List<Vector2Int> visibleChunkIDs = new List<Vector2Int>();
@@ -37,8 +39,10 @@ namespace NoiseTerrain
 
         public Vector2Int GetChunkID(Vector2 pos)
         {
-            if(pos.y > 0) return new Vector2Int((int)pos.x / width, (-(int)pos.y / height) - 1);
-            return new Vector2Int((int)pos.x / width, -(int)pos.y / height);
+            int xOffset = pos.x < 0 ? -1 : 0;
+            int yOffset = pos.y > 0 ? 1 : 0;
+
+            return new Vector2Int(xOffset + (int)pos.x / width, -yOffset - (int)pos.y / height);
         }
 
         public void DisplayMap(Vector2Int chunkID)
@@ -55,6 +59,25 @@ namespace NoiseTerrain
                         toDisplayChunks.Add(chunkID + new Vector2Int(x,y));
                     }
                 }
+
+                List<Vector2Int> toCheckTileRulesChunks = new List<Vector2Int>();
+                for (int x = -tileRulesRadius.x; x <= tileRulesRadius.x; x += 1)
+                {
+                    for (int y = -tileRulesRadius.y; y <= tileRulesRadius.y; y += 1)
+                    {
+                        toCheckTileRulesChunks.Add(chunkID + new Vector2Int(x, y));
+                    }
+                }
+
+                List<Vector2Int> toFixTileRulesChunks = new List<Vector2Int>();
+                for (int x = -tileRulesFixRadius.x; x <= tileRulesFixRadius.x; x += 1)
+                {
+                    for (int y = -tileRulesFixRadius.y; y <= tileRulesFixRadius.y; y += 1)
+                    {
+                        toFixTileRulesChunks.Add(chunkID + new Vector2Int(x, y));
+                    }
+                }
+
                 List<Vector2Int> toBuildChunks = new List<Vector2Int>();
                 for (int x = -chunkRadius.x; x <= chunkRadius.x; x += 1)
                 {
@@ -87,6 +110,44 @@ namespace NoiseTerrain
                     }
                 }
 
+                //check tileRules
+                for (int i = 0; i < toCheckTileRulesChunks.Count; i += 1)
+                {
+                    Chunk chunk = GetChunk(toCheckTileRulesChunks[i]);
+                    CheckTileRules(chunk);
+                   // Debug.Log($"Checking Chunk {chunk.chunkID}");
+                }
+
+                //fix tileRules
+                for (int i = 0; i < toFixTileRulesChunks.Count; i += 1)
+                {
+                    Chunk chunk = GetChunk(toFixTileRulesChunks[i]);
+                    if(chunk.hasInvalidTile)
+                    {
+                        //Debug.Log($"Fixing Chunk {chunk.chunkID}");
+                        List<SubChunk> subChunks = chunk.GetInvalidSubChunks(1);
+                        Debug.Log($"chunkID = {chunk.chunkID} : subChunks.Count = {subChunks.Count}");
+                        foreach(SubChunk subChunk in subChunks)
+                        {
+                            if(Mathf.Abs(chunkID.x - chunk.chunkID.x) <= tileRadius.x && Mathf.Abs(chunkID.y - chunk.chunkID.y) <= tileRadius.y)
+                            {
+                                string map = "";
+                                int width = subChunk.tiles.GetLength(0);
+                                int height = subChunk.tiles.GetLength(1);
+                                for(int y = 0; y < height; y += 1)
+                                {
+                                    for(int x = 0; x < width; x += 1)
+                                    {
+                                        map += subChunk.tiles[x, y] ? 1 : 0;
+                                    }
+                                    map += "\n";
+                                }
+                                Debug.Log(map);
+                            }
+                        }
+                    }
+                }
+
                 //display tiles
                 for (int i = 0; i < toDisplayChunks.Count; i += 1)
                 {
@@ -100,6 +161,28 @@ namespace NoiseTerrain
 
             
         }
+
+        void CheckTileRules(Chunk chunk)
+        {
+
+            for(int x = 0; x < width; x += 1)
+            {
+                for(int y = 0; y < height; y += 1)
+                {
+                    bool[] neighbors = chunk.GetTileNeighbors(x, y);
+                    if(neighbors != null)
+                    {
+                        bool valid = tileRules.GetValidTile(neighbors);
+                        chunk.SetInvalidTile(x, y, !valid);
+
+                        if (!valid) chunk.hasInvalidTile = true;
+                    }
+                    
+                }
+            }
+            //chunk.SetInvalidTile();
+        }
+
         public override void GenerateMap()
         {
             int minX = chunkID.x * width;

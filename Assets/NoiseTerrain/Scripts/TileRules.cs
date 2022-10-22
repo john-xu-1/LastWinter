@@ -33,6 +33,19 @@ namespace NoiseTerrain
             return sprite;
         }
 
+        public virtual bool GetValidTile(bool[] neighbors)
+        {
+            bool isValid = false;
+            foreach (TileRule tileRule in Tiles)
+            {
+                if (isMatching(tileRule, neighbors) && !isValid) isValid = true;
+                else if (isMatching(tileRule, neighbors)) Debug.LogWarning("Multiple sprites matching.");
+  
+            }
+
+            return isValid;
+        }
+
         bool isMatching(TileRule tile, bool[] neighbors)
         {
             

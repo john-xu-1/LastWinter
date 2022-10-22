@@ -11,6 +11,7 @@ namespace NoiseTerrain
         public Vector2Int chunkID;
         private bool[,] boolMap;
         private bool[,] invalidTiles;
+        public bool hasInvalidTile;
 
         public Chunk[] neighborChunks = new Chunk[8]; //0:upleft, 1:up, 2:upright, 3:left, 4:right, 5:downleft, 6:down, 7:downright
 
@@ -28,7 +29,29 @@ namespace NoiseTerrain
 
         public bool GetTile(int x, int y)
         {
+            Chunk chunk = GetChunk(x, y);
+            if (x < 0) x = width + x;
+            else if (x >= width) x -= width;
+            if (y < 0) y = height + y;
+            else if (y >= height) y -= height;
+
+            if (chunk != this) return chunk.GetTile(x, y);
             return boolMap[x, y];
+        }
+
+        public bool GetInvalidTile(int x, int y)
+        {
+            Chunk chunk = GetChunk(x, y);
+            if (x < 0) x = width + x;
+            else if (x >= width) x -= width;
+            if (y < 0) y = height + y;
+            else if (y >= height) y -= height;
+
+            if (chunk != this) return chunk.GetInvalidTile(x, y);
+            //Debug.Log(chunkID);
+            if(hasInvalidTile) return invalidTiles[x, y];
+            //Debug.Log("not invalid");
+            return false;
         }
 
         public bool[] GetTileNeighbors(int x, int y)
@@ -37,45 +60,15 @@ namespace NoiseTerrain
             {
                 
                 bool[] neighbors = new bool[8];
-                //upleft
-                if (x > 0 && y > 0) neighbors[0] = boolMap[x - 1, y - 1];
-                else if (x > 0) neighbors[0] = GetNeighborChunk(1).GetTile(x - 1, height - 1);
-                else if (y > 0) neighbors[0] = GetNeighborChunk(3).GetTile(width - 1, y - 1);
-                else neighbors[0] = GetNeighborChunk(0).GetTile(width - 1, height - 1);
 
-                //up
-                if (y > 0) neighbors[1] = boolMap[x, y - 1];
-                else neighbors[1] = GetNeighborChunk(1).GetTile(x, height - 1);
-
-                //upright
-                if (y > 0 && x < width - 1) neighbors[2] = boolMap[x + 1, y - 1];
-                else if (y > 0) neighbors[2] = GetNeighborChunk(4).GetTile(0, y - 1);
-                else if (x < width - 1) neighbors[2] = GetNeighborChunk(1).GetTile(x + 1, height - 1);
-                else neighbors[2] = GetNeighborChunk(2).GetTile(0, height - 1);
-
-                //left
-                if (x > 0) neighbors[3] = boolMap[x - 1, y];
-                else neighbors[3] = GetNeighborChunk(3).GetTile(width - 1, y);
-
-                //right
-                if (x < width - 1) neighbors[4] = boolMap[x + 1, y];
-                else neighbors[4] = GetNeighborChunk(4).GetTile(0, y);
-
-                //downleft
-                if (x > 0 && y < height - 1) neighbors[5] = boolMap[x - 1, y + 1];
-                else if (x > 0) neighbors[5] = GetNeighborChunk(6).GetTile(x - 1, 0);
-                else if (y < height - 1) neighbors[5] = GetNeighborChunk(3).GetTile(width - 1, y+1);
-                else neighbors[5] = GetNeighborChunk(5).GetTile(width - 1, 0);
-
-                //down
-                if (y < height - 1) neighbors[6] = boolMap[x, y + 1];
-                else neighbors[6] = GetNeighborChunk(6).GetTile(x, 0);
-
-                //downright
-                if (x < width - 1 && y < height - 1) neighbors[7] = boolMap[x + 1, y + 1];
-                else if (x < width - 1) neighbors[7] = GetNeighborChunk(6).GetTile(x + 1, 0);
-                else if (y < height - 1) neighbors[7] = GetNeighborChunk(4).GetTile(0, y + 1);
-                else neighbors[7] = GetNeighborChunk(7).GetTile(0, 0);
+                neighbors[0] = GetTile(x - 1, y - 1);
+                neighbors[1] = GetTile(x, y - 1);
+                neighbors[2] = GetTile(x + 1, y - 1);
+                neighbors[3] = GetTile(x - 1, y);
+                neighbors[4] = GetTile(x + 1, y);
+                neighbors[5] = GetTile(x - 1, y + 1);
+                neighbors[6] = GetTile(x, y + 1);
+                neighbors[7] = GetTile(x + 1, y + 1);
 
                 //string display = $"{neighbors[0]} {neighbors[1]} {neighbors[2]}\n{neighbors[3]} {boolMap[x, y]} {neighbors[4]}\n{neighbors[5]} {neighbors[6]} {neighbors[7]}";
                 //Debug.Log(display);
@@ -86,6 +79,19 @@ namespace NoiseTerrain
             {
                 return null;
             }
+        }
+
+        private Chunk GetChunk(int x, int y)
+        {
+            if (x < 0 && y < 0) return GetNeighborChunk(0);
+            else if (x >= 0 && x < width && y < 0) return GetNeighborChunk(1);
+            else if (x >= width && y < 0) return GetNeighborChunk(2);
+            else if (x < 0 && y >= 0 && y < height) return GetNeighborChunk(3);
+            else if (x >= width && y >= 0 && y < height) return GetNeighborChunk(4);
+            else if (x < 0 && y >= height) return GetNeighborChunk(5);
+            else if (x >= 0 && x < width && y >= height) return GetNeighborChunk(6);
+            else if (x >= width && y >= height) return GetNeighborChunk(7);
+            else return this;
         }
 
         private Chunk GetNeighborChunk(int index)
@@ -123,6 +129,135 @@ namespace NoiseTerrain
                         return null;
                 }
             }
+        }
+        public void SetInvalidTile()
+        {
+            bool invalid = false;
+            for(int x = 0; x < width; x+= 1)
+            {
+                for(int y = 0; y < height; y += 1)
+                {
+                    if (invalidTiles[x, y]) invalid = true;
+                }
+            }
+            hasInvalidTile = invalid;
+        }
+
+        public void SetInvalidTile(int x, int y, bool invalid)
+        {
+            if (invalidTiles == null) invalidTiles = new bool[width, height];
+            invalidTiles[x, y] = invalid;
+        }
+        public void SetInvalidTiles(bool[,] invalidTiles)
+        {
+            this.invalidTiles = invalidTiles;
+        }
+
+        public List<SubChunk> GetInvalidSubChunks(int borderWidth)
+        {
+            List<SubChunk> subChunks = new List<SubChunk>();
+            List<Vector2Int> foundInvalidTiles = new List<Vector2Int>();
+            for(int x = -borderWidth; x < width + borderWidth; x += 1)
+            {
+                for(int y = -borderWidth; y < height + borderWidth; y += 1)
+                {
+                    if (GetInvalidTile(x, y))
+                    {
+                        Vector2Int invalidTileStart = new Vector2Int(x, y);
+                        if (!foundInvalidTiles.Contains(invalidTileStart))
+                        {
+                            SubChunk subChunk = GetInvalidSubChunk(borderWidth, invalidTileStart);
+                            //Debug.Log($"subChunk invalidCount {subChunk.invalidTiles.Count}");
+                            foreach(Vector2Int invalidTile in subChunk.invalidTiles)
+                            {
+                                if (!foundInvalidTiles.Contains(invalidTile))
+                                {
+                                    foundInvalidTiles.Add(invalidTile);
+                                }
+                                else
+                                {
+                                    Debug.LogWarning("Found Invalid Tile duplicate error");
+                                }
+                            }
+                            subChunks.Add(subChunk);
+                        }
+                    }
+                    
+                }
+            }
+            return subChunks;
+        }
+
+        SubChunk GetInvalidSubChunk(int borderWidth, Vector2Int invalidTileStart)
+        {
+            List<Vector2Int> invalidTiles = new List<Vector2Int>();
+            invalidTiles.Add(invalidTileStart);
+            GetInvalidTiles(borderWidth, invalidTileStart, invalidTiles,chunkID);
+            int minX = int.MaxValue, maxX = int.MinValue, minY = int.MaxValue, maxY = int.MinValue;
+            foreach(Vector2Int invalidPos in invalidTiles)
+            {
+                if (invalidPos.x > maxX) maxX = invalidPos.x;
+                if (invalidPos.y > maxY) maxY = invalidPos.y;
+                if (invalidPos.x < minX) minX = invalidPos.x;
+                if (invalidPos.y < minY) minY = invalidPos.y;
+
+            }
+            minX -= borderWidth;
+            minY -= borderWidth;
+            maxX += borderWidth;
+            maxY += borderWidth;
+
+            int width = maxX - minX + 1;
+            int height = maxY - minY + 1;
+            //Debug.Log($"{width} x {height}");
+            bool[,] tiles = new bool[width, height];
+            for(int x = minX; x <= maxX; x+=1)
+            {
+                for(int y = minY; y <= maxY; y += 1)
+                {
+                    tiles[x - minX, y - minY] = GetTile(x, y);
+                }
+            }
+            return new SubChunk(minX, minY, tiles, invalidTiles);
+        }
+        void GetInvalidTiles(int borderWidth, Vector2Int invalidTileStart, List<Vector2Int> invalidTiles, Vector2Int refChunkID)
+        {
+            for (int x = -borderWidth; x <= borderWidth; x += 1)
+            {
+                for (int y = -borderWidth; y <= borderWidth; y += 1)
+                {
+                    //Debug.Log($"{chunkID} (tileStart = {invalidTileStart} ) GetInvalidTile({x + invalidTileStart.x},{y + invalidTileStart.y}) = {GetInvalidTile(x + invalidTileStart.x, y + invalidTileStart.y)}");
+                    if ((x != 0 || y != 0) && GetInvalidTile(x + invalidTileStart.x, y + invalidTileStart.y))
+                    {
+                        Vector2Int offset = refChunkID - chunkID;
+                        Vector2Int invalidTilePos = new Vector2Int(x + invalidTileStart.x + width * offset.x, y + invalidTileStart.y + height * offset.y);
+                        //Debug.Log($"added invalidTilePos {invalidTilePos}");
+                        if (!invalidTiles.Contains(invalidTilePos))
+                        {
+                            invalidTiles.Add(invalidTilePos);
+                            GetInvalidTiles(borderWidth, invalidTilePos, invalidTiles, refChunkID);
+                        }
+
+                    }
+                }
+            }
+        }
+        
+
+    }
+
+    public class SubChunk
+    {
+        public int minX;
+        public int minY;
+        public bool[,] tiles;
+        public List<Vector2Int> invalidTiles = new List<Vector2Int>();
+        public SubChunk(int minX, int minY, bool[,] tiles, List<Vector2Int> invalidTiles)
+        {
+            this.minX = minX;
+            this.minY = minY;
+            this.tiles = tiles;
+            this.invalidTiles = invalidTiles;
         }
     }
 }

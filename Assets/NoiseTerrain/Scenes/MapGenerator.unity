@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &527118235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
@@ -568,7 +568,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1486576023}
-  - component: {fileID: 1486576022}
   - component: {fileID: 1486576024}
   m_Layer: 0
   m_Name: MapGenerator
@@ -577,30 +576,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1486576022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1486576021}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3763718c21786343a420e9c02ab874e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fullTile: {fileID: 11400000, guid: f69676981cfef4bbaa7f13d1d70e1f52, type: 2}
-  fullTilemap: {fileID: 0}
-  width: 50
-  height: 50
-  noiseScale: 8
-  octaves: 4
-  persistance: 1
-  lacunarity: 0.52
-  seed: 0
-  offset: {x: 6.25, y: 0}
-  autoUpdate: 0
-  setupComplete: 0
 --- !u!4 &1486576023
 Transform:
   m_ObjectHideFlags: 0
@@ -629,8 +604,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullTile: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
   fullTilemap: {fileID: 1398139181}
-  width: 20
-  height: 20
+  width: 8
+  height: 8
   noiseScale: 8
   octaves: 4
   persistance: 1
@@ -640,7 +615,9 @@ MonoBehaviour:
   autoUpdate: 0
   setupComplete: 1
   chunkID: {x: 1, y: 0}
-  chunkRadius: {x: 4, y: 2}
+  chunkRadius: {x: 6, y: 5}
+  tileRulesRadius: {x: 5, y: 4}
+  tileRulesFixRadius: {x: 3, y: 2}
   tileRadius: {x: 2, y: 1}
   visibleChunkIDs: []
   target: {fileID: 750085811}
