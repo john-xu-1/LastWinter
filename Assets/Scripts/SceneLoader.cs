@@ -20,6 +20,8 @@ public class SceneLoader : MonoBehaviour
 
     public int progressionItemsCount = 9;
 
+    public int seed = 0;
+
 
     void Start()
     {
@@ -67,7 +69,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator UISetup()
     {
-        StartCoroutine(uiSetup.InitializeSetup());
+        StartCoroutine(uiSetup.InitializeSetup(2, 200, 2, 100, seed));
         while (!uiSetup.setupComplete)
         {
             yield return null;
@@ -107,7 +109,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator PickablesSetup()
     {
-        StartCoroutine(itemSetup.InitializeSetup());
+        StartCoroutine(itemSetup.InitializeSetup(2, 200, 2, 100, seed));
         while (!itemSetup.setupComplete)
         {
             yield return null;
@@ -117,7 +119,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator EnemiesSetup()
     {
-        StartCoroutine(enemySetup.InitializeSetup());
+        StartCoroutine(enemySetup.InitializeSetup(2,200,2,100,seed));
         while (!enemySetup.setupComplete)
         {
             yield return null;
@@ -128,7 +130,7 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator PlayerSetup()
     {
-        StartCoroutine(playerSetup.InitializeSetup());
+        StartCoroutine(playerSetup.InitializeSetup(2, 200, 2, 100, seed));
         while (!playerSetup.setupComplete)
         {
             yield return null;
@@ -165,7 +167,7 @@ public abstract class Setup
 {
     public bool setupComplete;
     public bool finalizedComplete;
-    public abstract IEnumerator InitializeSetup();
+    public abstract IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed);
     public abstract IEnumerator FinalizeSetup();
 }
 
@@ -173,7 +175,7 @@ public abstract class Setup
 [System.Serializable]
 public class UISetup : Setup
 {
-    public override IEnumerator InitializeSetup()
+    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
         //setup the world's width and height
         setupComplete = true;
@@ -198,7 +200,7 @@ public class UISetup : Setup
 [System.Serializable]
 public class CameraSetup : Setup
 {
-    public override IEnumerator InitializeSetup()
+    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
         setupComplete = true;
         yield return null;
@@ -225,12 +227,10 @@ public class PlayerSetup : Setup
         throw new System.NotImplementedException();
     }
 
-    public override IEnumerator InitializeSetup()
+    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
-        int minX = 2;
-        int minY = 2;
-        int maxX = 200;
-        int maxY = 100;
+
+        
 
         int x = Random.Range(minX, maxX);
         int y = Random.Range(minY, maxY);
@@ -261,26 +261,28 @@ public class EnemySetup : Setup
     public GameObject[] enemies;
     public int enemyCount = 10;
 
-    public override IEnumerator InitializeSetup()
+    public int attempts = 10;
+    
+    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
-        int minX = 2;
-        int minY = 2;
-        int maxX = 200;
-        int maxY = 100;
-
-        while (enemyCount > 0)
+        System.Random random = new System.Random(seed);
+        int attemptCount = 0;
+        int remainingEnemyCount = enemyCount;
+        while (attemptCount < attempts && remainingEnemyCount > 0)
         {
-            int x = Random.Range(minX, maxX);
-            int y = Random.Range(minY, maxY);
+            int x = random.Next(minX, maxX);
+            int y = random.Next(minY, maxY);
             while (!UtilityTilemap.isGround(x, -y, collsionMap))
             {
-                x = Random.Range(minX, maxX);
-                y = Random.Range(minY, maxY);
+                x = random.Next(minX, maxX);
+                y = random.Next(minY, maxY);
             }
             int rand = Random.Range(0, enemies.Length);
             GameObject enemy = GameObject.Instantiate(enemies[rand]);
             enemy.transform.position = new Vector2(x + 0.5f, -y + 1.6f);
-            enemyCount -= 1;
+            remainingEnemyCount -= 1;
+
+            attemptCount += 1;
 
             yield return null;
         }
@@ -304,14 +306,11 @@ public class ItemSetup : Setup
 
 
 
-    public override IEnumerator InitializeSetup()
+    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
         yield return null;
 
-        int minX = 2;
-        int minY = 2;
-        int maxX = 200;
-        int maxY = 100;
+        
 
 
 

@@ -9,6 +9,7 @@ public class LightingLevelSetup : MonoBehaviour
     public int minX = 1, maxX = 160, minY = 1, maxY = 160;
 
     public GameObject[] lightPlants;
+    private List<List<Lighting>> lightPlantPool = new List<List<Lighting>>();
 
     [SerializeField] bool isTestLight;
 
@@ -17,6 +18,10 @@ public class LightingLevelSetup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        for (int i = 0; i < lightPlants.Length; i += 1)
+        {
+            lightPlantPool.Add(new List<Lighting>());
+        }
         if (isTestLight) setupLighting();
     }
 
@@ -26,9 +31,15 @@ public class LightingLevelSetup : MonoBehaviour
         this.maxY = maxY;
         StartCoroutine(setupLighting());
     }
-    public void setupLighting(int minX, int maxX, int minY, int maxY, int seed)
+    public struct Lighting
+    {
+        public GameObject light;
+        public int lightID;
+    }
+    public List<Lighting> setupLighting(int minX, int maxX, int minY, int maxY, int seed)
     {
         System.Random random = new System.Random(seed);
+        List<Lighting> lightings = new List<Lighting>();
 
         for (int i = minX; i < maxX; i += 1)
         {
@@ -39,12 +50,14 @@ public class LightingLevelSetup : MonoBehaviour
                     if (random.Next(0,10) == 9)
                     {
                         int index = random.Next(0, lightPlants.Length);
-                        Instantiate(lightPlants[index], new Vector3(i, -j + 1, 0), Quaternion.identity);
-                        
+                        Lighting lighting = GetLight(index);
+                        lighting.light.transform.position = new Vector3(i, -j + 1, 0);
+                        lightings.Add(lighting);
                     }
                 }
             }
         }
+        return lightings;
     }
 
     public IEnumerator setupLighting()
@@ -83,5 +96,32 @@ public class LightingLevelSetup : MonoBehaviour
         {
             return false;
         }
+    }
+
+    private Lighting GetLight(int lightID)
+    {
+        if (lightPlantPool[lightID].Count > 0)
+        {
+            Lighting lighting = lightPlantPool[lightID][0];
+            lightPlantPool[lightID].RemoveAt(0);
+            lighting.light.SetActive(true);
+            
+            return lighting;
+        }
+        else
+        {
+            Lighting lighting = new Lighting();
+            GameObject light = Instantiate(lightPlants[lightID]);
+            lighting.light = light;
+            lighting.lightID = lightID;
+            return lighting;
+        }
+    }
+
+    public void ReturnLight(Lighting lighting)
+    {
+        lighting.light.SetActive(false);
+        lightPlantPool[lighting.lightID].Add(lighting);
+        Debug.Log(lighting.light);
     }
 }

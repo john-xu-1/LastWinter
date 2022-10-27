@@ -18,6 +18,7 @@ namespace NoiseTerrain
         public Transform target;
 
         public LightingLevelSetup lighting;
+        public EnemySetup enemySetup;
         public TileRules tileRules;
 
         List<Chunk> chunks = new List<Chunk>();
@@ -125,7 +126,7 @@ namespace NoiseTerrain
                     CheckTileRules(chunk); // need to check in case invalid were fixed in an overlapping subchunk
                     if (chunk.hasInvalidTile)
                     {
-                        HandleFixTileRules(chunk);
+                        //HandleFixTileRules(chunk);
 
                     }
                 }
@@ -187,7 +188,7 @@ namespace NoiseTerrain
                 {
                     int index = x + y * width;
                     bool[] neighbors = SubChunk.GetTileNeighbors(index, width, tiles);
-                    if (!tileRules.GetValidTile(neighbors)) return false;
+                    if (neighbors != null && !tileRules.GetValidTile(neighbors)) return false;
 
                 }
             }
@@ -233,7 +234,8 @@ namespace NoiseTerrain
             }
 
             //GenerateMap(minX, maxX, minY, maxY);
-            lighting.setupLighting(minX, maxX, minY+1, maxY, seed);
+            if (!chunk.initalized) StartCoroutine(enemySetup.InitializeSetup(minX, maxX, minY, maxY, seed));
+            chunk.BuildChunk(lighting, enemySetup, seed);
         }
 
         public void ClearMap(Vector2Int chunkID)
@@ -243,6 +245,7 @@ namespace NoiseTerrain
             int minY = chunkID.y * height;
             int maxY = (chunkID.y + 1) * height - 1;
             ClearMap(minX, maxX, minY, maxY);
+            GetChunk(chunkID).ClearChunk(lighting);
         }
 
         public override void ClearMap()
@@ -278,39 +281,39 @@ namespace NoiseTerrain
                 }
             }
 
-            //foreach (SubChunk subChunk in subChunks)
-            //{
-            //    List<bool> tilesList = subChunk.GetTilesList();
-            //    int width = subChunk.tiles.GetLength(0);
-            //    int height = tilesList.Count / width;
-            //    int count = tilesList.Count - height * 2 - width * 2 + 4;
-            //    int[] indices = new int[count];
-            //    int index = 0;
-            //    for(int y = 1; y < height-1; y += 1)
-            //    {
-            //        for(int x = 1; x < width-1; x += 1)
-            //        {
-            //            indices[index] = width * y + x;
-            //            index += 1;
-            //        }
-            //    }
-            //    FixSubChunk(0,indices,tilesList, width, subChunk);
-            //    if (!subChunk.hasInvalid)
-            //    {
-            //        for(int y = 0; y < height; y += 1)
-            //        {
-            //            for(int x = 0; x < width; x += 1)
-            //            {
-            //                chunk.SetTile(x, y, subChunk.tiles[x + subChunk.minX, y + subChunk.minY]);
-            //            }
-            //        }
-            //    }
-            //}
+            foreach (SubChunk subChunk in subChunks)
+            {
+                List<bool> tilesList = subChunk.GetTilesList();
+                int width = subChunk.tiles.GetLength(0);
+                int height = tilesList.Count / width;
+                int count = tilesList.Count - height * 2 - width * 2 + 4;
+                int[] indices = new int[count];
+                int index = 0;
+                for (int y = 1; y < height - 1; y += 1)
+                {
+                    for (int x = 1; x < width - 1; x += 1)
+                    {
+                        indices[index] = width * y + x;
+                        index += 1;
+                    }
+                }
+                FixSubChunk(0, indices, tilesList, width, subChunk);
+                if (!subChunk.hasInvalid)
+                {
+                    for (int y = 0; y < height; y += 1)
+                    {
+                        for (int x = 0; x < width; x += 1)
+                        {
+                            chunk.SetTile(x + subChunk.minX, y + subChunk.minY, subChunk.tiles[x, y]);
+                        }
+                    }
+                }
+            }
         }
 
         private void FixSubChunk(int index, int[] indices, List<bool> tiles, int width, SubChunk subChunk)
         {
-            subChunk.hasInvalid = CheckTileRules(tiles, width);
+            subChunk.hasInvalid = !CheckTileRules(tiles, width);
             if (!subChunk.hasInvalid)
             {
                 for(int x = 0; x < width; x += 1)
