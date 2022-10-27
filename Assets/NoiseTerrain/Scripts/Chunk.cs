@@ -38,6 +38,17 @@ namespace NoiseTerrain
             if (chunk != this) return chunk.GetTile(x, y);
             return boolMap[x, y];
         }
+        public void SetTile(int x, int y, bool value)
+        {
+            Chunk chunk = GetChunk(x, y);
+            if (x < 0) x = width + x;
+            else if (x >= width) x -= width;
+            if (y < 0) y = height + y;
+            else if (y >= height) y -= height;
+
+            if (chunk != this) chunk.SetTile(x, y,value);
+            else boolMap[x, y] = value;
+        }
 
         public bool GetInvalidTile(int x, int y)
         {
@@ -52,6 +63,18 @@ namespace NoiseTerrain
             if(hasInvalidTile) return invalidTiles[x, y];
             //Debug.Log("not invalid");
             return false;
+        }
+
+        public void SetValidTile(int x, int y, bool value)
+        {
+            Chunk chunk = GetChunk(x, y);
+            if (x < 0) x = width + x;
+            else if (x >= width) x -= width;
+            if (y < 0) y = height + y;
+            else if (y >= height) y -= height;
+
+            if (chunk != this) chunk.SetValidTile(x, y, value);
+            else invalidTiles[x, y] = !value;
         }
 
         public bool[] GetTileNeighbors(int x, int y)
@@ -248,6 +271,7 @@ namespace NoiseTerrain
 
     public class SubChunk
     {
+        public bool hasInvalid;
         public int minX;
         public int minY;
         public bool[,] tiles;
@@ -258,6 +282,74 @@ namespace NoiseTerrain
             this.minY = minY;
             this.tiles = tiles;
             this.invalidTiles = invalidTiles;
+        }
+        public List<bool> GetTilesList()
+        {
+            List<bool> tilesList = new List<bool>();
+            for (int y = 0; y < tiles.GetLength(1); y += 1)
+            {
+                for (int x = 0; x < tiles.GetLength(0); x += 1)
+                {
+                    tilesList.Add(tiles[x, y]);
+                }
+            }
+            return tilesList;
+        }
+
+        public bool[] GetTileNeighbors(int x, int y)
+        {
+            if (tiles[x, y])
+            {
+
+                bool[] neighbors = new bool[8];
+
+                neighbors[0] = tiles[x - 1, y - 1];
+                neighbors[1] = tiles[x, y - 1];
+                neighbors[2] = tiles[x + 1, y - 1];
+                neighbors[3] = tiles[x - 1, y];
+                neighbors[4] = tiles[x + 1, y];
+                neighbors[5] = tiles[x - 1, y + 1];
+                neighbors[6] = tiles[x, y + 1];
+                neighbors[7] = tiles[x + 1, y + 1];
+
+                //string display = $"{neighbors[0]} {neighbors[1]} {neighbors[2]}\n{neighbors[3]} {boolMap[x, y]} {neighbors[4]}\n{neighbors[5]} {neighbors[6]} {neighbors[7]}";
+                //Debug.Log(display);
+
+                return neighbors;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static bool[] GetTileNeighbors(int index, int width, List<bool> tiles)
+        {
+            int x = index % width;
+            int y = index / width;
+            if (tiles[index])
+            {
+
+                bool[] neighbors = new bool[8];
+
+                neighbors[0] = tiles[x - 1 + width*(y - 1)];
+                neighbors[1] = tiles[x + width*(y - 1)];
+                neighbors[2] = tiles[x + 1 + width * (y - 1)];
+                neighbors[3] = tiles[x - 1 + width * (y)];
+                neighbors[4] = tiles[x + 1 + width * (y)];
+                neighbors[5] = tiles[x - 1 + width * (y + 1)];
+                neighbors[6] = tiles[x + width * (y + 1)];
+                neighbors[7] = tiles[x + 1 + width * (y + 1)];
+
+                //string display = $"{neighbors[0]} {neighbors[1]} {neighbors[2]}\n{neighbors[3]} {boolMap[x, y]} {neighbors[4]}\n{neighbors[5]} {neighbors[6]} {neighbors[7]}";
+                //Debug.Log(display);
+
+                return neighbors;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

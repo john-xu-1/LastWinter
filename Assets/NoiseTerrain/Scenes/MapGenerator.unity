@@ -615,10 +615,10 @@ MonoBehaviour:
   autoUpdate: 0
   setupComplete: 1
   chunkID: {x: 1, y: 0}
-  chunkRadius: {x: 6, y: 5}
-  tileRulesRadius: {x: 5, y: 4}
-  tileRulesFixRadius: {x: 3, y: 2}
-  tileRadius: {x: 2, y: 1}
+  chunkRadius: {x: 7, y: 5}
+  tileRulesRadius: {x: 6, y: 4}
+  tileRulesFixRadius: {x: 5, y: 3}
+  tileRadius: {x: 4, y: 2}
   visibleChunkIDs: []
   target: {fileID: 750085811}
   lighting: {fileID: 624780207}
