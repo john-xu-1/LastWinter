@@ -22,6 +22,7 @@ namespace NoiseTerrain
         public TileRules tileRules;
 
         List<Chunk> chunks = new List<Chunk>();
+        public bool debugFixTileRules;
 
         private void Update()
         {
@@ -126,7 +127,7 @@ namespace NoiseTerrain
                     CheckTileRules(chunk); // need to check in case invalid were fixed in an overlapping subchunk
                     if (chunk.hasInvalidTile)
                     {
-                        //HandleFixTileRules(chunk);
+                        HandleFixTileRules(chunk);
 
                     }
                 }
@@ -167,12 +168,12 @@ namespace NoiseTerrain
         }
         bool CheckTileRules(SubChunk subChunk)
         {
-            for (int x = 0; x < width; x += 1)
+            for (int x = 1; x < subChunk.tiles.GetLength(0)-1; x += 1)
             {
-                for (int y = 0; y < height; y += 1)
+                for (int y = 1; y < subChunk.tiles.GetLength(1) - 1; y += 1)
                 {
                     bool[] neighbors = subChunk.GetTileNeighbors(x, y);
-                    if (!tileRules.GetValidTile(neighbors)) return false;
+                    if (neighbors != null && !tileRules.GetValidTile(neighbors)) return false;
                     
                 }
             }
@@ -258,27 +259,16 @@ namespace NoiseTerrain
         private void HandleFixTileRules(Chunk chunk)
         {
             //Debug.Log($"Fixing Chunk {chunk.chunkID}");
-            List<SubChunk> subChunks = chunk.GetInvalidSubChunks(2);
+            List<SubChunk> subChunks = chunk.GetInvalidSubChunks(3);
             Debug.Log($"chunkID = {chunk.chunkID} : subChunks.Count = {subChunks.Count}");
             foreach (SubChunk subChunk in subChunks)
             {
                 if (Mathf.Abs(chunkID.x - chunk.chunkID.x) <= tileRadius.x && Mathf.Abs(chunkID.y - chunk.chunkID.y) <= tileRadius.y)
                 {
-                    string map = "";
-                    int width = subChunk.tiles.GetLength(0);
-                    int height = subChunk.tiles.GetLength(1);
-                    for (int y = 0; y < height; y += 1)
-                    {
-                        for (int x = 0; x < width; x += 1)
-                        {
-                            map += subChunk.tiles[x, y] ? 1 : 0;
-                        }
-                        map += "\n";
-                    }
-                    Debug.Log(map);
+                    subChunk.PrintTiles();
                 }
             }
-
+            if (!debugFixTileRules) return;
             foreach (SubChunk subChunk in subChunks)
             {
                 List<bool> tilesList = subChunk.GetTilesList();
@@ -287,17 +277,19 @@ namespace NoiseTerrain
                 int count = tilesList.Count - height * 2 - width * 2 + 4;
                 int[] indices = new int[count];
                 int index = 0;
-                for (int y = 1; y < height - 1; y += 1)
+                for (int y = 2; y < height - 2; y += 1)
                 {
-                    for (int x = 1; x < width - 1; x += 1)
+                    for (int x = 2; x < width - 2; x += 1)
                     {
                         indices[index] = width * y + x;
                         index += 1;
                     }
                 }
+                subChunk.hasInvalid = !CheckTileRules(subChunk);
                 FixSubChunk(0, indices, tilesList, width, subChunk);
                 if (!subChunk.hasInvalid)
                 {
+                    subChunk.PrintTiles();
                     for (int y = 0; y < height; y += 1)
                     {
                         for (int x = 0; x < width; x += 1)
@@ -306,43 +298,55 @@ namespace NoiseTerrain
                         }
                     }
                 }
+                else
+                {
+                    Debug.LogWarning("TileRule not fixed");
+                }
             }
         }
 
         private void FixSubChunk(int index, int[] indices, List<bool> tiles, int width, SubChunk subChunk)
         {
-            subChunk.hasInvalid = !CheckTileRules(tiles, width);
-            if (!subChunk.hasInvalid)
+            if (subChunk.hasInvalid)
             {
-                for(int x = 0; x < width; x += 1)
+                subChunk.hasInvalid = !CheckTileRules(tiles, width);
+
+                if (!subChunk.hasInvalid)
                 {
-                    for(int y = 0; y < tiles.Count / width; y += 1)
+                    Debug.Log("Chunk fixed");
+                    for (int x = 0; x < width; x += 1)
                     {
-                        subChunk.tiles[x, y] = tiles[x + width * y];
+                        for (int y = 0; y < tiles.Count / width; y += 1)
+                        {
+                            subChunk.tiles[x, y] = tiles[x + width * y];
+                        }
                     }
                 }
-            }
-
-            if(index < indices.Length - 1)
-            {
-                if (subChunk.hasInvalid)
+                else
                 {
-                    List<bool> tilesClone = new List<bool>(tiles);
-                    tilesClone[indices[index]] = !tilesClone[indices[index]];
-                    FixSubChunk(index += 1, indices, tilesClone, width, subChunk);
-                }
+                    if (index < indices.Length)
+                    {
+                        if (subChunk.hasInvalid)
+                        {
+                            List<bool> tilesClone = new List<bool>(tiles);
+                            tilesClone[indices[index]] = !tilesClone[indices[index]];
+                            FixSubChunk(index += 1, indices, tilesClone, width, subChunk);
+                        }
 
-                if (subChunk.hasInvalid && index < indices.Length - 1)
-                {
-                    List<bool> tilesClone = new List<bool>(tiles);
-                    tilesClone[indices[index+1]] = !tilesClone[indices[index]];
-                    FixSubChunk(index += 2, indices, tilesClone, width, subChunk);
+                        if (subChunk.hasInvalid && index < indices.Length)
+                        {
+                            List<bool> tilesClone = new List<bool>(tiles);
+                            //tilesClone[indices[index + 1]] = !tilesClone[indices[index]];
+                            FixSubChunk(index += 1, indices, tilesClone, width, subChunk);
+                        }
+                    }
+                    
                 }
             }
-            else
-            {
-                Debug.LogWarning("TileRule not fixed");
-            }
+            
+            
+
+           
             
         }
 

@@ -373,6 +373,22 @@ namespace NoiseTerrain
                 return null;
             }
         }
+
+        public void PrintTiles()
+        {
+            string map = "";
+            int width = tiles.GetLength(0);
+            int height = tiles.GetLength(1);
+            for (int y = 0; y < height; y += 1)
+            {
+                for (int x = 0; x < width; x += 1)
+                {
+                    map += tiles[x, y] ? 1 : 0;
+                }
+                map += "\n";
+            }
+            Debug.Log(map);
+        }
     }
 }
 
