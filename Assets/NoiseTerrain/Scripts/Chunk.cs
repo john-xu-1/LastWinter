@@ -27,6 +27,28 @@ namespace NoiseTerrain
             height = boolMap.GetLength(1);
         }
 
+        public bool initialized;
+        List<LightingLevelSetup.Lighting> lights;
+        public void BuildChunk(LightingLevelSetup lighting, EnemySetup enemySetup, int seed)
+        {
+            int minX = chunkID.x * width;
+            int minY = chunkID.y * height;
+            int maxX = minX + width;
+            int maxY = minY + height;
+
+            
+            lights = lighting.setupLighting(minX, maxX, minY + 1, maxY, seed);
+            initialized = true;
+        }
+
+        public void ClearChunk(LightingLevelSetup lightingSetup)
+        {
+            foreach(LightingLevelSetup.Lighting lighting in lights)
+            {
+                lightingSetup.ReturnLight(lighting);
+            }
+        }
+
         public bool GetTile(int x, int y)
         {
             Chunk chunk = GetChunk(x, y);
