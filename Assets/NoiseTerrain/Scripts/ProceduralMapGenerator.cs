@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Threading;
 
 namespace NoiseTerrain
 {
@@ -14,6 +15,8 @@ namespace NoiseTerrain
         public Vector2Int tileRadius = new Vector2Int(2, 1);
 
         public List<Vector2Int> visibleChunkIDs = new List<Vector2Int>();
+        public List<Vector2Int> toFixChunkIDs = new List<Vector2Int>();
+        public List<Vector2Int> toDisplayChunks = new List<Vector2Int>();
 
         public Transform target;
 
@@ -23,16 +26,44 @@ namespace NoiseTerrain
 
         List<Chunk> chunks = new List<Chunk>();
         public bool debugFixTileRules;
-
+        public bool fixTileRules;
+        Thread handleFixTileRulesThread;
+        private void OnDestroy()
+        {
+            fixTileRules = false;
+            handleFixTileRulesThread.Abort();
+            Debug.Log("Exit");
+        }
+        private void Start()
+        {
+            handleFixTileRulesThread = new Thread(HandleFixTileRulesThread);
+            handleFixTileRulesThread.Start();
+            //fixTileRules = true;
+        }
         private void Update()
         {
             Vector2Int chunkID = GetChunkID(target.position);
             DisplayMap(chunkID);
+            //display tiles
+            for (int i = toDisplayChunks.Count - 1; i >= 0; i -= 1)
+            {
+                lock (toFixChunkIDs)
+                {
+                    if (!toFixChunkIDs.Contains(toDisplayChunks[i]))
+                    {
+                        //Debug.Log($"Displaying chunk {toDisplayChunks[i]}");
+                        GenerateMap(toDisplayChunks[i]);
+                        visibleChunkIDs.Add(toDisplayChunks[i]);
+                        toDisplayChunks.RemoveAt(i);
+                    }
+                }
+
+            }
         }
 
         public Chunk GetChunk(Vector2Int chunkID)
         {
-            foreach(Chunk chunk in chunks)
+            foreach (Chunk chunk in chunks)
             {
                 if (chunk.chunkID == chunkID) return chunk;
             }
@@ -49,132 +80,163 @@ namespace NoiseTerrain
 
         public void DisplayMap(Vector2Int chunkID)
         {
-            if(chunkID != this.chunkID)
+            if (chunkID != this.chunkID)
             {
                 this.chunkID = chunkID;
 
-                List<Vector2Int> toDisplayChunks = new List<Vector2Int>();
-                for(int x = -tileRadius.x; x <= tileRadius.x; x += 1)
+                lock (toFixChunkIDs)
                 {
-                    for (int y = -tileRadius.y; y <= tileRadius.y; y += 1)
+
+                    //layer 1 largest layer
+                    List<Vector2Int> toBuildChunks = new List<Vector2Int>();
+                    for (int x = -chunkRadius.x; x <= chunkRadius.x; x += 1)
                     {
-                        toDisplayChunks.Add(chunkID + new Vector2Int(x,y));
-                    }
-                }
+                        for (int y = -chunkRadius.y; y <= chunkRadius.y; y += 1)
+                        {
 
-                List<Vector2Int> toCheckTileRulesChunks = new List<Vector2Int>();
-                for (int x = -tileRulesRadius.x; x <= tileRulesRadius.x; x += 1)
-                {
-                    for (int y = -tileRulesRadius.y; y <= tileRulesRadius.y; y += 1)
+                            toBuildChunks.Add(chunkID + new Vector2Int(x, y));
+                        }
+                    }
+
+                    //layer 2 second largest layer
+                    List<Vector2Int> toCheckTileRulesChunks = new List<Vector2Int>();
+                    for (int x = -tileRulesRadius.x; x <= tileRulesRadius.x; x += 1)
                     {
-                        toCheckTileRulesChunks.Add(chunkID + new Vector2Int(x, y));
+                        for (int y = -tileRulesRadius.y; y <= tileRulesRadius.y; y += 1)
+                        {
+                            toCheckTileRulesChunks.Add(chunkID + new Vector2Int(x, y));
+                        }
                     }
-                }
 
-                List<Vector2Int> toFixTileRulesChunks = new List<Vector2Int>();
-                for (int x = -tileRulesFixRadius.x; x <= tileRulesFixRadius.x; x += 1)
-                {
-                    for (int y = -tileRulesFixRadius.y; y <= tileRulesFixRadius.y; y += 1)
+                    //layer 3
+                    List<Vector2Int> toFixTileRulesChunks = new List<Vector2Int>();
+                    for (int x = -tileRulesFixRadius.x; x <= tileRulesFixRadius.x; x += 1)
                     {
-                        toFixTileRulesChunks.Add(chunkID + new Vector2Int(x, y));
-                    }
-                }
+                        for (int y = -tileRulesFixRadius.y; y <= tileRulesFixRadius.y; y += 1)
+                        {
 
-                List<Vector2Int> toBuildChunks = new List<Vector2Int>();
-                for (int x = -chunkRadius.x; x <= chunkRadius.x; x += 1)
-                {
-                    for (int y = -chunkRadius.y; y <= chunkRadius.y; y += 1)
+
+
+
+                            toFixTileRulesChunks.Add(chunkID + new Vector2Int(x, y));
+
+
+                        }
+                    }
+
+
+
+                    // layer ?? visible layer smallest layer
+                    List<Vector2Int> toDisplayChunks = new List<Vector2Int>();
+                    for (int x = -tileRadius.x; x <= tileRadius.x; x += 1)
                     {
-                        toBuildChunks.Add(chunkID + new Vector2Int(x, y));
+                        for (int y = -tileRadius.y; y <= tileRadius.y; y += 1)
+                        {
+                            toDisplayChunks.Add(chunkID + new Vector2Int(x, y));
+                        }
                     }
-                }
 
-                //find chunks to be removed
-                for (int i = visibleChunkIDs.Count - 1; i >= 0; i -= 1)
-                {
-                    if (!toDisplayChunks.Contains(visibleChunkIDs[i])){
-                        ClearMap(visibleChunkIDs[i]);
-                        visibleChunkIDs.RemoveAt(i);
-                    }
-                }
-                //build chunks
-                for(int i = 0; i < toBuildChunks.Count; i+= 1)
-                {
-                    Chunk chunk = GetChunk(toBuildChunks[i]);
-                    if (chunk == null)
+                    //find chunks to be removed
+                    for (int i = visibleChunkIDs.Count - 1; i >= 0; i -= 1)
                     {
-                        int minX = toBuildChunks[i].x * width;
-                        int maxX = (toBuildChunks[i].x + 1) * width - 1;
-                        int minY = toBuildChunks[i].y * height;
-                        int maxY = (toBuildChunks[i].y + 1) * height - 1;
-                        chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY), this);
-                        chunks.Add(chunk);
+
+                        if (!toDisplayChunks.Contains(visibleChunkIDs[i]) && !this.toDisplayChunks.Contains(visibleChunkIDs[i]))
+                        {
+                            ClearMap(visibleChunkIDs[i]);
+                            visibleChunkIDs.RemoveAt(i);
+                        }
+                        else if (!toDisplayChunks.Contains(visibleChunkIDs[i]))
+                        {
+                            this.toDisplayChunks.Remove(visibleChunkIDs[i]);
+                        }
                     }
-                }
 
-                //check tileRules
-                for (int i = 0; i < toCheckTileRulesChunks.Count; i += 1)
-                {
-                    Chunk chunk = GetChunk(toCheckTileRulesChunks[i]);
-                    CheckTileRules(chunk);
-                   // Debug.Log($"Checking Chunk {chunk.chunkID}");
-                }
-
-                //fix tileRules
-                for (int i = 0; i < toFixTileRulesChunks.Count; i += 1)
-                {
-                    Chunk chunk = GetChunk(toFixTileRulesChunks[i]);
-                    CheckTileRules(chunk); // need to check in case invalid were fixed in an overlapping subchunk
-                    if (chunk.hasInvalidTile)
+                    //build chunks
+                    for (int i = 0; i < toBuildChunks.Count; i += 1)
                     {
-                        HandleFixTileRules(chunk);
-
+                        Chunk chunk = GetChunk(toBuildChunks[i]);
+                        if (chunk == null)
+                        {
+                            int minX = toBuildChunks[i].x * width;
+                            int maxX = (toBuildChunks[i].x + 1) * width - 1;
+                            int minY = toBuildChunks[i].y * height;
+                            int maxY = (toBuildChunks[i].y + 1) * height - 1;
+                            chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY), this);
+                            chunks.Add(chunk);
+                        }
                     }
-                }
 
-                //display tiles
-                for (int i = 0; i < toDisplayChunks.Count; i += 1)
-                {
-                    if (!visibleChunkIDs.Contains(toDisplayChunks[i]))
+                    //check tileRules
+                    for (int i = 0; i < toCheckTileRulesChunks.Count; i += 1)
                     {
-                        GenerateMap(toDisplayChunks[i]);
-                        visibleChunkIDs.Add(toDisplayChunks[i]);
+                        Chunk chunk = GetChunk(toCheckTileRulesChunks[i]);
+                        CheckTileRules(chunk);
+                        // Debug.Log($"Checking Chunk {chunk.chunkID}");
                     }
+
+                    //fix tileRules
+                    for (int i = 0; i < toFixTileRulesChunks.Count; i += 1)
+                    {
+                        if (!toFixChunkIDs.Contains(toFixTileRulesChunks[i]))
+                        {
+                            Chunk chunk = GetChunk(toFixTileRulesChunks[i]);
+                            CheckTileRules(chunk); // need to check in case invalid were fixed in an overlapping subchunk
+                            if (chunk.hasInvalidTile)
+                            {
+
+                                toFixChunkIDs.Add(toFixTileRulesChunks[i]);
+
+                            }
+                        }
+
+                    }
+
+                    for (int i = 0; i < toDisplayChunks.Count; i += 1)
+                    {
+                        if (!this.toDisplayChunks.Contains(toDisplayChunks[i]))
+                        {
+                            this.toDisplayChunks.Add(toDisplayChunks[i]);
+                        }
+                    }
+
                 }
+
+
+
             }
 
-            
+
         }
 
         void CheckTileRules(Chunk chunk)
         {
 
-            for(int x = 0; x < width; x += 1)
+            for (int x = 0; x < width; x += 1)
             {
-                for(int y = 0; y < height; y += 1)
+                for (int y = 0; y < height; y += 1)
                 {
                     bool[] neighbors = chunk.GetTileNeighbors(x, y);
-                    if(neighbors != null)
+                    if (neighbors != null)
                     {
                         bool valid = tileRules.GetValidTile(neighbors);
                         chunk.SetInvalidTile(x, y, !valid);
 
                         if (!valid) chunk.hasInvalidTile = true;
                     }
-                    
+
                 }
             }
             //chunk.SetInvalidTile();
         }
         bool CheckTileRules(SubChunk subChunk)
         {
-            for (int x = 1; x < subChunk.tiles.GetLength(0)-1; x += 1)
+            for (int x = 1; x < subChunk.tiles.GetLength(0) - 1; x += 1)
             {
                 for (int y = 1; y < subChunk.tiles.GetLength(1) - 1; y += 1)
                 {
                     bool[] neighbors = subChunk.GetTileNeighbors(x, y);
                     if (neighbors != null && !tileRules.GetValidTile(neighbors)) return false;
-                    
+
                 }
             }
             return true;
@@ -183,9 +245,9 @@ namespace NoiseTerrain
         bool CheckTileRules(List<bool> tiles, int width)
         {
             int height = tiles.Count / width;
-            for (int x = 1; x < width-1; x += 1)
+            for (int x = 1; x < width - 1; x += 1)
             {
-                for (int y = 1; y < height-1; y += 1)
+                for (int y = 1; y < height - 1; y += 1)
                 {
                     int index = x + y * width;
                     bool[] neighbors = SubChunk.GetTileNeighbors(index, width, tiles);
@@ -212,12 +274,12 @@ namespace NoiseTerrain
             int minY = chunkID.y * height;
             int maxY = (chunkID.y + 1) * height - 1;
 
-            for(int x = 0; x < width; x += 1)
+            for (int x = 0; x < width; x += 1)
             {
-                for(int y = 0; y < height; y += 1)
+                for (int y = 0; y < height; y += 1)
                 {
                     bool[] neighbors = chunk.GetTileNeighbors(x, y);
-                    if(neighbors != null)
+                    if (neighbors != null)
                     {
                         TileBase tile = tileRules.GetSprite(neighbors);
                         if (tile == null)
@@ -230,10 +292,10 @@ namespace NoiseTerrain
                     {
                         fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), null);
                     }
-                    
+
                 }
             }
-            if(!chunk.initialized)StartCoroutine(enemySetup.InitializeSetup(minX,maxX, minY, maxY, seed));
+            if (!chunk.initialized) StartCoroutine(enemySetup.InitializeSetup(minX, maxX, minY, maxY, seed));
             chunk.BuildChunk(lighting, enemySetup, seed);
         }
 
@@ -256,10 +318,55 @@ namespace NoiseTerrain
             ClearMap(minX, maxX, minY, maxY);
         }
 
+        private void HandleFixTileRulesThread()
+        {
+            while (fixTileRules)
+            {
+                Vector2Int chunkID = Vector2Int.zero;
+                bool chunkIDFound = false;
+                lock (toFixChunkIDs)
+                {
+                    if (toFixChunkIDs.Count > 0)
+                    {
+                        chunkID = toFixChunkIDs[0];
+                        chunkIDFound = true;
+                    }
+
+                }
+                if (chunkIDFound)
+                {
+                    Chunk chunk = GetChunk(chunkID);
+                    if (chunk != null)
+                    {
+                        lock (chunk)
+                        {
+                            CheckTileRules(chunk); // need to check in case invalid were fixed in an overlapping subchunk
+                            if (chunk.hasInvalidTile)
+                            {
+                                HandleFixTileRules(chunk);
+
+                            }
+                        }
+
+                        lock (toFixChunkIDs)
+                        {
+                            toFixChunkIDs.RemoveAt(0);
+                        }
+                    }
+
+                }
+
+
+
+
+            }
+
+        }
+
         public int fixTileRuleBorder = 2;
         private void HandleFixTileRules(Chunk chunk)
         {
-            //Debug.Log($"Fixing Chunk {chunk.chunkID}");
+            Debug.Log($"Fixing Chunk {chunk.chunkID}");
             List<SubChunk> subChunks = chunk.GetInvalidSubChunks(fixTileRuleBorder);
             Debug.Log($"chunkID = {chunk.chunkID} : subChunks.Count = {subChunks.Count}");
             foreach (SubChunk subChunk in subChunks)
@@ -309,13 +416,14 @@ namespace NoiseTerrain
 
         private void FixSubChunk(int index, int[] indices, List<bool> tiles, int width, SubChunk subChunk)
         {
+            if (!fixTileRules) return;
             if (subChunk.hasInvalid)
             {
                 subChunk.hasInvalid = !CheckTileRules(tiles, width);
 
                 if (!subChunk.hasInvalid)
                 {
-                    Debug.Log("Chunk fixed");
+                    Debug.Log("SubChunk fixed");
                     for (int x = 0; x < width; x += 1)
                     {
                         for (int y = 0; y < tiles.Count / width; y += 1)
@@ -326,6 +434,7 @@ namespace NoiseTerrain
                 }
                 else
                 {
+                    //Debug.Log("SubChunk not fixed");
                     if (index < indices.Length)
                     {
                         if (subChunk.hasInvalid)
@@ -342,14 +451,14 @@ namespace NoiseTerrain
                             FixSubChunk(index += 1, indices, tilesClone, width, subChunk);
                         }
                     }
-                    
+
                 }
             }
-            
-            
 
-           
-            
+
+
+
+
         }
 
     }
