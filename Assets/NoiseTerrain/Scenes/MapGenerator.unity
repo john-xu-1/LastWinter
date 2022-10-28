@@ -635,6 +635,7 @@ MonoBehaviour:
     attempts: 0
   tileRules: {fileID: 11400000, guid: 6d490fca4911858419df1f0338be359f, type: 2}
   debugFixTileRules: 0
+  fixTileRuleBorder: 2
 --- !u!1 &1829283895
 GameObject:
   m_ObjectHideFlags: 0

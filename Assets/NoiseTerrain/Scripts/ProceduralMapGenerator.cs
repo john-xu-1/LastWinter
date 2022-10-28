@@ -256,10 +256,11 @@ namespace NoiseTerrain
             ClearMap(minX, maxX, minY, maxY);
         }
 
+        public int fixTileRuleBorder = 2;
         private void HandleFixTileRules(Chunk chunk)
         {
             //Debug.Log($"Fixing Chunk {chunk.chunkID}");
-            List<SubChunk> subChunks = chunk.GetInvalidSubChunks(3);
+            List<SubChunk> subChunks = chunk.GetInvalidSubChunks(fixTileRuleBorder);
             Debug.Log($"chunkID = {chunk.chunkID} : subChunks.Count = {subChunks.Count}");
             foreach (SubChunk subChunk in subChunks)
             {
@@ -277,9 +278,10 @@ namespace NoiseTerrain
                 int count = tilesList.Count - height * 2 - width * 2 + 4;
                 int[] indices = new int[count];
                 int index = 0;
-                for (int y = 2; y < height - 2; y += 1)
+                int border = fixTileRuleBorder - 1;
+                for (int y = border; y < height - border; y += 1)
                 {
-                    for (int x = 2; x < width - 2; x += 1)
+                    for (int x = border; x < width - border; x += 1)
                     {
                         indices[index] = width * y + x;
                         index += 1;
