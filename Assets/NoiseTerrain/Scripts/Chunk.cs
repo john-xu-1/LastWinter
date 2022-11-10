@@ -15,7 +15,9 @@ namespace NoiseTerrain
 
         public Chunk[] neighborChunks = new Chunk[8]; //0:upleft, 1:up, 2:upright, 3:left, 4:right, 5:downleft, 6:down, 7:downright
 
-        int width, height;
+        public int width, height;
+
+        public bool valueChanged = true;
 
         public Chunk(Vector2Int chunkID, bool[,]boolMap, ProceduralMapGenerator mapGenerator)
         {
@@ -28,8 +30,8 @@ namespace NoiseTerrain
         }
 
         public bool initialized;
-        List<LightingLevelSetup.Lighting> lights;
-        public void BuildChunk(LightingLevelSetup lighting, EnemySetup enemySetup, int seed)
+        
+        public void BuildChunk(int seed)
         {
             int minX = chunkID.x * width;
             int minY = chunkID.y * height;
@@ -37,16 +39,13 @@ namespace NoiseTerrain
             int maxY = minY + height;
 
             
-            lights = lighting.setupLighting(minX, maxX, minY + 1, maxY, seed);
+            
             initialized = true;
         }
 
-        public void ClearChunk(LightingLevelSetup lightingSetup)
+        public void ClearChunk()
         {
-            foreach(LightingLevelSetup.Lighting lighting in lights)
-            {
-                lightingSetup.ReturnLight(lighting);
-            }
+            
         }
 
         public bool GetTile(int x, int y)
@@ -60,6 +59,11 @@ namespace NoiseTerrain
             if (chunk != this) return chunk.GetTile(x, y);
             return boolMap[x, y];
         }
+        public void SetTiles(bool[,] boolMap)
+        {
+            this.boolMap = boolMap;
+            valueChanged = true;
+        }
         public void SetTile(int x, int y, bool value)
         {
             Chunk chunk = GetChunk(x, y);
@@ -68,8 +72,12 @@ namespace NoiseTerrain
             if (y < 0) y = height + y;
             else if (y >= height) y -= height;
 
-            if (chunk != this) chunk.SetTile(x, y,value);
-            else boolMap[x, y] = value;
+            if (chunk != this) chunk.SetTile(x, y, value);
+            else
+            {
+                boolMap[x, y] = value;
+                valueChanged = true;
+            }
         }
 
         public bool GetInvalidTile(int x, int y)
@@ -372,6 +380,22 @@ namespace NoiseTerrain
             {
                 return null;
             }
+        }
+
+        public void PrintTiles()
+        {
+            string map = "";
+            int width = tiles.GetLength(0);
+            int height = tiles.GetLength(1);
+            for (int y = 0; y < height; y += 1)
+            {
+                for (int x = 0; x < width; x += 1)
+                {
+                    map += tiles[x, y] ? 1 : 0;
+                }
+                map += "\n";
+            }
+            Debug.Log(map);
         }
     }
 }

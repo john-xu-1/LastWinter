@@ -54,11 +54,6 @@ namespace WorldBuilder
       :- state(XX,YY, one), state(XX-1, YY, zero), state(XX+1, YY, zero).
       :- state(XX,YY, one), state(XX, YY-1, zero), state(XX, YY+1, zero).
 
-      %:- state(XX,YY, one), state(XX-1, YY, zero), XX == max_width.
-      %:- state(XX,YY, one), XX == 1, state(XX+1, YY, zero).
-      %:- state(XX,YY, one), state(XX, YY-1, zero), YY == max_height.
-      %:- state(XX,YY, one), YY == 1, state(XX, YY+1, zero).
-
 
       %no empty diagonals with adjencent filled diagonals (no checkers pattern)
       :- state(XX, YY, zero), state(XX+1, YY + 1, zero), state(XX, YY +1, one), state(XX+1, YY, one).
@@ -76,8 +71,7 @@ namespace WorldBuilder
       :- state(XX,YY,one), state(XX-1,YY, one), state(XX, YY+1, zero), state(XX-1, YY-1, zero).
 
       % no 2 empty diagonals on a filled tile
-      %:- state(XX,YY, one), state(XX+1, YY-1, zero), state(XX-1, YY+1, zero).
-      %:- state(XX,YY, one), state(XX-1, YY-1, zero), state(XX+1, YY+1, zero).
+
       :- state(XX,YY, one), state(XX+1, YY-1, zero), state(XX-1, YY+1, zero), state(XX, YY-1, one), state(XX,YY+1,one), state(XX+1,YY,one), state(XX-1,YY,one).
       :- state(XX,YY, one), state(XX-1, YY-1, zero), state(XX+1, YY+1, zero), state(XX, YY-1, one), state(XX,YY+1,one), state(XX+1,YY,one), state(XX-1,YY,one).
 

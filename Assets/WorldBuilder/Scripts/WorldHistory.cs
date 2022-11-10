@@ -11,11 +11,11 @@ namespace WorldBuilder
         [SerializeField] private List<RoomHistory> roomHistories = new List<RoomHistory>();
         [SerializeField] private RoomHistoryAnalysis[] roomHistoryAnalysis;
         public RoomHistory[] history;
-        public void AddRoom(int roomID, Map map, List<FreeObject> items, double buildTime, Clingo.ClingoSolver.Status status)
+        public void AddRoom(int roomID, Map map, List<FreeObject> items, double buildTime, Clingo_00.ClingoSolver.Status status)
         {
             roomHistories.Add(new RoomHistory(roomID, map, items, buildTime, status));
         }
-        public void DestroyRoom(int roomID, Map map, List<FreeObject> items, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
+        public void DestroyRoom(int roomID, Map map, List<FreeObject> items, double destroyTime, int destroyedByID, Clingo_00.ClingoSolver.Status status)
         {
             Map destroyedMap = new Map();
             destroyedMap.dimensions =  map.dimensions;
@@ -90,9 +90,9 @@ namespace WorldBuilder
         public double buildTime;
         public bool destroyed;
         public int destroyedByID;
-        public Clingo.ClingoSolver.Status buildStatus;
+        public Clingo_00.ClingoSolver.Status buildStatus;
 
-        public RoomHistory(int roomID, Map map, List<FreeObject> items, double buildTime, Clingo.ClingoSolver.Status status)
+        public RoomHistory(int roomID, Map map, List<FreeObject> items, double buildTime, Clingo_00.ClingoSolver.Status status)
         {
             this.roomID = roomID;
             this.map = map;
@@ -101,7 +101,7 @@ namespace WorldBuilder
             roomName = "Room " + roomID.ToString() + " BuildTime: " + buildTime.ToString();
             buildStatus = status;
         }
-        public RoomHistory(int roomID, Map map, List<FreeObject> items, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
+        public RoomHistory(int roomID, Map map, List<FreeObject> items, double destroyTime, int destroyedByID, Clingo_00.ClingoSolver.Status status)
         {
             buildTime = destroyTime;
             this.roomID = roomID;

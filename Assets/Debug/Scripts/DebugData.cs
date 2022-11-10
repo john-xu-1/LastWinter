@@ -72,20 +72,20 @@ namespace Debugging
             DebugUtility.CreateFile(table, $"{testDataPath}.csv", DebugUtility.DataFilePath);
         }
 
-        public void RoomRuntimeData(int runID, float runtime, DebugRoom debugRoom, WorldBuilder.Room room, Clingo.ClingoSolver.Status buildStatus)
+        public void RoomRuntimeData(int runID, float runtime, DebugRoom debugRoom, WorldBuilder.Room room, Clingo_00.ClingoSolver.Status buildStatus)
         {
             string[] data = new string[22];
             Vector2Int roomIndex = room.pos;                                                                            
             int width = debugRoom.roomSize.x;                                                                           
             int height = debugRoom.roomSize.y;                                                                          
-            int upExit = buildStatus == Clingo.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.upEgress ? room.upExit.x : 0;                                            
-            int upEntrace = buildStatus == Clingo.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.upIngress ? room.upExit.x : 0;                                        
-            int rightExit = buildStatus == Clingo.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.rightEgress ? room.rightExit.y : 0;                                   
-            int rightEntrance = buildStatus == Clingo.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.rightIngress ? room.rightExit.y : 0;                              
-            int downExit = buildStatus == Clingo.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.downEgress ? room.downExit.x : 0;                                      
-            int downEntrance = buildStatus == Clingo.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.downIngress ? room.downExit.x : 0;                                 
-            int leftExit = buildStatus == Clingo.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.leftEgress ? room.leftExit.y : 0;                                      
-            int leftEntrance = buildStatus == Clingo.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.leftIngress ? room.leftExit.y : 0;                                 
+            int upExit = buildStatus == Clingo_00.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.upEgress ? room.upExit.x : 0;                                            
+            int upEntrace = buildStatus == Clingo_00.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.upIngress ? room.upExit.x : 0;                                        
+            int rightExit = buildStatus == Clingo_00.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.rightEgress ? room.rightExit.y : 0;                                   
+            int rightEntrance = buildStatus == Clingo_00.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.rightIngress ? room.rightExit.y : 0;                              
+            int downExit = buildStatus == Clingo_00.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.downEgress ? room.downExit.x : 0;                                      
+            int downEntrance = buildStatus == Clingo_00.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.downIngress ? room.downExit.x : 0;                                 
+            int leftExit = buildStatus == Clingo_00.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.leftEgress ? room.leftExit.y : 0;                                      
+            int leftEntrance = buildStatus == Clingo_00.ClingoSolver.Status.SATISFIABLE && debugRoom.connections.leftIngress ? room.leftExit.y : 0;                                 
             string gate = GetGateData(debugRoom)[0];                                                                    
             string gated = GetGateData(debugRoom)[1];                                                                   
             
@@ -94,7 +94,7 @@ namespace Debugging
             string neighborDown = GetNeighborBorder(debugRoom.neighbors, WorldBuilder.Utility.Directions.down);                                                                                   
             string neighborLeft = GetNeighborBorder(debugRoom.neighbors, WorldBuilder.Utility.Directions.left);                                                                                   
             string status = buildStatus.ToString();                                                                     
-            string map = buildStatus == Clingo.ClingoSolver.Status.SATISFIABLE? DebugUtility.GetASCIRoom(room): "";                                                                
+            string map = buildStatus == Clingo_00.ClingoSolver.Status.SATISFIABLE? DebugUtility.GetASCIRoom(room): "";                                                                
             int cpus = debugRoom.cpus;                                                                                  
                                                                                                                         
             WorldBuilder.GateTypes key = debugRoom.key != null && debugRoom.key.type != 0 ?  debugRoom.gates[debugRoom.key.type - 1] : WorldBuilder.GateTypes.none;
@@ -125,7 +125,7 @@ namespace Debugging
             Debug.Log($"keyType = {key.ToString()}");
             RuntimeData(data, runID);
         }
-        public void RoomRuntimeData(int runID, float runtime, DebugRoom debugRoom, Vector2Int roomIndex, Clingo.ClingoSolver.Status buildStatus)
+        public void RoomRuntimeData(int runID, float runtime, DebugRoom debugRoom, Vector2Int roomIndex, Clingo_00.ClingoSolver.Status buildStatus)
         {
             WorldBuilder.Room room = new WorldBuilder.Room(roomIndex);
             room.isDestroyed = true;

@@ -39,15 +39,15 @@ namespace WorldBuilder
             WorldHistory = new WorldHistory();
         }
 
-        public void WorldHistoryAdd(int roomID, Map map, List<FreeObject> items, double buildTime, Clingo.ClingoSolver.Status status)
+        public void WorldHistoryAdd(int roomID, Map map, List<FreeObject> items, double buildTime, Clingo_00.ClingoSolver.Status status)
         {
             WorldHistory.AddRoom(roomID, map, items, buildTime, status);
         }
-        public void WorldHistoryRemove(int roomID, Map map, List<FreeObject> items, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
+        public void WorldHistoryRemove(int roomID, Map map, List<FreeObject> items, double destroyTime, int destroyedByID, Clingo_00.ClingoSolver.Status status)
         {
             WorldHistory.DestroyRoom(roomID, map, items, destroyTime, destroyedByID, status);
         }
-        public void WorldHistoryRemove(Room room, double destroyTime, int destroyedByID, Clingo.ClingoSolver.Status status)
+        public void WorldHistoryRemove(Room room, double destroyTime, int destroyedByID, Clingo_00.ClingoSolver.Status status)
         {
             int roomID = Utility.index_to_roomID(room.pos, width, height);
             WorldHistory.DestroyRoom(roomID, room.map, room.items, destroyTime, destroyedByID, status);
@@ -110,7 +110,7 @@ namespace WorldBuilder
             if (y < height - 1 && Rooms[x, y + 1] != null && !Rooms[x, y + 1].isDestroyed) neighbors.down = Rooms[x, y + 1];
 
             Room room = GetRoom(x, y);
-            if(room != null && room.buidStatus == Clingo.ClingoSolver.Status.UNSATISFIABLE)
+            if(room != null && room.buidStatus == Clingo_00.ClingoSolver.Status.UNSATISFIABLE)
             {
                 List<int> removed = room.removedNeighbors;
                 if (neighbors.left != null && removed.Contains(Utility.index_to_roomID(neighbors.left.pos, width, height))) neighbors.left = null;
