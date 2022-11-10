@@ -378,7 +378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cpus: 4
   timeout: 5
-  solver: {fileID: 1747112940}
+  solver: {fileID: 450358801}
   runOnStart: 0
   width: 0
   height: 0
@@ -591,11 +591,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fullTile: {fileID: 11400000, guid: 80cc21b320a3242ee9539b7d613a3a60, type: 2}
   fullTilemap: {fileID: 1398139181}
-  width: 8
-  height: 8
+  width: 12
+  height: 9
   noiseScale: 8
   octaves: 4
-  persistance: 0.023
+  persistance: 1
   lacunarity: 0.25
   seed: 0
   offset: {x: 0, y: 0}
@@ -611,7 +611,7 @@ MonoBehaviour:
   toDisplayChunks: []
   target: {fileID: 1486576023}
   tileRules: {fileID: 11400000, guid: 6d490fca4911858419df1f0338be359f, type: 2}
-  fixTileRules: 0
+  fixTileRules: 1
   fixSubChunk: {fileID: 797004055}
   fixTileRuleBorder: 2
 --- !u!1 &1747112939
