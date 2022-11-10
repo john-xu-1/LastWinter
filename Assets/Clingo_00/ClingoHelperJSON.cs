@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Clingo
+namespace Clingo_00
 {
     namespace ClingoHelperJSON
     {

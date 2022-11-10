@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Clingo {
+namespace Clingo_02 {
     public class SolverUI : MonoBehaviour
     {
         public Text text;

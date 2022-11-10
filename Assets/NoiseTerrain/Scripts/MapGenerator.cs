@@ -43,7 +43,7 @@ namespace NoiseTerrain
                 }
             }
         }
-
+        
         public bool[,] GenerateBoolMap(int minX, int maxX, int minY, int maxY)
         {
             //Debug.Log("GenerateMap");

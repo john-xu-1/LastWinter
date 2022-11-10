@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Clingo;
+using Clingo_02;
 
 [CustomEditor(typeof(SolverUI))]
 public class SolverUIEditor : Editor

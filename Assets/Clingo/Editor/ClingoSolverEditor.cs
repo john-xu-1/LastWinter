@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using Clingo;
+using Clingo_02;
 
-[CustomEditor(typeof(ClingoSolver))]
+
 public class ClingoSolverEditor : Editor
 {
     string solutionOutput = "";
@@ -43,3 +43,9 @@ public class ClingoSolverEditor : Editor
     }
 
 }
+
+[CustomEditor(typeof(ClingoOnline))]
+public class ClingoOnlineEditor : ClingoSolverEditor { }
+
+[CustomEditor(typeof(ClingoLocal))]
+public class ClingoLocalEditor : ClingoSolverEditor { }

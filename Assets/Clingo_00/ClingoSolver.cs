@@ -3,12 +3,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
-using Clingo.ClingoHelperJSON;
+using Clingo_00.ClingoHelperJSON;
 using UnityEngine;
 
-public delegate void solverCallback(string clingoOutput);
+//public delegate void solverCallback(string clingoOutput);
 
-namespace Clingo
+namespace Clingo_00
 {
     public class ClingoSolver : MonoBehaviour
     {

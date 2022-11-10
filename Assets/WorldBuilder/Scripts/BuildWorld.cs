@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using Clingo;
+using Clingo_00;
 namespace WorldBuilder
 {
     public class BuildWorld : MonoBehaviour
@@ -335,7 +335,7 @@ namespace WorldBuilder
             Generator.RemoveMap(room);
             if (FindObjectOfType<Debugging.DebugMap>()) FindObjectOfType<Debugging.DebugMap>().RemovePath(room);
         }
-        void DestroyRoom(Room killRoom, double destroyTime, int destoryerID, Clingo.ClingoSolver.Status status)
+        void DestroyRoom(Room killRoom, double destroyTime, int destoryerID, Clingo_00.ClingoSolver.Status status)
         {
             killRoom.isDestroyed = true;
             if (history) world.WorldHistoryRemove(killRoom, destroyTime, destoryerID, status);

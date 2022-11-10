@@ -17,7 +17,7 @@ namespace WorldBuilder
         public CollisionTile[,] mapGrid;
         public List<CollisionTile> tiles = new List<CollisionTile>();
         public Vector2Int upExit, downExit, rightExit, leftExit;
-        public Clingo.ClingoSolver.Status buidStatus;
+        public Clingo_00.ClingoSolver.Status buidStatus;
         public List<List<int>> neighborPermutations;
         public List<int> removedNeighbors;
         public double lastBuildTime;

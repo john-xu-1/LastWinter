@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 
-namespace Clingo
+namespace Clingo_02
 {
 
     public class ClingoUtil

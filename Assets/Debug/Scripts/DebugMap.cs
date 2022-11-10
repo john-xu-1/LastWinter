@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine.UI;
 
 using WorldBuilder;
-using Clingo;
+using Clingo_00;
 
 namespace Debugging
 {
