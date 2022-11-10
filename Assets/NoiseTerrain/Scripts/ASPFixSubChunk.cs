@@ -7,6 +7,10 @@ public class ASPFixSubChunk : FixSubChunk
 {
     //public Clingo2.ClingoSolver solver;
     public ASPFixSubChunkGenerator aspGenerator;
+    protected override bool CheckReady()
+    {
+        return CheckSolverStatus();
+    }
     public override void Fix(NoiseTerrain.SubChunk subChunk, int fixTileRuleBorder, NoiseTerrain.TileRules tileRules)
     {
         int width = subChunk.tiles.GetLength(0);

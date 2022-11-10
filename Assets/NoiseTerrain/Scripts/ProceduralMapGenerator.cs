@@ -386,6 +386,8 @@ namespace NoiseTerrain
             foreach (SubChunk subChunk in subChunks)
             {
                 fixSubChunk.Fix(subChunk, fixTileRuleBorder, tileRules);
+                while (!fixSubChunk.ready)
+                {/*waiting for fixSubChunk to be done*/ }
                 if (!subChunk.hasInvalid)
                 {
                     subChunk.PrintTiles();

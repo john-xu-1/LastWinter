@@ -6,6 +6,11 @@ using NoiseTerrain;
 public class FixSubChunk : MonoBehaviour
 {
     public bool fixTileRules = true;
+    public bool ready { get { return CheckReady(); } }
+    protected virtual bool CheckReady()
+    {
+        return true;
+    }
     public virtual void Fix(SubChunk subChunk, int fixTileRuleBorder, TileRules tileRules)
     {
         List<bool> tilesList = subChunk.GetTilesList();
