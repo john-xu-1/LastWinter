@@ -80,6 +80,43 @@ namespace NoiseTerrain
 
             }
             DisplayMap(chunkID);
+
+            if(!setupComplete && toDisplayChunks.Count == 0 && toFixChunkIDs.Count == 0)
+            {
+                setupComplete = true;
+            }
+        }
+
+        //public override void GenerateMap()
+        //{
+
+        //}
+
+        protected override int GetMinX()
+        {
+
+            return (chunkID.x - tileRadius.x) * width;
+
+        }
+
+        protected override int GetMinY()
+        {
+            return (chunkID.y - tileRadius.y) * height - height + 1;
+
+        }
+
+        protected override int GetMaxX()
+        {
+            return (chunkID.x + tileRadius.x) * width + width - 1;
+
+        }
+
+        protected override int GetMaxY()
+        {
+            return (chunkID.y + tileRadius.y) * height;
+
+            
+
         }
 
         public Chunk GetChunk(Vector2Int chunkID)
@@ -238,11 +275,11 @@ namespace NoiseTerrain
 
         public override void GenerateMap()
         {
-            int minX = chunkID.x * width;
-            int maxX = (chunkID.x + 1) * width - 1;
-            int minY = chunkID.y * height;
-            int maxY = (chunkID.y + 1) * height - 1;
-            GenerateMap(minX, maxX, minY, maxY);
+            //int minX = chunkID.x * width;
+            //int maxX = (chunkID.x + 1) * width - 1;
+            //int minY = chunkID.y * height;
+            //int maxY = (chunkID.y + 1) * height - 1;
+            //GenerateMap(minX, maxX, minY, maxY);
         }
         public void GenerateMap(Vector2Int chunkID)
         {

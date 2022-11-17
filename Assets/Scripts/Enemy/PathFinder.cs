@@ -9,6 +9,15 @@ public class PathFinder : MonoBehaviour
     public Tilemap tilemap;
     public int minX = 0, minY = -160, maxX = 160, maxY = 0;
 
+    public void SetMap (int minX, int minY, int maxX, int maxY)
+    {
+        this.minX = minX;
+        this.maxX = maxX;
+        this.minY = minY;
+        this.maxY = maxY;
+        gridMap = null;
+    }
+
     public List<GridNode> GetGridMap(Tilemap tilemap, int minX, int minY, int maxX, int maxY)
     {
         if (this.gridMap != null) return this.gridMap;
