@@ -56,6 +56,7 @@ public class LightingLevelSetup : MonoBehaviour
                 }
             }
         }
+        setupComplete = true;
         return lightings;
     }
 

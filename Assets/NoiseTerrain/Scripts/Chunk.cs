@@ -30,7 +30,7 @@ namespace NoiseTerrain
         }
 
         public bool initialized;
-        
+
         public void BuildChunk(int seed)
         {
             int minX = chunkID.x * width;
@@ -38,8 +38,8 @@ namespace NoiseTerrain
             int maxX = minX + width;
             int maxY = minY + height;
 
-            
-            
+
+
             initialized = true;
         }
 

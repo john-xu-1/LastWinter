@@ -21,6 +21,8 @@ public class SceneLoader : MonoBehaviour
     public int progressionItemsCount = 9;
     public int seed;
 
+    int maxX, minX, maxY, minY;
+
     void Start()
     {
         StartSetup();
@@ -50,6 +52,12 @@ public class SceneLoader : MonoBehaviour
             yield return null;
         }
 
+        minX = noiseMapGenerator.minX;
+        maxX = noiseMapGenerator.maxX;
+        minY = noiseMapGenerator.minY;
+        maxY = noiseMapGenerator.maxY;
+        FindObjectOfType<PathFinder>().SetMap(minX, minY, maxX, maxY);
+
         progression += 1 / (float)progressionItemsCount;
         Debug.Log("TilemapSetupComplete");
 
@@ -67,7 +75,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator UISetup()
     {
-        StartCoroutine(uiSetup.InitializeSetup(2, 200, 2, 100, seed));
+        StartCoroutine(uiSetup.InitializeSetup(minX, maxX, minY, maxY, seed));
         while (!uiSetup.setupComplete)
         {
             yield return null;
@@ -91,7 +99,7 @@ public class SceneLoader : MonoBehaviour
     IEnumerator EnvironmentSetup()
     {
         LightingLevelSetup lighting = FindObjectOfType<LightingLevelSetup>();
-        lighting.setupLighting(200, 100);
+        lighting.setupLighting(minX, maxX, minY, maxY, seed);
         while (!lighting.setupComplete)
         {
             yield return null;
@@ -107,7 +115,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator PickablesSetup()
     {
-        StartCoroutine(itemSetup.InitializeSetup(2, 200, 2, 100, seed));
+        StartCoroutine(itemSetup.InitializeSetup(minX, maxX, minY, maxY, seed));
         while (!itemSetup.setupComplete)
         {
             yield return null;
@@ -117,7 +125,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator EnemiesSetup()
     {
-        StartCoroutine(enemySetup.InitializeSetup(2, 200, 2, 100, seed));
+        StartCoroutine(enemySetup.InitializeSetup(minX, maxX, minY, maxY, seed));
         while (!enemySetup.setupComplete)
         {
             yield return null;
@@ -128,7 +136,7 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator PlayerSetup()
     {
-        StartCoroutine(playerSetup.InitializeSetup(2,200,2,100, seed));
+        StartCoroutine(playerSetup.InitializeSetup(minX, maxX, minY, maxY, seed));
         while (!playerSetup.setupComplete)
         {
             yield return null;
@@ -318,6 +326,7 @@ public class ItemSetup : Setup
 
         while (itemCount > 0 && placedItems.Count < items.Length)
         {
+            Debug.Log("Placing Items");
             int x = Random.Range(minX, maxX);
             int y = Random.Range(minY, maxY);
             while (!UtilityTilemap.isGround(x, -y, collsionMap))

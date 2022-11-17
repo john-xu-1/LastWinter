@@ -11,6 +11,14 @@ namespace NoiseTerrain
         public Tilemap fullTilemap;
 
         public int width = 100, height = 100;
+        public int minX { get { return GetMinX(); } }
+        public int maxX { get { return GetMaxX(); } }
+        public int minY { get { return GetMinY(); } }
+        public int maxY { get { return GetMaxY(); } }
+        protected virtual int GetMinX() { return 0; }
+        protected virtual int GetMaxX() { return width - 1; }
+        protected virtual int GetMinY() { return 0; }
+        protected virtual int GetMaxY() { return height - 1; }
 
         public float noiseScale = 1;
         public int octaves = 1;
