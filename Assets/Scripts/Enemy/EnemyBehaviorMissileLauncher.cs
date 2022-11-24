@@ -17,7 +17,7 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
 
     public List<Vector2Int> path;
     public Vector2Int playerPrevPos;
-    public Vector2Int playerPosInt { get { return new Vector2Int((int)(player.transform.position.x /*- player.transform.position.x < 0? 1 : 0*/), (int)(player.transform.position.y + 0.1f)); } }
+    public Vector2Int playerPosInt { get { return new Vector2Int((int)(Mathf.Floor(player.transform.position.x) ), (int)(Mathf.Floor(player.transform.position.y/* + 0.1f*/))); } }
 
     public override void defaultAI()
     {

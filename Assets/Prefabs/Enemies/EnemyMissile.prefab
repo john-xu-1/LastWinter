@@ -747,7 +747,7 @@ MonoBehaviour:
   speed: 5
   attackCD: 2
   dd: {fileID: 433661612054039830}
-  rotateSpeed: 400
+  rotateSpeed: 600
   pathIndex: 0
   pathNodeBuffer: 1
   mother: {fileID: 0}

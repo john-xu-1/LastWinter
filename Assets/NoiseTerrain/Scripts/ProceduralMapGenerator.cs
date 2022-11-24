@@ -96,7 +96,7 @@ namespace NoiseTerrain
         protected override int GetMaxY()
         {
 
-            return (chunkID.y + tileRadius.y) * height ;
+            return (chunkID.y + tileRadius.y) * height + height - 1;
         }
         protected override int GetMinX()
         {
@@ -104,7 +104,7 @@ namespace NoiseTerrain
         }
         protected override int GetMinY()
         {
-            return (chunkID.y - tileRadius.y) * height - height + 1;
+            return (chunkID.y - tileRadius.y) * height ;
         }
 
         public Chunk GetChunk(Vector2Int chunkID)
