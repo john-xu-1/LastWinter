@@ -47,7 +47,7 @@ namespace NoiseTerrain
         }
         private void Update()
         {
-            HandleMouseClickResetChunk();
+            //HandleMouseClickResetChunk();
             Vector2Int chunkID = GetChunkID(target.position);
 
             for (int i = 0; i < visibleChunkIDs.Count; i += 1)
