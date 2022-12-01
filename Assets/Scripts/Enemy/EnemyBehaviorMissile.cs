@@ -44,7 +44,7 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 			if (pathIndex < mother.path.Count - 1) pathIndex += 1;
 			else
 			{
-				//FindPath();
+				targetPos = player.transform.position;
 			}
 		}
 		Vector2 direction = targetPos - rb.position;

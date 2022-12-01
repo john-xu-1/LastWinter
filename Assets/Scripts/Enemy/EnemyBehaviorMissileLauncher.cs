@@ -17,7 +17,7 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
 
     public List<Vector2Int> path;
     public Vector2Int playerPrevPos;
-    public Vector2Int playerPosInt { get { return new Vector2Int((int)(player.transform.position.x /*- player.transform.position.x < 0? 1 : 0*/), (int)(player.transform.position.y + 0.1f)); } }
+    public Vector2Int playerPosInt { get { return new Vector2Int((int)(Mathf.Floor(player.transform.position.x)/*- player.transform.position.x < 0? 1 : 0*/), (int)(Mathf.Floor(player.transform.position.y) + 0.1f)); } }
 
     public override void defaultAI()
     {
@@ -44,14 +44,27 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
 
     void FindPath()
     {
-        path = FindObjectOfType<PathFinder>().FindPath(new Vector2Int((int)firepoint.position.x, (int)firepoint.position.y), new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y));
-        if (path.Count > 0)
+        Vector2Int start = new Vector2Int((int)firepoint.position.x, (int)firepoint.position.y);
+        Vector2Int end = new Vector2Int((int)player.transform.position.x, (int)player.transform.position.y);
+        if (FindObjectOfType<PathFinder>().paths.ContainsKey(new Vector4(start.x,start.y,end.x,end.y)))
         {
-            foreach (EnemyBehaviorMissile missile in FindObjectsOfType<EnemyBehaviorMissile>())
+
+            path = FindObjectOfType<PathFinder>().paths[new Vector4(start.x, start.y, end.x, end.y)];
+            
+            if (path.Count > 0)
             {
-                missile.pathChanged = true;
+                foreach (EnemyBehaviorMissile missile in FindObjectsOfType<EnemyBehaviorMissile>())
+                {
+                    missile.pathChanged = true;
+                }
             }
         }
+        else
+        {
+            FindObjectOfType<PathFinder>().FindPath(start, end);
+        }
+        
+        
        
     }
 
@@ -61,9 +74,9 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
         float distance = Vector2.Distance(pos, path[closest]);
         for (int i = 1; i < path.Count; i += 1)
         {
-            if (Vector2.Distance(pos, path[closest]) < distance)
+            if (Vector2.Distance(pos, path[i]) < distance)
             {
-                distance = Vector2.Distance(pos, path[closest]);
+                distance = Vector2.Distance(pos, path[i]);
                 closest = i;
             }
         }

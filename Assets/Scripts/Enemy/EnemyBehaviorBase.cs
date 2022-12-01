@@ -37,7 +37,7 @@ public class EnemyBehaviorBase : MonoBehaviour
             rb = GetComponent<Rigidbody2D>();
             ChildStart();
         }
-        if (player && getDistX(player.transform, transform) <= angerRange && getDistY(player.transform, transform) <= angerRange)
+        if (player && Vector2.Distance(player.transform.position, transform.position) <= angerRange)
         {
             defaultAI();
         }

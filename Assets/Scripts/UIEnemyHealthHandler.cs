@@ -10,12 +10,16 @@ public class UIEnemyHealthHandler : MonoBehaviour
 
     public void setMaxDisplay(float maxH)
     {
-        Debug.Log(sd.maxValue);
-        sd.maxValue = maxH;
+        if (sd)
+        {
+            Debug.Log(sd.maxValue);
+            sd.maxValue = maxH;
+        }
+        
     }
 
     virtual public void Display(float playerHealth)
     {
-        sd.value = playerHealth;
+        if (sd) sd.value = playerHealth;
     }
 }

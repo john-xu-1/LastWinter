@@ -1339,10 +1339,7 @@ MonoBehaviour:
     finalizedComplete: 0
     collsionMap: {fileID: 590074636}
     enemies:
-    - {fileID: 1173827562917520578, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
     - {fileID: 341972518879934238, guid: d1d6e714273274acb853a2157a70b6c2, type: 3}
-    - {fileID: 9034532965937968619, guid: 0ea9748bf53670245a441e38bf510be0, type: 3}
-    - {fileID: 8387131397387960704, guid: cc7a7600fbb8f48e7aadd34381960201, type: 3}
     enemyCount: 10
     attempts: 10
   itemSetup:
@@ -1959,7 +1956,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502672, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 23.5
+      value: -120
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502672, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: m_LocalPosition.z

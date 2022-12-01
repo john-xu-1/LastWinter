@@ -185,7 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   rb: {fileID: 341972518879934235}
-  angerRange: 20
+  angerRange: 25
   speed: 5
   attackCD: 2
   dd: {fileID: 0}

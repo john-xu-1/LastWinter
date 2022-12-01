@@ -328,7 +328,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &433661611807188843
 RectTransform:
   m_ObjectHideFlags: 0
@@ -594,9 +594,9 @@ GameObject:
   - component: {fileID: 433661612410558449}
   - component: {fileID: 433661612410558447}
   - component: {fileID: 433661612410558445}
-  - component: {fileID: 433661612410558446}
   - component: {fileID: 433661612410558444}
   - component: {fileID: 433661612410558443}
+  - component: {fileID: 2155957475017257097}
   m_Layer: 9
   m_Name: EnemyMissile
   m_TagString: enemy
@@ -619,6 +619,7 @@ Transform:
   - {fileID: 433661611330215308}
   - {fileID: 433661611807188843}
   - {fileID: 759368687}
+  - {fileID: 8454533913929384421}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -716,19 +717,6 @@ MonoBehaviour:
   combatCD: 5
   RegenMagnitude: 0
   isCombat: 0
---- !u!114 &433661612410558446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 433661612410558450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b03128e09bfd54a60842b4b41873759f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sd: {fileID: 433661612277936039}
 --- !u!114 &433661612410558444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -743,11 +731,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   rb: {fileID: 433661612410558443}
-  angerRange: 50
-  speed: 5
+  angerRange: 75
+  speed: 7.5
   attackCD: 2
   dd: {fileID: 433661612054039830}
-  rotateSpeed: 400
+  rotateSpeed: 1200
   pathIndex: 0
   pathNodeBuffer: 1
   mother: {fileID: 0}
@@ -773,6 +761,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2155957475017257097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433661612410558450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b03128e09bfd54a60842b4b41873759f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sd: {fileID: 433661612277936039}
 --- !u!1 &433661612643541900
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,7 +807,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -2.287, y: 0}
   m_SizeDelta: {x: 0.00843, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -884,3 +885,75 @@ RectTransform:
   m_AnchoredPosition: {x: -9.066, y: 0.4058}
   m_SizeDelta: {x: -22.7127, y: -0.8116}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2418465095449260321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8454533913929384421}
+  - component: {fileID: 6348380441905839739}
+  m_Layer: 9
+  m_Name: Point Light 2D
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8454533913929384421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418465095449260321}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 433661612410558448}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6348380441905839739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418465095449260321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LightType: 3
+  m_BlendStyleIndex: 0
+  m_FalloffIntensity: 0.897
+  m_Color: {r: 0.28595585, g: 0.6837842, b: 0.9622642, a: 1}
+  m_Intensity: 5.19
+  m_LightVolumeOpacity: 0
+  m_ApplyToSortingLayers: 00000000
+  m_LightCookieSprite: {fileID: 0}
+  m_UseNormalMap: 0
+  m_LightOrder: 0
+  m_AlphaBlendOnOverlap: 0
+  m_ShadowIntensity: 0
+  m_ShadowVolumeIntensity: 0
+  m_PointLightInnerAngle: 360
+  m_PointLightOuterAngle: 360
+  m_PointLightInnerRadius: 0
+  m_PointLightOuterRadius: 3.04
+  m_PointLightDistance: 3
+  m_PointLightQuality: 1
+  m_ShapeLightParametricSides: 5
+  m_ShapeLightParametricAngleOffset: 0
+  m_ShapeLightParametricRadius: 1
+  m_ShapeLightFalloffSize: 0.5
+  m_ShapeLightFalloffOffset: {x: 0, y: 0}
+  m_ShapePath:
+  - {x: -0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: 0.5, z: 0}
+  - {x: -0.5, y: 0.5, z: 0}

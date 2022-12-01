@@ -47,7 +47,7 @@ namespace NoiseTerrain
         }
         private void Update()
         {
-            HandleMouseClickResetChunk();
+            //HandleMouseClickResetChunk();
             Vector2Int chunkID = GetChunkID(target.position);
 
             for (int i = 0; i < visibleChunkIDs.Count; i += 1)
@@ -101,7 +101,7 @@ namespace NoiseTerrain
 
         protected override int GetMinY()
         {
-            return (chunkID.y - tileRadius.y) * height - height + 1;
+            return (chunkID.y - tileRadius.y) * height;
 
         }
 
@@ -113,7 +113,7 @@ namespace NoiseTerrain
 
         protected override int GetMaxY()
         {
-            return (chunkID.y + tileRadius.y) * height;
+            return (chunkID.y + tileRadius.y) * height + height - 1;
 
             
 

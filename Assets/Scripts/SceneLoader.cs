@@ -56,7 +56,7 @@ public class SceneLoader : MonoBehaviour
         maxX = noiseMapGenerator.maxX;
         minY = noiseMapGenerator.minY;
         maxY = noiseMapGenerator.maxY;
-        FindObjectOfType<PathFinder>().SetMap(minX, minY, maxX, maxY);
+        FindObjectOfType<PathFinder>().SetMap(minX, -maxY, maxX, -minY);
 
         progression += 1 / (float)progressionItemsCount;
         Debug.Log("TilemapSetupComplete");
@@ -99,7 +99,7 @@ public class SceneLoader : MonoBehaviour
     IEnumerator EnvironmentSetup()
     {
         LightingLevelSetup lighting = FindObjectOfType<LightingLevelSetup>();
-        lighting.setupLighting(minX, maxX, minY, maxY,seed);
+        lighting.setupLighting(minX, maxX, minY + 2, maxY - 2,seed);
         while (!lighting.setupComplete)
         {
             yield return null;
@@ -115,7 +115,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator PickablesSetup()
     {
-        StartCoroutine(itemSetup.InitializeSetup(minX, maxX, minY, maxY, seed));
+        StartCoroutine(itemSetup.InitializeSetup(minX, maxX, minY + 2, maxY - 2, seed));
         while (!itemSetup.setupComplete)
         {
             yield return null;
@@ -136,7 +136,7 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator PlayerSetup()
     {
-        StartCoroutine(playerSetup.InitializeSetup(minX, maxX, minY, maxY, seed));
+        StartCoroutine(playerSetup.InitializeSetup(minX, maxX, minY + 2, maxY - 2, seed));
         while (!playerSetup.setupComplete)
         {
             yield return null;
