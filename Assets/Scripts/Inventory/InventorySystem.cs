@@ -82,6 +82,7 @@ public class InventorySystem : MonoBehaviour
         selectInventory(equipedItem + 1);
     }
 
+
     public void AddItem(InventoryObjects item)
     {
         bool isFullReplace = false;
@@ -162,6 +163,7 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(name);
         if (!pa)
         {
             pa = FindObjectOfType<PlayerAttack>();

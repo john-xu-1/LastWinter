@@ -105,7 +105,7 @@ public class CameraController : MonoBehaviour
             {
 
 
-                transform.position = target.position + target_Offset;
+                transform.position = new Vector3(target.position.x + target_Offset.x, target.position.y + target_Offset.y, target.position.z + target_Offset.z);
 
 
                 //Vector2 cameraOffset = Vector2.zero;

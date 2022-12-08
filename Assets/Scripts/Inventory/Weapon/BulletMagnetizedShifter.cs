@@ -5,18 +5,21 @@ using UnityEngine;
 public class BulletMagnetizedShifter : BulletBase
 {
 
+    public float accelerationMultiple = 5;
+
     public override void setUp()
     {
         base.setUp();
         Vector3 target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = (target - transform.position).normalized;
         GetComponent<Rigidbody2D>().AddForce(new Vector2(direction.x * speed, direction.y * speed), ForceMode2D.Impulse);
+
     }
 
     public override void updateBehavior()
     {
         base.updateBehavior();
-        GetComponent<Rigidbody2D>().drag += Time.deltaTime / speed;
+        //GetComponent<Rigidbody2D>().drag += Time.deltaTime / 10f;
     }
 
     public override void triggerEnterBehavior(Collider2D collision)
@@ -31,14 +34,15 @@ public class BulletMagnetizedShifter : BulletBase
             Vector2 direction = (collision.transform.position - transform.position).normalized;
             if (sr.sprite == sr2.sprite)
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(-direction.x * speed * 2, -direction.y * speed * 2);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(-direction.x * speed, -direction.y * speed) * Vector2.one * accelerationMultiple;
                 Debug.Log("Repel");
             }
             else
             {
-                GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x * speed * 2, direction.y * speed * 2);
+                GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x * speed, direction.y * speed) * Vector2.one * accelerationMultiple;
                 Debug.Log("Attract");
             }
+
         }
         if(collision.gameObject.layer == 13 && !collision.transform.CompareTag ("TrailMarker"))
         {
@@ -58,7 +62,6 @@ public class BulletMagnetizedShifter : BulletBase
         {
             if (collision.transform.parent.gameObject.GetComponent<BulletMagnetizedShifter>().weapon.weaponType == InventoryWeapon.WeaponTypes.Magnetized_Shifter)
             {
-
                 Destroy(gameObject, 0.5f);
                 Destroy(collision.transform.parent.gameObject, 0.5f);
             }

@@ -22,6 +22,11 @@ public class DoDamage : MonoBehaviour
 
     public bool isMelee = false;
 
+    public float getDamage()
+    {
+        return damage;
+    }
+
     public void setDamage(float d)
     {
         damage = d;

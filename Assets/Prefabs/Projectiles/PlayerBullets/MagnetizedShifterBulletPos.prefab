@@ -220,6 +220,7 @@ MonoBehaviour:
   weapon: {fileID: 0}
   ExplosionPrefab: {fileID: 0}
   FireExplosionPrefab: {fileID: 0}
+  accelerationMultiple: 10
 --- !u!114 &-6555611523574882864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,7 +236,7 @@ MonoBehaviour:
   damage: 0
   type: Player
   hitpoint: {fileID: 4553391551309091968}
-  range: 1.5
+  range: 2
   enemyLayers:
     serializedVersion: 2
     m_Bits: 8192

@@ -13,6 +13,7 @@ public class BulletBase: MonoBehaviour
 
     private void Start()
     {
+        if (ExplosionPrefab) Instantiate(ExplosionPrefab, transform.position, Quaternion.identity);
         weapon = (InventoryWeapon)FindObjectOfType<InventorySystem>().selectedItem;
 
         
