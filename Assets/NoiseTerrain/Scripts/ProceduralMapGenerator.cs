@@ -41,6 +41,7 @@ namespace NoiseTerrain
         }
         private void Start()
         {
+            
             handleFixTileRulesThread = new Thread(HandleFixTileRulesThread);
             handleFixTileRulesThread.Start();
             //fixTileRules = true;
@@ -119,6 +120,14 @@ namespace NoiseTerrain
 
         }
 
+        public bool GetTile(Vector2Int pos)
+        {
+            int x = ((pos.x % width) + width) % width;
+            int y = ((-pos.y % height) + height) % height;
+            Debug.Log($"{x} {y}");
+            return GetChunk(GetChunkID(pos)).GetTile(x, y);
+        }
+
         public Chunk GetChunk(Vector2Int chunkID)
         {
             foreach (Chunk chunk in chunks)
@@ -133,7 +142,7 @@ namespace NoiseTerrain
             int xOffset = pos.x < 0 ? -1 : 0;
             int yOffset = pos.y > 0 ? 1 : 0;
 
-            return new Vector2Int(xOffset + (int)pos.x / width, -yOffset - (int)pos.y / height);
+            return new Vector2Int(xOffset + ((int)pos.x - xOffset )/ width, -yOffset - ((int)pos.y - yOffset )/ height);
         }
 
         public void DisplayMap(Vector2Int chunkID)

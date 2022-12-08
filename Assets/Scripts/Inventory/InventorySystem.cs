@@ -163,7 +163,7 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(name);
+        //Debug.Log(name);
         if (!pa)
         {
             pa = FindObjectOfType<PlayerAttack>();

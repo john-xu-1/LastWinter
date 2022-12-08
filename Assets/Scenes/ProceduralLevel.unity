@@ -1041,6 +1041,8 @@ MonoBehaviour:
   minY: -160
   maxX: 160
   maxY: 0
+  findingPath: 1
+  pathIDs: []
 --- !u!4 &1246202948
 Transform:
   m_ObjectHideFlags: 0
@@ -1785,6 +1787,7 @@ MonoBehaviour:
   - {fileID: 3118390037909646410, guid: 589c0a58c25ad440eb91e4c1f35fa6b8, type: 3}
   isTestLight: 0
   setupComplete: 0
+  map: {fileID: 853445341}
 --- !u!4 &1518394307
 Transform:
   m_ObjectHideFlags: 0
@@ -2005,6 +2008,18 @@ PrefabInstance:
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: persistance
       value: 0.457
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: fixTileRules
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: tileRadius.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: tileRadius.y
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
