@@ -24,7 +24,7 @@ namespace NoiseTerrain
 
         public Transform target;
 
-        
+
         public TileRules tileRules;
 
         List<Chunk> chunks = new List<Chunk>();
@@ -41,6 +41,7 @@ namespace NoiseTerrain
         }
         private void Start()
         {
+
             handleFixTileRulesThread = new Thread(HandleFixTileRulesThread);
             handleFixTileRulesThread.Start();
             //fixTileRules = true;
@@ -60,7 +61,7 @@ namespace NoiseTerrain
                         //toDisplayChunks.Add(visibleChunkIDs[i]);
                         GenerateMap(visibleChunkIDs[i]);
                     }
-                        
+
                     visibleChunk.valueChanged = false;
                 }
             }
@@ -81,7 +82,7 @@ namespace NoiseTerrain
             }
             DisplayMap(chunkID);
 
-            if(!setupComplete && toDisplayChunks.Count == 0 && toFixChunkIDs.Count == 0)
+            if (!setupComplete && toDisplayChunks.Count == 0 && toFixChunkIDs.Count == 0)
             {
                 setupComplete = true;
             }
@@ -115,8 +116,16 @@ namespace NoiseTerrain
         {
             return (chunkID.y + tileRadius.y) * height + height - 1;
 
-            
 
+
+        }
+
+        public bool GetTile(Vector2Int pos)
+        {
+            int x = ((pos.x % width) + width) % width;
+            int y = ((-pos.y % height) + height) % height;
+            Debug.Log($"{x} {y}");
+            return GetChunk(GetChunkID(pos)).GetTile(x, y);
         }
 
         public Chunk GetChunk(Vector2Int chunkID)
@@ -133,14 +142,14 @@ namespace NoiseTerrain
             int xOffset = pos.x < 0 ? -1 : 0;
             int yOffset = pos.y > 0 ? 1 : 0;
 
-            return new Vector2Int(xOffset + (int)pos.x / width, -yOffset - (int)pos.y / height);
+            return new Vector2Int(xOffset + ((int)pos.x - xOffset) / width, -yOffset - ((int)pos.y - yOffset) / height);
         }
 
         public void DisplayMap(Vector2Int chunkID)
         {
             if (chunkID != this.chunkID)
             {
-                
+
                 lock (toFixChunkIDs)
                 {
                     this.chunkID = chunkID;
@@ -174,9 +183,9 @@ namespace NoiseTerrain
                             if (fixTileRules)
                             {
                                 toFixTileRulesChunks.Add(chunkID + new Vector2Int(x, y));
-                                if(x != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(-x, y));
-                                if(y != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(x, -y));
-                                if (x!= 0 && y != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(-x, -y));
+                                if (x != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(-x, y));
+                                if (y != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(x, -y));
+                                if (x != 0 && y != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(-x, -y));
                             }
                         }
                     }
@@ -202,14 +211,14 @@ namespace NoiseTerrain
                             //Debug.LogWarning($"Removing {visibleChunkIDs[i]}");
                             ClearMap(visibleChunkIDs[i]);
                             visibleChunkIDs.RemoveAt(i);
-                            
+
                         }
                         else if (!toDisplayChunks.Contains(visibleChunkIDs[i]))
                         {
                             //Debug.LogWarning($"Removing 2 {visibleChunkIDs[i]} {this.toDisplayChunks.Remove(visibleChunkIDs[i])}"); // must remove next line for debug
                             this.toDisplayChunks.Remove(visibleChunkIDs[i]);
                             visibleChunkIDs.RemoveAt(i);
-                            
+
                         }
                     }
 
@@ -233,7 +242,7 @@ namespace NoiseTerrain
                     for (int i = 0; i < toCheckTileRulesChunks.Count; i += 1)
                     {
                         Chunk chunk = GetChunk(toCheckTileRulesChunks[i]);
-                        Utility.CheckTileRules(chunk,tileRules);
+                        Utility.CheckTileRules(chunk, tileRules);
                         // Debug.Log($"Checking Chunk {chunk.chunkID}");
                     }
 
@@ -243,7 +252,7 @@ namespace NoiseTerrain
                         if (!toFixChunkIDs.Contains(toFixTileRulesChunks[i]) && !visibleChunkIDs.Contains(toFixTileRulesChunks[i]) && !this.toDisplayChunks.Contains(toFixTileRulesChunks[i]))
                         {
                             Chunk chunk = GetChunk(toFixTileRulesChunks[i]);
-                            Utility.CheckTileRules(chunk,tileRules); // need to check in case invalid were fixed in an overlapping subchunk
+                            Utility.CheckTileRules(chunk, tileRules); // need to check in case invalid were fixed in an overlapping subchunk
                             if (chunk.hasInvalidTile)
                             {
 
@@ -271,7 +280,7 @@ namespace NoiseTerrain
 
         }
 
-        
+
 
         public override void GenerateMap()
         {
@@ -310,7 +319,7 @@ namespace NoiseTerrain
 
                 }
             }
-            
+
             chunk.BuildChunk(seed);
         }
 
@@ -347,7 +356,7 @@ namespace NoiseTerrain
         private void HandleMouseClickResetChunk()
         {
             Vector2Int clickChunkID = GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            if(Input.GetMouseButton(0) && (lastClickChunkID == null || lastClickChunkID != clickChunkID))
+            if (Input.GetMouseButton(0) && (lastClickChunkID == null || lastClickChunkID != clickChunkID))
             {
                 Chunk clickedChunk = GetChunk(clickChunkID);
                 if (clickedChunk != null)
@@ -361,7 +370,7 @@ namespace NoiseTerrain
                 }
                 lastClickChunkID = clickChunkID;
             }
-            
+
         }
 
         private void HandleFixTileRulesThread()
@@ -385,7 +394,7 @@ namespace NoiseTerrain
                     {
                         lock (chunk)
                         {
-                            Utility.CheckTileRules(chunk,tileRules); // need to check in case invalid were fixed in an overlapping subchunk
+                            Utility.CheckTileRules(chunk, tileRules); // need to check in case invalid were fixed in an overlapping subchunk
                             if (chunk.hasInvalidTile)
                             {
                                 HandleFixTileRules(chunk);
@@ -444,7 +453,7 @@ namespace NoiseTerrain
             }
         }
 
-        
+
 
     }
 }

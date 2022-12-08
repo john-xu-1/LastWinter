@@ -14,6 +14,7 @@ public class LightingLevelSetup : MonoBehaviour
     [SerializeField] bool isTestLight;
 
     public bool setupComplete = false;
+    public NoiseTerrain.ProceduralMapGenerator map;
 
     // Start is called before the first frame update
     void Start()
@@ -78,9 +79,11 @@ public class LightingLevelSetup : MonoBehaviour
 
     bool isGround(int x, int y)
     {
-        TileBase ground = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y));
-        TileBase air = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y + 1));
-        return ground != null && air == null;
+        //TileBase ground = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y));
+        //TileBase air = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y + 1));
+        bool ground = map.GetTile(new Vector2Int(x, y));
+        bool air = !map.GetTile(new Vector2Int(x, y+1));
+        return ground && air;
     }
 
     bool placeLight (int x, int y)
