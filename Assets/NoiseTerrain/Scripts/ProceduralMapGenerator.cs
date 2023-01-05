@@ -233,7 +233,10 @@ namespace NoiseTerrain
                             int minY = toBuildChunks[i].y * height;
                             int maxY = (toBuildChunks[i].y + 1) * height - 1;
 
-                            chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY), this);
+                            float threshold = 0;
+                            
+                            if (toBuildChunks[i].x == tileRadius.x + chunkID.x || toBuildChunks[i].x == -tileRadius.x + chunkID.x || toBuildChunks[i].y == tileRadius.y + chunkID.y || toBuildChunks[i].y == -tileRadius.y + chunkID.y) threshold = -1;
+                            chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), this);
                             chunks.Add(chunk);
                         }
                     }
@@ -349,7 +352,7 @@ namespace NoiseTerrain
             int minY = chunkID.y * height;
             int maxY = (chunkID.y + 1) * height - 1;
 
-            return GenerateBoolMap(minX, maxX, minY, maxY);
+            return GenerateBoolMap(minX, maxX, minY, maxY, 0);
         }
 
         Vector2Int lastClickChunkID;

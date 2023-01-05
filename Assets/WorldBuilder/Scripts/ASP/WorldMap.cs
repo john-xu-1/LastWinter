@@ -403,29 +403,20 @@ namespace WorldBuilder
         public static string test_text = @"
             #const max_width = 4.
             #const max_height = 3.
-
             #const start_room = 1.
-
 
             width(1..max_width).
             height(1..max_height).
             roomID(1..max_width*max_height).
             1{room_grid(XX,YY, ID)}1 :- width(XX), height(YY), ID = (YY - 1) * max_width + XX.
-            %1{room(RoomID)}1 :- roomID(RoomID).
             room(ID) :- room_grid(XX,YY,ID).
 
-            %{door(RoomID1, RoomID2)}1 :- room(RoomID1), room(RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX+1, YY, RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX-1, YY, RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX, YY+1, RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX, YY-1, RoomID2).
 
-            %path(RoomID, Type) :- path(RoomIDSource, Type), door(RoomIDSource, RoomID), roomID(Type).
-            %start(start_room).
-
             1{start(RoomID): room_grid(_,YY,RoomID), YY == 1}1.
-            %path(RoomID, Type) :- roomID(RoomID), Type = RoomID.
-            %:- room(RoomID), not path(RoomID, Type), roomID(Type).
 
         ";
 
@@ -467,26 +458,15 @@ namespace WorldBuilder
             door_count(RoomID, Count) :- Count = {door_east(RoomID); door_west(RoomID); door_north(RoomID); door_south(RoomID)}, roomID(RoomID).
             door_soft_lock_count(RoomID, Count) :- Count = {door_east_soft_lock(RoomID); door_west_soft_lock(RoomID); door_north_soft_lock(RoomID); door_south_soft_lock(RoomID)}, roomID(RoomID).
 
-
             door_soft_locked(Source, Destination) :- door(Source, Destination), not door(Destination, Source).
-    
-            %:- door_count(RoomID, Count), roomID(RoomID), Count > 3.
-    
-            %#show door_count/2.
 
         %if room has a directional door, it can only have two doors
             :- door_soft_lock_count(RoomID, Count), Count > 0, door_count(RoomID, Count2), Count2 > 2.
 
-        %world must have at least one directional door
-            %:- {door_soft_lock_count(RoomID, Count) : roomID(RoomID), Count > 0} < 5.
-
         %neighboring door to a room with directional door cannot have a directional door
             :- door_soft_lock_count(RoomID, Count), Count > 1.
 
-            %:- not door_east_soft_lock(_).
-            %:- not door_west_soft_lock(_).
-            %:- not door_north_soft_lock(_).
-            %:- not door_south_soft_lock(_).
+
 
         ";
 

@@ -52,7 +52,7 @@ namespace NoiseTerrain
             }
         }
         
-        public bool[,] GenerateBoolMap(int minX, int maxX, int minY, int maxY)
+        public bool[,] GenerateBoolMap(int minX, int maxX, int minY, int maxY, float threshold)
         {
             //Debug.Log("GenerateMap");
             int chunkSizeX = width;
@@ -67,7 +67,7 @@ namespace NoiseTerrain
                 for (int x = 0; x < width; x += 1)
                 {
                     
-                    boolMap[x, y] = noiseMap[x, y] > 0;
+                    boolMap[x, y] = noiseMap[x, y] > threshold;
                 }
             }
 
