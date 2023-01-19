@@ -131,15 +131,22 @@ namespace NoiseTerrain
         }
 
         public bool setupComplete = false;
-        public IEnumerator GenerateMap(int seed)
+        //public IEnumerator GenerateMap(int seed)
+        //{
+        //    setupComplete = false;
+        //    this.seed = seed;
+        //    GenerateMap();
+        //    while (!setupComplete)
+        //    {
+        //        yield return null;
+        //    }
+        //}
+
+        public virtual void GenerateMap(int seed)
         {
             setupComplete = false;
             this.seed = seed;
             GenerateMap();
-            while (!setupComplete)
-            {
-                yield return null;
-            }
         }
     }
 }

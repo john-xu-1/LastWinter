@@ -6,7 +6,7 @@ public class SceneLoader : MonoBehaviour
 {
     public GameObject LoadingScreen;
     public DungeonHandler dungeonHandler;
-    public NoiseTerrain.MapGenerator noiseMapGenerator;
+    public NoiseTerrain.ProceduralMapGenerator noiseMapGenerator;
 
     public GameHandler gameHandler;
     public UISetup uiSetup;
@@ -40,18 +40,13 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator TilemapSetup()
     {
-        //dungeonHandler.MapSetup(dungeonHandler.worlds.BuiltWorlds[0]);
-        //while (!dungeonHandler.setupComplete)
-        //{
-        //    yield return null;
-        //}
-
-        StartCoroutine(noiseMapGenerator.GenerateMap(noiseMapGenerator.seed));
+        //generate new RoomChunk or load from saved
+        noiseMapGenerator.GenerateMap(noiseMapGenerator.seed);
         while (!noiseMapGenerator.setupComplete)
         {
             yield return null;
         }
-
+        noiseMapGenerator.SetRoomChunk();
         minX = noiseMapGenerator.minX;
         maxX = noiseMapGenerator.maxX;
         minY = noiseMapGenerator.minY;
@@ -60,16 +55,6 @@ public class SceneLoader : MonoBehaviour
 
         progression += 1 / (float)progressionItemsCount;
         Debug.Log("TilemapSetupComplete");
-
-        //List<GridNode> gridMap = FindObjectOfType<PathFinder>().GetGridMap(FindObjectOfType<PathFinder>().tilemap, 0, -169, 160, 0);
-
-        //foreach (GridNode node in gridMap)
-        //{
-        //    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        //    cube.transform.position = new Vector3(node.pos.x, node.pos.y, 0);
-        //}
-
-
 
         StartCoroutine(UISetup());
     }
@@ -98,8 +83,10 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator EnvironmentSetup()
     {
+        while (!noiseMapGenerator.platformSetupComplete) yield return null;
         LightingLevelSetup lighting = FindObjectOfType<LightingLevelSetup>();
-        lighting.setupLighting(minX, maxX, minY + 2, maxY - 2,seed);
+        //lighting.setupLighting(minX, maxX, minY + 2, maxY - 2,seed);
+        lighting.setupLighting(noiseMapGenerator.GetPlatforms(), seed);
         while (!lighting.setupComplete)
         {
             yield return null;

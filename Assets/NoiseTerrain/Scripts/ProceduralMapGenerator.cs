@@ -22,7 +22,7 @@ namespace NoiseTerrain
         public List<Vector2Int> toFixChunkIDs = new List<Vector2Int>();
         public List<Vector2Int> toDisplayChunks = new List<Vector2Int>();
 
-        public Vector2Int roomSize = new Vector2Int(10, 10);
+        public Vector2Int roomSize = new Vector2Int(32, 32);
         public Transform target;
 
         
@@ -33,6 +33,7 @@ namespace NoiseTerrain
         public bool fixTileRules;
         Thread handleFixTileRulesThread;
         public FixSubChunk fixSubChunk;
+        public bool active = false;
         private void OnDestroy()
         {
             fixTileRules = false;
@@ -49,7 +50,7 @@ namespace NoiseTerrain
         }
         private void Update()
         {
-            //HandleMouseClickResetChunk();
+            if (!active) return;
             Vector2Int chunkID = GetChunkID(target.position);
 
             for (int i = 0; i < visibleChunkIDs.Count; i += 1)
@@ -236,9 +237,6 @@ namespace NoiseTerrain
 
                             float threshold = 0;
                             
-                            //if (toBuildChunks[i].x == tileRadius.x + chunkID.x || toBuildChunks[i].x == -tileRadius.x + chunkID.x 
-                            //    || toBuildChunks[i].y == tileRadius.y + chunkID.y || toBuildChunks[i].y == -tileRadius.y + chunkID.y)
-                            //    threshold = -1;
                             if (toBuildChunks[i].x % roomSize.x == 0 ||  toBuildChunks[i].y % roomSize.y == 0)
                                 threshold = -1;
                             chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), this);
@@ -288,7 +286,43 @@ namespace NoiseTerrain
 
         }
 
-        
+        RoomChunk roomChunk;
+        public int jumpHeight = 6;
+        public bool platformSetupComplete;
+        public void SetRoomChunk()
+        {
+            platformSetupComplete = false;
+            List<Chunk> roomChunks = new List<Chunk>();
+            for (int x = -tileRadius.x; x <= tileRadius.x; x += 1)
+            {
+                for (int y = -tileRadius.y; y <= tileRadius.y; y += 1)
+                {
+                    roomChunks.Add(GetChunk(chunkID + new Vector2Int(x, y)));
+                }
+            }
+            roomChunk = new RoomChunk(roomChunks, jumpHeight);
+            platformSetupComplete = true;
+        }
+
+        public List<PlatformChunk> GetPlatforms()
+        {
+            List<PlatformChunk> platforms = new List<PlatformChunk>();
+            foreach(FilledChunk filledChunk in roomChunk.filledChunks)
+            {
+                foreach(PlatformChunk platform in filledChunk.platforms)
+                {
+                    platforms.Add(platform);
+                }
+            }
+            return platforms;
+        }
+
+        public override void GenerateMap(int seed)
+        {
+            this.seed = seed;
+            setupComplete = false;
+            active = true;
+        }
 
         public override void GenerateMap()
         {

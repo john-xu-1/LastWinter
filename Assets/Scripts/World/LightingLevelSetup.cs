@@ -37,6 +37,34 @@ public class LightingLevelSetup : MonoBehaviour
         public GameObject light;
         public int lightID;
     }
+    public List<Lighting> setupLighting(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    {
+        System.Random random = new System.Random(seed);
+        List<Lighting> lightings = new List<Lighting>();
+        foreach(NoiseTerrain.PlatformChunk platform in platforms)
+        {
+            int lights = 1;
+            while(lights > 0)
+            {
+                foreach (Vector2Int ground in platform.groundTiles)
+                {
+                    if (random.Next(0, 10) == 9)
+                    {
+                        int index = random.Next(0, lightPlants.Length);
+                        Lighting lighting = GetLight(index);
+                        Vector2Int groundPos = platform.GetTilePos(ground);
+                        lighting.light.transform.position = new Vector3(groundPos.x, groundPos.y, 0);
+                        lightings.Add(lighting);
+                        lights -= 1;
+                    }
+                }
+            }
+            
+        }
+        
+        setupComplete = true;
+        return lightings;
+    }
     public List<Lighting> setupLighting(int minX, int maxX, int minY, int maxY, int seed)
     {
         System.Random random = new System.Random(seed);
