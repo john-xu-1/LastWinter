@@ -102,7 +102,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator PickablesSetup()
     {
-        StartCoroutine(itemSetup.InitializeSetup(minX, maxX, minY + 2, maxY - 2, seed));
+        StartCoroutine(itemSetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed));
         while (!itemSetup.setupComplete)
         {
             yield return null;
@@ -112,7 +112,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator EnemiesSetup()
     {
-        StartCoroutine(enemySetup.InitializeSetup(minX, maxX, minY, maxY, seed));
+        StartCoroutine(enemySetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed));
         while (!enemySetup.setupComplete)
         {
             yield return null;
@@ -254,7 +254,26 @@ public class EnemySetup : Setup
     public int enemyCount = 10;
 
     public int attempts = 10;
-    
+    public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    {
+        yield return null;
+        System.Random random = new System.Random(seed);
+        List<int> usedPlatforms = new List<int>();
+        int remainingEnemies = enemyCount;
+        while (remainingEnemies > 0)
+        {
+
+            int rand = random.Next(0, enemies.Length);
+            remainingEnemies -= 1;
+
+            GameObject enemy = GameObject.Instantiate(enemies[rand]);
+            NoiseTerrain.PlatformChunk platform = platforms[random.Next(0, platforms.Count)];
+            Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
+            Vector2Int groundPos = platform.GetTilePos(ground);
+            enemy.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1.6f);
+        }
+        setupComplete = true;
+    }
     public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
         System.Random random = new System.Random(seed);
@@ -301,15 +320,32 @@ public class ItemSetup : Setup
     public List<int> placedItems = new List<int>();
 
 
+    public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    {
+        yield return null;
+        System.Random random = new System.Random(seed);
+        List<int> usedPlatforms = new List<int>();
+        while(itemCount > 0 && placedItems.Count < items.Length)
+        {
 
+            int rand = random.Next(0, items.Length);
+            if (!placedItems.Contains(rand))
+            {
+                itemCount -= 1;
+                placedItems.Add(rand);
+                GameObject item = GameObject.Instantiate(items[rand]);
+                NoiseTerrain.PlatformChunk platform = platforms[random.Next(0, platforms.Count)];
+                Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
+                Vector2Int groundPos = platform.GetTilePos(ground);
+                item.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 2);
+            }
+        }
+        setupComplete = true;
+    }
 
     public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
         yield return null;
-
-        
-
-
 
         while (itemCount > 0 && placedItems.Count < items.Length)
         {
@@ -323,18 +359,15 @@ public class ItemSetup : Setup
             int rand = Random.Range(0, items.Length);
             if (!placedItems.Contains(rand))
             {
-                GameObject enemy = GameObject.Instantiate(items[rand]);
-                enemy.transform.position = new Vector2(x + 0.5f, -y + 2.0f);
+                GameObject item = GameObject.Instantiate(items[rand]);
+                item.transform.position = new Vector2(x + 0.5f, -y + 2.0f);
                 itemCount -= 1;
                 placedItems.Add(rand);
             }
 
-
-
         }
 
         setupComplete = true;
-
 
     }
     public override IEnumerator FinalizeSetup()

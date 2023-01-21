@@ -96,7 +96,7 @@ namespace NoiseTerrain
                     {
                         printMap += platformIDs[x, y].ToString();
                     }
-                    if (platformIDs[x, y] > 0) platforms[platformIDs[x, y] - 1].groundTiles.Add(new Vector2Int(x + minX, y + minY));
+                    if (platformIDs[x, y] > 0 && y + minY > 0) platforms[platformIDs[x, y] - 1].groundTiles.Add(new Vector2Int(x + minX, y + minY));
                 }
                 printMap += "\n";
             }

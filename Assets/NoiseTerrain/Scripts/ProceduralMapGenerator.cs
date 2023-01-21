@@ -27,6 +27,10 @@ namespace NoiseTerrain
 
         
         public TileRules tileRules;
+        public TileBase waterTile;
+        public Tilemap waterTilemap;
+        public TileBase lavaTile;
+        public Tilemap lavaTilemap;
 
         List<Chunk> chunks = new List<Chunk>();
         //public bool debugFixTileRules;
@@ -50,6 +54,7 @@ namespace NoiseTerrain
         }
         private void Update()
         {
+            HandleMouseClickDebugging();
             if (!active) return;
             Vector2Int chunkID = GetChunkID(target.position);
 
@@ -395,23 +400,65 @@ namespace NoiseTerrain
         }
 
         Vector2Int lastClickChunkID;
-        private void HandleMouseClickResetChunk()
+        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater}
+        public HandleMouseClickFunction clickFunction; 
+        private void HandleMouseClickDebugging()
         {
-            Vector2Int clickChunkID = GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            if(Input.GetMouseButton(0) && (lastClickChunkID == null || lastClickChunkID != clickChunkID))
+            if(clickFunction == HandleMouseClickFunction.resetChunk)
             {
-                Chunk clickedChunk = GetChunk(clickChunkID);
-                if (clickedChunk != null)
+                Vector2Int clickChunkID = GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                if (Input.GetMouseButton(0) && (lastClickChunkID == null || lastClickChunkID != clickChunkID))
                 {
-                    Debug.Log($"resetting {clickChunkID} chunk");
-                    bool[,] resetBoolMap = GenerateBoolMap(clickChunkID);
-                    clickedChunk.SetTiles(resetBoolMap);
-                    visibleChunkIDs.Remove(clickChunkID);
-                    toFixChunkIDs.Add(clickChunkID);
-                    toDisplayChunks.Add(clickChunkID);
+                    Chunk clickedChunk = GetChunk(clickChunkID);
+                    if (clickedChunk != null)
+                    {
+                        Debug.Log($"resetting {clickChunkID} chunk");
+                        bool[,] resetBoolMap = GenerateBoolMap(clickChunkID);
+                        clickedChunk.SetTiles(resetBoolMap);
+                        visibleChunkIDs.Remove(clickChunkID);
+                        toFixChunkIDs.Add(clickChunkID);
+                        toDisplayChunks.Add(clickChunkID);
+                    }
+                    lastClickChunkID = clickChunkID;
                 }
-                lastClickChunkID = clickChunkID;
+            }else if(clickFunction == HandleMouseClickFunction.placeWater)
+            {
+                if (Input.GetMouseButtonUp(0))
+                {
+                    Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+                    if (!GetTile(clickTile))
+                    {
+                        StartCoroutine(PlaceLiquid(waterTile, waterTilemap, clickTile));
+                    }
+                }
+                
             }
+            else if (clickFunction == HandleMouseClickFunction.placeLava)
+            {
+                if (Input.GetMouseButtonUp(0))
+                {
+                    Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+                    if (!GetTile(clickTile))
+                    {
+                        StartCoroutine(PlaceLiquid(lavaTile, lavaTilemap, clickTile));
+                    }
+                }
+
+            }
+
+
+        }
+        private IEnumerator PlaceLiquid(TileBase liquidTile, Tilemap tilemap, Vector2Int posStart)
+        {
+            yield return null;
+            if (!tilemap.GetTile(new Vector3Int(posStart.x, posStart.y, 0))){
+                tilemap.SetTile(new Vector3Int(posStart.x, posStart.y, 0), liquidTile);
+                if (!GetTile(posStart + Vector2Int.left)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left));
+                if (!GetTile(posStart + Vector2Int.right)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right));
+                if (!GetTile(posStart + Vector2Int.down)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down));
+            }
+            
+            
             
         }
 
