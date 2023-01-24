@@ -124,6 +124,8 @@ namespace NoiseTerrain
                     if (GetTile(x, y)) toVisit.Add(new Vector2Int(x, y));
                 }
             }
+            Debug.Log($"SetFilledChunkIDs start {System.DateTime.Now}");
+            var startTime = System.DateTime.Now;
             int filledChunkID = 0;
             while (toVisit.Count > 0)
             {
@@ -145,6 +147,7 @@ namespace NoiseTerrain
                     if (y < height - 1 && GetTile(x, y + 1) && !visited.Contains(new Vector2Int(x, y + 1)) && !frontier.Contains(new Vector2Int(x, y + 1))) frontier.Add(new Vector2Int(x, y + 1));
                 }
             }
+            Debug.Log($"SetFilledChunkIDs end {System.DateTime.Now} total time {System.DateTime.Now - startTime}");
             filledChunkCount = filledChunkID;
         }
         public void PrintFilledChunkIDs()
