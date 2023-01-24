@@ -514,6 +514,7 @@ GameObject:
   - component: {fileID: 169099509}
   - component: {fileID: 186070950}
   - component: {fileID: 1967048351183113834}
+  - component: {fileID: 5643850061515817897}
   m_Layer: 9
   m_Name: EnemyShotgun
   m_TagString: enemy
@@ -621,7 +622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1886a7ea559814154aa507ea96011e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  p: {fileID: 0}
+  player: {fileID: 0}
   rb: {fileID: 9034532965937968620}
   angerRange: 25
   speed: 5
@@ -636,6 +637,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  destroyTime: 2
 --- !u!114 &169099509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -692,3 +694,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 1.3665352}
   m_EdgeRadius: 0
+--- !u!114 &5643850061515817897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9034532965937968619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4985ddb9e5edbff4991d61c5fda9270a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myObjectPrefab: {fileID: 0}
+  radius: 8

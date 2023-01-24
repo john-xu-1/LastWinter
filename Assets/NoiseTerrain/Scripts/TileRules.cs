@@ -29,7 +29,7 @@ namespace NoiseTerrain
                 if (sprite) break;
             }
 
-            if (sprite == null) Debug.LogWarning("Tile missing");
+            if (sprite == null) Debug.Log("Tile missing");
             return sprite;
         }
 

@@ -425,6 +425,7 @@ GameObject:
   - component: {fileID: 42491551}
   - component: {fileID: 42491548}
   - component: {fileID: 6256649726956715757}
+  - component: {fileID: -6984569942992628343}
   m_Layer: 9
   m_Name: EnemyBounceBoi
   m_TagString: enemy
@@ -485,7 +486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac1c0de0eb15a416caae80a06992d35b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  p: {fileID: 0}
+  player: {fileID: 0}
   rb: {fileID: 1173827562917520583}
   angerRange: 15
   speed: 7
@@ -553,6 +554,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.1404935}
   m_EdgeRadius: 0
+--- !u!114 &-6984569942992628343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173827562917520578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4985ddb9e5edbff4991d61c5fda9270a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myObjectPrefab: {fileID: 0}
+  radius: 8
 --- !u!1 &1287904507424933010
 GameObject:
   m_ObjectHideFlags: 0

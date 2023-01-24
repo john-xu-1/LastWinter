@@ -38,6 +38,8 @@ namespace NoiseTerrain
         Thread handleFixTileRulesThread;
         public FixSubChunk fixSubChunk;
         public bool active = false;
+
+        public int displayCountPerFrame = 1000;
         private void OnDestroy()
         {
             fixTileRules = false;
@@ -58,6 +60,7 @@ namespace NoiseTerrain
             if (!active) return;
             Vector2Int chunkID = GetChunkID(target.position);
 
+            //update changed chunks
             for (int i = 0; i < visibleChunkIDs.Count; i += 1)
             {
                 Chunk visibleChunk = GetChunk(visibleChunkIDs[i]);
@@ -68,26 +71,55 @@ namespace NoiseTerrain
                         //toDisplayChunks.Add(visibleChunkIDs[i]);
                         GenerateMap(visibleChunkIDs[i]);
                     }
-                        
+
                     visibleChunk.valueChanged = false;
                 }
             }
-            //display tiles
-            for (int i = toDisplayChunks.Count - 1; i >= 0; i -= 1)
+
+            // ---------------------------chunk.Load(distance)--------------------------------
+            //if(chunkID != this.chunkID)
+            //{
+            //    foreach(Vector2Int visibleChunkID in visibleChunkIDs)
+            //    {
+            //        int distance = (int)Vector2Int.Distance(visibleChunkID, chunkID);
+            //        GetChunk(visibleChunkID).Load(distance);
+            //    }
+            //}
+
+            //----------- display chunk -----------------------
+            //for (int i = toDisplayChunks.Count - 1; i >= 0; i -= 1)
+            //{
+            //    lock (toFixChunkIDs)
+            //    {
+            //        if (!toFixChunkIDs.Contains(toDisplayChunks[i]))
+            //        {
+            //            //Debug.Log($"Displaying chunk {toDisplayChunks[i]}");
+            //            GenerateMap(toDisplayChunks[i]);
+            //            visibleChunkIDs.Add(toDisplayChunks[i]);
+            //            toDisplayChunks.RemoveAt(i);
+            //        }
+            //    }
+
+            //}
+            // ------------------------- new display chunk -------------------------------
+            int displayCountPerFrame = this.displayCountPerFrame;
+            int toDisplayIndex = toDisplayChunks.Count - 1;
+            while(toDisplayIndex >= 0 && displayCountPerFrame > 0)
             {
                 lock (toFixChunkIDs)
                 {
-                    if (!toFixChunkIDs.Contains(toDisplayChunks[i]))
+                    if (!toFixChunkIDs.Contains(toDisplayChunks[toDisplayIndex]))
                     {
                         //Debug.Log($"Displaying chunk {toDisplayChunks[i]}");
-                        GenerateMap(toDisplayChunks[i]);
-                        visibleChunkIDs.Add(toDisplayChunks[i]);
-                        toDisplayChunks.RemoveAt(i);
+                        GenerateMap(toDisplayChunks[toDisplayIndex]);
+                        visibleChunkIDs.Add(toDisplayChunks[toDisplayIndex]);
+                        toDisplayChunks.RemoveAt(toDisplayIndex);
+                        displayCountPerFrame -= 1;
                     }
                 }
-
+                toDisplayIndex -= 1;
             }
-            DisplayMap(chunkID);
+            CheckMap(chunkID);
 
             if(!setupComplete && toDisplayChunks.Count == 0 && toFixChunkIDs.Count == 0)
             {
@@ -126,6 +158,13 @@ namespace NoiseTerrain
             
 
         }
+        public void SetTile(Vector2Int pos, bool value)
+        {
+            int x = ((pos.x % width) + width) % width;
+            int y = ((-pos.y % height) + height) % height;
+            Debug.Log($"{x} {y}");
+            GetChunk(GetChunkID(pos)).SetTile(x, y, value);
+        }
 
         public bool GetTile(Vector2Int pos)
         {
@@ -134,14 +173,21 @@ namespace NoiseTerrain
             Debug.Log($"{x} {y}");
             return GetChunk(GetChunkID(pos)).GetTile(x, y);
         }
-
+        protected void AddChunk(Chunk chunk)
+        {
+            //chunks.Add(chunk);
+            chunkDict[chunk.chunkID] = chunk;
+        }
+        Dictionary<Vector2Int, Chunk> chunkDict = new Dictionary<Vector2Int, Chunk>();
         public Chunk GetChunk(Vector2Int chunkID)
         {
-            foreach (Chunk chunk in chunks)
-            {
-                if (chunk.chunkID == chunkID) return chunk;
-            }
-            return null;
+            //foreach (Chunk chunk in chunks)
+            //{
+            //    if (chunk.chunkID == chunkID) return chunk;
+            //}
+            //return null;
+            if (chunkDict.ContainsKey(chunkID)) return chunkDict[chunkID];
+            else return null;
         }
 
         public Vector2Int GetChunkID(Vector2 pos)
@@ -152,11 +198,11 @@ namespace NoiseTerrain
             return new Vector2Int(xOffset + ((int)pos.x - xOffset )/ width, -yOffset - ((int)pos.y - yOffset )/ height);
         }
 
-        public void DisplayMap(Vector2Int chunkID)
+        public void CheckMap(Vector2Int chunkID)
         {
             if (chunkID != this.chunkID)
             {
-                
+                Debug.Log("chunkID != this.chunkID");
                 lock (toFixChunkIDs)
                 {
                     this.chunkID = chunkID;
@@ -245,7 +291,7 @@ namespace NoiseTerrain
                             if (toBuildChunks[i].x % roomSize.x == 0 ||  toBuildChunks[i].y % roomSize.y == 0)
                                 threshold = -1;
                             chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), this);
-                            chunks.Add(chunk);
+                            AddChunk(chunk);
                         }
                     }
 
@@ -298,13 +344,20 @@ namespace NoiseTerrain
         {
             platformSetupComplete = false;
             List<Chunk> roomChunks = new List<Chunk>();
-            for (int x = -tileRadius.x; x <= tileRadius.x; x += 1)
+            for (int x = -roomSize.x/2; x <= roomSize.x/2; x += 1)
             {
-                for (int y = -tileRadius.y; y <= tileRadius.y; y += 1)
+                for (int y = -roomSize.y/2; y <= roomSize.y/2; y += 1)
                 {
                     roomChunks.Add(GetChunk(chunkID + new Vector2Int(x, y)));
                 }
             }
+            this.roomChunks = roomChunks;
+            Thread thread = new Thread(SetRoomChunkThread);
+            thread.Start();
+        }
+        List<Chunk> roomChunks;
+        public void SetRoomChunkThread()
+        {
             roomChunk = new RoomChunk(roomChunks, jumpHeight);
             platformSetupComplete = true;
         }
@@ -345,6 +398,7 @@ namespace NoiseTerrain
             int minY = chunkID.y * height;
             int maxY = (chunkID.y + 1) * height - 1;
 
+            //if (chunk.fullTilemap == null) chunk.fullTilemap = Instantiate(fullTilemap,fullTilemap.transform.parent);
             for (int x = 0; x < width; x += 1)
             {
                 for (int y = 0; y < height; y += 1)
@@ -357,11 +411,11 @@ namespace NoiseTerrain
                         {
                             tile = fullTile;
                         }
-                        fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), tile);
+                        /*chunk.*/fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), tile);
                     }
                     else
                     {
-                        fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), null);
+                        /*chunk.*/fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), null);
                     }
 
                 }
@@ -400,7 +454,8 @@ namespace NoiseTerrain
         }
 
         Vector2Int lastClickChunkID;
-        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater}
+        Vector2Int lastClickID;
+        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater, toggleTile}
         public HandleMouseClickFunction clickFunction; 
         private void HandleMouseClickDebugging()
         {
@@ -421,9 +476,26 @@ namespace NoiseTerrain
                     }
                     lastClickChunkID = clickChunkID;
                 }
-            }else if(clickFunction == HandleMouseClickFunction.placeWater)
+            }else if(clickFunction == HandleMouseClickFunction.toggleTile)
             {
-                if (Input.GetMouseButtonUp(0))
+                Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+                if (Input.GetMouseButtonDown(1) || Input.GetMouseButton(1) && (lastClickID == null || lastClickID != clickTile))
+                {
+                    Debug.Log($"TileClicked {clickTile}");
+                    Chunk clickedChunk = GetChunk(GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition)));
+                    if (clickedChunk != null)
+                    {
+                        bool value = GetTile(clickTile);
+                        SetTile(clickTile , !value);
+                        
+                    }
+                    lastClickID = clickTile;
+                }
+
+            }
+            else if(clickFunction == HandleMouseClickFunction.placeWater)
+            {
+                if (Input.GetMouseButtonUp(1))
                 {
                     Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
                     if (!GetTile(clickTile))
@@ -435,7 +507,7 @@ namespace NoiseTerrain
             }
             else if (clickFunction == HandleMouseClickFunction.placeLava)
             {
-                if (Input.GetMouseButtonUp(0))
+                if (Input.GetMouseButtonUp(1))
                 {
                     Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
                     if (!GetTile(clickTile))

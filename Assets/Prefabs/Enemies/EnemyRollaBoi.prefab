@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 8387131397387960717}
   - component: {fileID: 8387131397387960718}
   - component: {fileID: 8387131397387960713}
+  - component: {fileID: -1257276747782708892}
   m_Layer: 9
   m_Name: EnemyRollaBoi
   m_TagString: enemy
@@ -233,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4a5542bee2c84c7dab25c5dff3fd62b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  p: {fileID: 0}
+  player: {fileID: 0}
   rb: {fileID: 8387131397387960716}
   angerRange: 100
   speed: 1
@@ -294,6 +295,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sd: {fileID: 8387131398010429739}
+--- !u!114 &-1257276747782708892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8387131397387960704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4985ddb9e5edbff4991d61c5fda9270a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myObjectPrefab: {fileID: 0}
+  radius: 8
 --- !u!1 &8387131397630601815
 GameObject:
   m_ObjectHideFlags: 0

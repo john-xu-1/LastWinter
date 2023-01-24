@@ -16,6 +16,10 @@ public class LightingLevelSetup : MonoBehaviour
     public bool setupComplete = false;
     public NoiseTerrain.ProceduralMapGenerator map;
 
+    List<ChunkObjectLights> chunkObjectLights = new List<ChunkObjectLights>();
+    List<Vector2Int> chunkObjectLightsIDs = new List<Vector2Int>();
+    public ChunkObjectLights chunkObjectLightsPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,33 +41,90 @@ public class LightingLevelSetup : MonoBehaviour
         public GameObject light;
         public int lightID;
     }
-    public List<Lighting> setupLighting(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    //public List<Lighting> setupLighting(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    //{
+    //    System.Random random = new System.Random(seed);
+    //    List<Lighting> lightings = new List<Lighting>();
+    //    foreach(NoiseTerrain.PlatformChunk platform in platforms)
+    //    {
+    //        int lights = 1;
+    //        while(lights > 0)
+    //        {
+    //            foreach (Vector2Int ground in platform.groundTiles)
+    //            {
+    //                if (random.Next(0, 10) == 9)
+    //                {
+    //                    int index = random.Next(0, lightPlants.Length);
+    //                    Lighting lighting = GetLight(index);
+    //                    Vector2Int groundPos = platform.GetTilePos(ground);
+    //                    lighting.light.transform.position = new Vector3(groundPos.x, groundPos.y, 0);
+    //                    lightings.Add(lighting);
+    //                    lights -= 1;
+    //                }
+    //            }
+    //        }
+            
+    //    }
+        
+    //    setupComplete = true;
+    //    return lightings;
+    //}
+    public ChunkObjectLights GetChunkObjectLights(Vector2Int chunkID)
+    {
+        ChunkObjectLights chunkObjectLights = null;
+        for(int i = 0; i < chunkObjectLightsIDs.Count; i+=1)
+        {
+            Vector2Int chunkObjectID = chunkObjectLightsIDs[i];
+            if (chunkObjectID == chunkID)
+            {
+                chunkObjectLights = this.chunkObjectLights[i];
+                break;
+            }
+        }
+        if(chunkObjectLights == null)
+        {
+            chunkObjectLights = Instantiate(chunkObjectLightsPrefab);
+            chunkObjectLightsIDs.Add(chunkID);
+            this.chunkObjectLights.Add(chunkObjectLights);
+            NoiseTerrain.Chunk myChunk = map.GetChunk(chunkID);
+            myChunk.AddChunkObject(chunkObjectLights/*, 3*/);
+            chunkObjectLights.mychunk = myChunk;
+        }
+        return chunkObjectLights;
+    }
+    public void SetLight(int type, Vector2 pos)
+    {
+        Vector2Int chunkID = map.GetChunkID(pos);
+        GetChunkObjectLights(chunkID).AddLight(type, pos);
+
+    }
+    public void setupLighting(List<NoiseTerrain.PlatformChunk> platforms, int seed)
     {
         System.Random random = new System.Random(seed);
         List<Lighting> lightings = new List<Lighting>();
-        foreach(NoiseTerrain.PlatformChunk platform in platforms)
+        foreach (NoiseTerrain.PlatformChunk platform in platforms)
         {
             int lights = 1;
-            while(lights > 0)
+            while (lights > 0)
             {
                 foreach (Vector2Int ground in platform.groundTiles)
                 {
                     if (random.Next(0, 10) == 9)
                     {
                         int index = random.Next(0, lightPlants.Length);
-                        Lighting lighting = GetLight(index);
+                        //Lighting lighting = GetLight(index);
                         Vector2Int groundPos = platform.GetTilePos(ground);
-                        lighting.light.transform.position = new Vector3(groundPos.x, groundPos.y, 0);
-                        lightings.Add(lighting);
+                        SetLight(index, groundPos);
+                        //lighting.light.transform.position = new Vector3(groundPos.x, groundPos.y, 0);
+                        //lightings.Add(lighting);
                         lights -= 1;
                     }
                 }
             }
-            
+
         }
-        
+
         setupComplete = true;
-        return lightings;
     }
     public List<Lighting> setupLighting(int minX, int maxX, int minY, int maxY, int seed)
     {

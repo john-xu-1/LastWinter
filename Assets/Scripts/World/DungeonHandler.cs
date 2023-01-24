@@ -76,6 +76,7 @@ public class DungeonHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) DebugMenu.SetActive(!DebugMenu.activeSelf);
         if (buildingMap && !mapG.BuildingRooms)
         {
+            Debug.Log("Dungeonhandler");
             setupComplete = true;
             if (!debugging)
             {

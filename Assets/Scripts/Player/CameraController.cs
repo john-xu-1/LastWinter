@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     public CameraFollow FollowType = CameraFollow.snap;
 
     public MenuUIHandler MUH;
+    public NoiseTerrain.ProceduralMapGenerator chunkLoader;
 
     public enum CameraFollow
     {
@@ -44,7 +45,7 @@ public class CameraController : MonoBehaviour
 
     public bool active = false;
 
-
+    private Vector2Int chunkID;
     private void Start()
     {
         //target_Offset = Vector3.forward * -10;
@@ -198,6 +199,20 @@ public class CameraController : MonoBehaviour
 
             //Debug.Log(index);
 
+        }
+        else
+        {
+            Vector2Int chunkID = chunkLoader.GetChunkID(transform.position);
+            
+            if (this.chunkID == null || chunkID != this.chunkID)
+            {
+                this.chunkID = chunkID;
+                foreach (Vector2Int visibleChunkID in chunkLoader.visibleChunkIDs)
+                {
+                    int distance = (int)Vector2Int.Distance(visibleChunkID, chunkID);
+                    chunkLoader.GetChunk(visibleChunkID).Load(distance);
+                }
+            }
         }
     }
 

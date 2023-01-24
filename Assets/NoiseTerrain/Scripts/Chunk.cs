@@ -8,6 +8,7 @@ namespace NoiseTerrain
     {
         private ProceduralMapGenerator mapGenerator;
 
+        public UnityEngine.Tilemaps.Tilemap fullTilemap;
         public Vector2Int chunkID;
         private bool[,] boolMap;
         private bool[,] invalidTiles;
@@ -18,6 +19,13 @@ namespace NoiseTerrain
         public int width, height;
 
         public bool valueChanged = true;
+
+        List<ChunkObjectRadius> chunkObjects = new List<ChunkObjectRadius>();
+        struct ChunkObjectRadius
+        {
+            public ChunkObject chunkObject;
+            public int radius;
+        }
 
         public Chunk(Vector2Int chunkID, bool[,]boolMap, ProceduralMapGenerator mapGenerator)
         {
@@ -45,7 +53,54 @@ namespace NoiseTerrain
 
         public void ClearChunk()
         {
-            
+            List<ChunkObjectRadius> copy = new List<ChunkObjectRadius>(chunkObjects);
+            foreach (ChunkObjectRadius chunkObjectRadius in copy)
+            {
+                chunkObjectRadius.chunkObject.Unload();
+            }
+        }
+
+        public void Load()
+        {
+            int distance = (int)Vector2Int.Distance(mapGenerator.chunkID, chunkID);
+            Load(distance);
+        }
+
+        public void Load(int distance)
+        {
+            List<ChunkObjectRadius> copy = new List<ChunkObjectRadius>(chunkObjects);
+            foreach(ChunkObjectRadius chunkObjectRadius in copy)
+            {
+                if (chunkObjectRadius.radius >= distance) chunkObjectRadius.chunkObject.Load();
+                else chunkObjectRadius.chunkObject.Unload();
+            }
+        }
+
+        public Chunk GetChunk(Vector2 pos)
+        {
+            return mapGenerator.GetChunk(mapGenerator.GetChunkID(pos));
+        }
+
+        public void AddChunkObject(ChunkObject chunkObject/*, int radius*/)
+        {
+            ChunkObjectRadius newRadius = new ChunkObjectRadius();
+            newRadius.chunkObject = chunkObject;
+            newRadius.radius = chunkObject.radius;
+            if (chunkObjects == null) chunkObjects = new List<ChunkObjectRadius>();
+            chunkObjects.Add(newRadius);
+        }
+
+        public void RemoveChunkObject(ChunkObject chunkObject)
+        {
+            //Debug.LogWarning("RemoveChunkObject not implemented");
+            for(int i = 0; i < chunkObjects.Count; i += 1)
+            {
+                if(chunkObjects[i].chunkObject == chunkObject)
+                {
+                    chunkObjects.RemoveAt(i);
+                    break;
+                }
+            } 
         }
 
         public bool GetTile(int x, int y)
@@ -64,6 +119,12 @@ namespace NoiseTerrain
             this.boolMap = boolMap;
             valueChanged = true;
         }
+        /// <summary>
+        /// local to chunk
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="value"></param>
         public void SetTile(int x, int y, bool value)
         {
             Chunk chunk = GetChunk(x, y);
@@ -79,6 +140,60 @@ namespace NoiseTerrain
                 valueChanged = true;
             }
         }
+
+
+        private Chunk GetChunk(int x, int y)
+        {
+            if (x < 0 && y < 0) return GetNeighborChunk(0);
+            else if (x >= 0 && x < width && y < 0) return GetNeighborChunk(1);
+            else if (x >= width && y < 0) return GetNeighborChunk(2);
+            else if (x < 0 && y >= 0 && y < height) return GetNeighborChunk(3);
+            else if (x >= width && y >= 0 && y < height) return GetNeighborChunk(4);
+            else if (x < 0 && y >= height) return GetNeighborChunk(5);
+            else if (x >= 0 && x < width && y >= height) return GetNeighborChunk(6);
+            else if (x >= width && y >= height) return GetNeighborChunk(7);
+            else return this;
+        }
+
+        private Chunk GetNeighborChunk(int index)
+        {
+            if (neighborChunks[index] != null) return neighborChunks[index];
+            else
+            {
+                switch (index)
+                {
+                    case 0:
+                        neighborChunks[0] = mapGenerator.GetChunk(chunkID + new Vector2Int(-1, -1));
+                        return neighborChunks[0];
+                    case 1:
+                        neighborChunks[1] = mapGenerator.GetChunk(chunkID + new Vector2Int(0, -1));
+                        return neighborChunks[1];
+                    case 2:
+                        neighborChunks[2] = mapGenerator.GetChunk(chunkID + new Vector2Int(1, -1));
+                        return neighborChunks[2];
+                    case 3:
+                        neighborChunks[3] = mapGenerator.GetChunk(chunkID + new Vector2Int(-1, 0));
+                        return neighborChunks[3];
+                    case 4:
+                        neighborChunks[4] = mapGenerator.GetChunk(chunkID + new Vector2Int(1, 0));
+                        return neighborChunks[4];
+                    case 5:
+                        neighborChunks[5] = mapGenerator.GetChunk(chunkID + new Vector2Int(-1, 1));
+                        return neighborChunks[5];
+                    case 6:
+                        neighborChunks[6] = mapGenerator.GetChunk(chunkID + new Vector2Int(0, 1));
+                        return neighborChunks[6];
+                    case 7:
+                        neighborChunks[7] = mapGenerator.GetChunk(chunkID + new Vector2Int(1, 1));
+                        return neighborChunks[7];
+                    default:
+                        return null;
+                }
+            }
+        }
+
+        
+
 
         public bool GetInvalidTile(int x, int y)
         {
@@ -134,55 +249,7 @@ namespace NoiseTerrain
             }
         }
 
-        private Chunk GetChunk(int x, int y)
-        {
-            if (x < 0 && y < 0) return GetNeighborChunk(0);
-            else if (x >= 0 && x < width && y < 0) return GetNeighborChunk(1);
-            else if (x >= width && y < 0) return GetNeighborChunk(2);
-            else if (x < 0 && y >= 0 && y < height) return GetNeighborChunk(3);
-            else if (x >= width && y >= 0 && y < height) return GetNeighborChunk(4);
-            else if (x < 0 && y >= height) return GetNeighborChunk(5);
-            else if (x >= 0 && x < width && y >= height) return GetNeighborChunk(6);
-            else if (x >= width && y >= height) return GetNeighborChunk(7);
-            else return this;
-        }
 
-        private Chunk GetNeighborChunk(int index)
-        {
-            if (neighborChunks[index] != null) return neighborChunks[index];
-            else
-            {
-                switch (index)
-                {
-                    case 0:
-                        neighborChunks[0] = mapGenerator.GetChunk(chunkID + new Vector2Int(-1, -1));
-                        return neighborChunks[0];
-                    case 1:
-                        neighborChunks[1] = mapGenerator.GetChunk(chunkID + new Vector2Int(0, -1));
-                        return neighborChunks[1];
-                    case 2:
-                        neighborChunks[2] = mapGenerator.GetChunk(chunkID + new Vector2Int(1, -1));
-                        return neighborChunks[2];
-                    case 3:
-                        neighborChunks[3] = mapGenerator.GetChunk(chunkID + new Vector2Int(-1, 0));
-                        return neighborChunks[3];
-                    case 4:
-                        neighborChunks[4] = mapGenerator.GetChunk(chunkID + new Vector2Int(1, 0));
-                        return neighborChunks[4];
-                    case 5:
-                        neighborChunks[5] = mapGenerator.GetChunk(chunkID + new Vector2Int(-1, 1));
-                        return neighborChunks[5];
-                    case 6:
-                        neighborChunks[6] = mapGenerator.GetChunk(chunkID + new Vector2Int(0, 1));
-                        return neighborChunks[6];
-                    case 7:
-                        neighborChunks[7] = mapGenerator.GetChunk(chunkID + new Vector2Int(1, 1));
-                        return neighborChunks[7];
-                    default:
-                        return null;
-                }
-            }
-        }
         public void SetInvalidTile()
         {
             bool invalid = false;

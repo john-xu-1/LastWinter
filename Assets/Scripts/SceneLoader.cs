@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SceneLoader : MonoBehaviour
 {
-    public GameObject LoadingScreen;
+    public GameObject loadingScreen;
     public DungeonHandler dungeonHandler;
     public NoiseTerrain.ProceduralMapGenerator noiseMapGenerator;
 
@@ -23,6 +23,8 @@ public class SceneLoader : MonoBehaviour
 
     int maxX, minX, maxY, minY;
 
+
+
     void Start()
     {
         StartSetup();
@@ -35,6 +37,8 @@ public class SceneLoader : MonoBehaviour
     IEnumerator LoadingScreenSetup()
     {
         Debug.Log("Yielding");
+        loadingScreen.SetActive(true);
+        loadingScreen.GetComponent<LoadingScreen>().StartCounter();
         yield return null;
         StartCoroutine(TilemapSetup());
     }
@@ -112,7 +116,7 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator EnemiesSetup()
     {
-        StartCoroutine(enemySetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed));
+        StartCoroutine(enemySetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed, false));
         while (!enemySetup.setupComplete)
         {
             yield return null;
@@ -123,7 +127,8 @@ public class SceneLoader : MonoBehaviour
 
     IEnumerator PlayerSetup()
     {
-        StartCoroutine(playerSetup.InitializeSetup(minX, maxX, minY + 2, maxY - 2, seed));
+        //StartCoroutine(playerSetup.InitializeSetup(minX, maxX, minY + 2, maxY - 2, seed));
+        StartCoroutine(playerSetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed));
         while (!playerSetup.setupComplete)
         {
             yield return null;
@@ -152,6 +157,7 @@ public class SceneLoader : MonoBehaviour
             yield return null;
         }
 
+        loadingScreen.SetActive(false);
 
     }
 
@@ -220,6 +226,25 @@ public class PlayerSetup : Setup
         throw new System.NotImplementedException();
     }
 
+    public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    {
+        System.Random random = new System.Random(seed);
+        NoiseTerrain.PlatformChunk platform = platforms[random.Next(0, platforms.Count)];
+        Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
+        Vector2Int groundPos = platform.GetTilePos(ground);
+        GameObject player = GameObject.Instantiate(playerPrefab);
+        player.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1);
+        GameObject.FindObjectOfType<GameHandler>().StartGameHandler(player);
+        player.GetComponent<HealthPlayer>().GH = GameObject.FindObjectOfType<GameHandler>().gameObject;
+
+        //load inventorySystem
+        GameObject.Instantiate(inventorySystemPrefab);
+
+        Debug.Log("PlayerSetup Complete");
+        setupComplete = true;
+        yield return null;
+
+    }
     public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
        
@@ -252,9 +277,10 @@ public class EnemySetup : Setup
     public UnityEngine.Tilemaps.Tilemap collsionMap;
     public GameObject[] enemies;
     public int enemyCount = 10;
+    public NoiseTerrain.ProceduralMapGenerator map;
 
     public int attempts = 10;
-    public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed, bool setActive)
     {
         yield return null;
         System.Random random = new System.Random(seed);
@@ -271,6 +297,11 @@ public class EnemySetup : Setup
             Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
             Vector2Int groundPos = platform.GetTilePos(ground);
             enemy.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1.6f);
+            NoiseTerrain.Chunk myChunk = map.GetChunk(map.GetChunkID(enemy.transform.position));
+            enemy.GetComponent<ChunkObjectEnemy>().mychunk = myChunk;
+            myChunk.AddChunkObject(enemy.GetComponent<ChunkObjectEnemy>());
+
+            enemy.SetActive(setActive);
         }
         setupComplete = true;
     }
