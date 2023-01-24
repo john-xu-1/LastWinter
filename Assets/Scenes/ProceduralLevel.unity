@@ -1955,11 +1955,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502672, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6
+      value: -62
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502672, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -120
+      value: -145
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502672, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1998,6 +1998,14 @@ PrefabInstance:
       value: ProceduralMapGenerator
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: width
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: height
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: fixSubChunk
       value: 
       objectReference: {fileID: 225932936}
@@ -2012,6 +2020,14 @@ PrefabInstance:
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: fixTileRules
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: tileRadius.x
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: tileRadius.y
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1c70817418464a858a2298cf959c0ad, type: 3}

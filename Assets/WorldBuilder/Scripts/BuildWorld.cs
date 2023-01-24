@@ -346,7 +346,7 @@ namespace WorldBuilder
 
         public void BuildGraph(int worldWidth, int worldHeight, int gateKeyCount, int maxGatePerKey, int minGatePerKey, int bossGateKey, int startRoom, int timeout, int cpus)
         {
-            string aspCode = WorldMap.bidirectional_rules + WorldMap.test_text + WorldMap.gate_key_rules;
+            string aspCode = WorldMap.bidirectional_rules + WorldMap.graph_rules + WorldMap.gate_key_rules;
             string path = ClingoUtil.CreateFile(aspCode);
             ClingoSolver solver = FindObjectOfType<ClingoSolver>();
             solver.maxDuration = timeout + 10;

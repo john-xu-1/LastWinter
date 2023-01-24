@@ -32,10 +32,37 @@ public class LightingLevelSetup : MonoBehaviour
         this.maxY = maxY;
         StartCoroutine(setupLighting());
     }
+
     public struct Lighting
     {
         public GameObject light;
         public int lightID;
+    }
+    public List<Lighting> setupLighting(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    {
+        System.Random random = new System.Random(seed);
+        List<Lighting> lightings = new List<Lighting>();
+        foreach (NoiseTerrain.PlatformChunk platform in platforms)
+        {
+            int lights = 1;
+            while (lights > 0)
+            {
+                foreach (Vector2Int ground in platform.groundTiles)
+                {
+                    if (random.Next(0, 10) == 9)
+                    {
+                        int index = random.Next(0, lightPlants.Length);
+                        Lighting lighting = GetLight(index);
+                        Vector2 groundPos = platform.GetTilePos(ground);
+                        lighting.light.transform.position = new Vector3(groundPos.x, groundPos.y);
+                        lightings.Add(lighting);
+                        lights--;
+                    }
+                }
+            }
+        }
+        setupComplete = true;
+        return lightings;
     }
     public List<Lighting> setupLighting(int minX, int maxX, int minY, int maxY, int seed)
     {

@@ -22,7 +22,10 @@ namespace NoiseTerrain
         public List<Vector2Int> toFixChunkIDs = new List<Vector2Int>();
         public List<Vector2Int> toDisplayChunks = new List<Vector2Int>();
 
+        public Vector2Int roomSize = new Vector2Int(32,32);
         public Transform target;
+
+        public bool active = false;
 
 
         public TileRules tileRules;
@@ -48,6 +51,7 @@ namespace NoiseTerrain
         }
         private void Update()
         {
+            if (!active) return;
             //HandleMouseClickResetChunk();
             Vector2Int chunkID = GetChunkID(target.position);
 
@@ -233,7 +237,10 @@ namespace NoiseTerrain
                             int minY = toBuildChunks[i].y * height;
                             int maxY = (toBuildChunks[i].y + 1) * height - 1;
 
-                            chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY), this);
+                            float threshold = 0;
+                            //if (toBuildChunks[i].x == tileRadius.x + chunkID.x || toBuildChunks[i].x == -tileRadius.x + chunkID.x || toBuildChunks[i].y == tileRadius.y + chunkID.y || toBuildChunks[i].y == -tileRadius.y + chunkID.y) threshold = -1;
+                            if (toBuildChunks[i].x % roomSize.x == 0 || toBuildChunks[i].y % roomSize.y == 0) threshold = -1;
+                            chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), this);
                             chunks.Add(chunk);
                         }
                     }
@@ -280,6 +287,37 @@ namespace NoiseTerrain
 
         }
 
+        RoomChunk roomChunk;
+        public int jumpHeight = 6;
+        public bool platformSetupComplete;
+        public void SetRooomChunk()
+        {
+            platformSetupComplete = false;
+            List<Chunk> roomChunks = new List<Chunk>();
+            for (int x = -tileRadius.x; x <= tileRadius.x; x += 1)
+            {
+                for (int y = -tileRadius.y; y <= tileRadius.y; y += 1)
+                {
+                    roomChunks.Add(GetChunk(chunkID + new Vector2Int(x, y)));
+                }
+            }
+            roomChunk = new RoomChunk(roomChunks, jumpHeight);
+            platformSetupComplete = true;
+        }
+
+        public List<PlatformChunk> GetPlatforms()
+        {
+            List<PlatformChunk> platforms = new List<PlatformChunk>();
+            foreach (FilledChunk filledChunk in roomChunk.filledChunks)
+            {
+                foreach (PlatformChunk platform in filledChunk.platforms)
+                {
+                    platforms.Add(platform);
+                }
+            }
+
+            return platforms;
+        }
 
 
         public override void GenerateMap()
@@ -289,6 +327,12 @@ namespace NoiseTerrain
             //int minY = chunkID.y * height;
             //int maxY = (chunkID.y + 1) * height - 1;
             //GenerateMap(minX, maxX, minY, maxY);
+        }
+        public override void GenerateMap(int seed)
+        {
+            this.seed = seed;
+            setupComplete = false;
+            active = true;
         }
         public void GenerateMap(Vector2Int chunkID)
         {
@@ -323,6 +367,8 @@ namespace NoiseTerrain
             chunk.BuildChunk(seed);
         }
 
+        
+
         public void ClearMap(Vector2Int chunkID)
         {
             int minX = chunkID.x * width;
@@ -349,7 +395,7 @@ namespace NoiseTerrain
             int minY = chunkID.y * height;
             int maxY = (chunkID.y + 1) * height - 1;
 
-            return GenerateBoolMap(minX, maxX, minY, maxY);
+            return GenerateBoolMap(minX, maxX, minY, maxY, 0);
         }
 
         Vector2Int lastClickChunkID;

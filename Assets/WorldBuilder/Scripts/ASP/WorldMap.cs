@@ -400,10 +400,9 @@ namespace WorldBuilder
             return rule;
         }
 
-        public static string test_text = @"
+        public static string graph_rules = @"
             #const max_width = 4.
             #const max_height = 3.
-
             #const start_room = 1.
 
 
@@ -411,21 +410,17 @@ namespace WorldBuilder
             height(1..max_height).
             roomID(1..max_width*max_height).
             1{room_grid(XX,YY, ID)}1 :- width(XX), height(YY), ID = (YY - 1) * max_width + XX.
-            %1{room(RoomID)}1 :- roomID(RoomID).
             room(ID) :- room_grid(XX,YY,ID).
 
-            %{door(RoomID1, RoomID2)}1 :- room(RoomID1), room(RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX+1, YY, RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX-1, YY, RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX, YY+1, RoomID2).
             {door(RoomID1, RoomID2)}1 :- room_grid(XX,YY, RoomID1), room_grid(XX, YY-1, RoomID2).
 
-            %path(RoomID, Type) :- path(RoomIDSource, Type), door(RoomIDSource, RoomID), roomID(Type).
-            %start(start_room).
+            
 
             1{start(RoomID): room_grid(_,YY,RoomID), YY == 1}1.
-            %path(RoomID, Type) :- roomID(RoomID), Type = RoomID.
-            %:- room(RoomID), not path(RoomID, Type), roomID(Type).
+            
 
         ";
 

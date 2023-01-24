@@ -8,7 +8,7 @@ namespace Clingo_02
 {
     public class ClingoOnline : ClingoSolver
     {
-        private const string clingoServerURL = "https://ancient-cove-68362.herokuapp.com/clingo"; /*"https://clingo.herokuapp.com/clingo";*/
+        private const string clingoServerURL = "https://clingo.onrender.com/clingo"; /*"https://clingo.herokuapp.com/clingo";*/
 
         public string aspSourceFileName = "queens.txt";
         public string optionsFileName = "options.txt";
