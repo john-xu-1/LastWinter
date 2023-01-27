@@ -10,6 +10,11 @@ public class CameraController : MonoBehaviour
 
     public MenuUIHandler MUH;
     public NoiseTerrain.ProceduralMapGenerator chunkLoader;
+    public UnityEngine.UI.Text fpsText, fpsNormalizedText;
+    float lastFPSTime = 0;
+    float normalizedFPSCount;
+    public float normalizedFPSDuration = 1;
+
 
     public enum CameraFollow
     {
@@ -48,6 +53,8 @@ public class CameraController : MonoBehaviour
     private Vector2Int chunkID;
     private void Start()
     {
+        normalizedFPSCount = 0;
+        lastFPSTime = Time.time;
         //target_Offset = Vector3.forward * -10;
         origin = transform.position;
         myCamera = GetComponent<Camera>();
@@ -74,6 +81,8 @@ public class CameraController : MonoBehaviour
             worldHeight = debugWorldHeight;
             worldWidth = debugWorldWidth;
         }
+
+        
 
         //gridOffset = new Vector2(origin.x - gridSize.x / 2, origin.y - gridSize.y / 2);
     }
@@ -153,6 +162,19 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
+        fpsText.text = $"fps: {1/Time.deltaTime}";
+        normalizedFPSCount += 1;
+        if(lastFPSTime + normalizedFPSDuration < Time.time)
+        {
+            fpsNormalizedText.text = $"normalized fps: {normalizedFPSCount / (Time.time - lastFPSTime)}";
+            lastFPSTime = Time.time;
+            normalizedFPSCount = 0;
+        }
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            Screen.fullScreen = !Screen.fullScreen;
+        }
+
         if (FollowType == CameraFollow.menu_selection)
         {
 
