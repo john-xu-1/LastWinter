@@ -287,7 +287,7 @@ namespace NoiseTerrain
                             int maxY = (toBuildChunks[i].y + 1) * height - 1;
 
                             float threshold = 0;
-                            
+
                             if (toBuildChunks[i].x % roomSize.x == 0 ||  toBuildChunks[i].y % roomSize.y == 0)
                                 threshold = -1;
                             chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), this);
@@ -344,6 +344,7 @@ namespace NoiseTerrain
         {
             platformSetupComplete = false;
             List<Chunk> roomChunks = new List<Chunk>();
+            //roomSize should be double the tileRadius if all visible chunks should be in one room
             for (int x = -roomSize.x/2; x <= roomSize.x/2; x += 1)
             {
                 for (int y = -roomSize.y/2; y <= roomSize.y/2; y += 1)
@@ -384,11 +385,17 @@ namespace NoiseTerrain
 
         public override void GenerateMap()
         {
-            //int minX = chunkID.x * width;
+            int minX = chunkID.x * width;
             //int maxX = (chunkID.x + 1) * width - 1;
-            //int minY = chunkID.y * height;
+            int minY = chunkID.y * height;
             //int maxY = (chunkID.y + 1) * height - 1;
             //GenerateMap(minX, maxX, minY, maxY);
+
+            Vector2 scaleOffset = new Vector2(minX / noiseScale, minY / noiseScale);
+            int mapWidth = (2 * tileRadius.x + 1) * width;
+            int mapHeight = (2 * tileRadius.y + 1) * height;
+            Debug.Log($"{mapWidth}x{mapHeight}");
+            GenerateMap(FindObjectOfType<Sebastian.MapDisplay>(), mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, scaleOffset + offset, 0);
         }
         public void GenerateMap(Vector2Int chunkID)
         {

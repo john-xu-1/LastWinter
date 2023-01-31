@@ -60,7 +60,7 @@ namespace NoiseTerrain
 
             Vector2 scaleOffset = new Vector2(minX / noiseScale, minY / noiseScale);
 
-            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(width, height, seed, noiseScale, octaves, persistance, lacunarity, scaleOffset);
+            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(width, height, seed, noiseScale, octaves, persistance, lacunarity, scaleOffset + offset);
             bool[,] boolMap = new bool[width, height];
             for (int y = 0; y < height; y += 1)
             {
@@ -85,7 +85,7 @@ namespace NoiseTerrain
 
             
 
-            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(width, height, seed, noiseScale, octaves, persistance, lacunarity, scaleOffset);
+            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(width, height, seed, noiseScale, octaves, persistance, lacunarity, scaleOffset + offset);
 
             for (int y = 0; y < height; y += 1)
             {
@@ -147,6 +147,21 @@ namespace NoiseTerrain
             setupComplete = false;
             this.seed = seed;
             GenerateMap();
+        }
+
+        public virtual void GenerateMap(Sebastian.MapDisplay display, int mapWidth, int mapHeight, int seed, float noiseScale, int octaves, float persistance, float lacunarity, Vector2 offset, float threshold)
+        {
+            float[,] noiseMap = Sebastian.Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
+            float[,] invertYMap = new float[noiseMap.GetLength(0), noiseMap.GetLength(1)];
+            for (int y = 0; y < mapHeight; y += 1)
+            {
+                for (int x = 0; x < mapWidth; x += 1)
+                {
+                    invertYMap[x, mapHeight - y - 1] = noiseMap[x, y] > threshold? 1 : -1;
+                    noiseMap[x, y] = noiseMap[x, y] > threshold ? 1 : -1;
+                }
+            }
+            display.DrawRawImage(Sebastian.TextureGenerator.TextureFromHeightMap(invertYMap));
         }
     }
 }

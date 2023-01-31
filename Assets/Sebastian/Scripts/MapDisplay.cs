@@ -10,6 +10,8 @@ namespace Sebastian
         public MeshFilter meshFilter;
         public MeshRenderer meshRenderer;
 
+        public UnityEngine.UI.RawImage rawImage;
+
         public void DrawTexture(Texture2D texture)
         {
             textureRender.sharedMaterial.mainTexture = texture;
@@ -20,6 +22,12 @@ namespace Sebastian
         {
             meshFilter.sharedMesh = meshData.CreateMesh();
             meshRenderer.sharedMaterial.mainTexture = texture;
+        }
+
+        public void DrawRawImage(Texture2D texture)
+        {
+            rawImage.texture = texture;
+            rawImage.rectTransform.sizeDelta = new Vector3(texture.width, texture.height, 1);
         }
     }
 }

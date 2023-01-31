@@ -27,7 +27,8 @@ namespace Sebastian
             {
                 for (int x = 0; x < width; x += 1)
                 {
-                    colorMap[y * width + x] = Color.Lerp(Color.black, Color.white, heightMap[x, y]);
+                    colorMap[y * width + x] = Color.Lerp(Color.white, Color.black, heightMap[x, y]);
+                    
                 }
             }
             return TextureFromColorMap(colorMap, width, height);

@@ -48,7 +48,7 @@ namespace NoiseTerrain
             //PrintBoolMap();
             //PrintFilledChunkIDs();
             SetFilledChunks(jumpHeight);
-            PrintPlatformIDs();
+            //PrintPlatformIDs();
         }
         public void PrintBoolMap()
         {
@@ -359,7 +359,14 @@ namespace NoiseTerrain
         }
     }
 
-    
+
+    public class pathNode
+    {
+        bool usedDouble;
+        bool usedDash;
+        int upVelocity;
+        int dashVelocity;
+    }
 
     
 }
