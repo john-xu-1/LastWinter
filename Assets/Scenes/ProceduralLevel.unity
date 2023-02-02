@@ -137,9 +137,9 @@ GameObject:
   - component: {fileID: 85257492}
   - component: {fileID: 85257491}
   - component: {fileID: 85257490}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Tilemap Water
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2535,9 +2535,10 @@ GameObject:
   - component: {fileID: 1757039169}
   - component: {fileID: 1757039168}
   - component: {fileID: 1757039167}
-  m_Layer: 8
+  - component: {fileID: 1757039172}
+  m_Layer: 0
   m_Name: Tilemap Lava
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2711,6 +2712,26 @@ Transform:
   m_Father: {fileID: 1593762582}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1757039172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757039165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1203148bd60b4d5b8149a9c6ee28bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
+  maxDuration: 0
+  magnitude: 0
+  pc: {fileID: 0}
+  ph: {fileID: 0}
+  effectName: 
+  effectIcon: {fileID: 0}
+  damageRate: 0
 --- !u!1001 &1828950508
 PrefabInstance:
   m_ObjectHideFlags: 0

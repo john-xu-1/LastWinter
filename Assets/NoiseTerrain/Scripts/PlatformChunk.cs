@@ -4,32 +4,25 @@ using UnityEngine;
 
 namespace NoiseTerrain
 {
-    public class PlatformChunk
+    public class PlatformChunk : NodeChunk
     {
-        public int platformID;
         public List<Vector2Int> groundTiles = new List<Vector2Int>();
-        public int[,] path;
-        public List<int> connectedPlatforms;
-        private RoomChunk roomChunk;
         public PlatformChunk(RoomChunk roomChunk)
         {
             this.roomChunk = roomChunk;
         }
-        public Vector2Int GetTilePos(Vector2Int tile)
-        {
-            return new Vector2Int(tile.x + roomChunk.minTile.x, -tile.y + 1 - roomChunk.maxTile.y);
-        }
-        public void SetPath(int platformID, int jumpHeight)
+        
+        public override void SetPath(int nodeID, int jumpHeight)
         {
             
-            this.platformID = platformID;
-            Vector2Int start = GetTilePos(groundTiles[0]/*, roomChunk*/);
+            this.nodeID = nodeID;
+            Vector2Int start = GetTilePos(groundTiles[0]);
             //roomChunk.PrintPath(new Vector2Int(groundTiles[0].x + roomChunk.minTile.x, -groundTiles[0].y + 1 - roomChunk.maxTile.y), jumpHeight, platformID);
             //path = roomChunk.GetPath(new Vector2Int(groundTiles[0].x + roomChunk.minTile.x, -groundTiles[0].y + 1 - roomChunk.maxTile.y), jumpHeight, platformID);
             
             //roomChunk.PrintPath(start, jumpHeight, platformID);
-            path = roomChunk.GetPath(start, jumpHeight, platformID);
-            SetPlatformEdges(platformID, roomChunk);
+            path = roomChunk.GetPath(start, jumpHeight, nodeID);
+            SetPlatformEdges(nodeID, roomChunk);
         }
         public void SetPlatformEdges(int platformID, RoomChunk roomChunk)
         {
@@ -46,14 +39,5 @@ namespace NoiseTerrain
                 }
             }
         }
-    }
-
-
-    public class pathNode
-    {
-        bool usedDouble;
-        bool usedDash;
-        int upVelocity;
-        int dashVelocity;
     }
 }

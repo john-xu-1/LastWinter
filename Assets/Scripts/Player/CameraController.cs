@@ -200,7 +200,7 @@ public class CameraController : MonoBehaviour
             //Debug.Log(index);
 
         }
-        else
+        else if(chunkLoader)
         {
             Vector2Int chunkID = chunkLoader.GetChunkID(transform.position);
             
