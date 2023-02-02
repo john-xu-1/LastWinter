@@ -15,11 +15,11 @@ namespace NoiseTerrain
         {
             this.roomChunk = roomChunk;
         }
-        public Vector2Int GetTilePos(Vector2Int tile/*, RoomChunk roomChunk*/)
+        public Vector2Int GetTilePos(Vector2Int tile)
         {
             return new Vector2Int(tile.x + roomChunk.minTile.x, -tile.y + 1 - roomChunk.maxTile.y);
         }
-        public void SetPath(int platformID/*, RoomChunk roomChunk*/, int jumpHeight)
+        public void SetPath(int platformID, int jumpHeight)
         {
             
             this.platformID = platformID;
@@ -46,5 +46,14 @@ namespace NoiseTerrain
                 }
             }
         }
+    }
+
+
+    public class pathNode
+    {
+        bool usedDouble;
+        bool usedDash;
+        int upVelocity;
+        int dashVelocity;
     }
 }

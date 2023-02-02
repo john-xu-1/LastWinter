@@ -111,7 +111,19 @@ public class PlatformerController : PhysicsObject
     public Animator anim;
 
     public bool isFalling = true;
-    
+
+
+    public int numJumps = 2;
+
+
+    public BoxCollider2D boxCollider;
+    public bool isClimbing = false;
+
+    public int maxJumps = 1;
+    public int currentJumps = 0;
+
+    public float climbSpeed = 5.0f;
+    public float climbForce = 20.0f;
 
     private void Awake()
     {
@@ -120,11 +132,24 @@ public class PlatformerController : PhysicsObject
         dashTrail.SetActive(false);
     }
 
+    
+
     protected override void ComputeVelocity()
     {
         Vector2 horInput = Vector2.zero;
 
         horInput.x = PlayerController.canMove? Input.GetAxis("Horizontal"): 0;
+
+
+        //wall-climbing
+
+        if (Input.GetButtonDown("Jump") && isClimbing)
+        {
+            isClimbing = false;
+            gravityModifer = 1.0f;
+        }
+
+
 
         //flip
         if (horInput.x < 0)
@@ -151,7 +176,7 @@ public class PlatformerController : PhysicsObject
         }
 
         
-
+        //normal double/signle jumps
         if (EffectorState == EffectorStates.None)
         {
             gravityModifer = gravityModifierNormal;
@@ -167,72 +192,74 @@ public class PlatformerController : PhysicsObject
                 
             }
 
+            if (Input.GetButtonDown("Jump") && currentJumps < maxJumps)
+            {
+                velocity.y = takeOffSpeed;
+                isFalling = true;
+                anim.SetBool("isJump", true);
+                isJump = true;
+                currentJumps++;
+            }
+            else if (PlayerController.canJump && Input.GetButtonUp("Jump"))
+            {
+
+
+                if (velocity.y > 0)
+                {
+
+                    velocity.y *= 0.5f;
+
+
+                }
+
+            }
+
+            if (isGrounded) currentJumps = 0;
+
+
+            //padding
+            if (velocity.y <= jumpDashPadding && velocity.y >= 0)
+            {
+                isJump = false;
+            }
+
+
+
             if (isDash == 0)
             {
-                if (PlayerController.canJump && Input.GetButtonDown("Jump") && isGrounded)  
+                if (PlayerController.canMove && Input.GetKeyDown(KeyCode.LeftControl))
                 {
-                    velocity.y = takeOffSpeed;
-                    isFalling = true;
-                    anim.SetBool("isJump", true);
-                    isJump = true;
-                }
-                else if (PlayerController.canJump && Input.GetButtonUp("Jump"))
-                {
-                    if (velocity.y > 0)
+                    if (Time.time >= nextDashTime)
                     {
-                        velocity.y *= 0.5f;
+                        isDash = 1;
+                        gravityModifer = 0;
+                        dashTrail.SetActive(true);
+                        anim.SetTrigger("isDash");
+                        nextDashTime = Time.time + DashRate;
                     }
-                    
+
+
                 }
 
-                //padding
-                if (velocity.y <= jumpDashPadding && velocity.y >= 0)
-                {
-                    isJump = false;
-                }
             }
-            
-            
-
-            if (isJump == false)
+            else
             {
-                
-
-                if (isDash == 0)
+                if (dashTime <= 0)
                 {
-                    if (PlayerController.canMove && Input.GetKeyDown(KeyCode.W))
-                    {
-                        if (Time.time >= nextDashTime)
-                        {
-                            isDash = 1;
-                            dashTrail.SetActive(true);
-                            anim.SetTrigger("isDash");
-                            nextDashTime = Time.time + DashRate;
-                        }
-                        
-
-                    }
-                    
+                    isDash = 0;
+                    dashTrail.SetActive(false);
+                    gravityModifer = 2.0f;
+                    dashTime = dashStartTime;
+                    dashSpeed = 0;
                 }
                 else
                 {
-                    if (dashTime <= 0)
+                    dashTime -= Time.deltaTime;
+                    if (isDash == 1)
                     {
-                        isDash = 0;
-                        dashTrail.SetActive(false);
-                        dashTime = dashStartTime;
-                        dashSpeed = 0;
-                    }
-                    else
-                    {
-                        dashTime -= Time.deltaTime;
-                        if (isDash == 1)
-                        {
-                            dashSpeed = dashSpeedStart;
-                        }
+                        dashSpeed = dashSpeedStart;
                     }
                 }
-
             }
 
 

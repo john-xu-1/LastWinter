@@ -344,6 +344,7 @@ namespace NoiseTerrain
         {
             platformSetupComplete = false;
             List<Chunk> roomChunks = new List<Chunk>();
+            //roomSize should be double the tileRadius if all visible chunks should be in one room
             for (int x = -roomSize.x/2; x <= roomSize.x/2; x += 1)
             {
                 for (int y = -roomSize.y/2; y <= roomSize.y/2; y += 1)
