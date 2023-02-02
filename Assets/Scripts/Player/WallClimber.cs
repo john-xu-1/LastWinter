@@ -11,7 +11,7 @@ public class WallClimber : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Ground")
+        if (PlayerController.canWallClimb && other.gameObject.tag == "Ground")
         {
             float inputVertical = Input.GetAxis("Vertical");
             
@@ -32,7 +32,7 @@ public class WallClimber : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Ground")
+        if (PlayerController.canWallClimb && other.gameObject.tag == "Ground")
         {
             pc.gravityModifer = 2.0f;
             

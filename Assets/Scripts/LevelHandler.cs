@@ -50,19 +50,19 @@ public class LevelHandler : MonoBehaviour
     private void PlayMode()
     {
         Time.timeScale = 1;
-        PlayerController.SetAll(true, true, true, true, true, true, true);
+        PlayerController.SetAll(true, true, true, true, true, true, true, true, true, true, true, true);
     }
 
     private void PauseMode()
     {
         Time.timeScale = 0;
-        PlayerController.SetAll(false, false, false, false, false, false, false);
+        PlayerController.SetAll(false, false, false, false, false, false, false, false, false, false, false, false);
     }
 
     private void MenuMode()
     {
         Time.timeScale = 0;
-        PlayerController.SetAll(false, false, false, false, true, false, false);
+        PlayerController.SetAll(false, false, false, false, true, false, false, false, false, false ,false ,false);
     }
 
 }

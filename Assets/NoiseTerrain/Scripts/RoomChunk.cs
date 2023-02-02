@@ -104,12 +104,18 @@ namespace NoiseTerrain
                     {
                         filledChunks[filledChunkIDs[x, y] - 1].filledTiles.Add(new Vector2Int(x, y));
                         if(y > 0 && !GetTile(x,y-1)) filledChunks[filledChunkIDs[x, y] - 1].groundTiles.Add(new Vector2Int(x, y));
+                        if (x > 0 && !GetTile(x - 1, y)) filledChunks[filledChunkIDs[x, y] - 1].wallTiles.Add(new Vector2Int(x, y));
+                        else if (x < width - 1 && !GetTile(x + 1, y)) filledChunks[filledChunkIDs[x, y] - 1].wallTiles.Add(new Vector2Int(x, y));
                     }
                 }
             }
             //setup platform tiles
             for (int i = 0; i < filledChunkCount; i += 1)
+            {
                 filledChunks[i].SetPlatforms(this, jumpHeight);
+                filledChunks[i].SetWallChunks(this, jumpHeight);
+            }
+                
         }
         
         public void SetFilledChunkIDs()

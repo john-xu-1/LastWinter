@@ -1040,6 +1040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pc: {fileID: 2084049425}
+  wallStayBuffer: 0.1
 --- !u!1 &2824200790236858551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,11 +1317,11 @@ MonoBehaviour:
   TakeOffSpeedNormal: 10
   WaterModifier: 2.5
   MaxSpeedWater: 3
-  TakeOffSpeedWater: 3
+  TakeOffSpeedWater: 8
   SinkWater: 2
   LavaModifier: 3.1
   MaxSpeedLava: 2
-  TakeOffSpeedLava: 2
+  TakeOffSpeedLava: 5
   SinkLava: 2
   isModifyGravity: 1
   gravityModifierWater: 0

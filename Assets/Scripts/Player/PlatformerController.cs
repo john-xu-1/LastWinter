@@ -143,7 +143,7 @@ public class PlatformerController : PhysicsObject
 
         //wall-climbing
 
-        if (Input.GetButtonDown("Jump") && isClimbing)
+        if (PlayerController.canWallClimb && Input.GetButtonDown("Jump") && isClimbing)
         {
             isClimbing = false;
             gravityModifer = 1.0f;
@@ -175,6 +175,8 @@ public class PlatformerController : PhysicsObject
             anim.SetBool("isRun", false);
         }
 
+
+        
         
         //normal double/signle jumps
         if (EffectorState == EffectorStates.None)
@@ -192,8 +194,13 @@ public class PlatformerController : PhysicsObject
                 
             }
 
-            if (Input.GetButtonDown("Jump") && currentJumps < maxJumps)
+
+            if (isGrounded) currentJumps = 0;
+
+
+            if (PlayerController.canJump && Input.GetButtonDown("Jump") && (currentJumps == 0 || (PlayerController.canDoubleJump && currentJumps < maxJumps)))
             {
+                
                 velocity.y = takeOffSpeed;
                 isFalling = true;
                 anim.SetBool("isJump", true);
@@ -214,7 +221,7 @@ public class PlatformerController : PhysicsObject
 
             }
 
-            if (isGrounded) currentJumps = 0;
+            
 
 
             //padding
@@ -227,7 +234,7 @@ public class PlatformerController : PhysicsObject
 
             if (isDash == 0)
             {
-                if (PlayerController.canMove && Input.GetKeyDown(KeyCode.LeftControl))
+                if (PlayerController.canMove && PlayerController.canDash && Input.GetKeyDown(KeyCode.LeftControl))
                 {
                     if (Time.time >= nextDashTime)
                     {
