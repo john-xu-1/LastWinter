@@ -55,7 +55,7 @@ namespace NoiseTerrain
             List<Vector2Int> toVisit = new List<Vector2Int>(groundTiles);
             List<Vector2Int> visited = new List<Vector2Int>();
             int platformID = 0;
-            int breakCounter = 1000;
+            int breakCounter = 10000;
             while (toVisit.Count > 0)
             {
                 List<Vector2Int> frontier = new List<Vector2Int>();

@@ -544,6 +544,9 @@ namespace NoiseTerrain
                     Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
 
                     startingPlatformID = roomChunk.GetPlatformID(clickTile);
+                    int filledChunkID = startingPlatformID / 512;
+                    int platformChunkId = startingPlatformID % 512;
+                    Debug.LogWarning($"PlatformIDClicked: {startingPlatformID}  filledChunkID:{filledChunkID} platformID{platformChunkId}");
                     Thread thread = new Thread(GenerateChunkGraphThread);
                     thread.Start();
                 }

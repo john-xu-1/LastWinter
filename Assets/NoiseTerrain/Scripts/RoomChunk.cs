@@ -260,6 +260,7 @@ namespace NoiseTerrain
         }
         public PlatformChunk GetPlatform(int platformID)
         {
+            Debug.Log(platformID);
             int filledChunkID = platformID / 512;
             platformID %= 512;
             Debug.Log($"filledChunkID: {filledChunkID} platformID: {platformID}");
