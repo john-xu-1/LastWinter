@@ -40,6 +40,10 @@ namespace NoiseTerrain
         public bool active = false;
 
         public int displayCountPerFrame = 1000;
+
+        private bool displayPlatformGraph;
+        List<PlatformChunk> platformGraph;
+
         private void OnDestroy()
         {
             fixTileRules = false;
@@ -59,6 +63,21 @@ namespace NoiseTerrain
             HandleMouseClickDebugging();
             if (!active) return;
             Vector2Int chunkID = GetChunkID(target.position);
+
+            //debug platformGraph
+            if (displayPlatformGraph)
+            {
+                foreach(PlatformChunk platform in platformGraph)
+                {
+                    foreach(int nodeID in platform.connectedPlatforms)
+                    {
+                        PlatformChunk destination = roomChunk.GetPlatform(nodeID);
+                        Vector2 start = platform.GetTilePos(platform.groundTiles[0]);
+                        Vector2 dir = destination.GetTilePos(destination.groundTiles[0]) - start;
+                        Debug.DrawRay(start, dir);
+                    }
+                }
+            }
 
             //update changed chunks
             for (int i = 0; i < visibleChunkIDs.Count; i += 1)
@@ -456,7 +475,7 @@ namespace NoiseTerrain
 
         Vector2Int lastClickChunkID;
         Vector2Int lastClickID;
-        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater, toggleTile}
+        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater, toggleTile, displayPlatformGraph}
         public HandleMouseClickFunction clickFunction; 
         private void HandleMouseClickDebugging()
         {
@@ -517,10 +536,59 @@ namespace NoiseTerrain
                     }
                 }
 
+            }else if(clickFunction == HandleMouseClickFunction.displayPlatformGraph)
+            {
+                if(roomChunk != null && Input.GetMouseButtonUp(0))
+                {
+                    displayPlatformGraph = false;
+                    Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+
+                    startingPlatformID = roomChunk.GetPlatformID(clickTile);
+                    Thread thread = new Thread(GenerateChunkGraphThread);
+                    thread.Start();
+                }
             }
 
 
         }
+        private int startingPlatformID;
+        public int generateChunkGraphDepth = 0;
+        private void GenerateChunkGraphThread()
+        {
+            List<int> platformNodes = new List<int>();
+            platformNodes.Add(startingPlatformID);
+
+            int graphListIndex = 0;
+            int depth = 0;
+            while(depth < generateChunkGraphDepth)
+            {
+                int platformNodesCount = platformNodes.Count;
+                for (int i = graphListIndex; i < platformNodesCount; i += 1)
+                {
+                    foreach(int nodeDestionationId in roomChunk.GetPlatformEdges(platformNodes[i], jumpHeight))
+                    {
+                        if (!platformNodes.Contains(nodeDestionationId)) platformNodes.Add(nodeDestionationId);
+                    }
+                }
+                graphListIndex = platformNodesCount;
+                depth += 1;
+            }
+
+            List<PlatformChunk> graphList = new List<PlatformChunk>();
+            foreach(int nodeID in platformNodes)
+            {
+                PlatformChunk platform = roomChunk.GetPlatform(nodeID);
+                if (!graphList.Contains(platform))
+                {
+                    roomChunk.GetPlatformEdges(nodeID, jumpHeight);
+                    graphList.Add(platform);
+                }
+            }
+
+            platformGraph = graphList;
+            displayPlatformGraph = true;
+        }
+
         private IEnumerator PlaceLiquid(TileBase liquidTile, Tilemap tilemap, Vector2Int posStart)
         {
             yield return null;

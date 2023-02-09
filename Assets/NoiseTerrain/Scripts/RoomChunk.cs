@@ -158,7 +158,7 @@ namespace NoiseTerrain
         }
         public void PrintFilledChunkIDs()
         {
-            SetFilledChunkIDs();
+            //SetFilledChunkIDs();
             string idMap = "";
             for (int y = 0; y < height; y += 1)
             {
@@ -182,7 +182,7 @@ namespace NoiseTerrain
                 return -1;
             else
             {
-                int filledChunkID = filledChunkIDs[tile.x - minTile.x, -tile.y - maxTile.y] * 256;
+                int filledChunkID = filledChunkIDs[tile.x - minTile.x, -tile.y - maxTile.y] * 512;
                 if (filledChunkIDs[tile.x - minTile.x, -tile.y - maxTile.y] > 0)
                 {
                     if (filledChunks[filledChunkIDs[tile.x - minTile.x, -tile.y - maxTile.y] - 1].GetPlatformID(new Vector2Int(tile.x - minTile.x, -tile.y - maxTile.y)) > 0)
@@ -202,6 +202,7 @@ namespace NoiseTerrain
         }
         public void PrintPlatformIDs()
         {
+            Debug.Log("PrintPlatformIDs");
             string[,] platformIDs = new string[width, height];
             for(int i = 0; i < filledChunkIDs.GetLength(0); i += 1)
             {
@@ -237,7 +238,7 @@ namespace NoiseTerrain
                 }
                 map += "\n";
             }
-            Debug.Log(map);
+            //Debug.Log(map);
             Clingo_02.ClingoUtil.CreateFile(map, "debugStringMatrix.txt");
         }
 
@@ -259,8 +260,10 @@ namespace NoiseTerrain
         }
         public PlatformChunk GetPlatform(int platformID)
         {
-            int filledChunkID = platformID / 256;
-            platformID %= 256;
+            int filledChunkID = platformID / 512;
+            platformID %= 512;
+            Debug.Log($"filledChunkID: {filledChunkID} platformID: {platformID}");
+            Debug.Log($"filledChunks.Count: {filledChunks.Count}");
             return filledChunks[filledChunkID-1].platforms[platformID-1];
         }
         public List<int> GetPlatformEdges(int platformID, int jumpHeight)
