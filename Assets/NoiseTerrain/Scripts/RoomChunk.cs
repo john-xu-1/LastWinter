@@ -260,11 +260,11 @@ namespace NoiseTerrain
         }
         public PlatformChunk GetPlatform(int platformID)
         {
-            Debug.Log(platformID);
+            //Debug.Log(platformID);
             int filledChunkID = platformID / 512;
             platformID %= 512;
-            Debug.Log($"filledChunkID: {filledChunkID} platformID: {platformID}");
-            Debug.Log($"filledChunks.Count: {filledChunks.Count}");
+            //Debug.Log($"filledChunkID: {filledChunkID} platformID: {platformID}");
+            //Debug.Log($"filledChunks.Count: {filledChunks.Count}");
             return filledChunks[filledChunkID-1].platforms[platformID-1];
         }
         public List<int> GetPlatformEdges(int platformID, int jumpHeight)
@@ -272,14 +272,14 @@ namespace NoiseTerrain
             PlatformChunk platform = GetPlatform(platformID);
             if(platform.connectedPlatforms == null)
             {
-                platform.SetPath(platformID/*, this*/, jumpHeight);
+                platform.SetPath(platformID, jumpHeight);
             }
             return platform.connectedPlatforms;
         }
 
         public int[,] GetPath(Vector2Int start, int jumpHeight, int platformID)
         {
-            int exitLoop = 1000;
+            int exitLoop = 10000;
             int[,] path = new int[width, height];
             for(int i = 0; i < width; i += 1)
             {

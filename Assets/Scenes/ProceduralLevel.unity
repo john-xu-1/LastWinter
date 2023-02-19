@@ -2876,6 +2876,10 @@ PrefabInstance:
       value: ProceduralMapGenerator
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: seed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: width
       value: 8
       objectReference: {fileID: 0}
@@ -2909,7 +2913,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: roomSize.y
-      value: 24
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: fixSubChunk
@@ -2937,7 +2941,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: tileRadius.y
-      value: 12
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: waterTilemap
@@ -2945,7 +2949,7 @@ PrefabInstance:
       objectReference: {fileID: 85257494}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: clickFunction
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: fixTileRuleBorder

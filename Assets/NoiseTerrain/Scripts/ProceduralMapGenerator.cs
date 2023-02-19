@@ -307,8 +307,8 @@ namespace NoiseTerrain
 
                             float threshold = 0;
                             
-                            if (toBuildChunks[i].x % roomSize.x == 0 ||  toBuildChunks[i].y % roomSize.y == 0)
-                                threshold = -1;
+                            //if (toBuildChunks[i].x % roomSize.x == 0 ||  toBuildChunks[i].y % roomSize.y == 0)
+                            //    threshold = -1;
                             chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), this);
                             AddChunk(chunk);
                         }
