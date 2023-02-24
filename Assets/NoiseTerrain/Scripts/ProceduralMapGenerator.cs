@@ -192,7 +192,7 @@ namespace NoiseTerrain
             Debug.Log($"{x} {y}");
             return GetChunk(GetChunkID(pos)).GetTile(x, y);
         }
-        protected void AddChunk(Chunk chunk)
+        public void AddChunk(Chunk chunk)
         {
             //chunks.Add(chunk);
             chunkDict[chunk.chunkID] = chunk;
@@ -371,6 +371,13 @@ namespace NoiseTerrain
                     roomChunks.Add(GetChunk(chunkID + new Vector2Int(x, y)));
                 }
             }
+            this.roomChunks = roomChunks;
+            Thread thread = new Thread(SetRoomChunkThread);
+            thread.Start();
+        }
+        public void SetRoomChunk(List<Chunk> roomChunks)
+        {
+            platformSetupComplete = false;
             this.roomChunks = roomChunks;
             Thread thread = new Thread(SetRoomChunkThread);
             thread.Start();

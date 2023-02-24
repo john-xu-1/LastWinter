@@ -1877,6 +1877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 2006923319}
+  generateFromFile: 0
   dungeonHandler: {fileID: 1495851078}
   noiseMapGenerator: {fileID: 853445341}
   gameHandler: {fileID: 0}
@@ -2123,7 +2124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b1f9f80c630a4ae6a9ebf9acdbebfa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worlds: {fileID: 11400000, guid: 3eb5fb8e4b1304f4bb85c35e8daaa99c, type: 2}
+  worlds: {fileID: 11400000, guid: 6f564d747cecf3448ae2dc787f363a74, type: 2}
   playerPrefab: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
   allItems: []
   camControl: {fileID: 1436931341}
@@ -2131,6 +2132,10 @@ MonoBehaviour:
   wepChipPan: {fileID: 0}
   invPan: {fileID: 0}
   DebugMenu: {fileID: 0}
+  worldWidth: 0
+  worldHeight: 0
+  roomWidth: 0
+  roomHeight: 0
   setupComplete: 0
   debugging: 1
 --- !u!4 &1495851079
@@ -2881,7 +2886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: width
-      value: 8
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: active
@@ -2889,7 +2894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: height
-      value: 8
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: lavaTile
@@ -2909,11 +2914,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: roomSize.x
-      value: 32
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: roomSize.y
-      value: 48
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: fixSubChunk
@@ -2937,11 +2942,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: tileRadius.x
-      value: 16
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: tileRadius.y
-      value: 24
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: waterTilemap

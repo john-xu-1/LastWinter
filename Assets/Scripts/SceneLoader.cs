@@ -5,6 +5,7 @@ using UnityEngine;
 public class SceneLoader : MonoBehaviour
 {
     public GameObject loadingScreen;
+    public bool generateFromFile;
     public DungeonHandler dungeonHandler;
     public NoiseTerrain.ProceduralMapGenerator noiseMapGenerator;
 
@@ -45,16 +46,34 @@ public class SceneLoader : MonoBehaviour
     IEnumerator TilemapSetup()
     {
         //generate new RoomChunk or load from saved
-        noiseMapGenerator.GenerateMap(noiseMapGenerator.seed);
-        while (!noiseMapGenerator.setupComplete)
+        if (generateFromFile)
         {
-            yield return null;
+            dungeonHandler.MapSetup(dungeonHandler.worlds.BuiltWorlds[0]);
+            foreach(NoiseTerrain.Chunk roomChunk in dungeonHandler.chunks)
+            {
+                noiseMapGenerator.AddChunk(roomChunk);
+                minX = 0;
+                minY = -dungeonHandler.worldHeight * dungeonHandler.roomWidth;
+                maxX = dungeonHandler.worldWidth * dungeonHandler.worldHeight;
+                maxY = 0;
+            }
+            noiseMapGenerator.SetRoomChunk(dungeonHandler.chunks);
         }
-        noiseMapGenerator.SetRoomChunk();
-        minX = noiseMapGenerator.minX;
-        maxX = noiseMapGenerator.maxX;
-        minY = noiseMapGenerator.minY;
-        maxY = noiseMapGenerator.maxY;
+        else
+        {
+            noiseMapGenerator.GenerateMap(noiseMapGenerator.seed);
+            while (!noiseMapGenerator.setupComplete)
+            {
+                yield return null;
+            }
+            noiseMapGenerator.SetRoomChunk();
+            minX = noiseMapGenerator.minX;
+            maxX = noiseMapGenerator.maxX;
+            minY = noiseMapGenerator.minY;
+            maxY = noiseMapGenerator.maxY;
+        }
+
+        
         FindObjectOfType<PathFinder>().SetMap(minX, -maxY, maxX, -minY);
 
         progression += 1 / (float)progressionItemsCount;

@@ -32,6 +32,29 @@ public class MapGenerator : MonoBehaviour
         CMap.RemoveTiles(room);
         //need to add RemoveItems(room)
     }
+    public List<NoiseTerrain.Chunk> BuildWorldChunks(World world)
+    {
+        List<NoiseTerrain.Chunk> chunks = new List<NoiseTerrain.Chunk>();
+        foreach (Room room in world.GetRooms())
+        {
+            room.SetupRoom();
+            ConvertMap(room.map, room);
+            int width = room.map.dimensions.room_width;
+            int height = room.map.dimensions.room_height;
+            Vector2Int chunkID = new Vector2Int(room.map.dimensions.room_count_width, -room.map.dimensions.room_count_height);
+            bool[,] boolMap = new bool[width, height];
+            for (int x = 0; x < width; x += 1)
+            {
+                for(int y = 0; y < height; y += 1)
+                {
+                    boolMap[x, y] = room.mapGrid[x, y].type == 1 ? true : false;
+                }
+            }
+            NoiseTerrain.Chunk chunk = new NoiseTerrain.Chunk(chunkID, boolMap, FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>());
+            chunks.Add(chunk);
+        }
+        return chunks;
+    }
 
     public void BuildWorld(World world)
     {

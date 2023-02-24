@@ -169,7 +169,15 @@ public class InventorySystem : MonoBehaviour
             pa = FindObjectOfType<PlayerAttack>();
             selectInventory(equipedItem + 1);
         }
-        if (!SelectedRenderer) SelectedRenderer = GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>();
+        if (!SelectedRenderer)
+        {
+            if (GameObject.FindGameObjectWithTag("SelectedItem"))
+            {
+                SelectedRenderer = GameObject.FindGameObjectWithTag("SelectedItem").GetComponent<SpriteRenderer>();
+            }
+            else return;
+            
+        }
         //for debugging
 
         if (Input.GetKeyDown(KeyCode.LeftShift)) SaveInventory();

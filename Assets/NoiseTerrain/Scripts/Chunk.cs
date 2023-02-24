@@ -110,7 +110,7 @@ namespace NoiseTerrain
             else if (x >= width) x -= width;
             if (y < 0) y = height + y;
             else if (y >= height) y -= height;
-
+            //Debug.Log($"GetTile({x},{y})");
             if (chunk != this) return chunk.GetTile(x, y);
             return boolMap[x, y];
         }

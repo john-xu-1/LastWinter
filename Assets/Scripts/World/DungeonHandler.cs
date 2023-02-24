@@ -24,12 +24,13 @@ public class DungeonHandler : MonoBehaviour
 
     public GameObject DebugMenu;
 
-    private int worldWidth, worldHeight, roomWidth, roomHeight;
+    public int worldWidth, worldHeight, roomWidth, roomHeight;
     private bool buildingMap;
 
     public bool setupComplete = false;
 
     public bool debugging = false;
+    public List<NoiseTerrain.Chunk> chunks;
 
     public void MapSetup(World map)
     {
@@ -38,6 +39,7 @@ public class DungeonHandler : MonoBehaviour
         dungeon = map;
 
         mapG.BuildWorld(dungeon);
+        //chunks = mapG.BuildWorldChunks(dungeon);
 
         worldWidth = dungeon.Width;
         worldHeight = dungeon.Height;
@@ -52,7 +54,7 @@ public class DungeonHandler : MonoBehaviour
     {
         Debug.Log("PlayerSetup()");
         player = Instantiate(playerPrefab, new Vector3(dungeon.startPos.x + 0.5f, -dungeon.startPos.y + 1, 0), Quaternion.identity).transform;
-        player.GetComponent<InventorySystem>().wepChipPanel = wepChipPan;
+        //player.GetComponent<InventorySystem>().wepChipPanel = wepChipPan;
         SetUpPlayerUI();
     }
 
@@ -83,6 +85,15 @@ public class DungeonHandler : MonoBehaviour
                 PlayerSetup();
                 camSetup();
                 FindObjectOfType<LightingLevelSetup>().setupLighting(worldWidth * roomWidth, worldHeight * roomHeight);
+
+                InventorySystem inventorySystem = GameObject.FindObjectOfType<InventorySystem>();
+
+                foreach (Pickupable pickupable in GameObject.FindObjectsOfType<Pickupable>())
+                {
+                    pickupable.setInventorySystem(inventorySystem);
+                }
+
+                FindObjectOfType<CameraController>().active = true;
             }
 
 
