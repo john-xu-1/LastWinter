@@ -41,7 +41,8 @@ public class MapGenerator : MonoBehaviour
             ConvertMap(room.map, room);
             int width = room.map.dimensions.room_width;
             int height = room.map.dimensions.room_height;
-            Vector2Int chunkID = new Vector2Int(room.map.dimensions.room_count_width, -room.map.dimensions.room_count_height);
+            Vector2Int chunkID = new Vector2Int(room.pos.x * room.map.dimensions.room_count_width, room.pos.y *room.map.dimensions.room_count_height);
+            //Debug.Log($"chunkID: {chunkID}");
             bool[,] boolMap = new bool[width, height];
             for (int x = 0; x < width; x += 1)
             {

@@ -32,14 +32,18 @@ public class DungeonHandler : MonoBehaviour
     public bool debugging = false;
     public List<NoiseTerrain.Chunk> chunks;
 
+    public void MapSetup(int mapIndex)
+    {
+        MapSetup(worlds.BuiltWorlds[mapIndex]);
+    }
     public void MapSetup(World map)
     {
         //dungeon = worlds.GetWorld();
 
         dungeon = map;
 
-        mapG.BuildWorld(dungeon);
-        //chunks = mapG.BuildWorldChunks(dungeon);
+        //mapG.BuildWorld(dungeon);
+        chunks = mapG.BuildWorldChunks(dungeon);
 
         worldWidth = dungeon.Width;
         worldHeight = dungeon.Height;

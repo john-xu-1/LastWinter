@@ -43,21 +43,28 @@ public class SceneLoader : MonoBehaviour
         yield return null;
         StartCoroutine(TilemapSetup());
     }
+    public int loadWorldIndex = 0;
     IEnumerator TilemapSetup()
     {
         //generate new RoomChunk or load from saved
         if (generateFromFile)
         {
-            dungeonHandler.MapSetup(dungeonHandler.worlds.BuiltWorlds[0]);
+            dungeonHandler.MapSetup(loadWorldIndex);
             foreach(NoiseTerrain.Chunk roomChunk in dungeonHandler.chunks)
             {
                 noiseMapGenerator.AddChunk(roomChunk);
-                minX = 0;
-                minY = -dungeonHandler.worldHeight * dungeonHandler.roomWidth;
-                maxX = dungeonHandler.worldWidth * dungeonHandler.worldHeight;
-                maxY = 0;
+                
             }
+            minX = 0;
+            minY = -dungeonHandler.worldHeight * dungeonHandler.roomHeight;
+            maxX = dungeonHandler.worldWidth * dungeonHandler.roomWidth;
+            maxY = 0;
             noiseMapGenerator.SetRoomChunk(dungeonHandler.chunks);
+            Vector2Int chunkRadius = new Vector2Int(dungeonHandler.worldWidth / 2, dungeonHandler.worldHeight / 2);
+            Vector2Int chunkSize = new Vector2Int(dungeonHandler.roomWidth, dungeonHandler.roomHeight);
+            Vector2 pos = new Vector2(maxX / 2, minY / 2);
+            Debug.Log($"minY:{minY} maxX:{maxX} pos:{pos}");
+            noiseMapGenerator.SetupProceduralMapGenerator(chunkRadius, chunkSize, pos, true);
         }
         else
         {

@@ -21,6 +21,7 @@ namespace NoiseTerrain
             int maxYID = int.MinValue;
             int maxXID = int.MinValue;
 
+            Debug.Log($"roomChunks.Count: {roomChunks.Count}");
             foreach (Chunk chunk in roomChunks)
             {
                 minXID = Mathf.Min(chunk.chunkID.x, minXID);
@@ -34,6 +35,7 @@ namespace NoiseTerrain
             width = roomChunkSize.x * roomChunks[0].width;
             height = roomChunkSize.y * roomChunks[0].height;
 
+            Debug.Log($"minXID: {minXID} minYID: {minYID} maxXID: {maxXID} maxYID: {maxYID}");
             foreach (Chunk chunk in roomChunks)
             {
                 int x = chunk.chunkID.x - minXID;
@@ -45,7 +47,8 @@ namespace NoiseTerrain
             minTile = new Vector2Int(minXID * roomChunks[0].width, maxYID * roomChunks[0].height + roomChunks[0].height - 1);
             maxTile = new Vector2Int(maxXID * roomChunks[0].width + roomChunks[0].width - 1, minYID * roomChunks[0].height);
 
-            //PrintBoolMap();
+
+            PrintBoolMap();
             //PrintFilledChunkIDs();
             SetFilledChunks(jumpHeight);
             //PrintPlatformIDs();
@@ -63,7 +66,7 @@ namespace NoiseTerrain
                 map0_1 += "\n";
             }
             Debug.Log(map0_1);
-
+            Clingo_02.ClingoUtil.CreateFile(map0_1, "debugPrintBoolMap.txt");
         }
         public bool[,] GetBoolMap()
         {
@@ -88,6 +91,17 @@ namespace NoiseTerrain
             y = y % height;
 
             return chunks[xID, yID].GetTile(x, y);
+
+            //if (x <= maxTile.x && x >= minTile.x && y <= maxTile.y && y >= minTile.y)
+            //{
+                
+            //}
+            //else
+            //{
+            //    Debug.LogWarning($"x:{x} y:{y} not in roomChunk");
+            //    return true;
+            //}
+            
         }
         public void SetFilledChunks(int jumpHeight)
         {

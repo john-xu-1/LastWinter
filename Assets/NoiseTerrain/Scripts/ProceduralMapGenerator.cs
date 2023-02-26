@@ -145,6 +145,14 @@ namespace NoiseTerrain
                 setupComplete = true;
             }
         }
+        public void SetupProceduralMapGenerator(Vector2Int chunkRadius, Vector2Int chunkSize, Vector2 pos, bool active)
+        {
+            this.active = active;
+            tileRadius = chunkRadius;
+            transform.position = (Vector3)pos + Vector3.forward * transform.position.z;
+            width = chunkSize.x;
+            height = chunkSize.y;
+        }
 
         //public override void GenerateMap()
         //{
@@ -378,6 +386,8 @@ namespace NoiseTerrain
         public void SetRoomChunk(List<Chunk> roomChunks)
         {
             platformSetupComplete = false;
+            setupComplete = false;
+            //active = true;
             this.roomChunks = roomChunks;
             Thread thread = new Thread(SetRoomChunkThread);
             thread.Start();

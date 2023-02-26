@@ -106,6 +106,11 @@ namespace NoiseTerrain
         public bool GetTile(int x, int y)
         {
             Chunk chunk = GetChunk(x, y);
+            if(chunk == null)
+            {
+                Debug.LogWarning($"x:{x} y:{y} not in roomChunk");
+                return true;
+            }
             if (x < 0) x = width + x;
             else if (x >= width) x -= width;
             if (y < 0) y = height + y;

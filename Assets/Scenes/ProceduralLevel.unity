@@ -1877,7 +1877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 2006923319}
-  generateFromFile: 0
+  generateFromFile: 1
   dungeonHandler: {fileID: 1495851078}
   noiseMapGenerator: {fileID: 853445341}
   gameHandler: {fileID: 0}
@@ -1922,6 +1922,7 @@ MonoBehaviour:
   progression: 0
   progressionItemsCount: 9
   seed: 0
+  loadWorldIndex: 0
 --- !u!4 &1406625054
 Transform:
   m_ObjectHideFlags: 0
@@ -2015,7 +2016,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436931336}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 129, y: 77, z: -10}
+  m_LocalPosition: {x: 89.6, y: -50.1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2124,7 +2125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b1f9f80c630a4ae6a9ebf9acdbebfa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worlds: {fileID: 11400000, guid: 6f564d747cecf3448ae2dc787f363a74, type: 2}
+  worlds: {fileID: 11400000, guid: 3eb5fb8e4b1304f4bb85c35e8daaa99c, type: 2}
   playerPrefab: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
   allItems: []
   camControl: {fileID: 1436931341}
@@ -2838,11 +2839,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502672, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 128
+      value: 85.5
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502672, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 96
+      value: -51.5
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502672, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2906,7 +2907,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 945c4aa4acb1545ea9af81dc59a39ea6, type: 2}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: jumpHeight
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: noiseScale
