@@ -56,15 +56,19 @@ public class SceneLoader : MonoBehaviour
                 
             }
             minX = 0;
-            minY = -dungeonHandler.worldHeight * dungeonHandler.roomHeight;
+            maxY = dungeonHandler.worldHeight * dungeonHandler.roomHeight;
             maxX = dungeonHandler.worldWidth * dungeonHandler.roomWidth;
-            maxY = 0;
+            minY = 0;
             noiseMapGenerator.SetRoomChunk(dungeonHandler.chunks);
             Vector2Int chunkRadius = new Vector2Int(dungeonHandler.worldWidth / 2, dungeonHandler.worldHeight / 2);
             Vector2Int chunkSize = new Vector2Int(dungeonHandler.roomWidth, dungeonHandler.roomHeight);
-            Vector2 pos = new Vector2(maxX / 2, minY / 2);
+            Vector2 pos = new Vector2(maxX / 2, -maxY / 2);
             Debug.Log($"minY:{minY} maxX:{maxX} pos:{pos}");
             noiseMapGenerator.SetupProceduralMapGenerator(chunkRadius, chunkSize, pos, true);
+            while (!noiseMapGenerator.setupComplete)
+            {
+                yield return null;
+            }
         }
         else
         {
