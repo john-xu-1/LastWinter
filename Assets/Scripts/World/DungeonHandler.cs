@@ -36,14 +36,16 @@ public class DungeonHandler : MonoBehaviour
     {
         MapSetup(worlds.BuiltWorlds[mapIndex]);
     }
+    public bool buildMap;
     public void MapSetup(World map)
     {
         //dungeon = worlds.GetWorld();
 
         dungeon = map;
 
-        //mapG.BuildWorld(dungeon);
-        chunks = mapG.BuildWorldChunks(dungeon);
+        if (buildMap)
+            mapG.BuildWorld(dungeon);
+        else chunks = mapG.BuildWorldChunks(dungeon);
 
         worldWidth = dungeon.Width;
         worldHeight = dungeon.Height;
@@ -101,7 +103,7 @@ public class DungeonHandler : MonoBehaviour
             }
 
 
-            
+            if(buildMap) FindObjectOfType<PathFinder>().SetMap(0, -worldHeight*roomHeight, worldWidth*roomWidth, 0);
             buildingMap = false;
             
         }

@@ -42,7 +42,7 @@ MonoBehaviour:
     y: 0
     FreeObjectType: 2
     variation: 
-    gameObject: {fileID: 8232423840857397226, guid: 35fa8ea354d0c0d428079888ef147d17, type: 3}
+    gameObject: {fileID: 341972518879934238, guid: d1d6e714273274acb853a2157a70b6c2, type: 3}
     enemyType: 0
   - x: 0
     y: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
     y: 0
     FreeObjectType: 2
     variation: 
-    gameObject: {fileID: 1507855356422977492, guid: 8ee6e7c2b85cfad40bb1cf915b125fc9, type: 3}
+    gameObject: {fileID: 1173827562917520578, guid: 5076212b589c7624fb651f719d65bd1f, type: 3}
     enemyType: 3
   - x: 0
     y: 0

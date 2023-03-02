@@ -168,9 +168,13 @@ public class LightingLevelSetup : MonoBehaviour
 
     bool isGround(int x, int y)
     {
-        //TileBase ground = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y));
-        //TileBase air = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y + 1));
-        //return ground != null && air == null;
+        if(map == null)
+        {
+            TileBase groundTile = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y));
+            TileBase airTile = UtilityTilemap.GetTile(collisionMap, new Vector2(x, y + 1));
+            return groundTile != null && airTile == null;
+        }
+        
         bool ground = map.GetTile(new Vector2Int(x, y));
         bool air = !map.GetTile(new Vector2Int(x, y+1));
         return ground && air;
