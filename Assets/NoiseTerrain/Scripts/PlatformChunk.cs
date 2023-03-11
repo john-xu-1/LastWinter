@@ -45,6 +45,7 @@ namespace NoiseTerrain
             if (debugCheckConnection) return true;
             int xStart = x, yStart = y;
             int exitCounter = 0;
+            string pathStr = $"(xStart,yStart) ({xStart},{yStart})";
             while(exitCounter < 10000)
             {
                 exitCounter++;
@@ -53,22 +54,55 @@ namespace NoiseTerrain
                 if (y > 0)
                 {
                     y -= 1;
+                    pathStr += $"\n ({x},{y})";
+                    //Debug.Log($"({x},{y}) {roomChunk.GetTile(x, y)} {path[x, y]}");
                     //jump area found
-                    if (path[x, y] > 0) return true;
+                    if (path[x, y] > 0)
+                    {
+                        Debug.Log($"path found ({x},{y}) {pathStr}");
+                        return true;
+                    }
                     if(path[x,y] < 0) //either air or tile
                     {
                         if (!roomChunk.GetTile(x,y)) //air is above
                         {
+                            if (xStart != x && path[x, y] >= 0) //check stepping
+                            {
+                                //todo check if left or right sides are filled
+                                return false;
+                            }
+                                
                             //check left and right
-                            if (x > 0 && path[x - 1, y] >= 0) x -= 1; //step right
-                            else if (x < path.GetLength(0) - 1 && path[x + 1, y] >= 0) x += 1; // step left;
-                            else return IsPeak(x, y + 1);
+                            if (x > 0 && path[x - 1, y] >= 0)//step right
+                            {
+                                x -= 1;
+                                pathStr += $"step right";
+                            }
+                            else if(x < path.GetLength(0) - 1 && path[x + 1, y] >= 0)// step left;
+                            {
+                                x += 1;
+                                pathStr += $"step left";
+                            }
+                                
+                            else return IsPeak(x, y + 1,pathStr);
                         }
                         else //tile is above
                         {
                             int collidedPlatformID = roomChunk.GetPlatformID(x, y);
-                            if (nodeID == collidedPlatformID) return true;
-                            else if (nodeID / 512 != collidedPlatformID / 512) break;
+                            if (nodeID == collidedPlatformID)
+                            {
+                                Debug.Log($"nodeID found ({x},{y})  {pathStr}");
+                                return true;
+                            }
+                            else if (nodeID / 512 != collidedPlatformID / 512) //wrong filledChunk
+                            {
+                                break;
+                            }
+                            else if (collidedPlatformID % 512 > 0 && nodeID != collidedPlatformID) //ground tile does not match target
+                            {
+                                break;
+                            }
+                                
                         }
                     }
                     
@@ -78,23 +112,32 @@ namespace NoiseTerrain
             return false;
         }
 
-        private bool IsPeak(int x, int y)
+        private bool IsPeak(int x, int y, string pathStr)
         {
             //check left and right of x for the edge of path
             int xLeft = x, xRight = x;
             while(xLeft >= 0 && path[xLeft,y] >= 0)
             {
-                if (path[xLeft, y] > 0) return true; // found jump area
+                if (path[xLeft, y] > 0)// found jump area
+                {
+                    Debug.Log($"IsPeak left ({xLeft},{y}) x start: {x} {pathStr}");
+                    return true; 
+                }
                 if (path[xLeft, y - 1] >= 0) return false; // found local max, not valid
                 xLeft -= 1;
             }
             while (xRight < path.GetLength(0) && path[xRight, y] >= 0)
             {
-                if (path[xRight, y] > 0) return true; // found jump area
+                if (path[xRight, y] > 0)// found jump area
+                {
+                    Debug.Log($"IsPeak right ({xRight},{y}) x start: {x} {pathStr}");
+                    return true; 
+                }
                 if (path[xRight, y - 1] >= 0) return false; // found local max, not valid
                 xRight += 1;
             }
             if (xLeft < 0 || xRight >= path.GetLength(0)) return false;
+            Debug.Log($"IsPeak left ({xLeft},{y})  right ({xRight},{y}) x start: {x} {pathStr}");
             return true;
         }
     }

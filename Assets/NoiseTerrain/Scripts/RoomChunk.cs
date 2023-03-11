@@ -354,7 +354,7 @@ namespace NoiseTerrain
                 }
 
                 //walking
-                if(y < height - 1 && GetTile(x, y + 1))
+                if(y < height - 1 && GetTile(x, y + 1) && platformID == GetPlatformID(x, y + 1))
                 {
                     if(x > 0 && !GetTile(x - 1, y))
                     {
