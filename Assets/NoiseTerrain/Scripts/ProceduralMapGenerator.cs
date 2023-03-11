@@ -569,25 +569,29 @@ namespace NoiseTerrain
                 }
             }else if (clickFunction == HandleMouseClickFunction.printPlatformPath)
             {
-                if (roomChunk != null && Input.GetMouseButtonUp(0))
+                if(roomChunk != null && Input.GetMouseButtonUp(0))
                 {
-                    // Vector2Int clickChunkID = GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                    Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
-                    if (roomChunk.GetPlatformID(clickTile) == 0)
-                    {
-                        Debug.Log("Finding path");
-                        roomChunk.PrintPath(clickTile, jumpHeight, roomChunk.GetPlatformID(clickTile));
-                    }
-                    else if (roomChunk.GetPlatformID(clickTile) % 256 > 0)
-                    {
-                        Debug.Log("Finding platform connection path");
-                        roomChunk.PrintPath(new Vector2Int(clickTile.x, clickTile.y + 1), jumpHeight, roomChunk.GetPlatformID(clickTile));
-                    }
+                    Vector2 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(clickPos.x), (int)Mathf.Floor(clickPos.y));
 
+                    PrintPlatform(clickTile);
                 }
             }
 
 
+        }
+
+        private void PrintPlatform(Vector2Int startTile)
+        {
+            int platformID = roomChunk.GetPlatformID(startTile);
+            if (platformID == 0)
+            {
+                roomChunk.PrintPath(startTile, jumpHeight, platformID);
+            }
+            else if (platformID % 512 > 0)
+            {
+                roomChunk.PrintPath(new Vector2Int(startTile.x, startTile.y + 1), jumpHeight, platformID);
+            }
         }
         private int startingPlatformID;
         public int generateChunkGraphDepth = 0;
