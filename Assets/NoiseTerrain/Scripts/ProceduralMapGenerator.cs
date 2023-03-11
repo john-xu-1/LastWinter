@@ -492,7 +492,7 @@ namespace NoiseTerrain
 
         Vector2Int lastClickChunkID;
         Vector2Int lastClickID;
-        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater, toggleTile, displayPlatformGraph}
+        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater, toggleTile, displayPlatformGraph, printPlatformPath}
         public HandleMouseClickFunction clickFunction; 
         private void HandleMouseClickDebugging()
         {
@@ -566,6 +566,24 @@ namespace NoiseTerrain
                     Debug.LogWarning($"PlatformIDClicked: {startingPlatformID}  filledChunkID:{filledChunkID} platformID{platformChunkId}");
                     Thread thread = new Thread(GenerateChunkGraphThread);
                     thread.Start();
+                }
+            }else if (clickFunction == HandleMouseClickFunction.printPlatformPath)
+            {
+                if (roomChunk != null && Input.GetMouseButtonUp(0))
+                {
+                    // Vector2Int clickChunkID = GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                    Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+                    if (roomChunk.GetPlatformID(clickTile) == 0)
+                    {
+                        Debug.Log("Finding path");
+                        roomChunk.PrintPath(clickTile, jumpHeight, roomChunk.GetPlatformID(clickTile));
+                    }
+                    else if (roomChunk.GetPlatformID(clickTile) % 256 > 0)
+                    {
+                        Debug.Log("Finding platform connection path");
+                        roomChunk.PrintPath(new Vector2Int(clickTile.x, clickTile.y + 1), jumpHeight, roomChunk.GetPlatformID(clickTile));
+                    }
+
                 }
             }
 

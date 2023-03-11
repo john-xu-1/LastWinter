@@ -1877,7 +1877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 2006923319}
-  generateFromFile: 1
+  generateFromFile: 0
   dungeonHandler: {fileID: 1495851078}
   noiseMapGenerator: {fileID: 853445341}
   gameHandler: {fileID: 0}
@@ -2139,6 +2139,7 @@ MonoBehaviour:
   roomHeight: 0
   setupComplete: 0
   debugging: 1
+  buildMap: 0
 --- !u!4 &1495851079
 Transform:
   m_ObjectHideFlags: 0
@@ -2915,11 +2916,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: roomSize.x
-      value: 6
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: roomSize.y
-      value: 6
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: fixSubChunk
@@ -2943,11 +2944,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: tileRadius.x
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: tileRadius.y
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: waterTilemap
