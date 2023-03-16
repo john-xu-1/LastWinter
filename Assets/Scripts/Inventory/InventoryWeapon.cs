@@ -22,6 +22,8 @@ public class InventoryWeapon : InventoryObjects
     }
     public WeaponTypes weaponType;
 
+    
+
     public GameObject spawnedPrefab1;
     public GameObject spawnedPrefab2;
     public float coolDown;

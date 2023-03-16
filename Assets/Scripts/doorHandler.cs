@@ -12,6 +12,8 @@ public class DoorHandler : MonoBehaviour
         kh = FindObjectOfType<keyHandler>();
     }
 
+    
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform.CompareTag("Player"))
@@ -27,10 +29,12 @@ public class DoorHandler : MonoBehaviour
             {
                 RemoveDoor((Vector2)collision.transform.position + normal);
             }
+            //Debug.Log("?");
 
         }
     }
 
+   
     private void RemoveDoor(Vector2 pos)
     {
         TileBase tile = UtilityTilemap.GetTile(GetComponent<Tilemap>(), pos);

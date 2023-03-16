@@ -18,6 +18,8 @@ public class EffectBase : MonoBehaviour
 
     public Sprite effectIcon;
 
+    public bool effectStart = true;
+
 
     private void Start()
     {
@@ -36,7 +38,7 @@ public class EffectBase : MonoBehaviour
 
     private void Update()
     {
-        updateBehavior();
+        if (effectStart) updateBehavior();
     }
 
     public virtual void updateBehavior()
@@ -51,7 +53,7 @@ public class EffectBase : MonoBehaviour
     
     private void OnTriggerStay2D(Collider2D collision)
     {
-        onTriggerStayBehavior(collision);
+        if (effectStart) onTriggerStayBehavior(collision);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

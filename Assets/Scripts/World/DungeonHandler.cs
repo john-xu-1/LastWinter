@@ -32,6 +32,8 @@ public class DungeonHandler : MonoBehaviour
     public bool debugging = false;
     public List<NoiseTerrain.Chunk> chunks;
 
+    public bool buildMap;
+
     public void MapSetup(int mapIndex)
     {
         MapSetup(worlds.BuiltWorlds[mapIndex]);
@@ -42,8 +44,8 @@ public class DungeonHandler : MonoBehaviour
 
         dungeon = map;
 
-        //mapG.BuildWorld(dungeon);
-        chunks = mapG.BuildWorldChunks(dungeon);
+        if(buildMap) mapG.BuildWorld(dungeon);
+        else chunks = mapG.BuildWorldChunks(dungeon);
 
         worldWidth = dungeon.Width;
         worldHeight = dungeon.Height;
@@ -97,10 +99,10 @@ public class DungeonHandler : MonoBehaviour
                     pickupable.setInventorySystem(inventorySystem);
                 }
 
-                FindObjectOfType<CameraController>().active = true;
+                //FindObjectOfType<CameraController>().active = true;
             }
 
-
+            if (buildMap) FindObjectOfType<PathFinder>().SetMap(0, -worldHeight * roomHeight, worldWidth * roomWidth, 0);
             
             buildingMap = false;
             

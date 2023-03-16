@@ -492,7 +492,7 @@ namespace NoiseTerrain
 
         Vector2Int lastClickChunkID;
         Vector2Int lastClickID;
-        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater, toggleTile, displayPlatformGraph}
+        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater, toggleTile, displayPlatformGraph, printPlatformPath}
         public HandleMouseClickFunction clickFunction; 
         private void HandleMouseClickDebugging()
         {
@@ -568,9 +568,32 @@ namespace NoiseTerrain
                     thread.Start();
                 }
             }
+            else if (clickFunction == HandleMouseClickFunction.printPlatformPath)
+            {
+                if (roomChunk != null && Input.GetMouseButtonUp(0))
+                {
+                    Vector2 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector2Int clickTile = new Vector2Int((int) Mathf.Floor(clickPos.x), (int)Mathf.Floor(clickPos.y));
+                    PrintPlatform(clickTile);
+                }
+            }
 
 
         }
+
+        private void PrintPlatform(Vector2Int startTile )
+        {
+            int platformID = roomChunk.GetPlatformID(startTile);
+            if (platformID == 0)
+            {
+                roomChunk.PrintPath(startTile, jumpHeight, platformID);
+            }
+            else if (platformID % 512 > 0)
+            {
+                roomChunk.PrintPath(new Vector2Int(startTile.x, startTile.y + 1), jumpHeight, platformID);
+            }
+        }
+
         private int startingPlatformID;
         public int generateChunkGraphDepth = 0;
         private void GenerateChunkGraphThread()

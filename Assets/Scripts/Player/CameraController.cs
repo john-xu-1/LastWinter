@@ -49,6 +49,7 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         //target_Offset = Vector3.forward * -10;
+        //if (!active) return;
         origin = transform.position;
         myCamera = GetComponent<Camera>();
         gridSize = FindGridSize();
@@ -295,23 +296,23 @@ public class CameraController : MonoBehaviour
 
     public void setUp(int worldWidth, int worldHeight, int roomWidth, int roomHeight, Transform player)
     {
-        this.worldHeight = worldHeight;
-        this.worldWidth = worldWidth;
-        this.roomHeight = roomHeight;
-        this.roomWidth = roomWidth;
-        target = player;
+        //this.worldHeight = worldHeight;
+        //this.worldWidth = worldWidth;
+        //this.roomHeight = roomHeight;
+        //this.roomWidth = roomWidth;
+        //target = player;
 
 
 
-        target_Offset = Vector3.forward * -10;
-        origin = transform.position;
-        //Camera camera = GetComponent<Camera>();
-        float height = myCamera.orthographicSize * 2;
-        float width = myCamera.aspect * height;
-        gridSize = new Vector2(width, height);
+        //target_Offset = Vector3.forward * -10;
+        //origin = transform.position;
+        ////Camera camera = GetComponent<Camera>();
+        //float height = myCamera.orthographicSize * 2;
+        //float width = myCamera.aspect * height;
+        //gridSize = new Vector2(width, height);
 
-        if (FollowType == CameraFollow.follow) targetOthographicSize = FindMinTargetOthographicSize();
-        else SetCameraSnap();
+        //if (FollowType == CameraFollow.follow) targetOthographicSize = FindMinTargetOthographicSize();
+        //else SetCameraSnap();
 
     }
     int screenHeight = 1080;

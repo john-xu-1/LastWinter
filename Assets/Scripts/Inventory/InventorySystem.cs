@@ -55,6 +55,9 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private InventorySave inventorySave;
 
 
+    public InventoryObjects testObj;
+
+
     //private void Start()
     //{
     //    loadInventory();
@@ -139,6 +142,11 @@ public class InventorySystem : MonoBehaviour
     private void addKey(WorldBuilder.GateTypes keyType)
     {
         FindObjectOfType<keyHandler>().KeyFound(keyType);
+        if (keyType == WorldBuilder.GateTypes.enemy)
+        {
+            AddItem(testObj);
+
+        }
     }
 
     public void removeItem(InventoryObjects item)
