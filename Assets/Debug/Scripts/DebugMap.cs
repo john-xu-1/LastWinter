@@ -322,17 +322,21 @@ namespace Debugging
 
                 if (pathPoints == null) pathPoints = new GameObject[width * worldWidth + 2, height * worldHeight + 2];
 
-                if (!pathPoints[x, y])
+                if (x >= 0 && x < pathPoints.GetLength(0) && y >= 0 && y < pathPoints.GetLength(1))
                 {
+                    if (!pathPoints[x, y])
+                    {
 
-                    PathNode node = Instantiate(pathPrefab).GetComponent<PathNode>();
-                    pathPoints[x, y] = node.gameObject;
-                    node.SetUpPathNode(x, -(y), type);
+                        PathNode node = Instantiate(pathPrefab).GetComponent<PathNode>();
+                        pathPoints[x, y] = node.gameObject;
+                        node.SetUpPathNode(x, -(y), type);
+                    }
+                    else
+                    {
+                        pathPoints[x, y].GetComponent<PathNode>().AddNode(type);
+                    }
                 }
-                else
-                {
-                    pathPoints[x, y].GetComponent<PathNode>().AddNode(type);
-                }
+                
             }
         }
         public void RemovePath(Room room)

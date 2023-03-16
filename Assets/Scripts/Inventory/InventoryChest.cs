@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+//using UnityEngine.Experimental.Rendering.Universal;
 
 public class InventoryChest : MonoBehaviour
 {
@@ -79,7 +79,7 @@ public class InventoryChest : MonoBehaviour
         transform.GetChild(1).GetComponent<SpriteRenderer>().color = chestColor;
 
         
-        transform.GetChild(2).GetComponent<Light2D>().color = chestColor;
+        //transform.GetChild(2).GetComponent<Light2D>().color = chestColor;
 
         addItems(myObjects);
 
