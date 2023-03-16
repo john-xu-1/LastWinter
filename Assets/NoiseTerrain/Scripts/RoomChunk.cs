@@ -281,13 +281,15 @@ namespace NoiseTerrain
             //Debug.Log($"filledChunks.Count: {filledChunks.Count}");
             return filledChunks[filledChunkID-1].platforms[platformID-1];
         }
-        public List<int> GetPlatformEdges(int platformID, int jumpHeight)
+        public List<int> GetPlatformEdges(int platformID, int jumpHeight, bool checkConnection)
         {
             PlatformChunk platform = GetPlatform(platformID);
-            if(platform.connectedPlatforms == null)
+            if(platform.connectedPlatforms == null || checkConnection != platform.checkConnection)
             {
+                platform.checkConnection = checkConnection;
                 platform.SetPath(platformID, jumpHeight);
             }
+            
             return platform.connectedPlatforms;
         }
 

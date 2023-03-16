@@ -40,9 +40,10 @@ namespace NoiseTerrain
             }
         }
         bool debugCheckConnection = false;
+        public bool checkConnection = true;
         private bool CheckConnection(int x, int y)
         {
-            if (debugCheckConnection) return true;
+            if (debugCheckConnection || !checkConnection) return true;
             int xStart = x, yStart = y;
             int exitCounter = 0;
             string pathStr = $"(xStart,yStart) ({xStart},{yStart})";

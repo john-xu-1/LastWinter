@@ -42,7 +42,11 @@ namespace NoiseTerrain
         public int displayCountPerFrame = 1000;
 
         private bool displayPlatformGraph;
-        List<PlatformChunk> platformGraph;
+        List<PlatformChunkGraph> platformGraph;
+        class PlatformChunkGraph {
+            public PlatformChunk platform;
+            public Color graphColor;
+        }
 
         private void OnDestroy()
         {
@@ -67,14 +71,15 @@ namespace NoiseTerrain
             //debug platformGraph
             if (displayPlatformGraph)
             {
-                foreach(PlatformChunk platform in platformGraph)
+                foreach(PlatformChunkGraph platform in platformGraph)
                 {
-                    foreach(int nodeID in platform.connectedPlatforms)
+                    foreach(int nodeID in platform.platform.connectedPlatforms)
                     {
                         PlatformChunk destination = roomChunk.GetPlatform(nodeID);
-                        Vector2 start = platform.GetTilePos(platform.groundTiles[0]);
+                        Vector2 start = platform.platform.GetTilePos(platform.platform.groundTiles[0]);
                         Vector2 dir = destination.GetTilePos(destination.groundTiles[0]) - start;
-                        Debug.DrawRay(start, dir);
+                        Debug.DrawRay(start, dir,platform.graphColor);
+                        //Debug.Log($"{platform.graphColor}");
                     }
                 }
             }
@@ -575,6 +580,7 @@ namespace NoiseTerrain
                     Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(clickPos.x), (int)Mathf.Floor(clickPos.y));
 
                     PrintPlatform(clickTile);
+                    GenerateConnectedChunkGraph();
                 }
             }
 
@@ -595,6 +601,7 @@ namespace NoiseTerrain
         }
         private int startingPlatformID;
         public int generateChunkGraphDepth = 0;
+        public bool checkConnection = false;
         private void GenerateChunkGraphThread()
         {
             List<int> platformNodes = new List<int>();
@@ -607,7 +614,7 @@ namespace NoiseTerrain
                 int platformNodesCount = platformNodes.Count;
                 for (int i = graphListIndex; i < platformNodesCount; i += 1)
                 {
-                    foreach(int nodeDestionationId in roomChunk.GetPlatformEdges(platformNodes[i], jumpHeight))
+                    foreach(int nodeDestionationId in roomChunk.GetPlatformEdges(platformNodes[i], jumpHeight,checkConnection))
                     {
                         if (!platformNodes.Contains(nodeDestionationId)) platformNodes.Add(nodeDestionationId);
                     }
@@ -622,12 +629,169 @@ namespace NoiseTerrain
                 PlatformChunk platform = roomChunk.GetPlatform(nodeID);
                 if (!graphList.Contains(platform))
                 {
-                    roomChunk.GetPlatformEdges(nodeID, jumpHeight);
+                    roomChunk.GetPlatformEdges(nodeID, jumpHeight, checkConnection);
                     graphList.Add(platform);
                 }
             }
+            List<PlatformChunkGraph> platformChunkGraphs = new List<PlatformChunkGraph>();
+            foreach(PlatformChunk platform in graphList)
+            {
+                PlatformChunkGraph platformChunkGraph = new PlatformChunkGraph();
+                platformChunkGraph.platform = platform;
+                platformChunkGraph.graphColor = Color.red;
+                platformChunkGraphs.Add(platformChunkGraph);
+            }
+            platformGraph = platformChunkGraphs;
+            displayPlatformGraph = true;
+        }
 
-            platformGraph = graphList;
+        public void GenerateConnectedChunkGraph()
+        {
+            displayPlatformGraph = false;
+            Thread thread = new Thread(GenerateConnectedChunkGraphThread);
+            thread.Start();
+        }
+        private void GenerateConnectedChunkGraphThread()
+        {
+            //find all platformIDs
+            List<int> platformIDs = new List<int>();
+            int filledChunkIndex = 1;
+            foreach(FilledChunk filledChunk in roomChunk.filledChunks)
+            {
+                int platformIndex = 1;
+                foreach(PlatformChunk platformChunk in filledChunk.platforms)
+                {
+                    int platformID = filledChunkIndex * 512 + platformIndex;
+                    platformIDs.Add(platformID);
+                    //Debug.Log(platformID);
+                    platformIndex++;
+                }
+                filledChunkIndex++;
+            }
+
+            List<int> sourceIDs = new List<int>();
+            for(int i =0; i < platformIDs.Count; i+=1)
+            {
+                int id = platformIDs[i];
+                bool isSource = true;
+                for(int j = 0; j < platformIDs.Count; j += 1)
+                {
+                    if (roomChunk.GetPlatformEdges(platformIDs[j], jumpHeight, checkConnection).Contains(id))
+                    {
+                        isSource = false;
+                        break;
+                    }
+                }
+                if (isSource)
+                {
+                    //Debug.Log($"SourceID {id}");
+                    sourceIDs.Add(id);
+                    //roomChunk.GetPlatform(id).defaultSources.Add(roomChunk.GetPlatform(id));
+                }
+            }
+            Debug.Log($"sourceIDs.Count:{sourceIDs.Count}  platformIDs.Count:{platformIDs.Count}");
+            List<int> sourceIDsCopy = new List<int>(sourceIDs);
+            while(sourceIDsCopy.Count > 0)
+            {
+                int currentSource = sourceIDsCopy[0];
+                sourceIDsCopy.RemoveAt(0);
+                List<int> frontier = new List<int>();
+                frontier.Add(currentSource);
+                while(frontier.Count > 0)
+                {
+                    int current = frontier[0];
+                    frontier.RemoveAt(0);
+                    PlatformChunk platform = roomChunk.GetPlatform(current);
+                    if (!platform.defaultSources.Contains(roomChunk.GetPlatform(currentSource)))
+                    {
+                        platform.defaultSources.Add(roomChunk.GetPlatform(currentSource));
+                        foreach (int connection in platform.connectedPlatforms)
+                        {
+                            frontier.Add(connection);
+                        }
+                    }
+                        
+                }
+            }
+
+            //find all platform connections
+            List<PlatformChunkGraph> platforms = new List<PlatformChunkGraph>();
+            int connectChunkID = 0;
+            Color[] colors = { Color.red, Color.blue, Color.cyan, Color.green, Color.magenta, Color.yellow, Color.white, Color.black };
+            //List<int> visted = new List<int>();
+            //while(sourceIDs.Count > 0)
+            //{
+            //    int platformID = sourceIDs[0];
+            //    sourceIDs.RemoveAt(0);
+            //    List<int> frontier = new List<int>();
+            //    frontier.Add(platformID);
+            //    while(frontier.Count > 0)
+            //    {
+            //        int current = frontier[0];
+            //        //Debug.Log($"current {current}");
+            //        frontier.RemoveAt(0);
+            //        visted.Add(current);
+            //        PlatformChunkGraph platformChunkGraph = new PlatformChunkGraph();
+            //        platformChunkGraph.platform = roomChunk.GetPlatform(current);
+            //        platformChunkGraph.graphColor = colors[connectChunkID % colors.Length];
+
+            //        platforms.Add(platformChunkGraph);
+            //        List<int> connections = roomChunk.GetPlatformEdges(current, jumpHeight, checkConnection);
+            //        foreach (int connectionID in connections)
+            //        {
+            //            if (!frontier.Contains(connectionID) && !visted.Contains(connectionID))
+            //            {
+            //                frontier.Add(connectionID);
+            //                sourceIDs.Remove(connectionID);
+            //            }
+            //        }
+            //    }
+            //    connectChunkID++;
+            //}
+            List<PlatformChunkGraph> chunkGroups = new List<PlatformChunkGraph>();
+            foreach(int platformID in platformIDs)
+            {
+                PlatformChunk platform = roomChunk.GetPlatform(platformID);
+                PlatformChunkGraph platformChunkGraph = new PlatformChunkGraph();
+                platformChunkGraph.platform = platform;
+                platforms.Add(platformChunkGraph);
+                
+                bool foundChunkGroup = false;
+                for(int i = 0; i < chunkGroups.Count; i++)
+                {
+                    if(platform != chunkGroups[i].platform && platform.defaultSources.Count == chunkGroups[i].platform.defaultSources.Count)
+                    {
+                        bool matching = true;
+                        foreach(PlatformChunk source in platform.defaultSources)
+                        {
+                            if (!chunkGroups[i].platform.defaultSources.Contains(source))
+                            {
+                                matching = false;
+                                break;
+                            }
+                        }
+                        if (matching)
+                        {
+                            //Debug.Log($"{platformChunkGraph.platform.nodeID}:{platformChunkGraph.graphColor} -> {chunkGroups[i].platform.nodeID}:{chunkGroups[i].graphColor}");
+                            platformChunkGraph.graphColor = chunkGroups[i].graphColor;
+                            
+                            foundChunkGroup = true;
+                            break;
+                        }
+                    }
+                    
+                }
+                if (!foundChunkGroup)
+                {
+                    chunkGroups.Add(platformChunkGraph);
+                    int colorID = (chunkGroups.Count - 1) % colors.Length;
+                    platformChunkGraph.graphColor = colors[colorID];
+                    //Debug.Log($"{platformChunkGraph.platform.nodeID}:{platformChunkGraph.graphColor}");
+                }
+            }
+            Debug.Log($"chunkGroups.Count:{chunkGroups.Count}  platforms.Count:{platforms.Count}");
+
+            platformGraph = platforms;
             displayPlatformGraph = true;
         }
 
