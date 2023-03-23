@@ -21,11 +21,14 @@ public class ASPGenerator : MonoBehaviour
     protected string jobID = "";
 
     [SerializeField] bool runOnStart = false;
+    private void Awake()
+    {
+        InitializeGenerator(SATISFIABLE, UNSATISFIABLE, TIMEDOUT, ERROR);
+    }
     private void Start()
     {
         if (runOnStart)
         {
-            InitializeGenerator(SATISFIABLE, UNSATISFIABLE, TIMEDOUT, ERROR);
             startGenerator();
         }
 

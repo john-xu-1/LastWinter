@@ -25,7 +25,7 @@ namespace NoiseTerrain
         public Vector2Int roomSize = new Vector2Int(32, 32);
         public Transform target;
 
-        
+
         public TileRules tileRules;
         public TileBase waterTile;
         public Tilemap waterTilemap;
@@ -42,7 +42,12 @@ namespace NoiseTerrain
         public int displayCountPerFrame = 1000;
 
         private bool displayPlatformGraph;
-        List<PlatformChunk> platformGraph;
+        List<PlatformChunkGraph> platformGraph;
+        class PlatformChunkGraph
+        {
+            public PlatformChunk platform;
+            public Color graphColor;
+        }
 
         private void OnDestroy()
         {
@@ -53,7 +58,7 @@ namespace NoiseTerrain
         }
         private void Start()
         {
-            
+
             handleFixTileRulesThread = new Thread(HandleFixTileRulesThread);
             handleFixTileRulesThread.Start();
             //fixTileRules = true;
@@ -67,14 +72,15 @@ namespace NoiseTerrain
             //debug platformGraph
             if (displayPlatformGraph)
             {
-                foreach(PlatformChunk platform in platformGraph)
+                foreach (PlatformChunkGraph platform in platformGraph)
                 {
-                    foreach(int nodeID in platform.connectedPlatforms)
+                    foreach (int nodeID in platform.platform.connectedPlatforms)
                     {
                         PlatformChunk destination = roomChunk.GetPlatform(nodeID);
-                        Vector2 start = platform.GetTilePos(platform.groundTiles[0]);
+                        Vector2 start = platform.platform.GetTilePos(platform.platform.groundTiles[0]);
                         Vector2 dir = destination.GetTilePos(destination.groundTiles[0]) - start;
-                        Debug.DrawRay(start, dir);
+                        Debug.DrawRay(start, dir, platform.graphColor);
+                        //Debug.Log($"{platform.graphColor}");
                     }
                 }
             }
@@ -123,7 +129,7 @@ namespace NoiseTerrain
             // ------------------------- new display chunk -------------------------------
             int displayCountPerFrame = this.displayCountPerFrame;
             int toDisplayIndex = toDisplayChunks.Count - 1;
-            while(toDisplayIndex >= 0 && displayCountPerFrame > 0)
+            while (toDisplayIndex >= 0 && displayCountPerFrame > 0)
             {
                 lock (toFixChunkIDs)
                 {
@@ -140,7 +146,7 @@ namespace NoiseTerrain
             }
             CheckMap(chunkID);
 
-            if(!setupComplete && toDisplayChunks.Count == 0 && toFixChunkIDs.Count == 0)
+            if (!setupComplete && toDisplayChunks.Count == 0 && toFixChunkIDs.Count == 0)
             {
                 setupComplete = true;
             }
@@ -182,7 +188,7 @@ namespace NoiseTerrain
         {
             return (chunkID.y + tileRadius.y) * height + height - 1;
 
-            
+
 
         }
         public void SetTile(Vector2Int pos, bool value)
@@ -222,7 +228,7 @@ namespace NoiseTerrain
             int xOffset = pos.x < 0 ? -1 : 0;
             int yOffset = pos.y > 0 ? 1 : 0;
 
-            return new Vector2Int(xOffset + ((int)pos.x - xOffset )/ width, -yOffset - ((int)pos.y - yOffset )/ height);
+            return new Vector2Int(xOffset + ((int)pos.x - xOffset) / width, -yOffset - ((int)pos.y - yOffset) / height);
         }
 
         public void CheckMap(Vector2Int chunkID)
@@ -263,9 +269,9 @@ namespace NoiseTerrain
                             if (fixTileRules)
                             {
                                 toFixTileRulesChunks.Add(chunkID + new Vector2Int(x, y));
-                                if(x != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(-x, y));
-                                if(y != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(x, -y));
-                                if (x!= 0 && y != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(-x, -y));
+                                if (x != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(-x, y));
+                                if (y != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(x, -y));
+                                if (x != 0 && y != 0) toFixTileRulesChunks.Add(chunkID + new Vector2Int(-x, -y));
                             }
                         }
                     }
@@ -291,14 +297,14 @@ namespace NoiseTerrain
                             //Debug.LogWarning($"Removing {visibleChunkIDs[i]}");
                             ClearMap(visibleChunkIDs[i]);
                             visibleChunkIDs.RemoveAt(i);
-                            
+
                         }
                         else if (!toDisplayChunks.Contains(visibleChunkIDs[i]))
                         {
                             //Debug.LogWarning($"Removing 2 {visibleChunkIDs[i]} {this.toDisplayChunks.Remove(visibleChunkIDs[i])}"); // must remove next line for debug
                             this.toDisplayChunks.Remove(visibleChunkIDs[i]);
                             visibleChunkIDs.RemoveAt(i);
-                            
+
                         }
                     }
 
@@ -314,7 +320,7 @@ namespace NoiseTerrain
                             int maxY = (toBuildChunks[i].y + 1) * height - 1;
 
                             float threshold = 0;
-                            
+
                             //if (toBuildChunks[i].x % roomSize.x == 0 ||  toBuildChunks[i].y % roomSize.y == 0)
                             //    threshold = -1;
                             chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), this);
@@ -326,7 +332,7 @@ namespace NoiseTerrain
                     for (int i = 0; i < toCheckTileRulesChunks.Count; i += 1)
                     {
                         Chunk chunk = GetChunk(toCheckTileRulesChunks[i]);
-                        Utility.CheckTileRules(chunk,tileRules);
+                        Utility.CheckTileRules(chunk, tileRules);
                         // Debug.Log($"Checking Chunk {chunk.chunkID}");
                     }
 
@@ -336,7 +342,7 @@ namespace NoiseTerrain
                         if (!toFixChunkIDs.Contains(toFixTileRulesChunks[i]) && !visibleChunkIDs.Contains(toFixTileRulesChunks[i]) && !this.toDisplayChunks.Contains(toFixTileRulesChunks[i]))
                         {
                             Chunk chunk = GetChunk(toFixTileRulesChunks[i]);
-                            Utility.CheckTileRules(chunk,tileRules); // need to check in case invalid were fixed in an overlapping subchunk
+                            Utility.CheckTileRules(chunk, tileRules); // need to check in case invalid were fixed in an overlapping subchunk
                             if (chunk.hasInvalidTile)
                             {
 
@@ -372,9 +378,9 @@ namespace NoiseTerrain
             platformSetupComplete = false;
             List<Chunk> roomChunks = new List<Chunk>();
             //roomSize should be double the tileRadius if all visible chunks should be in one room
-            for (int x = -roomSize.x/2; x <= roomSize.x/2; x += 1)
+            for (int x = -roomSize.x / 2; x <= roomSize.x / 2; x += 1)
             {
-                for (int y = -roomSize.y/2; y <= roomSize.y/2; y += 1)
+                for (int y = -roomSize.y / 2; y <= roomSize.y / 2; y += 1)
                 {
                     roomChunks.Add(GetChunk(chunkID + new Vector2Int(x, y)));
                 }
@@ -402,9 +408,9 @@ namespace NoiseTerrain
         public List<PlatformChunk> GetPlatforms()
         {
             List<PlatformChunk> platforms = new List<PlatformChunk>();
-            foreach(FilledChunk filledChunk in roomChunk.filledChunks)
+            foreach (FilledChunk filledChunk in roomChunk.filledChunks)
             {
-                foreach(PlatformChunk platform in filledChunk.platforms)
+                foreach (PlatformChunk platform in filledChunk.platforms)
                 {
                     platforms.Add(platform);
                 }
@@ -448,16 +454,18 @@ namespace NoiseTerrain
                         {
                             tile = fullTile;
                         }
-                        /*chunk.*/fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), tile);
+                        /*chunk.*/
+                        fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), tile);
                     }
                     else
                     {
-                        /*chunk.*/fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), null);
+                        /*chunk.*/
+                        fullTilemap.SetTile(new Vector3Int(x + minX, -y - minY, 0), null);
                     }
 
                 }
             }
-            
+
             chunk.BuildChunk(seed);
         }
 
@@ -492,11 +500,11 @@ namespace NoiseTerrain
 
         Vector2Int lastClickChunkID;
         Vector2Int lastClickID;
-        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater, toggleTile, displayPlatformGraph, printPlatformPath}
-        public HandleMouseClickFunction clickFunction; 
+        public enum HandleMouseClickFunction { placePlayer, resetChunk, placeLava, placeWater, toggleTile, displayPlatformGraph, printPlatformPath }
+        public HandleMouseClickFunction clickFunction;
         private void HandleMouseClickDebugging()
         {
-            if(clickFunction == HandleMouseClickFunction.resetChunk)
+            if (clickFunction == HandleMouseClickFunction.resetChunk)
             {
                 Vector2Int clickChunkID = GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                 if (Input.GetMouseButton(0) && (lastClickChunkID == null || lastClickChunkID != clickChunkID))
@@ -513,7 +521,8 @@ namespace NoiseTerrain
                     }
                     lastClickChunkID = clickChunkID;
                 }
-            }else if(clickFunction == HandleMouseClickFunction.toggleTile)
+            }
+            else if (clickFunction == HandleMouseClickFunction.toggleTile)
             {
                 Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
                 if (Input.GetMouseButtonDown(1) || Input.GetMouseButton(1) && (lastClickID == null || lastClickID != clickTile))
@@ -523,14 +532,14 @@ namespace NoiseTerrain
                     if (clickedChunk != null)
                     {
                         bool value = GetTile(clickTile);
-                        SetTile(clickTile , !value);
-                        
+                        SetTile(clickTile, !value);
+
                     }
                     lastClickID = clickTile;
                 }
 
             }
-            else if(clickFunction == HandleMouseClickFunction.placeWater)
+            else if (clickFunction == HandleMouseClickFunction.placeWater)
             {
                 if (Input.GetMouseButtonUp(1))
                 {
@@ -540,7 +549,7 @@ namespace NoiseTerrain
                         StartCoroutine(PlaceLiquid(waterTile, waterTilemap, clickTile));
                     }
                 }
-                
+
             }
             else if (clickFunction == HandleMouseClickFunction.placeLava)
             {
@@ -553,9 +562,10 @@ namespace NoiseTerrain
                     }
                 }
 
-            }else if(clickFunction == HandleMouseClickFunction.displayPlatformGraph)
+            }
+            else if (clickFunction == HandleMouseClickFunction.displayPlatformGraph)
             {
-                if(roomChunk != null && Input.GetMouseButtonUp(0))
+                if (roomChunk != null && Input.GetMouseButtonUp(0))
                 {
                     displayPlatformGraph = false;
                     Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
@@ -573,15 +583,56 @@ namespace NoiseTerrain
                 if (roomChunk != null && Input.GetMouseButtonUp(0))
                 {
                     Vector2 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    Vector2Int clickTile = new Vector2Int((int) Mathf.Floor(clickPos.x), (int)Mathf.Floor(clickPos.y));
+                    Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(clickPos.x), (int)Mathf.Floor(clickPos.y));
+
                     PrintPlatform(clickTile);
+                    GenerateConnectedChunkGraph();
                 }
             }
 
 
         }
 
-        private void PrintPlatform(Vector2Int startTile )
+        public LocomotionSolver ls;
+        public bool generatingLocomotionGraph = false;
+        public IEnumerator GenerateLocomotionGraph()
+        {
+            generatingLocomotionGraph = true;
+            generateLocomotionGraphThreadCompleted = false;
+            Thread thread = new Thread(GenerateLocomotionGraphThread);
+            thread.Start();
+            while (!generateLocomotionGraphThreadCompleted)
+            {
+                yield return null;
+            }
+
+            ls.Solve(nodeChunks);
+
+            while (!ls.ready)
+            {
+                yield return null;
+            }
+
+            generatingLocomotionGraph = false;
+        }
+
+        List<NodeChunk> nodeChunks;
+        bool generateLocomotionGraphThreadCompleted = false;
+        private void GenerateLocomotionGraphThread()
+        {
+            List<int> platformIDs = roomChunk.GetPlatformIDs();
+            nodeChunks = new List<NodeChunk>();
+            foreach (int platformID in platformIDs)
+            {
+                NodeChunk nodeChunk = roomChunk.GetPlatform(platformID);
+
+            }
+            roomChunk.SetPlatformEdges(platformIDs, jumpHeight, checkConnection);
+            generateLocomotionGraphThreadCompleted = true;
+        }
+
+
+        private void PrintPlatform(Vector2Int startTile)
         {
             int platformID = roomChunk.GetPlatformID(startTile);
             if (platformID == 0)
@@ -593,9 +644,9 @@ namespace NoiseTerrain
                 roomChunk.PrintPath(new Vector2Int(startTile.x, startTile.y + 1), jumpHeight, platformID);
             }
         }
-
         private int startingPlatformID;
         public int generateChunkGraphDepth = 0;
+        public bool checkConnection = false;
         private void GenerateChunkGraphThread()
         {
             List<int> platformNodes = new List<int>();
@@ -603,12 +654,12 @@ namespace NoiseTerrain
 
             int graphListIndex = 0;
             int depth = 0;
-            while(depth < generateChunkGraphDepth)
+            while (depth < generateChunkGraphDepth)
             {
                 int platformNodesCount = platformNodes.Count;
                 for (int i = graphListIndex; i < platformNodesCount; i += 1)
                 {
-                    foreach(int nodeDestionationId in roomChunk.GetPlatformEdges(platformNodes[i], jumpHeight))
+                    foreach (int nodeDestionationId in roomChunk.GetPlatformEdges(platformNodes[i], jumpHeight, checkConnection))
                     {
                         if (!platformNodes.Contains(nodeDestionationId)) platformNodes.Add(nodeDestionationId);
                     }
@@ -618,32 +669,149 @@ namespace NoiseTerrain
             }
 
             List<PlatformChunk> graphList = new List<PlatformChunk>();
-            foreach(int nodeID in platformNodes)
+            foreach (int nodeID in platformNodes)
             {
                 PlatformChunk platform = roomChunk.GetPlatform(nodeID);
                 if (!graphList.Contains(platform))
                 {
-                    roomChunk.GetPlatformEdges(nodeID, jumpHeight);
+                    roomChunk.GetPlatformEdges(nodeID, jumpHeight, checkConnection);
                     graphList.Add(platform);
                 }
             }
+            List<PlatformChunkGraph> platformChunkGraphs = new List<PlatformChunkGraph>();
+            foreach (PlatformChunk platform in graphList)
+            {
+                PlatformChunkGraph platformChunkGraph = new PlatformChunkGraph();
+                platformChunkGraph.platform = platform;
+                platformChunkGraph.graphColor = Color.red;
+                platformChunkGraphs.Add(platformChunkGraph);
+            }
+            platformGraph = platformChunkGraphs;
+            displayPlatformGraph = true;
+        }
 
-            platformGraph = graphList;
+        public void GenerateConnectedChunkGraph()
+        {
+            displayPlatformGraph = false;
+            Thread thread = new Thread(GenerateConnectedChunkGraphThread);
+            thread.Start();
+        }
+        private void GenerateConnectedChunkGraphThread()
+        {
+            //find all platformIDs
+            List<int> platformIDs = roomChunk.GetPlatformIDs();
+
+            List<int> sourceIDs = new List<int>();
+            for (int i = 0; i < platformIDs.Count; i += 1)
+            {
+                int id = platformIDs[i];
+                bool isSource = true;
+                for (int j = 0; j < platformIDs.Count; j += 1)
+                {
+                    if (roomChunk.GetPlatformEdges(platformIDs[j], jumpHeight, checkConnection).Contains(id))
+                    {
+                        isSource = false;
+                        break;
+                    }
+                }
+                if (isSource)
+                {
+                    //Debug.Log($"SourceID {id}");
+                    sourceIDs.Add(id);
+                    //roomChunk.GetPlatform(id).defaultSources.Add(roomChunk.GetPlatform(id));
+                }
+            }
+
+            //finds all sources for each platform and adds to defaultSources in the NodeChunk
+            Debug.Log($"sourceIDs.Count:{sourceIDs.Count}  platformIDs.Count:{platformIDs.Count}");
+            List<int> sourceIDsCopy = new List<int>(sourceIDs);
+            while (sourceIDsCopy.Count > 0)
+            {
+                int currentSource = sourceIDsCopy[0];
+                sourceIDsCopy.RemoveAt(0);
+                List<int> frontier = new List<int>();
+                frontier.Add(currentSource);
+                while (frontier.Count > 0)
+                {
+                    int current = frontier[0];
+                    frontier.RemoveAt(0);
+                    PlatformChunk platform = roomChunk.GetPlatform(current);
+                    if (!platform.defaultSources.Contains(roomChunk.GetPlatform(currentSource)))
+                    {
+                        platform.defaultSources.Add(roomChunk.GetPlatform(currentSource));
+                        foreach (int connection in platform.connectedPlatforms)
+                        {
+                            frontier.Add(connection);
+                        }
+                    }
+
+                }
+            }
+
+            //find all platform connections
+            List<PlatformChunkGraph> platforms = new List<PlatformChunkGraph>();
+            int connectChunkID = 0;
+            Color[] colors = { Color.red, Color.blue, Color.cyan, Color.green, Color.magenta, Color.yellow, Color.white, Color.black };
+            
+            List<PlatformChunkGraph> chunkGroups = new List<PlatformChunkGraph>();
+            foreach (int platformID in platformIDs)
+            {
+                PlatformChunk platform = roomChunk.GetPlatform(platformID);
+                PlatformChunkGraph platformChunkGraph = new PlatformChunkGraph();
+                platformChunkGraph.platform = platform;
+                platforms.Add(platformChunkGraph);
+
+                bool foundChunkGroup = false;
+                for (int i = 0; i < chunkGroups.Count; i++)
+                {
+                    if (platform != chunkGroups[i].platform && platform.defaultSources.Count == chunkGroups[i].platform.defaultSources.Count)
+                    {
+                        bool matching = true;
+                        foreach (PlatformChunk source in platform.defaultSources)
+                        {
+                            if (!chunkGroups[i].platform.defaultSources.Contains(source))
+                            {
+                                matching = false;
+                                break;
+                            }
+                        }
+                        if (matching)
+                        {
+                            platformChunkGraph.graphColor = chunkGroups[i].graphColor;
+
+                            foundChunkGroup = true;
+                            break;
+                        }
+                    }
+
+                }
+                if (!foundChunkGroup)
+                {
+                    chunkGroups.Add(platformChunkGraph);
+                    int colorID = (chunkGroups.Count - 1) % colors.Length;
+                    platformChunkGraph.graphColor = colors[colorID];
+                    //Debug.Log($"{platformChunkGraph.platform.nodeID}:{platformChunkGraph.graphColor}");
+                }
+            }
+            Debug.Log($"chunkGroups.Count:{chunkGroups.Count}  platforms.Count:{platforms.Count}");
+
+            platformGraph = platforms;
             displayPlatformGraph = true;
         }
 
         private IEnumerator PlaceLiquid(TileBase liquidTile, Tilemap tilemap, Vector2Int posStart)
         {
             yield return null;
-            if (!tilemap.GetTile(new Vector3Int(posStart.x, posStart.y, 0))){
+            if (!tilemap.GetTile(new Vector3Int(posStart.x, posStart.y, 0)))
+            {
                 tilemap.SetTile(new Vector3Int(posStart.x, posStart.y, 0), liquidTile);
                 if (!GetTile(posStart + Vector2Int.left)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left));
                 if (!GetTile(posStart + Vector2Int.right)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right));
                 if (!GetTile(posStart + Vector2Int.down)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down));
             }
-            
-            
-            
+
+
+
         }
 
         private void HandleFixTileRulesThread()
@@ -667,7 +835,7 @@ namespace NoiseTerrain
                     {
                         lock (chunk)
                         {
-                            Utility.CheckTileRules(chunk,tileRules); // need to check in case invalid were fixed in an overlapping subchunk
+                            Utility.CheckTileRules(chunk, tileRules); // need to check in case invalid were fixed in an overlapping subchunk
                             if (chunk.hasInvalidTile)
                             {
                                 HandleFixTileRules(chunk);
@@ -726,7 +894,7 @@ namespace NoiseTerrain
             }
         }
 
-        
+
 
     }
 }

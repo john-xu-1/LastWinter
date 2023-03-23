@@ -130,9 +130,14 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator ObstaclesSetup()
     {
-        yield return null;
+        StartCoroutine(noiseMapGenerator.GenerateLocomotionGraph());
+        while (noiseMapGenerator.generatingLocomotionGraph)
+        {
+            yield return null;
+        }
+        
         progression += 1 / (float)progressionItemsCount;
-        StartCoroutine(PickablesSetup());
+        //StartCoroutine(PickablesSetup());
     }
     IEnumerator PickablesSetup()
     {
