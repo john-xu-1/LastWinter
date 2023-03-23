@@ -11,6 +11,9 @@ namespace NoiseTerrain
         public int[,] path;
         public List<int> connectedPlatforms;
         protected RoomChunk roomChunk;
+        public List<NodeChunk> defaultSources = new List<NodeChunk>();
+
+        public bool checkConnection;
 
         public virtual void SetPath(int platformID, int jumpHeight)
         {
@@ -23,4 +26,5 @@ namespace NoiseTerrain
         }
     }
 }
+
 
