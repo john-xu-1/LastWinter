@@ -16,4 +16,9 @@ public class ASPLocomotionSolver : LocomotionSolver
         generator.SetNodeChunkMemory(nodeChunks);
         generator.StartGenerator("0");
     }
+
+    public Clingo_02.AnswerSet GetAnswerset()
+    {
+        return generator.GetAnswerSet();
+    }
 }

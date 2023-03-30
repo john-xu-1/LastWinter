@@ -417,6 +417,10 @@ namespace NoiseTerrain
             }
             return platforms;
         }
+        public PlatformChunk GetPlatform(int platformID)
+        {
+            return roomChunk.GetPlatform(platformID);
+        }
 
         public override void GenerateMap(int seed)
         {
@@ -625,7 +629,7 @@ namespace NoiseTerrain
             foreach (int platformID in platformIDs)
             {
                 NodeChunk nodeChunk = roomChunk.GetPlatform(platformID);
-
+                nodeChunks.Add(nodeChunk);
             }
             roomChunk.SetPlatformEdges(platformIDs, jumpHeight, checkConnection);
             generateLocomotionGraphThreadCompleted = true;

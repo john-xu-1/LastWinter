@@ -2892,6 +2892,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: ls
+      value: 
+      objectReference: {fileID: 2132609659}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: seed
       value: 2
       objectReference: {fileID: 0}
@@ -3278,6 +3282,105 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2006923319}
   m_CullTransparentMesh: 1
+--- !u!1 &2132609657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2132609660}
+  - component: {fileID: 2132609659}
+  - component: {fileID: 2132609658}
+  - component: {fileID: 2132609661}
+  m_Layer: 0
+  m_Name: LocomotionSolver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2132609658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132609657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b95974e8112884d83dd7274cf9bfd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cpus: 4
+  timeout: 100
+  solver: {fileID: 2132609661}
+  runOnStart: 0
+--- !u!114 &2132609659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132609657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aea91a64dfe49134091eb1c6e57cc4b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generator: {fileID: 2132609658}
+--- !u!4 &2132609660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132609657}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2132609661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132609657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b473fdfdcbb38a84f89e1371e5c5f620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  threadPriority: 32
+  aspFilePath: DataFiles/ASPFiles/queens.txt
+  clingoExecutablePathMacOS: DataFiles/Clingo/clingo
+  clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
+  AdditionalArguments: 
+  maxDuration: 10
+  FindMultipleSolutions: 0
+  numOfSolutionsWanted: 1
+  _seed: 42
+  useRandomSeed: 0
+  saveToFile: 1
+  answerSet:
+    Solver: 
+    Input: []
+    Call:
+      Witnesses:
+        Value:
+          RawValue: []
+    Result: 
+    Time:
+      Total: 0
+      Solve: 0
+      Model: 0
+      Unsat: 0
+      CPU: 0
 --- !u!1001 &6843248305299137793
 PrefabInstance:
   m_ObjectHideFlags: 0
