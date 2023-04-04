@@ -90,12 +90,12 @@ namespace NoiseTerrain
         {
             //check left and right of x for the edge of path
             int xLeft = x, xRight = x;
-            while (path[xLeft, y] >= 0)
+            while (xLeft >= 0 && path[xLeft, y] >= 0)
             {
-                if (path[xLeft, y - 1] >= 0) return false;
+                if (path[xLeft, y - 1] >= 0 ) return false;
                 xLeft -= 1;
             }
-            while (path[xRight, y] >= 0)
+            while (xRight < path.GetLength(0) && path[xRight, y] >= 0)
             {
                 if (path[xRight, y - 1] >= 0) return false;
                 xRight++;

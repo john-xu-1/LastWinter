@@ -11,10 +11,10 @@ public class ASPLocomotionSolver : LocomotionSolver
     {
         return generator.done;
     }
-    public override void Solve(List<NodeChunk> nodeChunks)
+    public override void Solve(List<NodeChunk> nodeChunks, int seed)
     {
         generator.SetNodeChunkMemory(nodeChunks);
-        generator.StartGenerator("0");
+        generator.StartGenerator("0",seed);
     }
 
     public Clingo_02.AnswerSet GetAnswerset()

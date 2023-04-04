@@ -28,6 +28,7 @@ public class SceneLoader : MonoBehaviour
 
     void Start()
     {
+        seed = noiseMapGenerator.seed;
         StartSetup();
     }
 
@@ -148,11 +149,11 @@ public class SceneLoader : MonoBehaviour
             yield return null;
         }
         progression += 1 / (float)progressionItemsCount;
-        //StartCoroutine(EnemiesSetup());
+        StartCoroutine(EnemiesSetup());
     }
     IEnumerator EnemiesSetup()
     {
-        StartCoroutine(enemySetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed, false));
+        StartCoroutine(enemySetup.InitializeSetup(GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset(), seed, false));
         while (!enemySetup.setupComplete)
         {
             yield return null;
@@ -164,7 +165,7 @@ public class SceneLoader : MonoBehaviour
     IEnumerator PlayerSetup()
     {
         //StartCoroutine(playerSetup.InitializeSetup(minX, maxX, minY + 2, maxY - 2, seed));
-        StartCoroutine(playerSetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed));
+        StartCoroutine(playerSetup.InitializeSetup(GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset(), seed));
         while (!playerSetup.setupComplete)
         {
             yield return null;
@@ -261,7 +262,39 @@ public class PlayerSetup : Setup
     {
         throw new System.NotImplementedException();
     }
+    public IEnumerator InitializeSetup(Clingo_02.AnswerSet answerSet, int seed)
+    {
+        System.Random random = new System.Random(seed);
+        foreach (List<string> atom in answerSet.Value["piece"])
+        {
+            int platformID = 0;
+            GameObject prefab = null;
+            if (atom[0] == "player")
+            {
+                prefab = playerPrefab;
+                platformID = int.Parse(atom[1]);
+            }
+            if(platformID > 0)
+            {
+                NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);
+                Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
+                Vector2Int groundPos = platform.GetTilePos(ground);
+                GameObject player = GameObject.Instantiate(playerPrefab);
+                player.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1);
+                GameObject.FindObjectOfType<GameHandler>().StartGameHandler(player);
+                player.GetComponent<HealthPlayer>().GH = GameObject.FindObjectOfType<GameHandler>().gameObject;
+            }
+        }
 
+
+        //load inventorySystem
+        GameObject.Instantiate(inventorySystemPrefab);
+
+        Debug.Log("PlayerSetup Complete");
+        setupComplete = true;
+        yield return null;
+
+    }
     public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed)
     {
         System.Random random = new System.Random(seed);
@@ -316,6 +349,52 @@ public class EnemySetup : Setup
     public NoiseTerrain.ProceduralMapGenerator map;
 
     public int attempts = 10;
+    public IEnumerator InitializeSetup(Clingo_02.AnswerSet answerSet, int seed, bool setActive)
+    {
+        yield return null;
+        System.Random random = new System.Random(seed);
+        foreach (List<string> atom in answerSet.Value["piece"])
+        {
+            int platformID = 0;
+            GameObject prefab = null;
+            if (atom[0] == "missile_lancher")
+            {
+                prefab = enemies[0];
+                platformID = int.Parse(atom[1]);
+            }
+            else if (atom[0] == "rolla_boi")
+            {
+                prefab = enemies[1];
+                platformID = int.Parse(atom[1]);
+            }
+            else if (atom[0] == "shotgun_boi")
+            {
+                prefab = enemies[2];
+                platformID = int.Parse(atom[1]);
+            }
+            else if (atom[0] == "bounce_boi")
+            {
+                prefab = enemies[3];
+                platformID = int.Parse(atom[1]);
+            }
+            if (platformID > 0)
+            {
+                GameObject enemy = GameObject.Instantiate(prefab);
+                NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);
+                Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
+                Vector2Int groundPos = platform.GetTilePos(ground);
+                enemy.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1.6f);
+                NoiseTerrain.Chunk myChunk = map.GetChunk(map.GetChunkID(enemy.transform.position));
+                enemy.GetComponent<ChunkObjectEnemy>().mychunk = myChunk;
+                myChunk.AddChunkObject(enemy.GetComponent<ChunkObjectEnemy>());
+
+                enemy.SetActive(setActive);
+            }
+
+        }
+        
+        setupComplete = true;
+    }
     public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed, bool setActive)
     {
         yield return null;
@@ -422,6 +501,7 @@ public class ItemSetup : Setup
             }
             
         }
+        setupComplete = true;
     }
 
     public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed)

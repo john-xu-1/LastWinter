@@ -76,6 +76,13 @@ public class ASPGenerator : MonoBehaviour
         }
     }
 
+    public void StartGenerator(string jobID, int seed)
+    {
+        solver.Seed = seed;
+        this.jobID = jobID;
+        initializeGenerator();
+        startGenerator();
+    }
 
     public void StartGenerator(string jobID)
     {

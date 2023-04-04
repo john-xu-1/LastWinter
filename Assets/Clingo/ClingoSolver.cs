@@ -42,7 +42,7 @@ namespace Clingo_02
         protected Status status = Status.UNINITIATED;
 
 
-        public int Seed { get { return seed; } }
+        public int Seed { get { return seed; } set { _seed = value; } }
         public bool MoreSolutions { get { return moreSolutions; } }
         public int SolutionsFound { get { return totalSolutionsFound; } }
         public double Duration { get { return duration; } }

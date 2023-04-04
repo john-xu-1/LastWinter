@@ -610,7 +610,7 @@ namespace NoiseTerrain
                 yield return null;
             }
 
-            ls.Solve(nodeChunks);
+            ls.Solve(nodeChunks, seed);
 
             while (!ls.ready)
             {
