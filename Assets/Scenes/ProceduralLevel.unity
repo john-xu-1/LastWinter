@@ -123,6 +123,105 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &14347606
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 14347610}
+  - component: {fileID: 14347609}
+  - component: {fileID: 14347608}
+  - component: {fileID: 14347607}
+  m_Layer: 0
+  m_Name: LocomotionSolver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &14347607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14347606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b473fdfdcbb38a84f89e1371e5c5f620, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  threadPriority: 32
+  aspFilePath: DataFiles/ASPFiles/queens.txt
+  clingoExecutablePathMacOS: /opt/homebrew/bin/clingo
+  clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
+  AdditionalArguments: 
+  maxDuration: 10
+  FindMultipleSolutions: 0
+  numOfSolutionsWanted: 1
+  _seed: 42
+  useRandomSeed: 0
+  saveToFile: 1
+  answerSet:
+    Solver: 
+    Input: []
+    Call:
+      Witnesses:
+        Value:
+          RawValue: []
+    Result: 
+    Time:
+      Total: 0
+      Solve: 0
+      Model: 0
+      Unsat: 0
+      CPU: 0
+--- !u!114 &14347608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14347606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac6c05404c1ea482b9fcdd73bbbd8834, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cpus: 4
+  timeout: 100
+  solver: {fileID: 1233206644}
+  runOnStart: 0
+--- !u!114 &14347609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14347606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1aed60b7d1c49138501430aa8ade47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generator: {fileID: 14347608}
+--- !u!4 &14347610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14347606}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &85257488
 GameObject:
   m_ObjectHideFlags: 0
@@ -2892,6 +2991,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: ls
+      value: 
+      objectReference: {fileID: 14347609}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: seed
       value: 2
       objectReference: {fileID: 0}
@@ -2920,6 +3023,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+      propertyPath: lacunarity
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: noiseScale
       value: 12
       objectReference: {fileID: 0}
@@ -2945,7 +3052,7 @@ PrefabInstance:
       objectReference: {fileID: 1757039166}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: persistance
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: fixTileRules

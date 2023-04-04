@@ -137,17 +137,18 @@ public class SceneLoader : MonoBehaviour
         }
         
         progression += 1 / (float)progressionItemsCount;
-        //StartCoroutine(PickablesSetup());
+        StartCoroutine(PickablesSetup());
     }
     IEnumerator PickablesSetup()
     {
-        StartCoroutine(itemSetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed));
+        //StartCoroutine(itemSetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed));
+        StartCoroutine(itemSetup.InitializeSetup(GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset(), seed));
         while (!itemSetup.setupComplete)
         {
             yield return null;
         }
         progression += 1 / (float)progressionItemsCount;
-        StartCoroutine(EnemiesSetup());
+        //StartCoroutine(EnemiesSetup());
     }
     IEnumerator EnemiesSetup()
     {
@@ -384,6 +385,49 @@ public class ItemSetup : Setup
     public int itemCount = 5;
 
     public List<int> placedItems = new List<int>();
+
+    public IEnumerator InitializeSetup (Clingo_02.AnswerSet answerSet, int seed)
+    {
+        yield return null;
+        System.Random random = new System.Random(seed);
+        foreach (List<string> atom in answerSet.Value["piece"])
+        {
+            int platformID = 0;
+            GameObject prefab = null;
+            if (atom[0] == "drone_controller")
+            {
+                prefab = items[0];
+                platformID = int.Parse(atom[1]);
+            } else if (atom[0] == "magnetized_shifter")
+            {
+                prefab = items[1];
+                platformID = int.Parse(atom[1]);
+            }
+            else if (atom[0] == "old_shotgun")
+            {
+                prefab = items[2];
+                platformID = int.Parse(atom[1]);
+            }
+            else if (atom[0] == "rainy_day")
+            {
+                prefab = items[3];
+                platformID = int.Parse(atom[1]);
+            }
+            if (platformID > 0)
+            {
+                NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);
+                Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
+                Vector2Int groundPos = platform.GetTilePos(ground);
+                GameObject item = GameObject.Instantiate(prefab);
+                item.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 2);
+
+            }
+
+
+
+
+        }
+    }
 
 
     public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed)
