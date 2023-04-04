@@ -2969,7 +2969,7 @@ PrefabInstance:
       objectReference: {fileID: 85257494}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: clickFunction
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: fixTileRuleBorder

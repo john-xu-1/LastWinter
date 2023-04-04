@@ -39,14 +39,39 @@ public class ASPLocomotionGenerator : ASPGenerator
             %% place pieces on nodes %%
             1{{piece(player,NodeID): node(NodeID)}}1.
             enemy_min{{piece(Enemy,NodeID): node(NodeID),piece_enemy_types(Enemy)}}enemy_max.
+            :- piece_enemy_types(Type), not piece(Type,_).
+
+            %% only one typ of each weapon %%
             4{{piece(Weapon,NodeID): node(NodeID), piece_weapon_types(Weapon)}}4.
+            :- piece_weapon_types(Type), not piece(Type,_). 
+
+            %% only one piece per room %%
             :- Count = {{piece(_,NodeID)}}, node(NodeID), Count > 1.
+
+            %% start and end nodes %%
+            start(NodeID) :- piece(player, NodeID).
+            1{{end(NodeID):node(NodeID)}}1.
+            
+            %% flood sinks not on end path %%
+            path(NodeID, 0, PathID) :- node(NodeID), PathID = NodeID.
+            path(NodeID, Step + 1, PathID) :- edge(Source, NodeID), path(Source, Step, PathID), Step < 100.
+            sink(PathID) :- node(PathID), end(NodeID), not path(NodeID,_,PathID), path(PathID,_).
+            sink_source(NodeID, SinkID) :- edge(NodeID, SinkID), sink(SinkID), not sink(NodeID).
 
             %% player reach every piece %%
             path(NodeID, 0) :- piece(player,NodeID).
             path(NodeID, Step + 1) :- edge(Source, NodeID), path(Source, Step), Step < 100.
             :- piece(_,NodeID), not path(NodeID,_), node(NodeID).
+            :- end(NodeID), not path(NodeID,_).
+
+            %% every piece must be on a node that has a path to the end %%
+            :- piece(_,PathID), end(NodeID), not path(NodeID,_,PathID).
             
+            #show piece/2.
+            #show sink/1.
+            #show start/1.
+            #show end/1.
+            #show sink_source/2.
         ";
 
         return aspCode + GetNodeChunksMemory();
