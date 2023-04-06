@@ -92,16 +92,6 @@ namespace NoiseTerrain
 
             return chunks[xID, yID].GetTile(x, y);
 
-            //if (x <= maxTile.x && x >= minTile.x && y <= maxTile.y && y >= minTile.y)
-            //{
-
-            //}
-            //else
-            //{
-            //    Debug.LogWarning($"x:{x} y:{y} not in roomChunk");
-            //    return true;
-            //}
-
         }
         public void SetFilledChunks(int jumpHeight)
         {
@@ -211,7 +201,11 @@ namespace NoiseTerrain
         public int GetPlatformID(Vector2Int tile)
         {
             if (tile.x - minTile.x < 0 || tile.x - minTile.x > width - 1 || -tile.y - maxTile.y < 0 || -tile.y - maxTile.y > height - 1)
+            {
+                Debug.Log("Out of bounds");
                 return -1;
+            }
+                
             else
             {
                 int filledChunkID = filledChunkIDs[tile.x - minTile.x, -tile.y - maxTile.y] * 512;

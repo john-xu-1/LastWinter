@@ -577,7 +577,7 @@ namespace NoiseTerrain
                     startingPlatformID = roomChunk.GetPlatformID(clickTile);
                     int filledChunkID = startingPlatformID / 512;
                     int platformChunkId = startingPlatformID % 512;
-                    Debug.LogWarning($"PlatformIDClicked: {startingPlatformID}  filledChunkID:{filledChunkID} platformID{platformChunkId}");
+                    Debug.LogWarning($"clickTile: {clickTile} PlatformIDClicked: {startingPlatformID}  filledChunkID:{filledChunkID} platformID{platformChunkId}");
                     Thread thread = new Thread(GenerateChunkGraphThread);
                     thread.Start();
                 }
@@ -814,8 +814,16 @@ namespace NoiseTerrain
                 if (!GetTile(posStart + Vector2Int.down)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down));
             }
 
+        }
 
-
+        public void GenerateLiquid(int sourceID, int sinkID)
+        {
+            NodeChunk node = roomChunk.GetPlatform(sourceID);
+            Vector2Int fluidStart = node.GetFluidEdge(sinkID);
+            if(!roomChunk.GetTile(fluidStart.x, fluidStart.y))
+            {
+                StartCoroutine(PlaceLiquid(waterTile, waterTilemap, fluidStart));
+            }
         }
 
         private void HandleFixTileRulesThread()
