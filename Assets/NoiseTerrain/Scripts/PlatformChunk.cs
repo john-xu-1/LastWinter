@@ -112,14 +112,16 @@ namespace NoiseTerrain
                 if (ground.x > rEdge.x) rEdge = ground;
                 if (ground.x < lEdge.x) lEdge = ground;
             }
+            //rEdge = GetTilePos(rEdge);
+            //lEdge = GetTilePos(lEdge);
             if(rEdge.x < path.GetLength(0) - 1 && !roomChunk.GetTile(rEdge.x + 1, rEdge.y) && FindSink(sinkID, new Vector2Int(rEdge.x + 1, rEdge.y))){
-                return new Vector2Int(rEdge.x + 1, rEdge.y);
+                return /*GetTilePos(*/ new Vector2Int(rEdge.x + 1, rEdge.y)/*)*/;
             }else if (lEdge.x > 0 && !roomChunk.GetTile(lEdge.x - 1, lEdge.y) && FindSink(sinkID, new Vector2Int(lEdge.x - 1, lEdge.y)))
             {
-                return new Vector2Int(lEdge.x - 1, lEdge.y);
+                return /*GetTilePos(*/new Vector2Int(lEdge.x - 1, lEdge.y)/*)*/;
             }
             Debug.LogWarning("Sink not found!");
-            return rEdge;
+            return /*GetTilePos(*/rEdge/*)*/;
         }
 
         private bool FindSink(int sinkID, Vector2Int edgeStart)
@@ -133,8 +135,8 @@ namespace NoiseTerrain
             Debug.Log(sinkPath + " | " + edgeStart);
             if(roomChunk.GetTile(edgeStart.x, edgeStart.y))
             {
-                Debug.Log($"chunkNode:{nodeID} sinkID?{sinkID}:{roomChunk.GetPlatformID(new Vector2Int(edgeStart.x, -edgeStart.y))}");
-                return roomChunk.GetPlatformID(new Vector2Int(edgeStart.x, -edgeStart.y)) == sinkID;
+                Debug.Log($"chunkNode:{nodeID} sinkID?{sinkID}:{roomChunk.GetPlatformID(/*GetTilePos(*/new Vector2Int(edgeStart.x, -edgeStart.y)/*)*/)}");
+                return roomChunk.GetPlatformID(/*GetTilePos(*/new Vector2Int(edgeStart.x, -edgeStart.y)/*)*/) == sinkID;
             }
             else
             {

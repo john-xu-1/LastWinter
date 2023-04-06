@@ -8,6 +8,7 @@ namespace NoiseTerrain
 {
     public class ProceduralMapGenerator : MapGenerator
     {
+        public bool closedLevel;
         public Vector2Int chunkID;
         public Vector2Int _chunkRadius = new Vector2Int(5, 4);
         public Vector2Int _tileRulesRadius = new Vector2Int(4, 3);
@@ -203,7 +204,7 @@ namespace NoiseTerrain
         {
             int x = ((pos.x % width) + width) % width;
             int y = ((-pos.y % height) + height) % height;
-            Debug.Log($"{x} {y}");
+            //Debug.Log($"{x} {y}");
             return GetChunk(GetChunkID(pos)).GetTile(x, y);
         }
         public void AddChunk(Chunk chunk)
@@ -321,8 +322,8 @@ namespace NoiseTerrain
 
                             float threshold = 0;
 
-                            //if (toBuildChunks[i].x % roomSize.x == 0 ||  toBuildChunks[i].y % roomSize.y == 0)
-                            //    threshold = -1;
+                            if (closedLevel && (toBuildChunks[i].x % roomSize.x == 0 || toBuildChunks[i].y % roomSize.y == 0))
+                                threshold = -1;
                             chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), this);
                             AddChunk(chunk);
                         }
@@ -822,7 +823,7 @@ namespace NoiseTerrain
             Vector2Int fluidStart = node.GetFluidEdge(sinkID);
             if(!roomChunk.GetTile(fluidStart.x, fluidStart.y))
             {
-                StartCoroutine(PlaceLiquid(waterTile, waterTilemap, fluidStart));
+                StartCoroutine(PlaceLiquid(waterTile, waterTilemap, new Vector2Int(fluidStart.x, -fluidStart.y)));
             }
         }
 
