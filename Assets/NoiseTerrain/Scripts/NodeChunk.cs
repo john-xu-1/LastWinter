@@ -23,6 +23,11 @@ namespace NoiseTerrain
         {
             return new Vector2Int(tile.x + roomChunk.minTile.x, -tile.y + 1 - roomChunk.maxTile.y);
         }
+
+        public virtual Vector2Int GetFluidEdge(int sinkID)
+        {
+            return default;
+        }
     }
 }
 

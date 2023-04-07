@@ -818,6 +818,16 @@ namespace NoiseTerrain
 
         }
 
+        public void GenerateLiquid (int sourceID, int sinkID)
+        {
+            NodeChunk node = roomChunk.GetPlatform(sourceID);
+            Vector2Int fluidStart = node.GetFluidEdge(sinkID);
+            if (!roomChunk.GetTile(fluidStart.x, fluidStart.y))
+            {
+                StartCoroutine(PlaceLiquid(waterTile,waterTilemap,new Vector2Int(fluidStart.x, fluidStart.y - 1)));
+            }
+        }
+
         private void HandleFixTileRulesThread()
         {
             while (fixTileRules)

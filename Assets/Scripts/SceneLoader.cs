@@ -136,6 +136,11 @@ public class SceneLoader : MonoBehaviour
         {
             yield return null;
         }
+
+        foreach (List<string> atom in GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset().Value["sink_source"])
+        {
+            noiseMapGenerator.GenerateLiquid(int.Parse(atom[0]), int.Parse(atom[1]));
+        }
         
         progression += 1 / (float)progressionItemsCount;
         StartCoroutine(PickablesSetup());

@@ -42,7 +42,7 @@ namespace NoiseTerrain
         bool debugCheckConnection = false;
         private bool CheckConnection(int x, int y)
         {
-            if (debugCheckConnection) return true;
+            if (debugCheckConnection || !checkConnection) return true;
             bool validConnection = false;
             int exitCounter = 0;
             int xStart = x;
@@ -102,6 +102,52 @@ namespace NoiseTerrain
             }
             return true;
         }
+
+        public override Vector2Int GetFluidEdge(int sinkID)
+        {
+
+            Vector2Int rEdge = groundTiles[0];
+            Vector2Int lEdge = groundTiles[0];
+            foreach (Vector2Int ground in groundTiles)
+            {
+                if (ground.x > rEdge.x) rEdge = ground;
+                if (ground.x < lEdge.x) lEdge = ground;
+            }
+
+            if (rEdge.x < path.GetLength(0) - 1 && !roomChunk.GetTile(rEdge.x + 1, rEdge.y) && FindSink(sinkID, new Vector2Int(rEdge.x + 1, rEdge.y)))
+            {
+                return new Vector2Int(rEdge.x + 1, rEdge.y);
+            }
+            else if(lEdge.x > 0 && !roomChunk.GetTile(lEdge.x - 1, lEdge.y) && FindSink(sinkID, new Vector2Int(lEdge.x - 1, lEdge.y)))
+            {
+                return new Vector2Int(lEdge.x - 1, lEdge.y);
+            }
+            Debug.Log("Sink not found");
+
+            return rEdge;
+
+        }
+
+        private bool FindSink(int sinkID, Vector2Int edgeStart)
+        {
+            
+            while (!roomChunk.GetTile(edgeStart.x, edgeStart.y) && edgeStart.y < path.GetLength(1) - 1)
+            {
+                
+                edgeStart = new Vector2Int(edgeStart.x, edgeStart.y + 1);
+            }
+
+            if (roomChunk.GetTile (edgeStart.x, edgeStart.y))
+            {
+                return roomChunk.GetPlatformID(new Vector2Int(edgeStart.x, -edgeStart.y)) == sinkID;
+            }
+            else
+            {
+                //fell out of map
+                return false;
+            }
+        }
+
     }
 
 }

@@ -2897,7 +2897,7 @@ PrefabInstance:
       objectReference: {fileID: 2132609659}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: seed
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
       propertyPath: width
@@ -3315,7 +3315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cpus: 4
   timeout: 100
-  solver: {fileID: 2132609661}
+  solver: {fileID: 1233206644}
   runOnStart: 0
 --- !u!114 &2132609659
 MonoBehaviour:
@@ -3358,7 +3358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threadPriority: 32
   aspFilePath: DataFiles/ASPFiles/queens.txt
-  clingoExecutablePathMacOS: DataFiles/Clingo/clingo
+  clingoExecutablePathMacOS: /opt/homebrew/bin/clingo
   clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
   AdditionalArguments: 
   maxDuration: 10
