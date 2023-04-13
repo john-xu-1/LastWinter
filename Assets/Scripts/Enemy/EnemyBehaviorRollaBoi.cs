@@ -32,107 +32,24 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
 
         if (gravity.y < 0) //down
         {
-            if (movingRight) ///movingRight
-            {
-                if (!hitRight && hitDown)
-                {
-                    //rb.AddForce(gravity);
-                    rb.velocity = Vector2.right * speed;
-                }
-                else if (!hitDown && !hitRight && !hitLeft)
-                {
-                    rb.AddForce(gravity * speed);
-                    rb.velocity = new Vector2(rb.velocity.x - Time.fixedDeltaTime * 1.5f, rb.velocity.y);
-                }
-                else if (hitLeft)
-                {
-                    gravity = Vector2.left;
-                    rb.velocity = Vector2.left * speed + Vector2.down * speed;
-                }else if (hitRight)
-                {
-                    gravity = Vector2.right;
-                    //rb.velocity 
-                }
-            }
-            else
-            {
-
-            }
+            if (movingRight) HandleMovement(hitRight, hitDown, hitLeft, Vector2.right, Vector2.down, Vector2.left);
+            else HandleMovement(hitLeft, hitDown, hitRight, Vector2.left, Vector2.down, Vector2.right);
         }
         else if (gravity.y > 0)//up
         {
-            if (movingRight) //movingLeft
-            {
-                if (!hitLeft && hitUp)
-                {
-                    //rb.AddForce(gravity);
-                    rb.velocity = Vector2.left * speed;
-                }
-                else if (!hitLeft && !hitUp && !hitRight)
-                {
-                    rb.AddForce(gravity * speed);
-                    rb.velocity = new Vector2(rb.velocity.x + Time.fixedDeltaTime * 1.5f, rb.velocity.y);
-                }
-                else if (hitRight)
-                {
-                    gravity = Vector2.right;
-                    rb.velocity = Vector2.right * speed + Vector2.up * speed;
-                }else if (hitLeft)
-                {
-                    gravity = Vector2.left;
-                }
-            }
+            if (movingRight) HandleMovement(hitLeft, hitUp, hitRight, Vector2.left, Vector2.up, Vector2.right);
+            else HandleMovement(hitRight,  hitUp, hitLeft, Vector2.right, Vector2.up, Vector2.left);
 
         }
         else if (gravity.x < 0)//left
         {
-            if (movingRight) //movingDown
-            {
-                if (!hitDown && hitLeft)
-                {
-                    //rb.AddForce(gravity);
-                    rb.velocity = Vector2.down * speed;
-                }
-                else if (!hitDown && !hitLeft && !hitUp)
-                {
-//                    Debug.Log("!hitDown && !hitLeft");
-                    rb.AddForce(gravity * speed);
-                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + Time.fixedDeltaTime * 1.5f);
-                }
-                else if (hitUp)
-                {
-                    gravity = Vector2.up;
-                    rb.velocity = Vector2.left * speed + Vector2.up * speed;
-                }else if (hitDown)
-                {
-                    gravity = Vector2.down;
-                }
-            }
+            if (movingRight) HandleMovement(hitDown, hitLeft, hitUp, Vector2.down, Vector2.left, Vector2.up);
+            else HandleMovement(hitUp,  hitLeft, hitDown, Vector2.up, Vector2.left, Vector2.down);
         }
         else if (gravity.x > 0)//right
         {
-            if (movingRight) //movingUp
-            {
-                if (!hitUp && hitRight)
-                {
-                    //rb.AddForce(gravity);
-                    rb.velocity = Vector2.up * speed;
-                }
-                else if (!hitUp && !hitRight && !hitDown)
-                {
-//                    Debug.Log("!hitDown && !hitLeft");
-                    rb.AddForce(gravity * speed);
-                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - Time.fixedDeltaTime * 1.5f);
-                }
-                else if (hitDown)
-                {
-                    gravity = Vector2.down;
-                    rb.velocity = Vector2.down * speed + Vector2.right * speed;
-                }else if (hitUp)
-                {
-                    gravity = Vector2.up;
-                }
-            }
+            if (movingRight) HandleMovement(hitUp, hitRight, hitDown, Vector2.up, Vector2.right, Vector2.down);
+            else HandleMovement(hitDown, hitRight,  hitUp, Vector2.down, Vector2.right, Vector2.up);
         }
 
 
@@ -159,6 +76,29 @@ public class EnemyBehaviorRollaBoi : EnemyBehaviorBase
     {
         RaycastHit2D hit = Physics2D.Raycast(direction.normalized * radius + (Vector2)transform.position, direction, distance, groundLayer);
         return hit;
+    }
+
+    private void HandleMovement(bool hitForward, bool hitGroundward, bool hitBackward, Vector2 forward, Vector2 groundward, Vector2 backward)
+    {
+        if (!hitForward && hitGroundward) //forward  groundward
+        {
+            rb.velocity = forward * speed;
+        }
+        else if (!hitGroundward && !hitForward && !hitBackward) // rounding corner groundward forward backward
+        {
+            rb.AddForce(gravity * speed);
+            int sign = movingRight ? 1 : -1;
+            rb.velocity = new Vector2(rb.velocity.x + sign * gravity.y * Time.fixedDeltaTime * 1.0f, rb.velocity.y - sign * gravity.x * Time.fixedDeltaTime * 1.0f);
+        }
+        else if (hitBackward && !hitGroundward) // exit out of rounding corner
+        {
+            gravity = backward;
+            rb.velocity = backward * speed + groundward * speed;
+        }
+        else if (hitForward)
+        {
+            gravity = forward;
+        }
     }
 }
 

@@ -19,8 +19,10 @@ public class PathFinder : MonoBehaviour
         findPathThread.Abort();
     }
 
+    public bool debugPathfinder = false;
     private void Start()
     {
+        if(debugPathfinder)SetMap(minX, minY, maxX, maxY);
         findPathThread = new Thread(FindPathThread);
         findPathThread.Start();
 
@@ -91,6 +93,10 @@ public class PathFinder : MonoBehaviour
                 pathIDs.RemoveAt(0);
                 List<Vector2Int> path = FindPath(new Vector2Int((int)pathID.x,(int)pathID.y), new Vector2Int ((int)pathID.z,(int)pathID.w), tilemap, minX, minY, maxX, maxY);
                 /*if (path.Count > 0) */paths[pathID] = path;
+
+                string pathStr = "";
+                foreach(Vector2Int point in path) { pathStr += point + " "; }
+                Debug.Log(pathStr);
             }
             
         }
@@ -132,7 +138,7 @@ public class PathFinder : MonoBehaviour
         start.cost = 0;
         int loops = 0;
         bool targetFound = false;
-        while (frontier.Count > 0 && loops < 100)
+        while (frontier.Count > 0 && loops < 1000)
         {
             loops += 1;
             GridNode current = frontier[0];

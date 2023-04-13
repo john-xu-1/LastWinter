@@ -381,7 +381,7 @@ public class EnemySetup : Setup
         {
             int platformID = 0;
             GameObject prefab = null;
-            if (atom[0] == "missile_lancher")
+            if (atom[0] == "missile_launcher")
             {
                 prefab = enemies[0];
                 platformID = int.Parse(atom[1]);
