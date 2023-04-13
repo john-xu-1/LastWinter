@@ -51,7 +51,7 @@ public class MapGenerator : MonoBehaviour
                     boolMap[x, y] = room.mapGrid[x, y].type == 1 ? true : false;
                 }
             }
-            NoiseTerrain.Chunk chunk = new NoiseTerrain.Chunk(chunkID, boolMap, FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>());
+            NoiseTerrain.Chunk chunk = new NoiseTerrain.Chunk(chunkID, boolMap, FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().chunks);
             chunks.Add(chunk);
         }
         return chunks;

@@ -9,6 +9,9 @@ namespace NoiseTerrain
     public class ProceduralMapGenerator : MapGenerator
     {
         public bool closedLevel;
+
+        public ChunkHandler chunks;
+
         public Vector2Int chunkID;
         public Vector2Int _chunkRadius = new Vector2Int(5, 4);
         public Vector2Int _tileRulesRadius = new Vector2Int(4, 3);
@@ -33,7 +36,7 @@ namespace NoiseTerrain
         public TileBase lavaTile;
         public Tilemap lavaTilemap;
 
-        List<Chunk> chunks = new List<Chunk>();
+        //List<Chunk> chunks = new List<Chunk>();
         //public bool debugFixTileRules;
         public bool fixTileRules;
         Thread handleFixTileRulesThread;
@@ -59,7 +62,7 @@ namespace NoiseTerrain
         }
         private void Start()
         {
-
+            chunks.SetUp(width, height);
             handleFixTileRulesThread = new Thread(HandleFixTileRulesThread);
             handleFixTileRulesThread.Start();
             //fixTileRules = true;
@@ -68,7 +71,7 @@ namespace NoiseTerrain
         {
             HandleMouseClickDebugging();
             if (!active) return;
-            Vector2Int chunkID = GetChunkID(target.position);
+            Vector2Int chunkID = chunks.GetChunkID(target.position);
 
             //debug platformGraph
             if (displayPlatformGraph)
@@ -89,7 +92,7 @@ namespace NoiseTerrain
             //update changed chunks
             for (int i = 0; i < visibleChunkIDs.Count; i += 1)
             {
-                Chunk visibleChunk = GetChunk(visibleChunkIDs[i]);
+                Chunk visibleChunk = chunks.GetChunk(visibleChunkIDs[i]);
                 if (visibleChunk.valueChanged)
                 {
                     if (!toDisplayChunks.Contains(visibleChunkIDs[i]))
@@ -192,45 +195,8 @@ namespace NoiseTerrain
 
 
         }
-        public void SetTile(Vector2Int pos, bool value)
-        {
-            int x = ((pos.x % width) + width) % width;
-            int y = ((-pos.y % height) + height) % height;
-            Debug.Log($"{x} {y}");
-            GetChunk(GetChunkID(pos)).SetTile(x, y, value);
-        }
+        
 
-        public bool GetTile(Vector2Int pos)
-        {
-            int x = ((pos.x % width) + width) % width;
-            int y = ((-pos.y % height) + height) % height;
-            //Debug.Log($"{x} {y}");
-            return GetChunk(GetChunkID(pos)).GetTile(x, y);
-        }
-        public void AddChunk(Chunk chunk)
-        {
-            //chunks.Add(chunk);
-            chunkDict[chunk.chunkID] = chunk;
-        }
-        Dictionary<Vector2Int, Chunk> chunkDict = new Dictionary<Vector2Int, Chunk>();
-        public Chunk GetChunk(Vector2Int chunkID)
-        {
-            //foreach (Chunk chunk in chunks)
-            //{
-            //    if (chunk.chunkID == chunkID) return chunk;
-            //}
-            //return null;
-            if (chunkDict.ContainsKey(chunkID)) return chunkDict[chunkID];
-            else return null;
-        }
-
-        public Vector2Int GetChunkID(Vector2 pos)
-        {
-            int xOffset = pos.x < 0 ? -1 : 0;
-            int yOffset = pos.y > 0 ? 1 : 0;
-
-            return new Vector2Int(xOffset + ((int)pos.x - xOffset) / width, -yOffset - ((int)pos.y - yOffset) / height);
-        }
 
         public void CheckMap(Vector2Int chunkID)
         {
@@ -312,7 +278,7 @@ namespace NoiseTerrain
                     //build chunks
                     for (int i = 0; i < toBuildChunks.Count; i += 1)
                     {
-                        Chunk chunk = GetChunk(toBuildChunks[i]);
+                        Chunk chunk = chunks.GetChunk(toBuildChunks[i]);
                         if (chunk == null)
                         {
                             int minX = toBuildChunks[i].x * width;
@@ -324,15 +290,15 @@ namespace NoiseTerrain
 
                             if (closedLevel && (toBuildChunks[i].x % roomSize.x == 0 || toBuildChunks[i].y % roomSize.y == 0))
                                 threshold = -1;
-                            chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), this);
-                            AddChunk(chunk);
+                            chunk = new Chunk(toBuildChunks[i], GenerateBoolMap(minX, maxX, minY, maxY, threshold), chunks);
+                            chunks.AddChunk(chunk);
                         }
                     }
 
                     //check tileRules
                     for (int i = 0; i < toCheckTileRulesChunks.Count; i += 1)
                     {
-                        Chunk chunk = GetChunk(toCheckTileRulesChunks[i]);
+                        Chunk chunk = chunks.GetChunk(toCheckTileRulesChunks[i]);
                         Utility.CheckTileRules(chunk, tileRules);
                         // Debug.Log($"Checking Chunk {chunk.chunkID}");
                     }
@@ -342,7 +308,7 @@ namespace NoiseTerrain
                     {
                         if (!toFixChunkIDs.Contains(toFixTileRulesChunks[i]) && !visibleChunkIDs.Contains(toFixTileRulesChunks[i]) && !this.toDisplayChunks.Contains(toFixTileRulesChunks[i]))
                         {
-                            Chunk chunk = GetChunk(toFixTileRulesChunks[i]);
+                            Chunk chunk = chunks.GetChunk(toFixTileRulesChunks[i]);
                             Utility.CheckTileRules(chunk, tileRules); // need to check in case invalid were fixed in an overlapping subchunk
                             if (chunk.hasInvalidTile)
                             {
@@ -383,7 +349,7 @@ namespace NoiseTerrain
             {
                 for (int y = -roomSize.y / 2; y <= roomSize.y / 2; y += 1)
                 {
-                    roomChunks.Add(GetChunk(chunkID + new Vector2Int(x, y)));
+                    roomChunks.Add(chunks.GetChunk(chunkID + new Vector2Int(x, y)));
                 }
             }
             this.roomChunks = roomChunks;
@@ -440,7 +406,7 @@ namespace NoiseTerrain
         }
         public void GenerateMap(Vector2Int chunkID)
         {
-            Chunk chunk = GetChunk(chunkID);
+            Chunk chunk = chunks.GetChunk(chunkID);
             int minX = chunkID.x * width;
             int maxX = (chunkID.x + 1) * width - 1;
             int minY = chunkID.y * height;
@@ -481,7 +447,7 @@ namespace NoiseTerrain
             int minY = chunkID.y * height;
             int maxY = (chunkID.y + 1) * height - 1;
             ClearMap(minX, maxX, minY, maxY);
-            GetChunk(chunkID).ClearChunk();
+            chunks.GetChunk(chunkID).ClearChunk();
         }
 
         public override void ClearMap()
@@ -511,10 +477,10 @@ namespace NoiseTerrain
         {
             if (clickFunction == HandleMouseClickFunction.resetChunk)
             {
-                Vector2Int clickChunkID = GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                Vector2Int clickChunkID = chunks.GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                 if (Input.GetMouseButton(0) && (lastClickChunkID == null || lastClickChunkID != clickChunkID))
                 {
-                    Chunk clickedChunk = GetChunk(clickChunkID);
+                    Chunk clickedChunk = chunks.GetChunk(clickChunkID);
                     if (clickedChunk != null)
                     {
                         Debug.Log($"resetting {clickChunkID} chunk");
@@ -533,11 +499,11 @@ namespace NoiseTerrain
                 if (Input.GetMouseButtonDown(1) || Input.GetMouseButton(1) && (lastClickID == null || lastClickID != clickTile))
                 {
                     Debug.Log($"TileClicked {clickTile}");
-                    Chunk clickedChunk = GetChunk(GetChunkID(Camera.main.ScreenToWorldPoint(Input.mousePosition)));
+                    Chunk clickedChunk = chunks.GetChunk(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                     if (clickedChunk != null)
                     {
-                        bool value = GetTile(clickTile);
-                        SetTile(clickTile, !value);
+                        bool value = chunks.GetTile(clickTile);
+                        chunks.SetTile(clickTile, !value);
 
                     }
                     lastClickID = clickTile;
@@ -549,7 +515,7 @@ namespace NoiseTerrain
                 if (Input.GetMouseButtonUp(1))
                 {
                     Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
-                    if (!GetTile(clickTile))
+                    if (!chunks.GetTile(clickTile))
                     {
                         StartCoroutine(PlaceLiquid(waterTile, waterTilemap, clickTile));
                     }
@@ -561,7 +527,7 @@ namespace NoiseTerrain
                 if (Input.GetMouseButtonUp(1))
                 {
                     Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
-                    if (!GetTile(clickTile))
+                    if (!chunks.GetTile(clickTile))
                     {
                         StartCoroutine(PlaceLiquid(lavaTile, lavaTilemap, clickTile));
                     }
@@ -810,9 +776,9 @@ namespace NoiseTerrain
             if (!tilemap.GetTile(new Vector3Int(posStart.x, posStart.y, 0)))
             {
                 tilemap.SetTile(new Vector3Int(posStart.x, posStart.y, 0), liquidTile);
-                if (!GetTile(posStart + Vector2Int.left)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left));
-                if (!GetTile(posStart + Vector2Int.right)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right));
-                if (!GetTile(posStart + Vector2Int.down)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down));
+                if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left));
+                if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right));
+                if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)) && !chunks.GetTile(posStart + Vector2Int.down)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down));
             }
 
         }
@@ -843,7 +809,7 @@ namespace NoiseTerrain
                 }
                 if (chunkIDFound)
                 {
-                    Chunk chunk = GetChunk(chunkID);
+                    Chunk chunk = chunks.GetChunk(chunkID);
                     if (chunk != null)
                     {
                         lock (chunk)

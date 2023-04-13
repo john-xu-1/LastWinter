@@ -86,7 +86,7 @@ public class LightingLevelSetup : MonoBehaviour
             chunkObjectLights = Instantiate(chunkObjectLightsPrefab);
             chunkObjectLightsIDs.Add(chunkID);
             this.chunkObjectLights.Add(chunkObjectLights);
-            NoiseTerrain.Chunk myChunk = map.GetChunk(chunkID);
+            NoiseTerrain.Chunk myChunk = NoiseTerrain.ChunkHandler.singlton.GetChunk(chunkID);
             myChunk.AddChunkObject(chunkObjectLights/*, 3*/);
             chunkObjectLights.mychunk = myChunk;
         }
@@ -94,7 +94,7 @@ public class LightingLevelSetup : MonoBehaviour
     }
     public void SetLight(int type, Vector2 pos)
     {
-        Vector2Int chunkID = map.GetChunkID(pos);
+        Vector2Int chunkID = NoiseTerrain.ChunkHandler.singlton.GetChunkID(pos);
         GetChunkObjectLights(chunkID).AddLight(type, pos);
 
     }
@@ -175,8 +175,8 @@ public class LightingLevelSetup : MonoBehaviour
             return groundTile != null && airTile == null;
         }
 
-        bool ground = map.GetTile(new Vector2Int(x, y));
-        bool air = !map.GetTile(new Vector2Int(x, y+1));
+        bool ground = NoiseTerrain.ChunkHandler.singlton.GetTile(new Vector2Int(x, y));
+        bool air = !NoiseTerrain.ChunkHandler.singlton.GetTile(new Vector2Int(x, y+1));
         return ground && air;
     }
 

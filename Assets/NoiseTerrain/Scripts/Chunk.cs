@@ -6,7 +6,7 @@ namespace NoiseTerrain
 {
     public class Chunk
     {
-        private ProceduralMapGenerator mapGenerator;
+        private ChunkHandler chunkHandler;
 
         public UnityEngine.Tilemaps.Tilemap fullTilemap;
         public Vector2Int chunkID;
@@ -27,11 +27,11 @@ namespace NoiseTerrain
             public int radius;
         }
 
-        public Chunk(Vector2Int chunkID, bool[,]boolMap, ProceduralMapGenerator mapGenerator)
+        public Chunk(Vector2Int chunkID, bool[,]boolMap, ChunkHandler chunkHandler)
         {
             this.chunkID = chunkID;
             this.boolMap = boolMap;
-            this.mapGenerator = mapGenerator;
+            this.chunkHandler = chunkHandler;
 
             width = boolMap.GetLength(0);
             height = boolMap.GetLength(1);
@@ -60,11 +60,11 @@ namespace NoiseTerrain
             }
         }
 
-        public void Load()
-        {
-            int distance = (int)Vector2Int.Distance(mapGenerator.chunkID, chunkID);
-            Load(distance);
-        }
+        //public void Load()
+        //{
+        //    int distance = (int)Vector2Int.Distance(mapGenerator.chunkID, chunkID);
+        //    Load(distance);
+        //}
 
         public void Load(int distance)
         {
@@ -78,7 +78,7 @@ namespace NoiseTerrain
 
         public Chunk GetChunk(Vector2 pos)
         {
-            return mapGenerator.GetChunk(mapGenerator.GetChunkID(pos));
+            return chunkHandler.GetChunk(chunkHandler.GetChunkID(pos));
         }
 
         public void AddChunkObject(ChunkObject chunkObject/*, int radius*/)
@@ -168,28 +168,28 @@ namespace NoiseTerrain
                 switch (index)
                 {
                     case 0:
-                        neighborChunks[0] = mapGenerator.GetChunk(chunkID + new Vector2Int(-1, -1));
+                        neighborChunks[0] = chunkHandler.GetChunk(chunkID + new Vector2Int(-1, -1));
                         return neighborChunks[0];
                     case 1:
-                        neighborChunks[1] = mapGenerator.GetChunk(chunkID + new Vector2Int(0, -1));
+                        neighborChunks[1] = chunkHandler.GetChunk(chunkID + new Vector2Int(0, -1));
                         return neighborChunks[1];
                     case 2:
-                        neighborChunks[2] = mapGenerator.GetChunk(chunkID + new Vector2Int(1, -1));
+                        neighborChunks[2] = chunkHandler.GetChunk(chunkID + new Vector2Int(1, -1));
                         return neighborChunks[2];
                     case 3:
-                        neighborChunks[3] = mapGenerator.GetChunk(chunkID + new Vector2Int(-1, 0));
+                        neighborChunks[3] = chunkHandler.GetChunk(chunkID + new Vector2Int(-1, 0));
                         return neighborChunks[3];
                     case 4:
-                        neighborChunks[4] = mapGenerator.GetChunk(chunkID + new Vector2Int(1, 0));
+                        neighborChunks[4] = chunkHandler.GetChunk(chunkID + new Vector2Int(1, 0));
                         return neighborChunks[4];
                     case 5:
-                        neighborChunks[5] = mapGenerator.GetChunk(chunkID + new Vector2Int(-1, 1));
+                        neighborChunks[5] = chunkHandler.GetChunk(chunkID + new Vector2Int(-1, 1));
                         return neighborChunks[5];
                     case 6:
-                        neighborChunks[6] = mapGenerator.GetChunk(chunkID + new Vector2Int(0, 1));
+                        neighborChunks[6] = chunkHandler.GetChunk(chunkID + new Vector2Int(0, 1));
                         return neighborChunks[6];
                     case 7:
-                        neighborChunks[7] = mapGenerator.GetChunk(chunkID + new Vector2Int(1, 1));
+                        neighborChunks[7] = chunkHandler.GetChunk(chunkID + new Vector2Int(1, 1));
                         return neighborChunks[7];
                     default:
                         return null;

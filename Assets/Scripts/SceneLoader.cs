@@ -53,7 +53,7 @@ public class SceneLoader : MonoBehaviour
             dungeonHandler.MapSetup(loadWorldIndex);
             foreach(NoiseTerrain.Chunk roomChunk in dungeonHandler.chunks)
             {
-                noiseMapGenerator.AddChunk(roomChunk);
+                NoiseTerrain.ChunkHandler.singlton.AddChunk(roomChunk);
                 
             }
             minX = 0;
@@ -96,7 +96,7 @@ public class SceneLoader : MonoBehaviour
     IEnumerator UISetup()
     {
         StartCoroutine(uiSetup.InitializeSetup(minX, maxX, minY, maxY, seed));
-        while (!uiSetup.setupComplete)
+        while (!uiSetup.SetupComplete())
         {
             yield return null;
         }
@@ -149,7 +149,7 @@ public class SceneLoader : MonoBehaviour
     {
         //StartCoroutine(itemSetup.InitializeSetup(noiseMapGenerator.GetPlatforms(), seed));
         StartCoroutine(itemSetup.InitializeSetup(GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset(), seed));
-        while (!itemSetup.setupComplete)
+        while (!itemSetup.SetupComplete())
         {
             yield return null;
         }
@@ -159,7 +159,7 @@ public class SceneLoader : MonoBehaviour
     IEnumerator EnemiesSetup()
     {
         StartCoroutine(enemySetup.InitializeSetup(GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset(), seed, false));
-        while (!enemySetup.setupComplete)
+        while (!enemySetup.SetupComplete())
         {
             yield return null;
         }
@@ -171,7 +171,7 @@ public class SceneLoader : MonoBehaviour
     {
         //StartCoroutine(playerSetup.InitializeSetup(minX, maxX, minY + 2, maxY - 2, seed));
         StartCoroutine(playerSetup.InitializeSetup(GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset(), seed));
-        while (!playerSetup.setupComplete)
+        while (!playerSetup.SetupComplete())
         {
             yield return null;
         }
@@ -182,19 +182,19 @@ public class SceneLoader : MonoBehaviour
     IEnumerator GameStartSetup()
     {
         StartCoroutine(uiSetup.FinalizeSetup());
-        while (!uiSetup.finalizedComplete)
+        while (!uiSetup.FinalizedComplete())
         {
             yield return null;
         }
 
         StartCoroutine(cameraSetup.FinalizeSetup());
-        while (!cameraSetup.finalizedComplete)
+        while (!cameraSetup.FinalizedComplete())
         {
             yield return null;
         }
 
         StartCoroutine(itemSetup.FinalizeSetup());
-        while (!itemSetup.finalizedComplete)
+        while (!itemSetup.FinalizedComplete())
         {
             yield return null;
         }
@@ -204,19 +204,23 @@ public class SceneLoader : MonoBehaviour
     }
 
 }
-public abstract class Setup
+public interface Setup
 {
-    public bool setupComplete;
-    public bool finalizedComplete;
-    public abstract IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed);
-    public abstract IEnumerator FinalizeSetup();
+    bool SetupComplete();
+    bool FinalizedComplete();
+    IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed);
+    IEnumerator FinalizeSetup();
 }
 
 
 [System.Serializable]
 public class UISetup : Setup
 {
-    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
+    bool setupComplete = false;
+    bool finalizedComplete = false;
+    public bool SetupComplete() { return setupComplete; }
+    public bool FinalizedComplete() { return finalizedComplete; }
+    public IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
         //setup the world's width and height
         setupComplete = true;
@@ -225,7 +229,7 @@ public class UISetup : Setup
     }
 
     public GameObject[] FinalizeUIGameObjects;
-    public override IEnumerator FinalizeSetup()
+    public IEnumerator FinalizeSetup()
     {
 
         foreach (GameObject UI in FinalizeUIGameObjects)
@@ -236,18 +240,23 @@ public class UISetup : Setup
 
         yield return null;
     }
+   
 }
 
 [System.Serializable]
 public class CameraSetup : Setup
 {
-    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
+    bool setupComplete = false;
+    bool finalizedComplete = false;
+    public bool SetupComplete() { return setupComplete; }
+    public bool FinalizedComplete() { return finalizedComplete; }
+    public IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
         setupComplete = true;
         yield return null;
     }
     public CameraController camController;
-    public override IEnumerator FinalizeSetup()
+    public IEnumerator FinalizeSetup()
     {
         camController.active = true;
         finalizedComplete = true;
@@ -263,7 +272,12 @@ public class PlayerSetup : Setup
     public UnityEngine.Tilemaps.Tilemap collsionMap;
     public InventorySystem inventorySystemPrefab;
 
-    public override IEnumerator FinalizeSetup()
+    bool setupComplete = false;
+    bool finalizedComplete = false;
+    public bool SetupComplete() { return setupComplete; }
+    public bool FinalizedComplete() { return finalizedComplete; }
+
+    public IEnumerator FinalizeSetup()
     {
         throw new System.NotImplementedException();
     }
@@ -319,7 +333,7 @@ public class PlayerSetup : Setup
         yield return null;
 
     }
-    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
+    public IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
        
 
@@ -352,6 +366,11 @@ public class EnemySetup : Setup
     public GameObject[] enemies;
     public int enemyCount = 10;
     public NoiseTerrain.ProceduralMapGenerator map;
+
+    bool setupComplete = false;
+    bool finalizedComplete = false;
+    public bool SetupComplete() { return setupComplete; }
+    public bool FinalizedComplete() { return finalizedComplete; }
 
     public int attempts = 10;
     public IEnumerator InitializeSetup(Clingo_02.AnswerSet answerSet, int seed, bool setActive)
@@ -389,7 +408,7 @@ public class EnemySetup : Setup
                 Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
                 Vector2Int groundPos = platform.GetTilePos(ground);
                 enemy.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1.6f);
-                NoiseTerrain.Chunk myChunk = map.GetChunk(map.GetChunkID(enemy.transform.position));
+                NoiseTerrain.Chunk myChunk = NoiseTerrain.ChunkHandler.singlton.GetChunk(enemy.transform.position);
                 enemy.GetComponent<ChunkObjectEnemy>().mychunk = myChunk;
                 myChunk.AddChunkObject(enemy.GetComponent<ChunkObjectEnemy>());
 
@@ -417,7 +436,7 @@ public class EnemySetup : Setup
             Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
             Vector2Int groundPos = platform.GetTilePos(ground);
             enemy.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1.6f);
-            NoiseTerrain.Chunk myChunk = map.GetChunk(map.GetChunkID(enemy.transform.position));
+            NoiseTerrain.Chunk myChunk = NoiseTerrain.ChunkHandler.singlton.GetChunk(enemy.transform.position);
             enemy.GetComponent<ChunkObjectEnemy>().mychunk = myChunk;
             myChunk.AddChunkObject(enemy.GetComponent<ChunkObjectEnemy>());
 
@@ -425,7 +444,7 @@ public class EnemySetup : Setup
         }
         setupComplete = true;
     }
-    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
+    public IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
         System.Random random = new System.Random(seed);
         
@@ -455,7 +474,7 @@ public class EnemySetup : Setup
         }
         setupComplete = true;
     }
-    public override IEnumerator FinalizeSetup()
+    public IEnumerator FinalizeSetup()
     {
         throw new System.NotImplementedException();
     }
@@ -469,6 +488,11 @@ public class ItemSetup : Setup
     public int itemCount = 5;
 
     public List<int> placedItems = new List<int>();
+
+    bool setupComplete = false;
+    bool finalizedComplete = false;
+    public bool SetupComplete() { return setupComplete; }
+    public bool FinalizedComplete() { return finalizedComplete; }
 
     public IEnumerator InitializeSetup(Clingo_02.AnswerSet answerSet, int seed)
     {
@@ -532,7 +556,7 @@ public class ItemSetup : Setup
         setupComplete = true;
     }
 
-    public override IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
+    public IEnumerator InitializeSetup(int minX, int maxX, int minY, int maxY, int seed)
     {
         yield return null;
 
@@ -559,7 +583,7 @@ public class ItemSetup : Setup
         setupComplete = true;
 
     }
-    public override IEnumerator FinalizeSetup()
+    public IEnumerator FinalizeSetup()
     {
         yield return null;
         Debug.Log("ItemFinalize Start");
