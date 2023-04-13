@@ -28,10 +28,15 @@ public class EnemyBehaviorMissileLauncher : EnemyBehaviorBase
             instance = Instantiate(bulletPrefab, firepoint.position, Quaternion.identity);
 
             instance.GetComponent<EnemyBehaviorMissile>().mother = this;
+            //instance.GetComponent<EnemyBehaviorMissile>().path = null;
 
             Destroy(instance, destroyTime);
 
             nextShootTime = Time.time + fireCD;
+
+            //string pathStr = "";
+            //foreach (Vector2Int point in path) { pathStr += point + " "; }
+            //Debug.Log(pathStr);
         }
 
         playerPrevPos = playerPosInt;

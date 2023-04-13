@@ -12,7 +12,7 @@ public class UIEnemyHealthHandler : MonoBehaviour
     {
         if (sd)
         {
-            Debug.Log(sd.maxValue);
+            //Debug.Log(sd.maxValue);
             sd.maxValue = maxH;
         }
         

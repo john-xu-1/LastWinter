@@ -94,9 +94,7 @@ public class PathFinder : MonoBehaviour
                 List<Vector2Int> path = FindPath(new Vector2Int((int)pathID.x,(int)pathID.y), new Vector2Int ((int)pathID.z,(int)pathID.w), tilemap, minX, minY, maxX, maxY);
                 /*if (path.Count > 0) */paths[pathID] = path;
 
-                string pathStr = "";
-                foreach(Vector2Int point in path) { pathStr += point + " "; }
-                Debug.Log(pathStr);
+                
             }
             
         }
