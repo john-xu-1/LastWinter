@@ -19,8 +19,10 @@ public class PathFinder : MonoBehaviour
         findPathThread.Abort();
     }
 
+    public bool debugPathfinder = false;
     private void Start()
     {
+        if(debugPathfinder) SetMap(minX, minY, maxX, maxY);
         findPathThread = new Thread(FindPathThread);
         findPathThread.Start();
 
