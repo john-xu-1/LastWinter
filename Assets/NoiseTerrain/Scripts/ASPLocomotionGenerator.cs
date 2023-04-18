@@ -66,12 +66,23 @@ public class ASPLocomotionGenerator : ASPGenerator
 
             %% every piece must be on a node that has a path to the end %%
             :- piece(_,PathID), end(NodeID), not path(NodeID,_,PathID).
+
+            teleporter(1..2).
+            2{{teleporter(NodeID, TeleporterID): node(NodeID)}}2 :- teleporter(TeleporterID).
+            :- teleporter(NodeID,_), Count = {{teleporter(NodeID,_)}}, Count != 1.
+            %:- teleporter(N1, T1), teleporter(N2,T2), teleporter(T1), teleporter(T2), N1 == N2.
+            edge(Source,NodeID) :- teleporter(NodeID, TeleporterID), teleporter(Source, TeleporterID), teleporter(TeleporterID), NodeID != Source.
+            %:- teleporter(NodeID,_), not path(NodeID,_).
+
+            %tele_count(NodeID, Count) :- teleporter(NodeID,_), Count = {{teleporter(NodeID,_)}}.
             
             #show piece/2.
             #show sink/1.
             #show start/1.
             #show end/1.
             #show sink_source/2.
+            #show teleporter/2.
+            %#show tele_count/2.
         ";
 
         return aspCode + GetNodeChunksMemory();

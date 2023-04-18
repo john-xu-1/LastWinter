@@ -1647,6 +1647,7 @@ MonoBehaviour:
   minY: -160
   maxX: 160
   maxY: 0
+  debugPathfinder: 0
   findingPath: 1
   pathIDs: []
 --- !u!4 &1246202948
@@ -1960,6 +1961,7 @@ MonoBehaviour:
   progressionItemsCount: 9
   seed: 0
   loadWorldIndex: 0
+  teleporterPrefab: {fileID: 8713250576435558712, guid: 1bc0877c177fb3448ab09e12e0833221, type: 3}
 --- !u!4 &1406625054
 Transform:
   m_ObjectHideFlags: 0
@@ -3360,7 +3362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cpus: 4
   timeout: 100
-  solver: {fileID: 1233206644}
+  solver: {fileID: 2132609661}
   runOnStart: 0
 --- !u!114 &2132609659
 MonoBehaviour:
@@ -3410,7 +3412,7 @@ MonoBehaviour:
   FindMultipleSolutions: 0
   numOfSolutionsWanted: 1
   _seed: 42
-  useRandomSeed: 0
+  useRandomSeed: 1
   saveToFile: 1
   answerSet:
     Solver: 

@@ -129,6 +129,7 @@ public class SceneLoader : MonoBehaviour
         progression += 1 / (float)progressionItemsCount;
         StartCoroutine(ObstaclesSetup());
     }
+    public Teleporter teleporterPrefab;
     IEnumerator ObstaclesSetup()
     {
         StartCoroutine(noiseMapGenerator.GenerateLocomotionGraph());
@@ -140,6 +141,18 @@ public class SceneLoader : MonoBehaviour
         foreach(List<string> atom in GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset().Value["sink_source"])
         {
             noiseMapGenerator.GenerateLiquid(int.Parse(atom[0]), int.Parse(atom[1]));
+        }
+        System.Random random = new System.Random(seed);
+        foreach (List<string> atom in GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset().Value["teleporter"]){
+            Teleporter teleporter = Instantiate(teleporterPrefab);
+            int nodeID = int.Parse(atom[0]);
+            int teleporterID = int.Parse(atom[1]);
+            teleporter.teleporterID = teleporterID;
+            NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(nodeID);
+            
+            int randomIndex = random.Next(0,platform.groundTiles.Count);
+            Vector2 ground = platform.GetTilePos(platform.groundTiles[randomIndex]);
+            teleporter.transform.position = new Vector3(ground.x + 0.5f, ground.y, 0);
         }
         
         progression += 1 / (float)progressionItemsCount;
