@@ -51,7 +51,7 @@ namespace Sebastian
                 {
                     if (useFalloff)
                     {
-                        noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y] - falloffMap[x, y]);
+                        noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y] + falloffMap[x, y]);
                     }
                     colorMap[y * mapWidth + x] = regions[regions.Length - 1].color;
                     float currentHeight = noiseMap[x, y];
@@ -67,6 +67,7 @@ namespace Sebastian
             }
 
             MapDisplay display = FindObjectOfType<MapDisplay>();
+            
             if(drawMode == DrawMode.NoiseMap) 
                 display.DrawTexture(TextureGenerator.TextureFromHeightMap(noiseMap));
             else if(drawMode == DrawMode.ColorMap)

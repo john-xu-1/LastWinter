@@ -29,7 +29,7 @@ public class ASPLocomotionGenerator : ASPGenerator
     {
         string aspCode = $@"
 
-            #const enemy_max = 10.
+            #const enemy_max = 100.
             #const enemy_min = 5.
             
             piece_types(player;enemy;item).
@@ -67,14 +67,17 @@ public class ASPLocomotionGenerator : ASPGenerator
             %% every piece must be on a node that has a path to the end %%
             :- piece(_,PathID), end(NodeID), not path(NodeID,_,PathID).
 
-            teleporter(1..2).
+            
+            #const max_teleporters = 2.
+            teleporter(1..max_teleporters).
             2{{teleporter(NodeID, TeleporterID): node(NodeID)}}2 :- teleporter(TeleporterID).
             :- teleporter(NodeID,_), Count = {{teleporter(NodeID,_)}}, Count != 1.
-            %:- teleporter(N1, T1), teleporter(N2,T2), teleporter(T1), teleporter(T2), N1 == N2.
-            edge(Source,NodeID) :- teleporter(NodeID, TeleporterID), teleporter(Source, TeleporterID), teleporter(TeleporterID), NodeID != Source.
-            %:- teleporter(NodeID,_), not path(NodeID,_).
+            
+            %edge(Source,NodeID) :- teleporter(NodeID, T1), teleporter(Source, T2), T1 == T2, NodeID != Source.
+            :- teleporter(NodeID,_), not path(NodeID,_).
+            path(NodeID, Step + 1) :- teleporter(NodeID, T1), teleporter(Source,T2), T1 == T2, path(Source, Step), Step < 100.
 
-            %tele_count(NodeID, Count) :- teleporter(NodeID,_), Count = {{teleporter(NodeID,_)}}.
+            
             
             #show piece/2.
             #show sink/1.
@@ -82,7 +85,7 @@ public class ASPLocomotionGenerator : ASPGenerator
             #show end/1.
             #show sink_source/2.
             #show teleporter/2.
-            %#show tele_count/2.
+
         ";
 
         return aspCode + GetNodeChunksMemory();

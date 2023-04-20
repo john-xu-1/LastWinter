@@ -775,20 +775,27 @@ namespace NoiseTerrain
             yield return null;
             if (!tilemap.GetTile(new Vector3Int(posStart.x, posStart.y, 0)))
             {
-                tilemap.SetTile(new Vector3Int(posStart.x, posStart.y, 0), liquidTile);
-                if (fillHorizontal && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
-                    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, fillHorizontal));
-                if (fillHorizontal && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
-                    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right,fillHorizontal));
-                if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)) && !chunks.GetTile(posStart + Vector2Int.down))
-                    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down, false));
-                else if(visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)))
+                List<Vector2Int> fillTiles = WaterChunk.FindFloodTiles(posStart, chunks);
+
+                foreach(Vector2Int tile in fillTiles)
                 {
-                    if(visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
-                        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, false));
-                    if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
-                        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right, false));
+                    tilemap.SetTile(new Vector3Int(tile.x, tile.y, 0), liquidTile);
                 }
+                //tilemap.SetTile(new Vector3Int(posStart.x, posStart.y, 0), liquidTile);
+
+                //if (fillHorizontal && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
+                //    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, fillHorizontal));
+                //if (fillHorizontal && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
+                //    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right,fillHorizontal));
+                //if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)) && !chunks.GetTile(posStart + Vector2Int.down))
+                //    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down, false));
+                //else if(visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)))
+                //{
+                //    if(visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
+                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, false));
+                //    if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
+                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right, false));
+                //}
             }
 
         }
