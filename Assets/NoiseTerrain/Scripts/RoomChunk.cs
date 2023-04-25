@@ -48,7 +48,7 @@ namespace NoiseTerrain
             maxTile = new Vector2Int(maxXID * roomChunks[0].width + roomChunks[0].width - 1, minYID * roomChunks[0].height);
 
 
-            PrintBoolMap();
+            //PrintBoolMap();
             //PrintFilledChunkIDs();
             SetFilledChunks(jumpHeight);
             //PrintPlatformIDs();

@@ -10,7 +10,7 @@ public class LoadLevelLabTrigger : LabTrigger
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            SceneManager.LoadScene(loadLevelScene);
+            SceneManager.LoadSceneAsync(loadLevelScene,LoadSceneMode.Additive);
         }
     }
 

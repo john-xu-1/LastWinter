@@ -1413,7 +1413,7 @@ MonoBehaviour:
   IS: {fileID: 11400000, guid: 37c0586d1c2a3421a856ddf00e808fb8, type: 2}
   saveName: 
   MUH: {fileID: 0}
-  labIndex: 1
+  labIndex: 2
 --- !u!1 &641719091
 GameObject:
   m_ObjectHideFlags: 0
