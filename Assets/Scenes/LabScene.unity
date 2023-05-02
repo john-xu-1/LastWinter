@@ -865,6 +865,7 @@ MonoBehaviour:
   target_Offset: {x: 0, y: -0.5, z: -10}
   FollowType: 2
   MUH: {fileID: 0}
+  chunkLoader: {fileID: 0}
   targetOthographicSize: 31
   targetOthographicSizeGrowthRate: 0.01
   debug: 1
@@ -1685,7 +1686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggeredCanvas: {fileID: 1608661723}
-  loadLevelScene: EnemyTestScene
+  loadLevelScene: ProceduralLevel
 --- !u!61 &1729632509
 BoxCollider2D:
   m_ObjectHideFlags: 0

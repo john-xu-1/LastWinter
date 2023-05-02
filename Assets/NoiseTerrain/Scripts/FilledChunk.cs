@@ -12,27 +12,18 @@ namespace NoiseTerrain
         public List<PlatformChunk> platforms = new List<PlatformChunk>();
         public List<WallChunk> walls = new List<WallChunk>();
         int[,] platformIDs;
+        int[,] wallIDs;
         int minX, minY, maxX, maxY;
-        //public FilledChunk()
-        //{
-        //    filledTiles = new List<Vector2Int>();
-        //    groundTiles = new List<Vector2Int>();
-        //}
-        //public FilledChunk(List<Vector2Int> filledTiles)
-        //{
-        //    this.filledTiles = filledTiles;
-        //}
+        RoomChunk roomChunk;
+        
         public int GetPlatformID(Vector2Int tile)
         {
             //Debug.Log($"{tile.x - minX} {-tile.y - maxY} minX: {minX} maxY: {maxY}");
             return platformIDs[tile.x - minX, tile.y - minY];
         }
-        public void SetWallChunks(RoomChunk roomChunk, int jumpHeight)
+        public void setUpFilledChunk (RoomChunk roomChunk)
         {
-
-        }
-        public void SetPlatforms(RoomChunk roomChunk, int jumpHeight)
-        {
+            this.roomChunk = roomChunk;
             minX = int.MaxValue;
             minY = int.MaxValue;
             maxX = int.MinValue;
@@ -44,6 +35,20 @@ namespace NoiseTerrain
                 if (tile.x < minX) minX = tile.x;
                 if (tile.y < minY) minY = tile.y;
             }
+        }
+        public void SetWallChunks(int jumpHeight)
+        {
+            int width = maxX - minX + 1;
+            int height = maxY - minY + 1;
+            platformIDs = new int[width, height];
+            foreach (Vector2Int tile in filledTiles)
+            {
+                platformIDs[tile.x - minX, tile.y - minY] = -1;
+            }
+        }
+        public void SetPlatforms(int jumpHeight)
+        {
+            //setUpFilledChunk(roomChunk);
             int width = maxX - minX + 1;
             int height = maxY - minY + 1;
             platformIDs = new int[width, height];

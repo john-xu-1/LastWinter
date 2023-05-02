@@ -517,7 +517,7 @@ namespace NoiseTerrain
                     Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
                     if (!chunks.GetTile(clickTile))
                     {
-                        StartCoroutine(PlaceLiquid(waterTile, waterTilemap, clickTile));
+                        StartCoroutine(PlaceLiquid(waterTile, waterTilemap, clickTile, true));
                     }
                 }
 
@@ -529,7 +529,7 @@ namespace NoiseTerrain
                     Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
                     if (!chunks.GetTile(clickTile))
                     {
-                        StartCoroutine(PlaceLiquid(lavaTile, lavaTilemap, clickTile));
+                        StartCoroutine(PlaceLiquid(lavaTile, lavaTilemap, clickTile, true));
                     }
                 }
 
@@ -770,15 +770,32 @@ namespace NoiseTerrain
             displayPlatformGraph = true;
         }
 
-        private IEnumerator PlaceLiquid(TileBase liquidTile, Tilemap tilemap, Vector2Int posStart)
+        private IEnumerator PlaceLiquid(TileBase liquidTile, Tilemap tilemap, Vector2Int posStart, bool fillHorizontally)
         {
             yield return null;
             if (!tilemap.GetTile(new Vector3Int(posStart.x, posStart.y, 0)))
             {
-                tilemap.SetTile(new Vector3Int(posStart.x, posStart.y, 0), liquidTile);
-                if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left));
-                if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right));
-                if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)) && !chunks.GetTile(posStart + Vector2Int.down)) StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down));
+                List<Vector2Int> fillTiles = WaterChunk.FindFloodTiles(posStart, chunks);
+
+                foreach (Vector2Int tile in fillTiles)
+                {
+                    tilemap.SetTile(new Vector3Int(tile.x, tile.y, 0), liquidTile);
+                }
+                
+
+                //if (fillHorizontally && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
+                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, fillHorizontally));
+                //if (fillHorizontally && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
+                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right, fillHorizontally));
+                //if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)) && !chunks.GetTile(posStart + Vector2Int.down))
+                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down, false));
+                //else if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)))
+                //{
+                //    if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
+                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, false));
+                //    if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
+                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right, false));
+                //}
             }
 
         }
@@ -789,7 +806,7 @@ namespace NoiseTerrain
             Vector2Int fluidStart = node.GetFluidEdge(sinkID);
             if(!roomChunk.GetTile(fluidStart.x, fluidStart.y))
             {
-                StartCoroutine(PlaceLiquid(waterTile, waterTilemap, new Vector2Int(fluidStart.x, -fluidStart.y)));
+                StartCoroutine(PlaceLiquid(waterTile, waterTilemap, new Vector2Int(fluidStart.x, -fluidStart.y), true));
             }
         }
 

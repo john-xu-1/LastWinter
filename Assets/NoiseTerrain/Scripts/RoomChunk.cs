@@ -48,7 +48,7 @@ namespace NoiseTerrain
             maxTile = new Vector2Int(maxXID * roomChunks[0].width + roomChunks[0].width - 1, minYID * roomChunks[0].height);
 
 
-            PrintBoolMap();
+            //PrintBoolMap();
             //PrintFilledChunkIDs();
             SetFilledChunks(jumpHeight);
             //PrintPlatformIDs();
@@ -116,8 +116,9 @@ namespace NoiseTerrain
             //setup platform tiles
             for (int i = 0; i < filledChunkCount; i += 1)
             {
-                filledChunks[i].SetPlatforms(this, jumpHeight);
-                filledChunks[i].SetWallChunks(this, jumpHeight);
+                filledChunks[i].setUpFilledChunk(this);
+                filledChunks[i].SetPlatforms(jumpHeight);
+                filledChunks[i].SetWallChunks(jumpHeight);
             }
 
         }

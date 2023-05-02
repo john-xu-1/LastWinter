@@ -9,7 +9,7 @@ public class MenuSaveSystem : MonoBehaviour
 
     public MenuUIHandler MUH;
 
-    public int labIndex = 1;
+    public int labIndex = 2;
 
 
     public void LoadLab()

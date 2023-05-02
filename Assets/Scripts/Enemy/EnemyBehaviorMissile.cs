@@ -39,7 +39,7 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
         }
 
 		Vector2 targetPos = this.targetPos + Vector2.up * 0.5f + Vector2.right * 0.5f;
-		if (Vector2.Distance(targetPos, transform.position) < pathNodeBuffer)
+		if (pathIndex >= mother.path.Count || Vector2.Distance(targetPos, transform.position) < pathNodeBuffer)
 		{
 			if (pathIndex < mother.path.Count - 1) pathIndex += 1;
 			else
@@ -53,6 +53,8 @@ public class EnemyBehaviorMissile : EnemyBehaviorBase
 		direction.Normalize();
 
 		float rotateAmount = Vector3.Cross(direction, transform.up).z;
+
+		if (rotateAmount == 0 && direction == (targetPos - (Vector2)transform.position).normalized) rotateAmount = 0.1f;
 
 		rb.angularVelocity = -rotateAmount * rotateSpeed;
 

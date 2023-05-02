@@ -594,12 +594,14 @@ MonoBehaviour:
   target_Offset: {x: 0, y: 0, z: 0}
   FollowType: 3
   MUH: {fileID: 1343483857}
+  chunkLoader: {fileID: 0}
   targetOthographicSize: 31
   targetOthographicSizeGrowthRate: 0.01
   debug: 1
   debugWorldHeight: 100
   debugWorldWidth: 100
   inputRate: 0.15
+  active: 0
   bound: {fileID: 0}
   labSmoothing: 2
 --- !u!1 &691038506
@@ -1101,7 +1103,7 @@ MonoBehaviour:
   IS: {fileID: 11400000, guid: 37c0586d1c2a3421a856ddf00e808fb8, type: 2}
   saveName: 
   MUH: {fileID: 1343483857}
-  labIndex: 1
+  labIndex: 2
 --- !u!1 &1997566854
 GameObject:
   m_ObjectHideFlags: 0

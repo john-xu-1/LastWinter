@@ -129,6 +129,8 @@ public class SceneLoader : MonoBehaviour
         progression += 1 / (float)progressionItemsCount;
         StartCoroutine(ObstaclesSetup());
     }
+    public Teleporter teleporterPrefab;
+    public Exit exitPrefab;
     IEnumerator ObstaclesSetup()
     {
         StartCoroutine(noiseMapGenerator.GenerateLocomotionGraph());
@@ -141,7 +143,32 @@ public class SceneLoader : MonoBehaviour
         {
             noiseMapGenerator.GenerateLiquid(int.Parse(atom[0]), int.Parse(atom[1]));
         }
-        
+        System.Random random = new System.Random(seed);
+        foreach (List<string> atom in GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset().Value["teleporter"])
+        {
+            Teleporter teleporter = Instantiate(teleporterPrefab);
+            int nodeID = int.Parse(atom[0]);
+            int teleporterID = int.Parse(atom[1]);
+            teleporter.teleporterID = teleporterID;
+
+            //NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(nodeID);
+            //int randomIndex = random.Next(0, platform.groundTiles.Count);
+
+            Vector2 ground = getRandomGround(nodeID, random);
+            teleporter.transform.position = new Vector3(ground.x + 0.5f, ground.y, 0f);
+        }
+
+        foreach (List<string> atom in GameObject.FindObjectOfType<ASPLocomotionSolver>().GetAnswerset().Value["exit"])
+        {
+            int nodeID = int.Parse(atom[0]);
+            int sceneID = int.Parse(atom[1]);
+            Exit exit = Instantiate(exitPrefab);
+            exit.exitSceneIndex = sceneID;
+            Vector2 ground = getRandomGround(nodeID, random);
+            exit.transform.position = new Vector3(ground.x + 0.5f, ground.y + 0.5f, 0);
+
+        }
+
         progression += 1 / (float)progressionItemsCount;
         StartCoroutine(PickablesSetup());
     }
@@ -201,6 +228,14 @@ public class SceneLoader : MonoBehaviour
 
         loadingScreen.SetActive(false);
 
+    }
+
+    public static Vector2 getRandomGround(int nodeID, System.Random random)
+    {
+        
+        NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(nodeID);
+        int randomIndex = random.Next(0, platform.groundTiles.Count);
+        return platform.GetTilePos(platform.groundTiles[randomIndex]);
     }
 
 }
@@ -295,9 +330,9 @@ public class PlayerSetup : Setup
             }
             if(platformID > 0)
             {
-                NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);
-                Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
-                Vector2Int groundPos = platform.GetTilePos(ground);
+                //NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);
+                //Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
+                Vector2 groundPos = SceneLoader.getRandomGround(platformID, random);//platform.GetTilePos(ground);
                 GameObject player = GameObject.Instantiate(playerPrefab);
                 player.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1);
                 GameObject.FindObjectOfType<GameHandler>().StartGameHandler(player);
@@ -404,9 +439,9 @@ public class EnemySetup : Setup
             if (platformID > 0)
             {
                 GameObject enemy = GameObject.Instantiate(prefab);
-                NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);
-                Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
-                Vector2Int groundPos = platform.GetTilePos(ground);
+                //NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);
+                //Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
+                Vector2 groundPos = SceneLoader.getRandomGround(platformID, random);
                 enemy.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1.6f);
                 NoiseTerrain.Chunk myChunk = NoiseTerrain.ChunkHandler.singlton.GetChunk(enemy.transform.position);
                 enemy.GetComponent<ChunkObjectEnemy>().mychunk = myChunk;
@@ -522,9 +557,9 @@ public class ItemSetup : Setup
             }
             if( platformID > 0)
             {
-                NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);
-                Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
-                Vector2Int groundPos = platform.GetTilePos(ground);
+                //NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);
+                //Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
+                Vector2 groundPos = SceneLoader.getRandomGround(platformID, random);
                 GameObject item = GameObject.Instantiate(prefab);
                 item.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 2);
             }

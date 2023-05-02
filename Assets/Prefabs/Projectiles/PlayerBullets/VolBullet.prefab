@@ -231,13 +231,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75864a3df8bf439c9c75d9eb624bac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
+  damage: 5
   type: Player
   hitpoint: {fileID: 2891621919610108017}
   range: 0.15
   enemyLayers:
     serializedVersion: 2
     m_Bits: 8192
+  enemyCriticalLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isEnemy: 0
   isMelee: 0
 --- !u!1 &4440748887184078937
 GameObject:

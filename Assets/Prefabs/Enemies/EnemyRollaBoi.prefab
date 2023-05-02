@@ -237,7 +237,7 @@ MonoBehaviour:
   player: {fileID: 0}
   rb: {fileID: 8387131397387960716}
   angerRange: 100
-  speed: 1
+  speed: 10
   attackCD: 0.25
   dd: {fileID: 8387131398469716254}
   movingRight: 1
@@ -248,7 +248,7 @@ MonoBehaviour:
   gravity: {x: 0, y: -1}
   startTimeBetweenSpawn: 0.75
   trail: {fileID: 7188955091665116316, guid: 3dea5ad75655c4202a3c326069a3fcde, type: 3}
-  trailTime: 5
+  trailTime: 10
 --- !u!58 &8387131397387960717
 CircleCollider2D:
   m_ObjectHideFlags: 0

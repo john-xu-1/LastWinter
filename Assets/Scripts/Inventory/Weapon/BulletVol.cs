@@ -85,7 +85,7 @@ public class BulletVol : BulletBase
 
 
 
-                hasCollided.Add(collision.gameObject);
+                hasCollided.Add(collision.transform.parent.gameObject);
 
                 foreach (GameObject element in hasCollided)
                 {
@@ -95,7 +95,7 @@ public class BulletVol : BulletBase
 
                 Vector2 curEnemy = collision.transform.position;
 
-                if (hasJumpedTimes < jumpTimes && collision && enemyList.Count > 0)
+                if (hasJumpedTimes < jumpTimes && collision.transform.parent && enemyList.Count > 0)
                 {
                     Vector2 direction = (GetClosestEnemy(enemyList, curEnemy).transform.position - transform.position).normalized;
                     GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x * speed, direction.y * speed);
