@@ -12,27 +12,18 @@ namespace NoiseTerrain
         public List<PlatformChunk> platforms = new List<PlatformChunk>();
         public List<WallChunk> walls = new List<WallChunk>();
         int[,] platformIDs;
+        int[,] wallIDs;
         int minX, minY, maxX, maxY;
-        //public FilledChunk()
-        //{
-        //    filledTiles = new List<Vector2Int>();
-        //    groundTiles = new List<Vector2Int>();
-        //}
-        //public FilledChunk(List<Vector2Int> filledTiles)
-        //{
-        //    this.filledTiles = filledTiles;
-        //}
+        RoomChunk roomChunk;
+
         public int GetPlatformID(Vector2Int tile)
         {
             //Debug.Log($"{tile.x - minX} {-tile.y - maxY} minX: {minX} maxY: {maxY}");
             return platformIDs[tile.x - minX, tile.y - minY];
         }
-        public void SetWallChunks(RoomChunk roomChunk, int jumpHeight)
+        public void SetupFilledChunk(RoomChunk roomChunk)
         {
-
-        }
-        public void SetPlatforms(RoomChunk roomChunk, int jumpHeight)
-        {
+            this.roomChunk = roomChunk;
             minX = int.MaxValue;
             minY = int.MaxValue;
             maxX = int.MinValue;
@@ -44,6 +35,18 @@ namespace NoiseTerrain
                 if (tile.x < minX) minX = tile.x;
                 if (tile.y < minY) minY = tile.y;
             }
+        }
+        public void SetWallChunks(int jumpHeight)
+        {
+            int width = maxX - minX + 1;
+            int height = maxY - minY + 1;
+            wallIDs = new int[width, height];
+
+
+        }
+        public void SetPlatforms(int jumpHeight)
+        {
+            //SetupFilledChunk(roomChunk);
             int width = maxX - minX + 1;
             int height = maxY - minY + 1;
             platformIDs = new int[width, height];
@@ -118,15 +121,13 @@ namespace NoiseTerrain
                 {
                     //check up
 
-                    if (/*platformIDs[current.x + xOffset - minX, y - 1 - minY] != 0*/ !roomChunk.GetTile(current.x + xOffset, y - 1))
+                    if (!roomChunk.GetTile(current.x + xOffset, y - 1))
                     {
                         //plaform tile found
                         platformIDs[current.x + xOffset - minX, y - minY] = platformID;
                         Vector2Int neighbor = new Vector2Int(current.x + xOffset, y);
                         if (!visited.Contains(neighbor) && !frontier.Contains(neighbor))
                         {
-                            //toVisit.Remove(neighbor);
-                            //visited.Add(neighbor);
                             frontier.Add(neighbor);
                         }
 

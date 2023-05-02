@@ -116,8 +116,9 @@ namespace NoiseTerrain
             //setup platform tiles
             for (int i = 0; i < filledChunkCount; i += 1)
             {
-                filledChunks[i].SetPlatforms(this, jumpHeight);
-                filledChunks[i].SetWallChunks(this, jumpHeight);
+                filledChunks[i].SetupFilledChunk(this);
+                filledChunks[i].SetPlatforms(/*this,*/ jumpHeight);
+                filledChunks[i].SetWallChunks(/*this,*/ jumpHeight);
             }
 
         }

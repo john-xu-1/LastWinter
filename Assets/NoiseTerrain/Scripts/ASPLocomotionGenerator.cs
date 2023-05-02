@@ -14,15 +14,19 @@ public class ASPLocomotionGenerator : ASPGenerator
     }
     protected string GetNodeChunksMemory()
     {
+        Debug.Log($"Node Count: {nodeChunks.Count}");
         string aspCode = "\n";
+        int edgeCount = 0;
         foreach(NodeChunk nodeChunk in nodeChunks)
         {
             aspCode += $"node({nodeChunk.nodeID}).\n";
             foreach(int connectionID in nodeChunk.connectedPlatforms)
             {
                 aspCode += $"edge({nodeChunk.nodeID},{connectionID}).\n";
+                edgeCount++;
             }
         }
+        Debug.Log($"Edge Count: {edgeCount}");
         return aspCode;
     }
     protected override string getASPCode()
@@ -53,10 +57,11 @@ public class ASPLocomotionGenerator : ASPGenerator
             1{{end(NodeID):node(NodeID)}}1.
             
             %% flood sinks not on end path %%
-            path(NodeID, 0, PathID) :- node(NodeID), PathID = NodeID.
+            path(NodeID, 0, PathID) :- path(NodeID,_), node(NodeID), PathID = NodeID.
             path(NodeID, Step + 1, PathID) :- edge(Source, NodeID), path(Source, Step, PathID), Step < 100.
-            sink(PathID) :- node(PathID), end(NodeID), not path(NodeID,_,PathID), path(PathID,_).
-            sink_source(NodeID, SinkID) :- edge(NodeID, SinkID), sink(SinkID), not sink(NodeID).
+            
+            %sink(PathID) :- node(PathID), end(NodeID), not path(NodeID,_,PathID), path(PathID,_).
+            %sink_source(NodeID, SinkID) :- edge(NodeID, SinkID), sink(SinkID), not sink(NodeID).
 
             %% player reach every piece %%
             path(NodeID, 0) :- piece(player,NodeID).
@@ -70,20 +75,23 @@ public class ASPLocomotionGenerator : ASPGenerator
             
             #const max_teleporters = 2.
             teleporter(1..max_teleporters).
-            2{{teleporter(NodeID, TeleporterID): node(NodeID)}}2 :- teleporter(TeleporterID).
+            2{{teleporter(NodeID, TeleporterID): node(NodeID), path(NodeID,_)}}2 :- teleporter(TeleporterID).
             :- teleporter(NodeID,_), Count = {{teleporter(NodeID,_)}}, Count != 1.
             
             %edge(Source,NodeID) :- teleporter(NodeID, T1), teleporter(Source, T2), T1 == T2, NodeID != Source.
             :- teleporter(NodeID,_), not path(NodeID,_).
-            %path(NodeID, Step + 1) :- teleporter(NodeID, T1), teleporter(Source,T2), T1 == T2, path(Source, Step), Step < 100.
+            path(NodeID, Step + 1) :- teleporter(NodeID, T1), teleporter(Source,T2), T1 == T2, path(Source, Step), Step < 100.
 
             exit(NodeID, 2) :- end(NodeID).
+
+            reachable_node(NodeID) :- node(NodeID), path(NodeID,_).
+            %:- reachable_node(PathID), start(NodeID), not path(NodeID,_,PathID).
             
             #show piece/2.
-            #show sink/1.
+            %#show sink/1.
             #show start/1.
             #show exit/2.
-            #show sink_source/2.
+            %#show sink_source/2.
             #show teleporter/2.
 
         ";
