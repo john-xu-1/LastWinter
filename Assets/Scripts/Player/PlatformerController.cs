@@ -116,14 +116,27 @@ public class PlatformerController : PhysicsObject
     public int numJumps = 2;
 
 
-    public BoxCollider2D boxCollider;
-    public bool isClimbing = false;
+    
+
 
     public int maxJumps = 1;
     public int currentJumps = 0;
 
-    public float climbSpeed = 5.0f;
-    public float climbForce = 20.0f;
+
+    bool isTouchingFront;
+    public Transform frontCheck;
+    bool wallSliding;
+    public LayerMask whatsWall;
+    public float wallSlidingSpeed;
+    public float wallSlidePadding;
+    public float checkRadius;
+    public bool wallJumping;
+    public float xWallForce;
+    public float yWallForce;
+    public float wallJumpTime;
+
+
+    bool isWallJumpOver = true;
 
     private void Awake()
     {
@@ -141,16 +154,9 @@ public class PlatformerController : PhysicsObject
         horInput.x = PlayerController.canMove? Input.GetAxis("Horizontal"): 0;
 
 
-        //wall-climbing
+       
 
-        if (Input.GetButtonDown("Jump") && isClimbing)
-        {
-            isClimbing = false;
-            gravityModifer = 1.0f;
-        }
-
-
-
+        
         //flip
         if (horInput.x < 0)
         {
@@ -175,96 +181,132 @@ public class PlatformerController : PhysicsObject
             anim.SetBool("isRun", false);
         }
 
-        
+        Vector2 tspeed = Vector2.zero;
+
+
         //normal double/signle jumps
         if (EffectorState == EffectorStates.None)
         {
             gravityModifer = gravityModifierNormal;
 
-            
-
-            
-
-            
-            if (velocity.y <= 0)
+            isTouchingFront = Physics2D.OverlapCircle(frontCheck.position, checkRadius, whatsWall);
+            Debug.Log(isGrounded);
+            if (isTouchingFront && !isGrounded)
             {
-                anim.SetBool("isJump", false);
-                
+                wallSliding = true;
             }
+            else wallSliding = false;
 
-            if (Input.GetButtonDown("Jump") && currentJumps < maxJumps)
+
+
+            if (!wallSliding)
             {
-                velocity.y = takeOffSpeed;
-                isFalling = true;
-                anim.SetBool("isJump", true);
-                isJump = true;
-                currentJumps++;
-            }
-            else if (PlayerController.canJump && Input.GetButtonUp("Jump"))
-            {
-
-
-                if (velocity.y > 0)
+                if (velocity.y <= 0)
                 {
-
-                    velocity.y *= 0.5f;
-
+                    anim.SetBool("isJump", false);
 
                 }
 
-            }
-
-            if (isGrounded) currentJumps = 0;
-
-
-            //padding
-            if (velocity.y <= jumpDashPadding && velocity.y >= 0)
-            {
-                isJump = false;
-            }
-
-
-
-            if (isDash == 0)
-            {
-                if (PlayerController.canMove && Input.GetKeyDown(KeyCode.LeftControl))
+                if (Input.GetButtonDown("Jump") && currentJumps < maxJumps)
                 {
-                    if (Time.time >= nextDashTime)
+                    velocity.y = takeOffSpeed;
+                    isFalling = true;
+                    anim.SetBool("isJump", true);
+                    isJump = true;
+                    currentJumps++;
+                }
+                else if (PlayerController.canJump && Input.GetButtonUp("Jump"))
+                {
+
+
+                    if (velocity.y > 0)
                     {
-                        isDash = 1;
-                        gravityModifer = 0;
-                        dashTrail.SetActive(true);
-                        anim.SetTrigger("isDash");
-                        nextDashTime = Time.time + DashRate;
+
+                        velocity.y *= 0.5f;
+
+
                     }
 
+                }
+
+                if (isGrounded) currentJumps = 0;
+
+
+                //padding
+                if (velocity.y <= jumpDashPadding && velocity.y >= 0)
+                {
+                    isJump = false;
+                }
+
+
+
+                if (isDash == 0)
+                {
+                    if (PlayerController.canMove && Input.GetKeyDown(KeyCode.LeftControl))
+                    {
+                        if (Time.time >= nextDashTime)
+                        {
+                            isDash = 1;
+                            gravityModifer = 0;
+                            dashTrail.SetActive(true);
+                            anim.SetTrigger("isDash");
+                            nextDashTime = Time.time + DashRate;
+                        }
+
+
+                    }
 
                 }
+                else
+                {
+                    if (dashTime <= 0)
+                    {
+                        isDash = 0;
+                        dashTrail.SetActive(false);
+                        gravityModifer = 2.0f;
+                        dashTime = dashStartTime;
+                        dashSpeed = 0;
+                    }
+                    else
+                    {
+                        dashTime -= Time.deltaTime;
+                        if (isDash == 1)
+                        {
+                            dashSpeed = dashSpeedStart;
+                        }
+                    }
+                }
+
+
+                velocity.y += specialYForce;
+
+                tspeed = horInput * maxSpeed;
+
+
 
             }
             else
             {
-                if (dashTime <= 0)
+
+
+                //wall climbing
+
+
+                velocity = new Vector2(velocity.x, Mathf.Clamp(velocity.y, -wallSlidingSpeed, float.MaxValue));
+
+                if (Input.GetButtonDown("Jump"))
                 {
-                    isDash = 0;
-                    dashTrail.SetActive(false);
-                    gravityModifer = 2.0f;
-                    dashTime = dashStartTime;
-                    dashSpeed = 0;
+                    wallJumping = true;
+                    Invoke("SetWallJumpingToFalse", wallJumpTime);
                 }
-                else
+
+                if (wallJumping == true)
                 {
-                    dashTime -= Time.deltaTime;
-                    if (isDash == 1)
-                    {
-                        dashSpeed = dashSpeedStart;
-                    }
+                    velocity = new Vector2(xWallForce * -horInput.x, yWallForce);
                 }
+
+
             }
-
-
-
-
         }
         else
         {
@@ -278,17 +320,24 @@ public class PlatformerController : PhysicsObject
             {
                 velocity.y = -SinkEffector;
             }
-            
+
         }
+            
+            
 
-        velocity.y += specialYForce;
 
-        Vector2 tspeed = horInput * maxSpeed;
+
+
 
         targetVelocity = new Vector2(tspeed.x + specialXForce + (facing * dashSpeed), tspeed.y);
 
-        
 
+
+    }
+
+    void SetWallJumpingToFalse()
+    {
+        wallJumping = false;
     }
 
     /*
