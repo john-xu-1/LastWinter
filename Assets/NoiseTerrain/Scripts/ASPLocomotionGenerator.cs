@@ -80,7 +80,7 @@ public class ASPLocomotionGenerator : ASPGenerator
             
             %edge(Source,NodeID) :- teleporter(NodeID, T1), teleporter(Source, T2), T1 == T2, NodeID != Source.
             :- teleporter(NodeID,_), not path(NodeID,_).
-            path(NodeID, Step + 1) :- teleporter(NodeID, T1), teleporter(Source,T2), T1 == T2, path(Source, Step), Step < 100.
+            %path(NodeID, Step + 1) :- teleporter(NodeID, T1), teleporter(Source,T2), T1 == T2, path(Source, Step), Step < 100.
 
             exit(NodeID, 2) :- end(NodeID).
 

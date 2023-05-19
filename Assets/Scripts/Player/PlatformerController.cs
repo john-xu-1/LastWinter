@@ -137,6 +137,7 @@ public class PlatformerController : PhysicsObject
 
 
     bool isWallJumpOver = true;
+    float wj0x = 0;
 
     private void Awake()
     {
@@ -190,7 +191,7 @@ public class PlatformerController : PhysicsObject
             gravityModifer = gravityModifierNormal;
 
             isTouchingFront = Physics2D.OverlapCircle(frontCheck.position, checkRadius, whatsWall);
-            Debug.Log(isGrounded);
+            //Debug.Log(isGrounded);
             if (isTouchingFront && !isGrounded)
             {
                 wallSliding = true;
@@ -302,11 +303,17 @@ public class PlatformerController : PhysicsObject
 
                 if (wallJumping == true)
                 {
-                    velocity = new Vector2(xWallForce * -horInput.x, yWallForce);
+                    
+                    
+                    velocity.y = yWallForce;
+                    wj0x = xWallForce * -horInput.x;
+
                 }
 
 
             }
+
+            
         }
         else
         {
@@ -329,8 +336,10 @@ public class PlatformerController : PhysicsObject
 
 
 
-        targetVelocity = new Vector2(tspeed.x + specialXForce + (facing * dashSpeed), tspeed.y);
+        targetVelocity = new Vector2(tspeed.x + specialXForce + wj0x + (facing * dashSpeed), tspeed.y);
 
+        wj0x *= 0.95f;
+        if (wj0x < 0.01f && wj0x > -0.01f) wj0x = 0; 
 
 
     }

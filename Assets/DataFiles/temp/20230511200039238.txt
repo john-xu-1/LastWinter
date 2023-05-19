@@ -1,0 +1,451 @@
+
+
+            #const enemy_max = 100.
+            #const enemy_min = 5.
+            
+            piece_types(player;enemy;item).
+            piece_enemy_types(bounce_boi;missile_launcher;rolla_boi;shotgun_boi).
+            piece_weapon_types(drone_controller;old_shotgun;rainy_day;magnetized_shifter).
+
+            %% place pieces on nodes %%
+            1{piece(player,NodeID): node(NodeID)}1.
+            enemy_min{piece(Enemy,NodeID): node(NodeID),piece_enemy_types(Enemy)}enemy_max.
+            :- piece_enemy_types(Type), not piece(Type,_).
+
+            %% only one typ of each weapon %%
+            4{piece(Weapon,NodeID): node(NodeID), piece_weapon_types(Weapon)}4.
+            :- piece_weapon_types(Type), not piece(Type,_). 
+
+            %% only one piece per room %%
+            :- Count = {piece(_,NodeID)}, node(NodeID), Count > 1.
+
+            %% start and end nodes %%
+            start(NodeID) :- piece(player, NodeID).
+            1{end(NodeID):node(NodeID)}1.
+            
+            %% flood sinks not on end path %%
+            path(NodeID, 0, PathID) :- path(NodeID,_), node(NodeID), PathID = NodeID.
+            path(NodeID, Step + 1, PathID) :- edge(Source, NodeID), path(Source, Step, PathID), Step < 100.
+            
+            %sink(PathID) :- node(PathID), end(NodeID), not path(NodeID,_,PathID), path(PathID,_).
+            %sink_source(NodeID, SinkID) :- edge(NodeID, SinkID), sink(SinkID), not sink(NodeID).
+
+            %% player reach every piece %%
+            path(NodeID, 0) :- piece(player,NodeID).
+            path(NodeID, Step + 1) :- edge(Source, NodeID), path(Source, Step), Step < 100.
+            :- piece(_,NodeID), not path(NodeID,_), node(NodeID).
+            :- end(NodeID), not path(NodeID,_).
+
+            %% every piece must be on a node that has a path to the end %%
+            :- piece(_,PathID), end(NodeID), not path(NodeID,_,PathID).
+
+            
+            #const max_teleporters = 2.
+            teleporter(1..max_teleporters).
+            2{teleporter(NodeID, TeleporterID): node(NodeID), path(NodeID,_)}2 :- teleporter(TeleporterID).
+            :- teleporter(NodeID,_), Count = {teleporter(NodeID,_)}, Count != 1.
+            
+            %edge(Source,NodeID) :- teleporter(NodeID, T1), teleporter(Source, T2), T1 == T2, NodeID != Source.
+            :- teleporter(NodeID,_), not path(NodeID,_).
+            path(NodeID, Step + 1) :- teleporter(NodeID, T1), teleporter(Source,T2), T1 == T2, path(Source, Step), Step < 100.
+
+            exit(NodeID, 2) :- end(NodeID).
+
+            reachable_node(NodeID) :- node(NodeID), path(NodeID,_).
+            %:- reachable_node(PathID), start(NodeID), not path(NodeID,_,PathID).
+            
+            #show piece/2.
+            %#show sink/1.
+            #show start/1.
+            #show exit/2.
+            %#show sink_source/2.
+            #show teleporter/2.
+
+        
+node(513).
+node(514).
+node(515).
+node(516).
+node(517).
+edge(517,515).
+node(518).
+edge(518,516).
+node(519).
+node(520).
+node(521).
+edge(521,522).
+edge(521,531).
+edge(521,533).
+node(522).
+edge(522,531).
+edge(522,533).
+edge(522,1025).
+edge(522,541).
+node(523).
+node(524).
+node(525).
+edge(525,522).
+edge(525,521).
+edge(525,531).
+edge(525,533).
+node(526).
+edge(526,523).
+edge(526,527).
+edge(526,528).
+node(527).
+edge(527,523).
+edge(527,528).
+node(528).
+node(529).
+edge(529,521).
+edge(529,522).
+edge(529,530).
+edge(529,531).
+edge(529,533).
+node(530).
+edge(530,522).
+edge(530,521).
+edge(530,531).
+edge(530,533).
+node(531).
+edge(531,527).
+edge(531,528).
+edge(531,533).
+node(532).
+edge(532,534).
+node(533).
+node(534).
+node(535).
+edge(535,534).
+edge(535,536).
+edge(535,537).
+node(536).
+edge(536,534).
+edge(536,537).
+node(537).
+edge(537,534).
+node(538).
+edge(538,531).
+edge(538,533).
+edge(538,1025).
+edge(538,541).
+node(539).
+edge(539,540).
+edge(539,542).
+edge(539,1537).
+node(540).
+edge(540,542).
+node(541).
+edge(541,533).
+node(542).
+node(543).
+edge(543,524).
+node(544).
+edge(544,540).
+edge(544,542).
+edge(544,1537).
+edge(544,550).
+node(545).
+edge(545,540).
+edge(545,542).
+node(546).
+node(547).
+node(548).
+node(549).
+node(550).
+node(551).
+edge(551,543).
+edge(551,553).
+edge(551,554).
+node(552).
+edge(552,555).
+node(553).
+node(554).
+edge(554,553).
+node(555).
+node(556).
+edge(556,550).
+edge(556,565).
+edge(556,566).
+edge(556,568).
+edge(556,569).
+edge(556,570).
+edge(556,3585).
+edge(556,571).
+edge(556,573).
+edge(556,574).
+edge(556,575).
+node(557).
+edge(557,2561).
+edge(557,3073).
+edge(557,554).
+edge(557,560).
+node(558).
+edge(558,2561).
+edge(558,3073).
+edge(558,554).
+edge(558,557).
+edge(558,560).
+node(559).
+edge(559,555).
+node(560).
+edge(560,553).
+edge(560,3073).
+edge(560,554).
+node(561).
+edge(561,554).
+node(562).
+edge(562,557).
+edge(562,563).
+node(563).
+edge(563,557).
+node(564).
+edge(564,554).
+edge(564,561).
+node(565).
+edge(565,566).
+edge(565,568).
+edge(565,577).
+node(566).
+edge(566,572).
+node(567).
+edge(567,556).
+edge(567,565).
+edge(567,566).
+edge(567,568).
+edge(567,569).
+node(568).
+edge(568,566).
+edge(568,574).
+node(569).
+edge(569,565).
+edge(569,566).
+edge(569,568).
+edge(569,3585).
+edge(569,571).
+edge(569,573).
+edge(569,574).
+node(570).
+edge(570,565).
+edge(570,566).
+edge(570,568).
+edge(570,569).
+edge(570,3585).
+edge(570,571).
+edge(570,573).
+edge(570,574).
+edge(570,575).
+node(571).
+edge(571,565).
+edge(571,568).
+edge(571,566).
+edge(571,3585).
+edge(571,573).
+edge(571,574).
+node(572).
+node(573).
+edge(573,572).
+edge(573,574).
+edge(573,577).
+node(574).
+edge(574,566).
+edge(574,572).
+node(575).
+edge(575,565).
+edge(575,566).
+edge(575,3585).
+edge(575,571).
+edge(575,573).
+edge(575,574).
+node(576).
+node(577).
+node(578).
+edge(578,581).
+edge(578,577).
+edge(578,582).
+node(579).
+edge(579,580).
+edge(579,583).
+node(580).
+node(581).
+edge(581,577).
+edge(581,582).
+edge(581,585).
+edge(581,5121).
+node(582).
+edge(582,577).
+edge(582,573).
+edge(582,585).
+node(583).
+edge(583,580).
+node(584).
+edge(584,581).
+edge(584,4609).
+edge(584,587).
+edge(584,586).
+node(585).
+edge(585,589).
+node(586).
+edge(586,5121).
+edge(586,598).
+edge(586,599).
+edge(586,601).
+edge(586,8193).
+node(587).
+edge(587,581).
+edge(587,4609).
+edge(587,586).
+node(588).
+edge(588,585).
+edge(588,589).
+node(589).
+node(590).
+edge(590,589).
+edge(590,593).
+edge(590,595).
+node(591).
+edge(591,586).
+edge(591,5633).
+node(592).
+node(593).
+edge(593,589).
+edge(593,595).
+node(594).
+edge(594,583).
+edge(594,5633).
+edge(594,5634).
+node(595).
+node(596).
+edge(596,593).
+edge(596,589).
+edge(596,6145).
+edge(596,595).
+edge(596,597).
+node(597).
+edge(597,593).
+edge(597,595).
+node(598).
+node(599).
+edge(599,598).
+node(600).
+edge(600,7170).
+edge(600,598).
+edge(600,6658).
+edge(600,7681).
+edge(600,599).
+node(601).
+edge(601,598).
+edge(601,599).
+node(602).
+node(603).
+node(604).
+edge(604,598).
+node(605).
+edge(605,8705).
+node(606).
+node(1025).
+edge(1025,533).
+edge(1025,541).
+node(1537).
+edge(1537,540).
+edge(1537,542).
+edge(1537,545).
+node(2049).
+edge(2049,543).
+node(2561).
+edge(2561,543).
+edge(2561,551).
+edge(2561,553).
+edge(2561,3073).
+edge(2561,554).
+node(3073).
+edge(3073,551).
+edge(3073,553).
+edge(3073,554).
+node(3585).
+edge(3585,568).
+edge(3585,566).
+edge(3585,572).
+edge(3585,573).
+node(4097).
+edge(4097,573).
+edge(4097,577).
+edge(4097,582).
+edge(4097,585).
+node(4609).
+edge(4609,581).
+edge(4609,5121).
+edge(4609,586).
+node(5121).
+edge(5121,577).
+edge(5121,582).
+edge(5121,585).
+edge(5121,586).
+node(5633).
+edge(5633,586).
+node(5634).
+edge(5634,586).
+edge(5634,5633).
+edge(5634,6657).
+node(6145).
+edge(6145,593).
+edge(6145,595).
+node(6657).
+edge(6657,586).
+node(6658).
+edge(6658,6657).
+edge(6658,586).
+edge(6658,6659).
+edge(6658,7682).
+node(6659).
+edge(6659,586).
+edge(6659,8193).
+node(7169).
+edge(7169,5634).
+edge(7169,6657).
+edge(7169,7170).
+node(7170).
+edge(7170,6657).
+edge(7170,6658).
+edge(7170,7681).
+node(7681).
+edge(7681,6658).
+edge(7681,6659).
+edge(7681,7682).
+edge(7681,586).
+edge(7681,8193).
+edge(7681,8195).
+node(7682).
+edge(7682,6658).
+edge(7682,6659).
+edge(7682,586).
+edge(7682,8193).
+node(8193).
+edge(8193,598).
+edge(8193,8194).
+node(8194).
+edge(8194,599).
+edge(8194,598).
+node(8195).
+edge(8195,586).
+edge(8195,8193).
+edge(8195,8194).
+edge(8195,598).
+edge(8195,8197).
+node(8196).
+edge(8196,598).
+node(8197).
+node(8198).
+edge(8198,598).
+edge(8198,604).
+edge(8198,10241).
+node(8705).
+edge(8705,7681).
+edge(8705,8195).
+edge(8705,8197).
+node(9217).
+edge(9217,8705).
+node(9729).
+edge(9729,8197).
+node(10241).
+edge(10241,604).
