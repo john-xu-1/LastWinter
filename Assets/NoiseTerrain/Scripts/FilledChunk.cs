@@ -8,7 +8,9 @@ namespace NoiseTerrain
     {
         public List<Vector2Int> filledTiles = new List<Vector2Int>();
         public List<Vector2Int> groundTiles = new List<Vector2Int>();
-        public List<Vector2Int> wallTiles = new List<Vector2Int>();
+        //public List<Vector2Int> wallTiles = new List<Vector2Int>();
+        public List<Vector2Int> leftWallTiles = new List<Vector2Int>();
+        public List<Vector2Int> rightWallTiles = new List<Vector2Int>();
         public List<PlatformChunk> platforms = new List<PlatformChunk>();
         public List<WallChunk> walls = new List<WallChunk>();
         int[,] platformIDs;
@@ -42,7 +44,29 @@ namespace NoiseTerrain
             int height = maxY - minY + 1;
             wallIDs = new int[width, height];
 
+            SetWallChunks(leftWallTiles, jumpHeight, false);
+            SetWallChunks(rightWallTiles, jumpHeight, true);
+        }
+        int wallID = 0;
+        private void SetWallChunks(List<Vector2Int> wallSideTiles, int jumpHeight, bool rightSide)
+        {
+            List<Vector2Int> toVisit = new List<Vector2Int>(wallSideTiles);
+            List<Vector2Int> visited = new List<Vector2Int>();
 
+            int breakCounter = 1000;
+            while (toVisit.Count > 0)
+            {
+                List<Vector2Int> frontier = new List<Vector2Int>();
+                wallID += 1;
+                Vector2Int validWall = FindValidWall(toVisit, jumpHeight, rightSide);
+
+                breakCounter -= 1;
+                if (breakCounter < 0)
+                {
+                    Debug.LogWarning("SetWallChunks toVisit.Count break");
+                    break;
+                }
+            }
         }
         public void SetPlatforms(int jumpHeight)
         {
@@ -92,25 +116,45 @@ namespace NoiseTerrain
             }
 
             for (int i = 0; i < platformID; i += 1) platforms.Add(new PlatformChunk(roomChunk));
-            string printMap = "";
+            //string printMap = "";
             for (int y = 0; y < platformIDs.GetLength(1); y += 1)
             {
                 for (int x = 0; x < platformIDs.GetLength(0); x += 1)
                 {
-                    if (platformIDs[x, y] == -1)
+                    //if (platformIDs[x, y] == -1)
+                    //{
+                    //    printMap += "X";
+                    //}
+                    //else
+                    //{
+                    //    printMap += platformIDs[x, y].ToString();
+                    //}
+                    if (platformIDs[x, y] > 0 && y + minY > 0)
                     {
-                        printMap += "X";
+                        platforms[platformIDs[x, y] - 1].jumpTiles.Add(new Vector2Int(x + minX, y + minY));
+                        //Debug.Log($"jumpTiles[{x + minX}, {y + minY}] = {roomChunk.GetTile(x + minX, y + minY)}");
                     }
-                    else
-                    {
-                        printMap += platformIDs[x, y].ToString();
-                    }
-                    if (platformIDs[x, y] > 0 && y + minY > 0) platforms[platformIDs[x, y] - 1].groundTiles.Add(new Vector2Int(x + minX, y + minY));
                 }
-                printMap += "\n";
+                //printMap += "\n";
             }
-            Debug.Log(printMap);
+            //Debug.Log(printMap);
         }
+        private Vector2Int FindValidWall(List<Vector2Int> wallTiles, int jumpHeight, bool rightSide)
+        {
+            Vector2Int validWall = new Vector2Int(-1,-1);
+            
+            return validWall;
+        } 
+
+        private bool IsValidWall(Vector2Int wallTile, int jumpHeight, bool rightSide)
+        {
+            int xOffset = rightSide ? 1 : -1;
+            //valid wall tile has at least one attached wall tile that is jumpHieght + 1 above the ground
+            int count = jumpHeight;
+
+            return true;
+        }
+
         private void FindPlatformNeighbor(int xOffset, Vector2Int current, int jumpHeight, int platformID, List<Vector2Int> toVisit, List<Vector2Int> visited, List<Vector2Int> frontier, RoomChunk roomChunk)
         {
             int y = current.y;

@@ -107,7 +107,7 @@ public class LightingLevelSetup : MonoBehaviour
             int lights = 1;
             while (lights > 0)
             {
-                foreach (Vector2Int ground in platform.groundTiles)
+                foreach (Vector2Int ground in platform.jumpTiles)
                 {
                     if (random.Next(0, 10) == 9)
                     {

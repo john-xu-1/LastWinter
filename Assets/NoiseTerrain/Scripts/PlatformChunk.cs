@@ -6,7 +6,7 @@ namespace NoiseTerrain
 {
     public class PlatformChunk : NodeChunk
     {
-        public List<Vector2Int> groundTiles = new List<Vector2Int>();
+        //public List<Vector2Int> jumpTiles = new List<Vector2Int>();
         public PlatformChunk(RoomChunk roomChunk)
         {
             this.roomChunk = roomChunk;
@@ -16,7 +16,7 @@ namespace NoiseTerrain
         {
             
             this.nodeID = nodeID;
-            Vector2Int start = GetTilePos(groundTiles[0]);
+            Vector2Int start = GetTilePos(jumpTiles[0]);
             //roomChunk.PrintPath(new Vector2Int(groundTiles[0].x + roomChunk.minTile.x, -groundTiles[0].y + 1 - roomChunk.maxTile.y), jumpHeight, platformID);
             //path = roomChunk.GetPath(new Vector2Int(groundTiles[0].x + roomChunk.minTile.x, -groundTiles[0].y + 1 - roomChunk.maxTile.y), jumpHeight, platformID);
             
@@ -105,9 +105,9 @@ namespace NoiseTerrain
 
         public override Vector2Int GetFluidEdge(int sinkID)
         {
-            Vector2Int rEdge = groundTiles[0];
-            Vector2Int lEdge = groundTiles[0];
-            foreach(Vector2Int ground in groundTiles)
+            Vector2Int rEdge = jumpTiles[0];
+            Vector2Int lEdge = jumpTiles[0];
+            foreach(Vector2Int ground in jumpTiles)
             {
                 if (ground.x > rEdge.x) rEdge = ground;
                 if (ground.x < lEdge.x) lEdge = ground;

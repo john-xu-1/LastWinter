@@ -81,8 +81,8 @@ namespace NoiseTerrain
                     foreach (int nodeID in platform.platform.connectedPlatforms)
                     {
                         PlatformChunk destination = roomChunk.GetPlatform(nodeID);
-                        Vector2 start = platform.platform.GetTilePos(platform.platform.groundTiles[0]);
-                        Vector2 dir = destination.GetTilePos(destination.groundTiles[0]) - start;
+                        Vector2 start = platform.platform.GetTilePos(platform.platform.jumpTiles[0]);
+                        Vector2 dir = destination.GetTilePos(destination.jumpTiles[0]) - start;
                         Debug.DrawRay(start, dir, platform.graphColor);
                         //Debug.Log($"{platform.graphColor}");
                     }
