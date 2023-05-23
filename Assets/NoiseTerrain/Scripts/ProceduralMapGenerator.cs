@@ -317,58 +317,7 @@ namespace NoiseTerrain
 
         }
 
-        RoomChunk roomChunk;
-        public RoomChunk RoomChunk { get { return roomChunk; } }
-        public int jumpHeight = 6;
-        public bool platformSetupComplete;
-        public void SetRoomChunk()
-        {
-            platformSetupComplete = false;
-            List<Chunk> roomChunks = new List<Chunk>();
-            //roomSize should be double the tileRadius if all visible chunks should be in one room
-            for (int x = -roomSize.x / 2; x <= roomSize.x / 2; x += 1)
-            {
-                for (int y = -roomSize.y / 2; y <= roomSize.y / 2; y += 1)
-                {
-                    roomChunks.Add(chunks.GetChunk(chunkID + new Vector2Int(x, y)));
-                }
-            }
-            this.roomChunks = roomChunks;
-            Thread thread = new Thread(SetRoomChunkThread);
-            thread.Start();
-        }
-        public void SetRoomChunk(List<Chunk> roomChunks)
-        {
-            platformSetupComplete = false;
-            setupComplete = false;
-            //active = true;
-            this.roomChunks = roomChunks;
-            Thread thread = new Thread(SetRoomChunkThread);
-            thread.Start();
-        }
-        List<Chunk> roomChunks;
-        public void SetRoomChunkThread()
-        {
-            roomChunk = new RoomChunk(roomChunks, jumpHeight);
-            platformSetupComplete = true;
-        }
-
-        public List<PlatformChunk> GetPlatforms()
-        {
-            List<PlatformChunk> platforms = new List<PlatformChunk>();
-            foreach (FilledChunk filledChunk in roomChunk.filledChunks)
-            {
-                foreach (PlatformChunk platform in filledChunk.platforms)
-                {
-                    platforms.Add(platform);
-                }
-            }
-            return platforms;
-        }
-        public PlatformChunk GetPlatform(int platformID)
-        {
-            return roomChunk.GetPlatform(platformID);
-        }
+        
 
         public override void GenerateMap(int seed)
         {
@@ -450,7 +399,106 @@ namespace NoiseTerrain
             return GenerateBoolMap(minX, maxX, minY, maxY, 0);
         }
 
-        
+        public void PlaceWater(Vector2Int startPos)
+        {
+            StartCoroutine(PlaceLiquid(waterTile, waterTilemap, startPos, true));
+        }
+        public void PlaceLava(Vector2Int startPos)
+        {
+            StartCoroutine(PlaceLiquid(lavaTile, lavaTilemap, startPos, true));
+        }
+        private IEnumerator PlaceLiquid(TileBase liquidTile, Tilemap tilemap, Vector2Int posStart, bool fillHorizontal)
+        {
+            yield return null;
+            if (!tilemap.GetTile(new Vector3Int(posStart.x, posStart.y, 0)))
+            {
+                List<Vector2Int> fillTiles = WaterChunk.FindFloodTiles(posStart, chunks);
+
+                foreach (Vector2Int tile in fillTiles)
+                {
+                    tilemap.SetTile(new Vector3Int(tile.x, tile.y, 0), liquidTile);
+                }
+                //tilemap.SetTile(new Vector3Int(posStart.x, posStart.y, 0), liquidTile);
+
+                //if (fillHorizontal && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
+                //    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, fillHorizontal));
+                //if (fillHorizontal && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
+                //    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right,fillHorizontal));
+                //if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)) && !chunks.GetTile(posStart + Vector2Int.down))
+                //    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down, false));
+                //else if(visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)))
+                //{
+                //    if(visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
+                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, false));
+                //    if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
+                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right, false));
+                //}
+            }
+
+        }
+
+        public void GenerateLiquid(int sourceID, int sinkID)
+        {
+            NodeChunk node = roomChunk.GetPlatform(sourceID);
+            Vector2Int fluidStart = node.GetFluidEdge(sinkID);
+            if (!roomChunk.GetTile(fluidStart.x, fluidStart.y))
+            {
+                StartCoroutine(PlaceLiquid(waterTile, waterTilemap, new Vector2Int(fluidStart.x, -fluidStart.y), true));
+            }
+        }
+
+        RoomChunk roomChunk;
+        public RoomChunk RoomChunk { get { return roomChunk; } }
+        public int jumpHeight = 6;
+        public bool platformSetupComplete;
+        public void SetRoomChunk()
+        {
+            platformSetupComplete = false;
+            List<Chunk> roomChunks = new List<Chunk>();
+            //roomSize should be double the tileRadius if all visible chunks should be in one room
+            for (int x = -roomSize.x / 2; x <= roomSize.x / 2; x += 1)
+            {
+                for (int y = -roomSize.y / 2; y <= roomSize.y / 2; y += 1)
+                {
+                    roomChunks.Add(chunks.GetChunk(chunkID + new Vector2Int(x, y)));
+                }
+            }
+            this.roomChunks = roomChunks;
+            Thread thread = new Thread(SetRoomChunkThread);
+            thread.Start();
+        }
+        public void SetRoomChunk(List<Chunk> roomChunks)
+        {
+            platformSetupComplete = false;
+            setupComplete = false;
+            //active = true;
+            this.roomChunks = roomChunks;
+            Thread thread = new Thread(SetRoomChunkThread);
+            thread.Start();
+        }
+        List<Chunk> roomChunks;
+        public void SetRoomChunkThread()
+        {
+            roomChunk = new RoomChunk(roomChunks, jumpHeight);
+            platformSetupComplete = true;
+        }
+
+        public List<PlatformChunk> GetPlatforms()
+        {
+            List<PlatformChunk> platforms = new List<PlatformChunk>();
+            foreach (FilledChunk filledChunk in roomChunk.filledChunks)
+            {
+                foreach (PlatformChunk platform in filledChunk.platforms)
+                {
+                    platforms.Add(platform);
+                }
+            }
+            return platforms;
+        }
+        public PlatformChunk GetPlatform(int platformID)
+        {
+            return roomChunk.GetPlatform(platformID);
+        }
 
         public LocomotionSolver ls;
         public bool generatingLocomotionGraph = false;
@@ -490,60 +538,8 @@ namespace NoiseTerrain
             generateLocomotionGraphThreadCompleted = true;
         }
 
-
-        
         public bool checkConnection = false;
         
-
-        
-        public void PlaceWater(Vector2Int startPos)
-        {
-            StartCoroutine(PlaceLiquid(waterTile, waterTilemap, startPos, true));
-        }
-        public void PlaceLava(Vector2Int startPos)
-        {
-            StartCoroutine(PlaceLiquid(lavaTile, lavaTilemap, startPos, true));
-        }
-        private IEnumerator PlaceLiquid(TileBase liquidTile, Tilemap tilemap, Vector2Int posStart, bool fillHorizontal)
-        {
-            yield return null;
-            if (!tilemap.GetTile(new Vector3Int(posStart.x, posStart.y, 0)))
-            {
-                List<Vector2Int> fillTiles = WaterChunk.FindFloodTiles(posStart, chunks);
-
-                foreach(Vector2Int tile in fillTiles)
-                {
-                    tilemap.SetTile(new Vector3Int(tile.x, tile.y, 0), liquidTile);
-                }
-                //tilemap.SetTile(new Vector3Int(posStart.x, posStart.y, 0), liquidTile);
-
-                //if (fillHorizontal && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
-                //    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, fillHorizontal));
-                //if (fillHorizontal && visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
-                //    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right,fillHorizontal));
-                //if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)) && !chunks.GetTile(posStart + Vector2Int.down))
-                //    StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.down, false));
-                //else if(visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.down)))
-                //{
-                //    if(visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.left)) && !chunks.GetTile(posStart + Vector2Int.left))
-                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.left, false));
-                //    if (visibleChunkIDs.Contains(chunks.GetChunkID(posStart + Vector2Int.right)) && !chunks.GetTile(posStart + Vector2Int.right))
-                //        StartCoroutine(PlaceLiquid(liquidTile, tilemap, posStart + Vector2Int.right, false));
-                //}
-            }
-
-        }
-
-        public void GenerateLiquid(int sourceID, int sinkID)
-        {
-            NodeChunk node = roomChunk.GetPlatform(sourceID);
-            Vector2Int fluidStart = node.GetFluidEdge(sinkID);
-            if(!roomChunk.GetTile(fluidStart.x, fluidStart.y))
-            {
-                StartCoroutine(PlaceLiquid(waterTile, waterTilemap, new Vector2Int(fluidStart.x, -fluidStart.y),true));
-            }
-        }
-
         private void HandleFixTileRulesThread()
         {
             while (fixTileRules)

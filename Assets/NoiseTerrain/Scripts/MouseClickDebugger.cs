@@ -77,7 +77,7 @@ public class MouseClickDebugger : MonoBehaviour
         }
         else if (clickFunction == HandleMouseClickFunction.toggleTile)
         {
-            Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+            Vector2Int clickTile = TilePosFromClick(Input.mousePosition);// new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
             if (Input.GetMouseButtonDown(1) || Input.GetMouseButton(1) && (lastClickID == null || lastClickID != clickTile))
             {
                 Debug.Log($"TileClicked {clickTile}");
@@ -96,7 +96,7 @@ public class MouseClickDebugger : MonoBehaviour
         {
             if (Input.GetMouseButtonUp(1))
             {
-                Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+                Vector2Int clickTile = TilePosFromClick(Input.mousePosition); //new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
                 if (!chunks.GetTile(clickTile))
                 {
                     generator.PlaceWater(clickTile);
@@ -108,7 +108,7 @@ public class MouseClickDebugger : MonoBehaviour
         {
             if (Input.GetMouseButtonUp(1))
             {
-                Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+                Vector2Int clickTile = TilePosFromClick(Input.mousePosition);// new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
                 if (!chunks.GetTile(clickTile))
                 {
                     generator.PlaceLava(clickTile);
@@ -121,7 +121,7 @@ public class MouseClickDebugger : MonoBehaviour
             if (generator.RoomChunk != null && Input.GetMouseButtonUp(0))
             {
                 displayPlatformGraph = false;
-                Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+                Vector2Int clickTile = TilePosFromClick(Input.mousePosition);// new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
 
                 startingPlatformID = generator.RoomChunk.GetPlatformID(clickTile);
                 int filledChunkID = startingPlatformID / 512;
@@ -135,8 +135,8 @@ public class MouseClickDebugger : MonoBehaviour
         {
             if (generator.RoomChunk != null && Input.GetMouseButtonUp(0))
             {
-                Vector2 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(clickPos.x), (int)Mathf.Floor(clickPos.y));
+                //Vector2 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2Int clickTile = TilePosFromClick(Input.mousePosition); //new Vector2Int((int)Mathf.Floor(clickPos.x), (int)Mathf.Floor(clickPos.y));
 
                 PrintPlatform(clickTile);
                 GenerateConnectedChunkGraph();
@@ -146,15 +146,16 @@ public class MouseClickDebugger : MonoBehaviour
         {
             if (Input.GetMouseButtonUp(1)) //check right side of wall
             {
-                Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
-                if (chunks.GetTile(clickTile))
+                Vector2Int clickTile = generator.RoomChunk.GetWorldToGridPos( TilePosFromClick(Input.mousePosition));
+                Debug.Log(clickTile);
+                if (generator.RoomChunk.GetTile(clickTile.x, clickTile.y))
                 {
                     Debug.Log($"isValidWall right empty: {WallChunk.IsValidWall(clickTile, generator.jumpHeight, true, generator.RoomChunk)}");
                 }
             }else if (Input.GetMouseButtonUp(0)) //check left side of wall
             {
-                Vector2Int clickTile = new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
-                if (chunks.GetTile(clickTile))
+                Vector2Int clickTile = generator.RoomChunk.GetWorldToGridPos(TilePosFromClick(Input.mousePosition));// new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+                if (generator.RoomChunk.GetTile(clickTile.x,clickTile.y))
                 {
                     Debug.Log($"isValidWall left empty: {WallChunk.IsValidWall(clickTile, generator.jumpHeight, false, generator.RoomChunk)}");
                 }
@@ -165,7 +166,10 @@ public class MouseClickDebugger : MonoBehaviour
 
     }
 
-    
+    private Vector2Int TilePosFromClick(Vector2 mousePosition)
+    {
+        return new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+    }
     
 
     private void GenerateChunkGraphThread()

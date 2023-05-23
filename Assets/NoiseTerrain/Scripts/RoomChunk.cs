@@ -316,6 +316,14 @@ namespace NoiseTerrain
             return platform.connectedPlatforms;
         }
 
+        /// <summary>
+        /// Generates a 2D array of integers showing where the player can go from the starting platform (platformID)
+        /// start is a world space position
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="jumpHeight"></param>
+        /// <param name="platformID"></param>
+        /// <returns></returns>
         public int[,] GetPath(Vector2Int start, int jumpHeight, int platformID)
         {
             int exitLoop = 10000;
@@ -328,7 +336,7 @@ namespace NoiseTerrain
                 }
             }
             List<Vector2Int> frontier = new List<Vector2Int>();
-            frontier.Add(new Vector2Int(start.x - minTile.x, -start.y - maxTile.y));
+            frontier.Add(GetWorldToGridPos(start));
             while (frontier.Count > 0)
             {
                 exitLoop -= 1;
@@ -405,6 +413,16 @@ namespace NoiseTerrain
         private void AddToSet(List<Vector2Int> list, Vector2Int value)
         {
             if (!list.Contains(value)) list.Add(value);
+        }
+
+        /// <summary>
+        /// converts world position to corresponding 2D index of tiles stored by the RoomChunk
+        /// </summary>
+        /// <param name="worldPos"></param>
+        /// <returns></returns>
+        public Vector2Int GetWorldToGridPos(Vector2Int worldPos)
+        {
+            return new Vector2Int(worldPos.x - minTile.x, -worldPos.y - maxTile.y);
         }
     }
 
