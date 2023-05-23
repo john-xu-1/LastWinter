@@ -146,14 +146,7 @@ namespace NoiseTerrain
             return validWall;
         } 
 
-        private bool IsValidWall(Vector2Int wallTile, int jumpHeight, bool rightSide)
-        {
-            int xOffset = rightSide ? 1 : -1;
-            //valid wall tile has at least one attached wall tile that is jumpHieght + 1 above the ground
-            int count = jumpHeight;
-
-            return true;
-        }
+        
 
         private void FindPlatformNeighbor(int xOffset, Vector2Int current, int jumpHeight, int platformID, List<Vector2Int> toVisit, List<Vector2Int> visited, List<Vector2Int> frontier, RoomChunk roomChunk)
         {

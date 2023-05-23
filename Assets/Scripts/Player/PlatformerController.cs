@@ -333,7 +333,7 @@ public class PlatformerController : PhysicsObject
 
         wj0x *= 0.95f;
         if (wj0x < 0.01f && wj0x > -0.01f) wj0x = 0;
-        Debug.Log($"wjox {wj0x}");
+        //Debug.Log($"wjox {wj0x}");
 
     }
 
