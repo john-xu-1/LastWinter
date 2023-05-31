@@ -1842,6 +1842,50 @@ Transform:
   m_Father: {fileID: 1593762582}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1324131300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1324131302}
+  - component: {fileID: 1324131301}
+  m_Layer: 0
+  m_Name: WallChunkDebugger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1324131301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324131300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e47a89bf2a17147b2b61b5b8d843c2a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayWalls: 0
+--- !u!4 &1324131302
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324131300}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.6655259, y: 1.6375605, z: -47.2334}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 23
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1404291030
 GameObject:
   m_ObjectHideFlags: 0
@@ -3548,7 +3592,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threadPriority: 32
   aspFilePath: DataFiles/ASPFiles/queens.txt
-  clingoExecutablePathMacOS: /opt/homebrew/bin/clingo
+  clingoExecutablePathMacOS: /usr/local/bin/clingo
   clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
   AdditionalArguments: 
   maxDuration: 10

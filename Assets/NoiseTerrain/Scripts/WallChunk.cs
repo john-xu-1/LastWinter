@@ -21,7 +21,7 @@ namespace NoiseTerrain
 
             // return to org position and go up and count down till zero, if wall exists and surface, true, else false
 
-            int count = jumpHeight + 1;
+            int count = jumpHeight;
             int x = wallTile.x;
             int y = wallTile.y;
             Debug.Log($"x:{x} y:{y}");
@@ -38,17 +38,18 @@ namespace NoiseTerrain
             }
 
             //either found ground or wall tile is higher than jumpheight from ground
-            if (count == 0) return true;
+            if (count == 0 && !roomChunk.GetTile(x + xOffset, y)) return true;
+
 
             //move up from ground to find valid tile above ground
-            y = wallTile.y;
+            y = wallTile.y - 1;
             while (count > 0 && !roomChunk.GetTile(x + xOffset, y) && roomChunk.GetTile(x, y))
             {
                 count--;
                 y--; //up is negative
             }
 
-            if (count == 0) return true;
+            if (count == 0 && !roomChunk.GetTile(x + xOffset, y) && roomChunk.GetTile(x, y)) return true;
 
             return false;
         }

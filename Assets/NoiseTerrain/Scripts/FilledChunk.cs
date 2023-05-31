@@ -44,8 +44,23 @@ namespace NoiseTerrain
             int height = maxY - minY + 1;
             wallIDs = new int[width, height];
 
+            Debug.Log("Set Left Walls");
             SetWallChunks(leftWallTiles, jumpHeight, false);
+            Debug.Log("Set Right Walls");
             SetWallChunks(rightWallTiles, jumpHeight, true);
+
+            List<Vector2Int> validWalls = new List<Vector2Int>();
+            for(int x = 0; x < wallIDs.GetLength(0); x++)
+            {
+                for (int y = 0; y < wallIDs.GetLength(1); y++)
+                {
+                    if(wallIDs[x,y] > 0)
+                    {
+                        validWalls.Add(new Vector2Int(x, y));
+                    }
+                }
+            }
+            WallChunkDebugger.singlton.SetWalls(validWalls, true);
         }
         int wallID = 0;
         private void SetWallChunks(List<Vector2Int> wallSideTiles, int jumpHeight, bool rightSide)
@@ -56,17 +71,62 @@ namespace NoiseTerrain
             int breakCounter = 1000;
             while (toVisit.Count > 0)
             {
-                List<Vector2Int> frontier = new List<Vector2Int>();
-                wallID += 1;
                 Vector2Int validWall = FindValidWall(toVisit, jumpHeight, rightSide);
-
-                breakCounter -= 1;
-                if (breakCounter < 0)
+                if(validWall.x != -1 || validWall.y != -1)
                 {
-                    Debug.LogWarning("SetWallChunks toVisit.Count break");
-                    break;
+                    wallID += 1;
+                    Debug.Log($"validWall.x:{validWall.x} validWall.y:{validWall.y} {wallIDs.GetLength(0)} {wallIDs.GetLength(1)}");
+                    wallIDs[validWall.x, validWall.y] = wallID;
+                    foreach(Vector2Int connectedWall in GetValidWalls(validWall, rightSide))
+                    {
+                        toVisit.Remove(connectedWall);
+                        wallIDs[connectedWall.x, connectedWall.y] = wallID;
+                    }
+                    breakCounter -= 1;
+                    if (breakCounter < 0)
+                    {
+                        Debug.LogWarning("SetWallChunks toVisit.Count break");
+                        break;
+                    }
+                }
+                
+            }
+        }
+        private Vector2Int FindValidWall(List<Vector2Int> wallTiles, int jumpHeight, bool rightSide)
+        {
+            Vector2Int validWall = new Vector2Int(-1, -1);
+            while(wallTiles.Count > 0 && validWall.x == -1 && validWall.y == -1)
+            {
+                Vector2Int checkWall = wallTiles[0];
+                wallTiles.RemoveAt(0);
+                if(WallChunk.IsValidWall(checkWall,jumpHeight,rightSide, roomChunk))
+                {
+                    validWall = checkWall;
                 }
             }
+
+            return validWall;
+        }
+        private List<Vector2Int> GetValidWalls(Vector2Int wallTile, bool rightSide)
+        {
+            int xOffset = rightSide ? 1 : -1;
+            List<Vector2Int> validWalls = new List<Vector2Int>();
+            //loop up until empty or no longer a wall
+            int y = wallTile.y - 1;
+            while(y <= 0 && roomChunk.GetTile(wallTile.x, y) && roomChunk.GetTile(wallTile.x + xOffset, y))
+            {
+                validWalls.Add(new Vector2Int(wallTile.x, y));
+                y--;
+            }
+
+            //loop down until empty or no longer a wall
+            y = wallTile.y + 1;
+            while (y < wallIDs.GetLength(1) && roomChunk.GetTile(wallTile.x, y) && roomChunk.GetTile(wallTile.x + xOffset, y))
+            {
+                validWalls.Add(new Vector2Int(wallTile.x, y));
+                y++;
+            }
+            return validWalls;
         }
         public void SetPlatforms(int jumpHeight)
         {
@@ -139,12 +199,7 @@ namespace NoiseTerrain
             }
             //Debug.Log(printMap);
         }
-        private Vector2Int FindValidWall(List<Vector2Int> wallTiles, int jumpHeight, bool rightSide)
-        {
-            Vector2Int validWall = new Vector2Int(-1,-1);
-            
-            return validWall;
-        } 
+        
 
         
 
