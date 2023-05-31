@@ -11,8 +11,9 @@ namespace NoiseTerrain
         Chunk[,] chunks;
 
         public List<FilledChunk> filledChunks = new List<FilledChunk>();
+        public List<WaterChunk> waterChunk = new List<WaterChunk>();
         public int[,] filledChunkIDs;
-        public int filledChunkCount;
+        public int filledChunkCount;    
 
         public RoomChunk(List<Chunk> roomChunks, int jumpHeight)
         {
@@ -108,8 +109,8 @@ namespace NoiseTerrain
                     {
                         filledChunks[filledChunkIDs[x, y] - 1].filledTiles.Add(new Vector2Int(x, y));
                         if (y > 0 && !GetTile(x, y - 1)) filledChunks[filledChunkIDs[x, y] - 1].groundTiles.Add(new Vector2Int(x, y));
-                        if (x > 0 && !GetTile(x - 1, y)) filledChunks[filledChunkIDs[x, y] - 1].wallTiles.Add(new Vector2Int(x, y));
-                        else if (x < width - 1 && !GetTile(x + 1, y)) filledChunks[filledChunkIDs[x, y] - 1].wallTiles.Add(new Vector2Int(x, y));
+                        if (x > 0 && !GetTile(x - 1, y)) filledChunks[filledChunkIDs[x, y] - 1].leftWallTiles.Add(new Vector2Int(x, y));
+                        if (x < width - 1 && !GetTile(x + 1, y)) filledChunks[filledChunkIDs[x, y] - 1].rightWallTiles.Add(new Vector2Int(x, y));
                     }
                 }
             }
@@ -245,7 +246,7 @@ namespace NoiseTerrain
                 foreach (PlatformChunk platformChunk in chunk.platforms)
                 {
                     platformID += 1;
-                    foreach (Vector2Int ground in platformChunk.groundTiles)
+                    foreach (Vector2Int ground in platformChunk.jumpTiles)
                     {
                         if (platformID > 9) platformIDs[ground.x, ground.y] = ((char)(/*(int)*/'A' + platformID - 10)).ToString();
                         else platformIDs[ground.x, ground.y] = (platformID).ToString();

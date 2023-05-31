@@ -1340,7 +1340,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
   m_PrefabInstance: {fileID: 1859506617}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1658304323}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1194077e52174b04aa75d2d2ac054ce6, type: 3}
@@ -2561,6 +2561,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1658304323 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6147222636303502674, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
+  m_PrefabInstance: {fileID: 1859506617}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1658304324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658304323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc398ac3954cd479b8e41f8a7e7267f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chunks: {fileID: 191559731}
+  generator: {fileID: 853445341}
+  clickFunction: 7
+  generateChunkGraphDepth: 0
 --- !u!1 &1674830209 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6843248306668466673, guid: 008dc1390e9d240149e029252007d690, type: 3}
@@ -3484,7 +3505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cpus: 4
   timeout: 100
-  solver: {fileID: 2132609661}
+  solver: {fileID: 1233206644}
   runOnStart: 0
 --- !u!114 &2132609659
 MonoBehaviour:
