@@ -148,14 +148,14 @@ public class MouseClickDebugger : MonoBehaviour
             {
                 Vector2Int clickTile = generator.RoomChunk.GetWorldToGridPos( TilePosFromClick(Input.mousePosition));
                 Debug.Log(clickTile);
-                if (generator.RoomChunk.GetTile(clickTile.x, clickTile.y))
+                if (generator.RoomChunk.FilledTile(clickTile.x, clickTile.y))
                 {
                     Debug.Log($"isValidWall right empty: {WallChunk.IsValidWall(clickTile, generator.jumpHeight, true, generator.RoomChunk)}");
                 }
             }else if (Input.GetMouseButtonUp(0)) //check left side of wall
             {
                 Vector2Int clickTile = generator.RoomChunk.GetWorldToGridPos(TilePosFromClick(Input.mousePosition));// new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
-                if (generator.RoomChunk.GetTile(clickTile.x,clickTile.y))
+                if (generator.RoomChunk.FilledTile(clickTile.x,clickTile.y))
                 {
                     Debug.Log($"isValidWall left empty: {WallChunk.IsValidWall(clickTile, generator.jumpHeight, false, generator.RoomChunk)}");
                 }

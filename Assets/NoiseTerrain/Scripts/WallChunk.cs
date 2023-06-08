@@ -25,31 +25,31 @@ namespace NoiseTerrain
             int x = wallTile.x;
             int y = wallTile.y;
             Debug.Log($"x:{x} y:{y}");
-            if (roomChunk.GetTile(x + xOffset, y))
+            if (roomChunk.FilledTile(x + xOffset, y))
             {
                 return false;
             }
 
             //move down to find ground
-            while (count > 0 && !roomChunk.GetTile(x + xOffset, y))
+            while (count > 0 && !roomChunk.FilledTile(x + xOffset, y))
             {
                 count--;
                 y++; //down is positive
             }
 
             //either found ground or wall tile is higher than jumpheight from ground
-            if (count == 0 && !roomChunk.GetTile(x + xOffset, y)) return true;
+            if (count == 0 && !roomChunk.FilledTile(x + xOffset, y)) return true;
 
 
             //move up from ground to find valid tile above ground
             y = wallTile.y - 1;
-            while (count > 0 && !roomChunk.GetTile(x + xOffset, y) && roomChunk.GetTile(x, y))
+            while (count > 0 && !roomChunk.FilledTile(x + xOffset, y) && roomChunk.FilledTile(x, y))
             {
                 count--;
                 y--; //up is negative
             }
 
-            if (count == 0 && !roomChunk.GetTile(x + xOffset, y) && roomChunk.GetTile(x, y)) return true;
+            if (count == 0 && !roomChunk.FilledTile(x + xOffset, y) && roomChunk.FilledTile(x, y)) return true;
 
             return false;
         }

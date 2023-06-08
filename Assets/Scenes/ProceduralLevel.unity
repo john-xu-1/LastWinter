@@ -1871,6 +1871,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47a89bf2a17147b2b61b5b8d843c2a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0.037703037, b: 1, a: 1}
+  - {r: 0.08334541, g: 1, b: 0, a: 1}
+  - {r: 0.97573745, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0.7741265, a: 1}
+  - {r: 0, g: 1, b: 0.9505663, a: 1}
+  - {r: 1, g: 0.47913206, b: 0, a: 1}
   displayWalls: 0
 --- !u!4 &1324131302
 Transform:

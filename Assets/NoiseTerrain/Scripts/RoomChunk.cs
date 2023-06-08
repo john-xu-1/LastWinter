@@ -76,13 +76,13 @@ namespace NoiseTerrain
             {
                 for (int x = 0; x < width; x += 1)
                 {
-                    boolMap[x, y] = GetTile(x, y);
+                    boolMap[x, y] = FilledTile(x, y);
                 }
             }
             return boolMap;
         }
 
-        public bool GetTile(int x, int y)
+        public bool FilledTile(int x, int y)
         {
             int width = chunks[0, 0].width;
             int height = chunks[0, 0].height;
@@ -110,15 +110,16 @@ namespace NoiseTerrain
                         filledChunks[filledChunkIDs[x, y] - 1].filledTiles.Add(new Vector2Int(x, y));
 
                         //finding PlatformChunk Tiles
-                        if (y > 0 && !GetTile(x, y - 1)) filledChunks[filledChunkIDs[x, y] - 1].groundTiles.Add(new Vector2Int(x, y));
+                        if (y > 0 && !FilledTile(x, y - 1)) filledChunks[filledChunkIDs[x, y] - 1].groundTiles.Add(new Vector2Int(x, y));
 
                         //finding WallChunk tiles
-                        if (x > 0 && !GetTile(x - 1, y)) filledChunks[filledChunkIDs[x, y] - 1].leftWallTiles.Add(new Vector2Int(x, y));
-                        if (x < width - 1 && !GetTile(x + 1, y)) filledChunks[filledChunkIDs[x, y] - 1].rightWallTiles.Add(new Vector2Int(x, y));
+                        if (x > 0 && !FilledTile(x - 1, y)) filledChunks[filledChunkIDs[x, y] - 1].leftWallTiles.Add(new Vector2Int(x, y));
+                        if (x < width - 1 && !FilledTile(x + 1, y)) filledChunks[filledChunkIDs[x, y] - 1].rightWallTiles.Add(new Vector2Int(x, y));
                     }
                 }
             }
 
+            WallChunkDebugger.singlton.ClearWalls();
             //setup platform tiles
             for (int i = 0; i < filledChunkCount; i += 1)
             {
@@ -138,7 +139,7 @@ namespace NoiseTerrain
             {
                 for (int y = 0; y < height; y += 1)
                 {
-                    if (GetTile(x, y)) toVisit.Add(new Vector2Int(x, y));
+                    if (FilledTile(x, y)) toVisit.Add(new Vector2Int(x, y));
                 }
             }
             Debug.Log($"SetFilledChunkIDs start {System.DateTime.Now}");
@@ -158,10 +159,10 @@ namespace NoiseTerrain
                     visited.Add(loc);
                     if (!toVisit.Remove(loc)) Debug.Log(loc + " removed");
                     int x = loc.x, y = loc.y;
-                    if (x > 0 && GetTile(x - 1, y) && !visited.Contains(new Vector2Int(x - 1, y)) && !frontier.Contains(new Vector2Int(x - 1, y))) frontier.Add(new Vector2Int(x - 1, y));
-                    if (y > 0 && GetTile(x, y - 1) && !visited.Contains(new Vector2Int(x, y - 1)) && !frontier.Contains(new Vector2Int(x, y - 1))) frontier.Add(new Vector2Int(x, y - 1));
-                    if (x < width - 1 && GetTile(x + 1, y) && !visited.Contains(new Vector2Int(x + 1, y)) && !frontier.Contains(new Vector2Int(x + 1, y))) frontier.Add(new Vector2Int(x + 1, y));
-                    if (y < height - 1 && GetTile(x, y + 1) && !visited.Contains(new Vector2Int(x, y + 1)) && !frontier.Contains(new Vector2Int(x, y + 1))) frontier.Add(new Vector2Int(x, y + 1));
+                    if (x > 0 && FilledTile(x - 1, y) && !visited.Contains(new Vector2Int(x - 1, y)) && !frontier.Contains(new Vector2Int(x - 1, y))) frontier.Add(new Vector2Int(x - 1, y));
+                    if (y > 0 && FilledTile(x, y - 1) && !visited.Contains(new Vector2Int(x, y - 1)) && !frontier.Contains(new Vector2Int(x, y - 1))) frontier.Add(new Vector2Int(x, y - 1));
+                    if (x < width - 1 && FilledTile(x + 1, y) && !visited.Contains(new Vector2Int(x + 1, y)) && !frontier.Contains(new Vector2Int(x + 1, y))) frontier.Add(new Vector2Int(x + 1, y));
+                    if (y < height - 1 && FilledTile(x, y + 1) && !visited.Contains(new Vector2Int(x, y + 1)) && !frontier.Contains(new Vector2Int(x, y + 1))) frontier.Add(new Vector2Int(x, y + 1));
                 }
             }
             Debug.Log($"SetFilledChunkIDs end {System.DateTime.Now} total time {System.DateTime.Now - starTime}");
@@ -283,7 +284,7 @@ namespace NoiseTerrain
             {
                 for (int x = 0; x < width; x += 1)
                 {
-                    if (GetTile(x, y)) pathMap += "X";
+                    if (FilledTile(x, y)) pathMap += "X";
                     else pathMap += path[x, y] + 1;
                 }
                 pathMap += "\n";
@@ -353,47 +354,47 @@ namespace NoiseTerrain
                 path[x, y] = Mathf.Max(0, path[x, y]);
 
                 //jumping
-                if (y < height - 1 && y > 0 && GetTile(x, y + 1) && !GetTile(x, y - 1) && (platformID == 0 || platformID == GetPlatformID(x, y + 1)))
+                if (y < height - 1 && y > 0 && FilledTile(x, y + 1) && !FilledTile(x, y - 1) && (platformID == 0 || platformID == GetPlatformID(x, y + 1)))
                 {
                     AddMaxToPath(frontier, path, jumpHeight - 1, x, y - 1);
                 }
-                else if (path[x, y] > 0 && y > 0 && !GetTile(x, y - 1))
+                else if (path[x, y] > 0 && y > 0 && !FilledTile(x, y - 1))
                 {
                     AddMaxToPath(frontier, path, path[x, y] - 1, x, y - 1);
 
-                    if (x > 0 && !GetTile(x - 1, y - 1))
+                    if (x > 0 && !FilledTile(x - 1, y - 1))
                     {
                         AddMaxToPath(frontier, path, path[x, y] - 1, x - 1, y - 1);
                     }
-                    if (x < width - 1 && !GetTile(x + 1, y - 1))
+                    if (x < width - 1 && !FilledTile(x + 1, y - 1))
                     {
                         AddMaxToPath(frontier, path, path[x, y] - 1, x + 1, y - 1);
                     }
                 }
 
                 //falling
-                if (y < height - 1 && path[x, y] >= 0 && !GetTile(x, y + 1))
+                if (y < height - 1 && path[x, y] >= 0 && !FilledTile(x, y + 1))
                 {
                     AddMaxToPath(frontier, path, 0, x, y + 1);
 
-                    if (x > 0 && !GetTile(x - 1, y + 1))
+                    if (x > 0 && !FilledTile(x - 1, y + 1))
                     {
                         AddMaxToPath(frontier, path, 0, x - 1, y + 1);
                     }
-                    if (x < width - 1 && !GetTile(x + 1, y + 1))
+                    if (x < width - 1 && !FilledTile(x + 1, y + 1))
                     {
                         AddMaxToPath(frontier, path, 0, x + 1, y + 1);
                     }
                 }
 
                 //walking
-                if (y < height - 1 && GetTile(x, y + 1) && platformID == GetPlatformID(x, y + 1))
+                if (y < height - 1 && FilledTile(x, y + 1) && platformID == GetPlatformID(x, y + 1))
                 {
-                    if (x > 0 && !GetTile(x - 1, y))
+                    if (x > 0 && !FilledTile(x - 1, y))
                     {
                         AddMaxToPath(frontier, path, 0, x - 1, y);
                     }
-                    if (x < width - 1 && !GetTile(x + 1, y))
+                    if (x < width - 1 && !FilledTile(x + 1, y))
                     {
                         AddMaxToPath(frontier, path, 0, x + 1, y);
                     }
