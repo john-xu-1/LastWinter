@@ -38,7 +38,7 @@ public class ASPLocomotionGenerator : ASPGenerator
             
             piece_types(player;enemy;item).
             piece_enemy_types(bounce_boi;missile_launcher;rolla_boi;shotgun_boi).
-            piece_weapon_types(drone_controller;old_shotgun;rainy_day;magnetized_shifter).
+            piece_weapon_types(drone_controller;old_shotgun;rainy_day;magnetized_shifter;vol;gaeas_touch).
 
             %% place pieces on nodes %%
             1{{piece(player,NodeID): node(NodeID)}}1.
@@ -46,7 +46,7 @@ public class ASPLocomotionGenerator : ASPGenerator
             :- piece_enemy_types(Type), not piece(Type,_).
 
             %% only one typ of each weapon %%
-            4{{piece(Weapon,NodeID): node(NodeID), piece_weapon_types(Weapon)}}4.
+            6{{piece(Weapon,NodeID): node(NodeID), piece_weapon_types(Weapon)}}6.
             :- piece_weapon_types(Type), not piece(Type,_). 
 
             %% only one piece per room %%
