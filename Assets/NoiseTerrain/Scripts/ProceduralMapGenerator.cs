@@ -441,7 +441,7 @@ namespace NoiseTerrain
         {
             NodeChunk node = roomChunk.GetPlatform(sourceID);
             Vector2Int fluidStart = node.GetFluidEdge(sinkID);
-            if (!roomChunk.GetTile(fluidStart.x, fluidStart.y))
+            if (!roomChunk.FilledTile(fluidStart.x, fluidStart.y))
             {
                 StartCoroutine(PlaceLiquid(waterTile, waterTilemap, new Vector2Int(fluidStart.x, -fluidStart.y), true));
             }

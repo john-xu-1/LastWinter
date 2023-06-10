@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2249044188139197724}
   - component: {fileID: 3596106216036135711}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Point Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 8016845385255410238}
   - component: {fileID: 555511711162202207}
   - component: {fileID: 5030603640912576175}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: VolBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,14 +211,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 40
   weapon: {fileID: 0}
-  ExplosionPrefab: {fileID: 0}
+  ExplosionPrefab: {fileID: 1820902462077310796, guid: c71ddbf8136fe4caaa414f6d5c489680, type: 3}
   FireExplosionPrefab: {fileID: 3198119191284390770, guid: ba02c26a9f8b94d76ba3fc5f3486e007, type: 3}
-  jumpTimes: 3
-  JumptRange: {x: 3, y: 5}
-  hasCollided: []
-  subBullet: {fileID: 1264778190397573501, guid: dbf98894ba9fd44f6941e751653dad25, type: 3}
-  isSub: 0
-  KB: 25
+  tilemap: {fileID: 0}
 --- !u!114 &5030603640912576175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,6 +233,10 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 8192
+  enemyCriticalLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  isEnemy: 0
   isMelee: 0
 --- !u!1 &4440748887184078937
 GameObject:

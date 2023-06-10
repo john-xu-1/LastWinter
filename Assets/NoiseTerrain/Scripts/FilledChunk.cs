@@ -46,6 +46,22 @@ namespace NoiseTerrain
 
             SetWallChunks(leftWallTiles, jumpHeight, false);
             SetWallChunks(rightWallTiles, jumpHeight, true);
+
+            
+            List<Vector2Int> validWalls = new List<Vector2Int>();
+            List<int> validWallIDs = new List<int>();
+            for (int x = 0; x < wallIDs.GetLength(0); x++)
+            {
+                for (int y = 0; y < wallIDs.GetLength(1); y++)
+                {
+                    if (wallIDs[x,y] > 0)
+                    {
+                        validWalls.Add(new Vector2Int(x + minX, y + minY));
+                        validWallIDs.Add(wallIDs[x, y]);
+                    }
+                }
+            }
+            WallChunkDebugger.singleton.AddWalls(validWalls, validWallIDs, true);
         }
         int wallID = 0;
         private void SetWallChunks(List<Vector2Int> wallSideTiles, int jumpHeight, bool rightSide)
@@ -56,17 +72,63 @@ namespace NoiseTerrain
             int breakCounter = 1000;
             while (toVisit.Count > 0)
             {
-                List<Vector2Int> frontier = new List<Vector2Int>();
-                wallID += 1;
+                
                 Vector2Int validWall = FindValidWall(toVisit, jumpHeight, rightSide);
-
-                breakCounter -= 1;
-                if (breakCounter < 0)
+                if (validWall.x != -1 || validWall.y != -1)
                 {
-                    Debug.LogWarning("SetWallChunks toVisit.Count break");
-                    break;
+                    wallID += 1;
+                    wallIDs[validWall.x - minX, validWall.y - minY] = wallID;
+                    foreach (Vector2Int connectedWall in GetValidWalls(validWall, rightSide))
+                    {
+                        toVisit.Remove(connectedWall);
+                        wallIDs[connectedWall.x - minX, connectedWall.y - minY] = wallID;
+                    }
+                    breakCounter -= 1;
+                    if (breakCounter < 0)
+                    {
+                        Debug.LogWarning("SetWallChunks toVisit.Count break");
+                        break;
+                    }
+                }
+                
+            }
+        }
+        private Vector2Int FindValidWall(List<Vector2Int> wallTiles, int jumpHeight, bool rightSide)
+        {
+            Vector2Int validWall = new Vector2Int(-1, -1);
+
+            while (wallTiles.Count > 0 && validWall.x == -1 && validWall.y == -1)
+            {
+                Vector2Int checkWall = wallTiles[0];
+                wallTiles.RemoveAt(0);
+                if (WallChunk.IsValidWall(checkWall, jumpHeight, rightSide, roomChunk))
+                {
+                    validWall = checkWall;
                 }
             }
+
+            return validWall;
+        }
+        private List<Vector2Int> GetValidWalls(Vector2Int wallTile, bool rightSide)
+        {
+            int xOffset = rightSide ? 1 : -1;
+            List<Vector2Int> validWalls = new List<Vector2Int>();
+            //loop up until empty or no longer a wall
+            int y = wallTile.y - 1;
+            while (y <= 0 && roomChunk.FilledTile(wallTile.x, y) && !roomChunk.FilledTile(wallTile.x + xOffset, y))
+            {
+                validWalls.Add(new Vector2Int(wallTile.x, y));
+                y--;
+            }
+
+            //loop down until empty or no longer a wall
+            y = wallTile.y + 1;
+            while (y < wallIDs.GetLength(1) && roomChunk.FilledTile(wallTile.x, y) && !roomChunk.FilledTile(wallTile.x + xOffset, y))
+            {
+                validWalls.Add(new Vector2Int(wallTile.x, y));
+                y++;
+            }
+            return validWalls;
         }
         public void SetPlatforms(int jumpHeight)
         {
@@ -139,12 +201,7 @@ namespace NoiseTerrain
             }
             //Debug.Log(printMap);
         }
-        private Vector2Int FindValidWall(List<Vector2Int> wallTiles, int jumpHeight, bool rightSide)
-        {
-            Vector2Int validWall = new Vector2Int(-1,-1);
-            
-            return validWall;
-        } 
+        
 
         
 
@@ -158,7 +215,7 @@ namespace NoiseTerrain
                 {
                     //check up
 
-                    if (!roomChunk.GetTile(current.x + xOffset, y - 1))
+                    if (!roomChunk.FilledTile(current.x + xOffset, y - 1))
                     {
                         //plaform tile found
                         platformIDs[current.x + xOffset - minX, y - minY] = platformID;

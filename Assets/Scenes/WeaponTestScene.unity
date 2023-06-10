@@ -382,6 +382,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 198491038, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99976605
+      objectReference: {fileID: 0}
+    - target: {fileID: 198491038, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.021629022
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985711518, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9816469
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985711518, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.19070804
+      objectReference: {fileID: 0}
+    - target: {fileID: 3243438903541821193, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.010170871
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408529536955896918, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.004064953
+      objectReference: {fileID: 0}
+    - target: {fileID: 5484690444082203804, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.3564028
+      objectReference: {fileID: 0}
+    - target: {fileID: 5484690444082203804, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.9343325
+      objectReference: {fileID: 0}
     - target: {fileID: 6154040031498853860, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_Name
       value: Player
@@ -429,6 +461,10 @@ PrefabInstance:
     - target: {fileID: 6154040031498853887, guid: d021e07fd68584ae184f35db76284713, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174317057381277557, guid: d021e07fd68584ae184f35db76284713, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.006210488
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d021e07fd68584ae184f35db76284713, type: 3}
@@ -8515,11 +8551,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3756520863527365480, guid: 47c5251d3aa1a4ac9bdad6bf6cc87a2e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -33.3
+      value: -50.93
       objectReference: {fileID: 0}
     - target: {fileID: 3756520863527365480, guid: 47c5251d3aa1a4ac9bdad6bf6cc87a2e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.59
+      value: 1.06
       objectReference: {fileID: 0}
     - target: {fileID: 3756520863527365480, guid: 47c5251d3aa1a4ac9bdad6bf6cc87a2e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8557,6 +8593,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DroneControllerItem
       objectReference: {fileID: 0}
+    - target: {fileID: 3756520863527365487, guid: 47c5251d3aa1a4ac9bdad6bf6cc87a2e, type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 499fd970a8e88453cb00789082a40281, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47c5251d3aa1a4ac9bdad6bf6cc87a2e, type: 3}
 --- !u!1001 &4189447177283823276
@@ -8572,11 +8612,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4189447176845886600, guid: be7dff808398a40d3b8e6d8e7de20ded, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -41.5
+      value: -50.96
       objectReference: {fileID: 0}
     - target: {fileID: 4189447176845886600, guid: be7dff808398a40d3b8e6d8e7de20ded, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.11
+      value: -0.89
       objectReference: {fileID: 0}
     - target: {fileID: 4189447176845886600, guid: be7dff808398a40d3b8e6d8e7de20ded, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8614,6 +8654,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: OldShotgunItem
       objectReference: {fileID: 0}
+    - target: {fileID: 4189447176845886607, guid: be7dff808398a40d3b8e6d8e7de20ded, type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 7cafe256347584bfcaa5848e148b39e3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be7dff808398a40d3b8e6d8e7de20ded, type: 3}
 --- !u!1001 &5908448405638872187

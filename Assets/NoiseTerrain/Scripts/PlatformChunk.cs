@@ -31,7 +31,7 @@ namespace NoiseTerrain
             {
                 for (int y = 0; y < path.GetLength(1); y += 1)
                 {
-                    if (path[x, y] == 0 && y + 1 < roomChunk.height && roomChunk.GetTile(x, y + 1) && roomChunk.GetPlatformID(x, y + 1) != platformID)
+                    if (path[x, y] == 0 && y + 1 < roomChunk.height && roomChunk.FilledTile(x, y + 1) && roomChunk.GetPlatformID(x, y + 1) != platformID)
                     {
                         int landingID = roomChunk.GetPlatformID(x, y + 1);
                         if (!connectedPlatforms.Contains(landingID) && CheckConnection(x,y)) connectedPlatforms.Add(landingID);
@@ -58,7 +58,7 @@ namespace NoiseTerrain
                     if (path[x, y] > 0) return true; //in platform jump area
                     if (path[x, y] < 0)
                     {
-                        if (!roomChunk.GetTile(x, y))//air is above
+                        if (!roomChunk.FilledTile(x, y))//air is above
                         {
                             if (xStart != x && path[x, y] >= 0) return false;
                             //check left and right
@@ -114,9 +114,9 @@ namespace NoiseTerrain
             }
             //rEdge = GetTilePos(rEdge);
             //lEdge = GetTilePos(lEdge);
-            if(rEdge.x < path.GetLength(0) - 1 && !roomChunk.GetTile(rEdge.x + 1, rEdge.y) && FindSink(sinkID, new Vector2Int(rEdge.x + 1, rEdge.y))){
+            if(rEdge.x < path.GetLength(0) - 1 && !roomChunk.FilledTile(rEdge.x + 1, rEdge.y) && FindSink(sinkID, new Vector2Int(rEdge.x + 1, rEdge.y))){
                 return /*GetTilePos(*/ new Vector2Int(rEdge.x + 1, rEdge.y)/*)*/;
-            }else if (lEdge.x > 0 && !roomChunk.GetTile(lEdge.x - 1, lEdge.y) && FindSink(sinkID, new Vector2Int(lEdge.x - 1, lEdge.y)))
+            }else if (lEdge.x > 0 && !roomChunk.FilledTile(lEdge.x - 1, lEdge.y) && FindSink(sinkID, new Vector2Int(lEdge.x - 1, lEdge.y)))
             {
                 return /*GetTilePos(*/new Vector2Int(lEdge.x - 1, lEdge.y)/*)*/;
             }
@@ -127,13 +127,13 @@ namespace NoiseTerrain
         private bool FindSink(int sinkID, Vector2Int edgeStart)
         {
             string sinkPath = $"";
-            while(!roomChunk.GetTile(edgeStart.x, edgeStart.y) && edgeStart.y < path.GetLength(1) - 1)
+            while(!roomChunk.FilledTile(edgeStart.x, edgeStart.y) && edgeStart.y < path.GetLength(1) - 1)
             {
                 sinkPath += $"{edgeStart} ";
                 edgeStart = new Vector2Int(edgeStart.x, edgeStart.y+1);
             }
             Debug.Log(sinkPath + " | " + edgeStart);
-            if(roomChunk.GetTile(edgeStart.x, edgeStart.y))
+            if(roomChunk.FilledTile(edgeStart.x, edgeStart.y))
             {
                 Debug.Log($"chunkNode:{nodeID} sinkID?{sinkID}:{roomChunk.GetPlatformID(/*GetTilePos(*/new Vector2Int(edgeStart.x, -edgeStart.y)/*)*/)}");
                 return roomChunk.GetPlatformID(/*GetTilePos(*/new Vector2Int(edgeStart.x, -edgeStart.y)/*)*/) == sinkID;

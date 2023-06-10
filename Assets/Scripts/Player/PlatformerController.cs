@@ -276,9 +276,9 @@ public class PlatformerController : PhysicsObject
                 }
 
 
-                velocity.y += specialYForce;
+                //velocity.y += specialYForce;
 
-                tspeed = horInput * maxSpeed;
+                tspeed.x = horInput.x * maxSpeed;
 
 
 
@@ -322,14 +322,16 @@ public class PlatformerController : PhysicsObject
             }
 
         }
-            
-            
 
 
 
+        velocity.y += specialYForce;
 
 
         targetVelocity = new Vector2(tspeed.x + specialXForce + wj0x + (facing * dashSpeed), tspeed.y);
+
+        specialYForce *= 0.75f;
+        if (specialYForce < 0.01f && specialYForce > -0.01f) specialYForce = 0;
 
         wj0x *= 0.95f;
         if (wj0x < 0.01f && wj0x > -0.01f) wj0x = 0;
