@@ -44,6 +44,16 @@ public class ItemSetup : Setup
                 prefab = items[3];
                 platformID = int.Parse(atom[1]);
             }
+            else if (atom[0] == "vol")
+            {
+                prefab = items[4];
+                platformID = int.Parse(atom[1]);
+            }
+            else if (atom[0] == "gaeas_touch")
+            {
+                prefab = items[5];
+                platformID = int.Parse(atom[1]);
+            }
             if (platformID > 0)
             {
                 //NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(platformID);

@@ -2024,6 +2024,8 @@ MonoBehaviour:
     - {fileID: 6700226986815469580, guid: ea57df54d3fcf4e18979a42a05e3b19f, type: 3}
     - {fileID: 4189447176845886604, guid: be7dff808398a40d3b8e6d8e7de20ded, type: 3}
     - {fileID: 1264434555977984627, guid: c54968ee1e2b7493ab666e433baa828c, type: 3}
+    - {fileID: 1264434555977984627, guid: 07f0bae151ef0cc418394312de7260ca, type: 3}
+    - {fileID: 1264434555977984627, guid: 10cdb9f934c4bed42861905f79d681b0, type: 3}
     itemCount: 5
     placedItems: 
   progression: 0

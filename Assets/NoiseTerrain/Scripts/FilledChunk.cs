@@ -44,6 +44,7 @@ namespace NoiseTerrain
             int height = maxY - minY + 1;
             wallIDs = new int[width, height];
 
+            Debug.Log($"------------------------({minX},{minY}) ({maxX},{maxY})---------------");
             SetWallChunks(leftWallTiles, jumpHeight, false);
             SetWallChunks(rightWallTiles, jumpHeight, true);
 
