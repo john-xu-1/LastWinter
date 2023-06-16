@@ -30,7 +30,7 @@ public class DungeonHandler : MonoBehaviour
     public bool setupComplete = false;
 
     public bool debugging = false;
-    public List<NoiseTerrain.Chunk> chunks;
+    public List<ChunkHandler.Chunk> chunks;
 
     public bool buildMap;
 

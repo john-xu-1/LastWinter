@@ -1,37 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NoiseTerrain;
 
-public class ASPLocomotionGenerator : ASPGenerator
+namespace LocomotionGraph
 {
-    public Clingo_02.AnswerSet GetAnswerSet() { return solver.answerSet; }
-    public bool done { get { return solver.SolverStatus == Clingo_02.ClingoSolver.Status.SATISFIABLE; } }
-    protected List<NodeChunk> nodeChunks;
-    public void SetNodeChunkMemory(List<NodeChunk> nodeChunks)
+    public class ASPLocomotionGenerator : ASPGenerator
     {
-        this.nodeChunks = nodeChunks;
-    }
-    protected string GetNodeChunksMemory()
-    {
-        Debug.Log($"Node Count: {nodeChunks.Count}");
-        string aspCode = "\n";
-        int edgeCount = 0;
-        foreach(NodeChunk nodeChunk in nodeChunks)
+        public Clingo_02.AnswerSet GetAnswerSet() { return solver.answerSet; }
+        public bool done { get { return solver.SolverStatus == Clingo_02.ClingoSolver.Status.SATISFIABLE; } }
+        protected List<NodeChunk> nodeChunks;
+        public void SetNodeChunkMemory(List<NodeChunk> nodeChunks)
         {
-            aspCode += $"node({nodeChunk.nodeID}).\n";
-            foreach(int connectionID in nodeChunk.connectedPlatforms)
-            {
-                aspCode += $"edge({nodeChunk.nodeID},{connectionID}).\n";
-                edgeCount++;
-            }
+            this.nodeChunks = nodeChunks;
         }
-        Debug.Log($"Edge Count: {edgeCount}");
-        return aspCode;
-    }
-    protected override string getASPCode()
-    {
-        string aspCode = $@"
+        protected string GetNodeChunksMemory()
+        {
+            Debug.Log($"Node Count: {nodeChunks.Count}");
+            string aspCode = "\n";
+            int edgeCount = 0;
+            foreach (NodeChunk nodeChunk in nodeChunks)
+            {
+                aspCode += $"node({nodeChunk.nodeID}).\n";
+                foreach (int connectionID in nodeChunk.connectedPlatforms)
+                {
+                    aspCode += $"edge({nodeChunk.nodeID},{connectionID}).\n";
+                    edgeCount++;
+                }
+            }
+            Debug.Log($"Edge Count: {edgeCount}");
+            return aspCode;
+        }
+        protected override string getASPCode()
+        {
+            string aspCode = $@"
 
             #const enemy_max = 100.
             #const enemy_min = 5.
@@ -96,6 +97,7 @@ public class ASPLocomotionGenerator : ASPGenerator
 
         ";
 
-        return aspCode + GetNodeChunksMemory();
+            return aspCode + GetNodeChunksMemory();
+        }
     }
 }

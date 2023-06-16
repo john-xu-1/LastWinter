@@ -1,36 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NoiseTerrain;
+using ChunkHandler;
 
-public class FixSubChunk : MonoBehaviour
+namespace NoiseTerrain
 {
-    public bool fixTileRules = true;
-    public bool ready { get { return CheckReady(); } }
-    protected virtual bool CheckReady()
+    public class FixSubChunk : MonoBehaviour
     {
-        return true;
-    }
-    public virtual void Fix(SubChunk subChunk, int fixTileRuleBorder, TileRules tileRules)
-    {
-        List<bool> tilesList = subChunk.GetTilesList();
-        int width = subChunk.tiles.GetLength(0);
-        int height = tilesList.Count / width;
-        int count = tilesList.Count - height * 2 - width * 2 + 4;
-        int[] indices = new int[count];
-        int index = 0;
-        int border = fixTileRuleBorder - 1;
-        for (int y = border; y < height - border; y += 1)
+        public bool fixTileRules = true;
+        public bool ready { get { return CheckReady(); } }
+        protected virtual bool CheckReady()
         {
-            for (int x = border; x < width - border; x += 1)
-            {
-                indices[index] = width * y + x;
-                index += 1;
-            }
+            return true;
         }
-        subChunk.hasInvalid = !NoiseTerrain.Utility.CheckTileRules(subChunk, tileRules);
-        Fix(0, indices, tilesList, width, subChunk, tileRules);
-    }
+        public virtual void Fix(SubChunk subChunk, int fixTileRuleBorder, TileRules tileRules)
+        {
+            List<bool> tilesList = subChunk.GetTilesList();
+            int width = subChunk.tiles.GetLength(0);
+            int height = tilesList.Count / width;
+            int count = tilesList.Count - height * 2 - width * 2 + 4;
+            int[] indices = new int[count];
+            int index = 0;
+            int border = fixTileRuleBorder - 1;
+            for (int y = border; y < height - border; y += 1)
+            {
+                for (int x = border; x < width - border; x += 1)
+                {
+                    indices[index] = width * y + x;
+                    index += 1;
+                }
+            }
+            subChunk.hasInvalid = !NoiseTerrain.Utility.CheckTileRules(subChunk, tileRules);
+            Fix(0, indices, tilesList, width, subChunk, tileRules);
+        }
 
         private void Fix(int index, int[] indices, List<bool> tiles, int width, SubChunk subChunk, TileRules tileRules)
         {
@@ -74,5 +76,7 @@ public class FixSubChunk : MonoBehaviour
             }
 
         }
-    
+
+    }
+
 }

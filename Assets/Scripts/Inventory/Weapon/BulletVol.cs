@@ -22,11 +22,11 @@ public class BulletVol : BulletBase
         if (collision.CompareTag("Ground"))
         {
             Vector2Int pos = new Vector2Int(tilemap.WorldToCell(transform.position).x, tilemap.WorldToCell(transform.position).y);
-            NoiseTerrain.ChunkHandler.singlton.SetTile(pos, false);
-            NoiseTerrain.ChunkHandler.singlton.SetTile(pos + Vector2Int.up, false);
-            NoiseTerrain.ChunkHandler.singlton.SetTile(pos + Vector2Int.down, false);
-            NoiseTerrain.ChunkHandler.singlton.SetTile(pos + Vector2Int.left, false);
-            NoiseTerrain.ChunkHandler.singlton.SetTile(pos + Vector2Int.right, false);
+            ChunkHandler.ChunkHandler.singlton.SetTile(pos, false);
+            ChunkHandler.ChunkHandler.singlton.SetTile(pos + Vector2Int.up, false);
+            ChunkHandler.ChunkHandler.singlton.SetTile(pos + Vector2Int.down, false);
+            ChunkHandler.ChunkHandler.singlton.SetTile(pos + Vector2Int.left, false);
+            ChunkHandler.ChunkHandler.singlton.SetTile(pos + Vector2Int.right, false);
             Instantiate(ExplosionPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }

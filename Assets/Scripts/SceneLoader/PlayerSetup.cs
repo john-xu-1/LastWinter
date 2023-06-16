@@ -51,10 +51,10 @@ public class PlayerSetup : Setup
         yield return null;
 
     }
-    public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    public IEnumerator InitializeSetup(List<LocomotionGraph.PlatformChunk> platforms, int seed)
     {
         System.Random random = new System.Random(seed);
-        NoiseTerrain.PlatformChunk platform = platforms[random.Next(0, platforms.Count)];
+        LocomotionGraph.PlatformChunk platform = platforms[random.Next(0, platforms.Count)];
         Vector2Int ground = platform.jumpTiles[random.Next(0, platform.jumpTiles.Count)];
         Vector2Int groundPos = platform.GetTilePos(ground);
         GameObject player = GameObject.Instantiate(playerPrefab);

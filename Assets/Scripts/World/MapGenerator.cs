@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using WorldBuilder;
+using ChunkHandler;
 public class MapGenerator : MonoBehaviour
 {
     [SerializeField] CollisionMap CMap;
@@ -32,9 +33,9 @@ public class MapGenerator : MonoBehaviour
         CMap.RemoveTiles(room);
         //need to add RemoveItems(room)
     }
-    public List<NoiseTerrain.Chunk> BuildWorldChunks(World world)
+    public List<Chunk> BuildWorldChunks(World world)
     {
-        List<NoiseTerrain.Chunk> chunks = new List<NoiseTerrain.Chunk>();
+        List<Chunk> chunks = new List<Chunk>();
         foreach (Room room in world.GetRooms())
         {
             room.SetupRoom();
@@ -51,7 +52,7 @@ public class MapGenerator : MonoBehaviour
                     boolMap[x, y] = room.mapGrid[x, y].type == 1 ? true : false;
                 }
             }
-            NoiseTerrain.Chunk chunk = new NoiseTerrain.Chunk(chunkID, boolMap, FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().chunks);
+            Chunk chunk = new Chunk(chunkID, boolMap, FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().chunks);
             chunks.Add(chunk);
         }
         return chunks;

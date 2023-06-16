@@ -203,7 +203,7 @@ public class CameraController : MonoBehaviour
         }
         else if(chunkLoader)
         {
-            Vector2Int chunkID = NoiseTerrain.ChunkHandler.singlton.GetChunkID(transform.position);
+            Vector2Int chunkID = ChunkHandler.ChunkHandler.singlton.GetChunkID(transform.position);
             
             if (this.chunkID == null || chunkID != this.chunkID)
             {
@@ -211,7 +211,7 @@ public class CameraController : MonoBehaviour
                 foreach (Vector2Int visibleChunkID in chunkLoader.visibleChunkIDs)
                 {
                     int distance = (int)Vector2Int.Distance(visibleChunkID, chunkID);
-                    NoiseTerrain.ChunkHandler.singlton.GetChunk(visibleChunkID).Load(distance);
+                    ChunkHandler.ChunkHandler.singlton.GetChunk(visibleChunkID).Load(distance);
                 }
             }
         }

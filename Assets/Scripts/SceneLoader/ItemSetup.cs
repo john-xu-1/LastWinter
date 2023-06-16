@@ -67,7 +67,7 @@ public class ItemSetup : Setup
         setupComplete = true;
     }
 
-    public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    public IEnumerator InitializeSetup(List<LocomotionGraph.PlatformChunk> platforms, int seed)
     {
         yield return null;
         System.Random random = new System.Random(seed);
@@ -81,7 +81,7 @@ public class ItemSetup : Setup
                 itemCount -= 1;
                 placedItems.Add(rand);
                 GameObject item = GameObject.Instantiate(items[rand]);
-                NoiseTerrain.PlatformChunk platform = platforms[random.Next(0, platforms.Count)];
+                LocomotionGraph.PlatformChunk platform = platforms[random.Next(0, platforms.Count)];
                 Vector2Int ground = platform.jumpTiles[random.Next(0, platform.jumpTiles.Count)];
                 Vector2Int groundPos = platform.GetTilePos(ground);
                 item.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 2);

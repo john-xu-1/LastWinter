@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ChunkHandler;
+using LocomotionGraph;
 
 [System.Serializable]
 public class EnemySetup : Setup
@@ -51,7 +53,7 @@ public class EnemySetup : Setup
                 //Vector2Int ground = platform.groundTiles[random.Next(0, platform.groundTiles.Count)];
                 Vector2 groundPos = SceneLoader.GetRandomGround(platformID, random); //platform.GetTilePos(ground);
                 enemy.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y);
-                NoiseTerrain.Chunk myChunk = NoiseTerrain.ChunkHandler.singlton.GetChunk(enemy.transform.position);
+                Chunk myChunk = ChunkHandler.ChunkHandler.singlton.GetChunk(enemy.transform.position);
                 enemy.GetComponent<ChunkObjectEnemy>().mychunk = myChunk;
                 myChunk.AddChunkObject(enemy.GetComponent<ChunkObjectEnemy>());
 
@@ -62,7 +64,7 @@ public class EnemySetup : Setup
 
         setupComplete = true;
     }
-    public IEnumerator InitializeSetup(List<NoiseTerrain.PlatformChunk> platforms, int seed, bool setActive)
+    public IEnumerator InitializeSetup(List<PlatformChunk> platforms, int seed, bool setActive)
     {
         yield return null;
         System.Random random = new System.Random(seed);
@@ -75,11 +77,11 @@ public class EnemySetup : Setup
             remainingEnemies -= 1;
 
             GameObject enemy = GameObject.Instantiate(enemies[rand]);
-            NoiseTerrain.PlatformChunk platform = platforms[random.Next(0, platforms.Count)];
+            PlatformChunk platform = platforms[random.Next(0, platforms.Count)];
             Vector2Int ground = platform.jumpTiles[random.Next(0, platform.jumpTiles.Count)];
             Vector2Int groundPos = platform.GetTilePos(ground);
             enemy.transform.position = new Vector2(groundPos.x + 0.5f, groundPos.y + 1.6f);
-            NoiseTerrain.Chunk myChunk = NoiseTerrain.ChunkHandler.singlton.GetChunk(enemy.transform.position);
+            Chunk myChunk = ChunkHandler.ChunkHandler.singlton.GetChunk(enemy.transform.position);
             enemy.GetComponent<ChunkObjectEnemy>().mychunk = myChunk;
             myChunk.AddChunkObject(enemy.GetComponent<ChunkObjectEnemy>());
 

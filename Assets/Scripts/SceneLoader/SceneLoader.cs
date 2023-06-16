@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LocomotionGraph;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class SceneLoader : MonoBehaviour
     public bool generateFromFile;
     public DungeonHandler dungeonHandler;
     public NoiseTerrain.ProceduralMapGenerator noiseMapGenerator;
+    public LocomotionGraph.LocomotionGraph locomotionGraph;
 
     public GameHandler gameHandler;
     public UISetup uiSetup;
@@ -51,16 +53,16 @@ public class SceneLoader : MonoBehaviour
         if (generateFromFile)
         {
             dungeonHandler.MapSetup(loadWorldIndex);
-            foreach(NoiseTerrain.Chunk roomChunk in dungeonHandler.chunks)
+            foreach(ChunkHandler.Chunk roomChunk in dungeonHandler.chunks)
             {
-                NoiseTerrain.ChunkHandler.singlton.AddChunk(roomChunk);
+                ChunkHandler.ChunkHandler.singlton.AddChunk(roomChunk);
                 
             }
             minX = 0;
             maxY = dungeonHandler.worldHeight * dungeonHandler.roomHeight;
             maxX = dungeonHandler.worldWidth * dungeonHandler.roomWidth;
             minY = 0;
-            noiseMapGenerator.SetRoomChunk(dungeonHandler.chunks);
+            locomotionGraph.SetRoomChunk(dungeonHandler.chunks, noiseMapGenerator.seed);
             Vector2Int chunkRadius = new Vector2Int(dungeonHandler.worldWidth / 2, dungeonHandler.worldHeight / 2);
             Vector2Int chunkSize = new Vector2Int(dungeonHandler.roomWidth, dungeonHandler.roomHeight);
             Vector2 pos = new Vector2(maxX / 2, -maxY / 2);
@@ -118,10 +120,10 @@ public class SceneLoader : MonoBehaviour
     }
     IEnumerator EnvironmentSetup()
     {
-        while (!noiseMapGenerator.platformSetupComplete) yield return null;
+        while (!locomotionGraph.platformSetupComplete) yield return null;
         LightingLevelSetup lighting = FindObjectOfType<LightingLevelSetup>();
         //lighting.setupLighting(minX, maxX, minY + 2, maxY - 2,seed);
-        lighting.setupLighting(noiseMapGenerator.GetPlatforms(), seed);
+        lighting.setupLighting(locomotionGraph.GetPlatforms(), seed);
         while (!lighting.setupComplete)
         {
             yield return null;
@@ -133,8 +135,8 @@ public class SceneLoader : MonoBehaviour
     public Exit exitPrefab;
     IEnumerator ObstaclesSetup()
     {
-        StartCoroutine(noiseMapGenerator.GenerateLocomotionGraph());
-        while (noiseMapGenerator.generatingLocomotionGraph)
+        StartCoroutine(locomotionGraph.GenerateLocomotionGraph());
+        while (locomotionGraph.generatingLocomotionGraph)
         {
             yield return null;
         }
@@ -230,7 +232,7 @@ public class SceneLoader : MonoBehaviour
 
     public static Vector2 GetRandomGround(int nodeID, System.Random random)
     {
-        NoiseTerrain.PlatformChunk platform = GameObject.FindObjectOfType<NoiseTerrain.ProceduralMapGenerator>().GetPlatform(nodeID);
+        PlatformChunk platform = GameObject.FindObjectOfType<LocomotionGraph.LocomotionGraph>().GetPlatform(nodeID);
         int randomIndex = random.Next(0, platform.jumpTiles.Count);
         return platform.GetTilePos(platform.jumpTiles[randomIndex]);
     }

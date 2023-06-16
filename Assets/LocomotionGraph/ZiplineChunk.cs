@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZiplineChunk : NoiseTerrain.NodeChunk
+namespace LocomotionGraph
 {
-    
+    public class ZiplineChunk : NodeChunk
+    {
+
+    }
 }

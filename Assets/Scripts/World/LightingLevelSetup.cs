@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using ChunkHandler;
+using LocomotionGraph;
 
 public class LightingLevelSetup : MonoBehaviour
 {
@@ -86,7 +88,7 @@ public class LightingLevelSetup : MonoBehaviour
             chunkObjectLights = Instantiate(chunkObjectLightsPrefab);
             chunkObjectLightsIDs.Add(chunkID);
             this.chunkObjectLights.Add(chunkObjectLights);
-            NoiseTerrain.Chunk myChunk = NoiseTerrain.ChunkHandler.singlton.GetChunk(chunkID);
+            Chunk myChunk = ChunkHandler.ChunkHandler.singlton.GetChunk(chunkID);
             myChunk.AddChunkObject(chunkObjectLights/*, 3*/);
             chunkObjectLights.mychunk = myChunk;
         }
@@ -94,15 +96,15 @@ public class LightingLevelSetup : MonoBehaviour
     }
     public void SetLight(int type, Vector2 pos)
     {
-        Vector2Int chunkID = NoiseTerrain.ChunkHandler.singlton.GetChunkID(pos);
+        Vector2Int chunkID = ChunkHandler.ChunkHandler.singlton.GetChunkID(pos);
         GetChunkObjectLights(chunkID).AddLight(type, pos);
 
     }
-    public void setupLighting(List<NoiseTerrain.PlatformChunk> platforms, int seed)
+    public void setupLighting(List<PlatformChunk> platforms, int seed)
     {
         System.Random random = new System.Random(seed);
         List<Lighting> lightings = new List<Lighting>();
-        foreach (NoiseTerrain.PlatformChunk platform in platforms)
+        foreach (PlatformChunk platform in platforms)
         {
             int lights = 1;
             while (lights > 0)
@@ -175,8 +177,8 @@ public class LightingLevelSetup : MonoBehaviour
             return groundTile != null && airTile == null;
         }
 
-        bool ground = NoiseTerrain.ChunkHandler.singlton.GetTile(new Vector2Int(x, y));
-        bool air = !NoiseTerrain.ChunkHandler.singlton.GetTile(new Vector2Int(x, y+1));
+        bool ground = ChunkHandler.ChunkHandler.singlton.GetTile(new Vector2Int(x, y));
+        bool air = !ChunkHandler.ChunkHandler.singlton.GetTile(new Vector2Int(x, y+1));
         return ground && air;
     }
 
