@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NoiseTerrain
+namespace LocomotionGraph
 {
     public class FilledChunk
     {
@@ -115,7 +115,7 @@ namespace NoiseTerrain
             List<Vector2Int> validWalls = new List<Vector2Int>();
             //loop up until empty or no longer a wall
             int y = wallTile.y - 1;
-            while (y <= 0 && roomChunk.FilledTile(wallTile.x, y) && !roomChunk.FilledTile(wallTile.x + xOffset, y))
+            while (y - minY >= 0 && roomChunk.FilledTile(wallTile.x, y) && !roomChunk.FilledTile(wallTile.x + xOffset, y))
             {
                 validWalls.Add(new Vector2Int(wallTile.x, y));
                 y--;
@@ -123,7 +123,7 @@ namespace NoiseTerrain
 
             //loop down until empty or no longer a wall
             y = wallTile.y + 1;
-            while (y < wallIDs.GetLength(1) && roomChunk.FilledTile(wallTile.x, y) && !roomChunk.FilledTile(wallTile.x + xOffset, y))
+            while (y - minY < wallIDs.GetLength(1) && roomChunk.FilledTile(wallTile.x, y) && !roomChunk.FilledTile(wallTile.x + xOffset, y))
             {
                 validWalls.Add(new Vector2Int(wallTile.x, y));
                 y++;

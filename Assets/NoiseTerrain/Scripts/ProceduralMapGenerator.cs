@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Threading;
+using ChunkHandler;
+using LocomotionGraph;
 
 namespace NoiseTerrain
 {
@@ -10,7 +12,7 @@ namespace NoiseTerrain
     {
         public bool closedLevel;
 
-        public ChunkHandler chunks;
+        public ChunkHandler.ChunkHandler chunks;
 
         public Vector2Int chunkID;
         public Vector2Int _chunkRadius = new Vector2Int(5, 4);
@@ -437,23 +439,21 @@ namespace NoiseTerrain
 
         }
 
+        // temp method for generating liquid after ASP locomotion solver
         public void GenerateLiquid(int sourceID, int sinkID)
         {
-            NodeChunk node = roomChunk.GetPlatform(sourceID);
+            NodeChunk node = locomotionGraph.RoomChunk.GetPlatform(sourceID);
             Vector2Int fluidStart = node.GetFluidEdge(sinkID);
-            if (!roomChunk.FilledTile(fluidStart.x, fluidStart.y))
+            if (!locomotionGraph.RoomChunk.FilledTile(fluidStart.x, fluidStart.y))
             {
                 StartCoroutine(PlaceLiquid(waterTile, waterTilemap, new Vector2Int(fluidStart.x, -fluidStart.y), true));
             }
         }
 
-        RoomChunk roomChunk;
-        public RoomChunk RoomChunk { get { return roomChunk; } }
-        public int jumpHeight = 6;
-        public bool platformSetupComplete;
+
+        public LocomotionGraph.LocomotionGraph locomotionGraph;
         public void SetRoomChunk()
         {
-            platformSetupComplete = false;
             List<Chunk> roomChunks = new List<Chunk>();
             //roomSize should be double the tileRadius if all visible chunks should be in one room
             for (int x = -roomSize.x / 2; x <= roomSize.x / 2; x += 1)
@@ -463,83 +463,10 @@ namespace NoiseTerrain
                     roomChunks.Add(chunks.GetChunk(chunkID + new Vector2Int(x, y)));
                 }
             }
-            this.roomChunks = roomChunks;
-            Thread thread = new Thread(SetRoomChunkThread);
-            thread.Start();
-        }
-        public void SetRoomChunk(List<Chunk> roomChunks)
-        {
-            platformSetupComplete = false;
-            setupComplete = false;
-            //active = true;
-            this.roomChunks = roomChunks;
-            Thread thread = new Thread(SetRoomChunkThread);
-            thread.Start();
-        }
-        List<Chunk> roomChunks;
-        public void SetRoomChunkThread()
-        {
-            roomChunk = new RoomChunk(roomChunks, jumpHeight);
-            platformSetupComplete = true;
+            locomotionGraph.SetRoomChunk(roomChunks, seed);
         }
 
-        public List<PlatformChunk> GetPlatforms()
-        {
-            List<PlatformChunk> platforms = new List<PlatformChunk>();
-            foreach (FilledChunk filledChunk in roomChunk.filledChunks)
-            {
-                foreach (PlatformChunk platform in filledChunk.platforms)
-                {
-                    platforms.Add(platform);
-                }
-            }
-            return platforms;
-        }
-        public PlatformChunk GetPlatform(int platformID)
-        {
-            return roomChunk.GetPlatform(platformID);
-        }
 
-        public LocomotionSolver ls;
-        public bool generatingLocomotionGraph = false;
-        public IEnumerator GenerateLocomotionGraph()
-        {
-            generatingLocomotionGraph = true;
-            generateLocomotionGraphThreadCompleted = false;
-            Thread thread = new Thread(GenerateLocomotionGraphThread);
-            thread.Start();
-            while (!generateLocomotionGraphThreadCompleted)
-            {
-                yield return null;
-            }
-
-            ls.Solve(nodeChunks, seed);
-
-            while (!ls.ready)
-            {
-                yield return null;
-            }
-
-            generatingLocomotionGraph = false;
-        }
-
-        List<NodeChunk> nodeChunks;
-        bool generateLocomotionGraphThreadCompleted = false;
-        private void GenerateLocomotionGraphThread()
-        {
-            List<int> platformIDs = roomChunk.GetPlatformIDs();
-            nodeChunks = new List<NodeChunk>();
-            foreach (int platformID in platformIDs)
-            {
-                NodeChunk nodeChunk = roomChunk.GetPlatform(platformID);
-                nodeChunks.Add(nodeChunk);
-            }
-            roomChunk.SetPlatformEdges(platformIDs, jumpHeight, checkConnection);
-            generateLocomotionGraphThreadCompleted = true;
-        }
-
-        public bool checkConnection = false;
-        
         private void HandleFixTileRulesThread()
         {
             while (fixTileRules)
