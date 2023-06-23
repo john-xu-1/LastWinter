@@ -114,6 +114,7 @@ namespace LocomotionGraph
         {
             int xOffset = rightSide ? 1 : -1;
             List<Vector2Int> validWalls = new List<Vector2Int>();
+
             //loop up until empty or no longer a wall
             int y = wallTile.y - 1;
             while (y -minY >= 0 && roomChunk.FilledTile(wallTile.x, y) && !roomChunk.FilledTile(wallTile.x + xOffset, y))

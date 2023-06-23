@@ -85,6 +85,12 @@ namespace LocomotionGraph
 
         public bool FilledTile(int x, int y)
         {
+            //return filledChunkIDs[x - minX, y - minY] > 0;
+            return GetTile(x, y);
+        }
+
+        public bool GetTile(int x, int y)
+        {
             int width = chunks[0, 0].width;
             int height = chunks[0, 0].height;
             int xID = x / width;
@@ -95,6 +101,7 @@ namespace LocomotionGraph
             return chunks[xID, yID].GetTile(x, y);
 
         }
+
         public void SetFilledChunks(int jumpHeight)
         {
             if (filledChunkIDs == null)
@@ -140,7 +147,7 @@ namespace LocomotionGraph
             {
                 for (int y = 0; y < height; y += 1)
                 {
-                    if (FilledTile(x, y)) toVisit.Add(new Vector2Int(x, y));
+                    if (GetTile(x, y)) toVisit.Add(new Vector2Int(x, y));
                 }
             }
             Debug.Log($"SetFilledChunkIDs start {System.DateTime.Now}");
@@ -160,10 +167,10 @@ namespace LocomotionGraph
                     visited.Add(loc);
                     if (!toVisit.Remove(loc)) Debug.Log(loc + " removed");
                     int x = loc.x, y = loc.y;
-                    if (x > 0 && FilledTile(x - 1, y) && !visited.Contains(new Vector2Int(x - 1, y)) && !frontier.Contains(new Vector2Int(x - 1, y))) frontier.Add(new Vector2Int(x - 1, y));
-                    if (y > 0 && FilledTile(x, y - 1) && !visited.Contains(new Vector2Int(x, y - 1)) && !frontier.Contains(new Vector2Int(x, y - 1))) frontier.Add(new Vector2Int(x, y - 1));
-                    if (x < width - 1 && FilledTile(x + 1, y) && !visited.Contains(new Vector2Int(x + 1, y)) && !frontier.Contains(new Vector2Int(x + 1, y))) frontier.Add(new Vector2Int(x + 1, y));
-                    if (y < height - 1 && FilledTile(x, y + 1) && !visited.Contains(new Vector2Int(x, y + 1)) && !frontier.Contains(new Vector2Int(x, y + 1))) frontier.Add(new Vector2Int(x, y + 1));
+                    if (x > 0 && GetTile(x - 1, y) && !visited.Contains(new Vector2Int(x - 1, y)) && !frontier.Contains(new Vector2Int(x - 1, y))) frontier.Add(new Vector2Int(x - 1, y));
+                    if (y > 0 && GetTile(x, y - 1) && !visited.Contains(new Vector2Int(x, y - 1)) && !frontier.Contains(new Vector2Int(x, y - 1))) frontier.Add(new Vector2Int(x, y - 1));
+                    if (x < width - 1 && GetTile(x + 1, y) && !visited.Contains(new Vector2Int(x + 1, y)) && !frontier.Contains(new Vector2Int(x + 1, y))) frontier.Add(new Vector2Int(x + 1, y));
+                    if (y < height - 1 && GetTile(x, y + 1) && !visited.Contains(new Vector2Int(x, y + 1)) && !frontier.Contains(new Vector2Int(x, y + 1))) frontier.Add(new Vector2Int(x, y + 1));
                 }
             }
             Debug.Log($"SetFilledChunkIDs end {System.DateTime.Now} total time {System.DateTime.Now - starTime}");
