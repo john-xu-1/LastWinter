@@ -85,8 +85,11 @@ namespace LocomotionGraph
 
         public bool FilledTile(int x, int y)
         {
-            //return filledChunkIDs[x - minX, y - minY] > 0;
-            return GetTile(x, y);
+            //x = x + minTile.x;
+            //y = -y - maxTile.y;
+            //Debug.Log($"{x} {y}");
+            return filledChunkIDs[x, y] > 0;
+            //return GetTile(x, y);
         }
 
         public bool GetTile(int x, int y)

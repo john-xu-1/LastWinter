@@ -657,28 +657,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af6a3f6ef84cc441e954d2b7a7135f0f, type: 3}
---- !u!1 &457688590 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6147222636303502674, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
-  m_PrefabInstance: {fileID: 1859506617}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &457688591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 457688590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f92ed1e269ee64c478ef2160928e0c08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chunks: {fileID: 191559731}
-  generator: {fileID: 853445341}
-  locomotionGraph: {fileID: 0}
-  clickFunction: 7
-  generateChunkGraphDepth: 0
 --- !u!1 &493389888
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,6 +733,7 @@ GameObject:
   m_Component:
   - component: {fileID: 503278597}
   - component: {fileID: 503278596}
+  - component: {fileID: 503278598}
   m_Layer: 0
   m_Name: LocomotionGraph
   m_TagString: Untagged
@@ -774,7 +753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89b07cb67f1f8341878e0e651fcb898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpHeight: 6
+  jumpHeight: 3
   platformSetupComplete: 0
   ls: {fileID: 2132609659}
   generatingLocomotionGraph: 0
@@ -793,6 +772,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &503278598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503278595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f92ed1e269ee64c478ef2160928e0c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chunks: {fileID: 191559731}
+  generator: {fileID: 853445341}
+  locomotionGraph: {fileID: 503278596}
+  clickFunction: 7
+  generateChunkGraphDepth: 0
 --- !u!1001 &570936434
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1460,7 +1456,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6147222636303502687, guid: c1c70817418464a858a2298cf959c0ad, type: 3}
   m_PrefabInstance: {fileID: 1859506617}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 457688590}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1194077e52174b04aa75d2d2ac054ce6, type: 3}
@@ -3654,7 +3650,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threadPriority: 32
   aspFilePath: DataFiles/ASPFiles/queens.txt
-  clingoExecutablePathMacOS: /opt/homebrew/bin/clingo
+  clingoExecutablePathMacOS: /usr/local/bin/clingo
   clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
   AdditionalArguments: 
   maxDuration: 10

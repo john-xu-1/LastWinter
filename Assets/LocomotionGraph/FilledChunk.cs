@@ -217,7 +217,7 @@ namespace LocomotionGraph
                 {
                     //check up
 
-                    if (!roomChunk.FilledTile(current.x + xOffset, y - 1))
+                    if (y > 0 && !roomChunk.FilledTile(current.x + xOffset, y - 1))
                     {
                         //plaform tile found
                         platformIDs[current.x + xOffset - minX, y - minY] = platformID;
