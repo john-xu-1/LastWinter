@@ -450,7 +450,7 @@ namespace NoiseTerrain
             }
         }
 
-        public LocomotionGraph.LocomotionGraph locomotionGraph;
+        public LocomotionChunkGraph locomotionGraph;
         public void SetRoomChunk()
         {
             List<Chunk> roomChunks = new List<Chunk>();

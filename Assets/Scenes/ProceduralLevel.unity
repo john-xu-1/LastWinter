@@ -753,7 +753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89b07cb67f1f8341878e0e651fcb898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpHeight: 3
+  jumpHeight: 6
   platformSetupComplete: 0
   ls: {fileID: 2132609659}
   generatingLocomotionGraph: 0

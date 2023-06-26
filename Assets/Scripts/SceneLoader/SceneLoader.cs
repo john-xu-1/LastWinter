@@ -9,7 +9,7 @@ public class SceneLoader : MonoBehaviour
     public bool generateFromFile;
     public DungeonHandler dungeonHandler;
     public NoiseTerrain.ProceduralMapGenerator noiseMapGenerator;
-    public LocomotionGraph.LocomotionGraph locomotionGraph;
+    public LocomotionChunkGraph locomotionGraph;
 
     public GameHandler gameHandler;
     public UISetup uiSetup;
@@ -62,7 +62,12 @@ public class SceneLoader : MonoBehaviour
             maxY = dungeonHandler.worldHeight * dungeonHandler.roomHeight;
             maxX = dungeonHandler.worldWidth * dungeonHandler.roomWidth;
             minY = 0;
+
+            //set room chunk from pregenerated Terrain
+            SetOnLocomotionGraphComplete();
             locomotionGraph.SetRoomChunk(dungeonHandler.chunks, noiseMapGenerator.seed);
+
+
             Vector2Int chunkRadius = new Vector2Int(dungeonHandler.worldWidth / 2, dungeonHandler.worldHeight / 2);
             Vector2Int chunkSize = new Vector2Int(dungeonHandler.roomWidth, dungeonHandler.roomHeight);
             Vector2 pos = new Vector2(maxX / 2, -maxY / 2);
@@ -75,12 +80,18 @@ public class SceneLoader : MonoBehaviour
         }
         else
         {
+            
             noiseMapGenerator.GenerateMap(noiseMapGenerator.seed);
             while (!noiseMapGenerator.setupComplete)
             {
                 yield return null;
             }
+
+            //set room chunk from noise terrain generator
+            SetOnLocomotionGraphComplete();
             noiseMapGenerator.SetRoomChunk();
+
+
             minX = noiseMapGenerator.minX;
             maxX = noiseMapGenerator.maxX;
             minY = noiseMapGenerator.minY;
@@ -118,11 +129,22 @@ public class SceneLoader : MonoBehaviour
         progression += 1 / (float)progressionItemsCount;
         StartCoroutine(EnvironmentSetup());
     }
+
+    bool locomotionGraphSetupComplete = false;
+    private void SetOnLocomotionGraphComplete()
+    {
+        locomotionGraphSetupComplete = false;
+        locomotionGraph.onLocomotionGraphSetupComplete += OnLocomotionGraphSetupComplete;
+    }
+    public void OnLocomotionGraphSetupComplete()
+    {
+        locomotionGraphSetupComplete = true;
+        locomotionGraph.onLocomotionGraphSetupComplete -= OnLocomotionGraphSetupComplete;
+    }
     IEnumerator EnvironmentSetup()
     {
-        while (!locomotionGraph.platformSetupComplete) yield return null;
+        while (!locomotionGraphSetupComplete) yield return null;
         LightingLevelSetup lighting = FindObjectOfType<LightingLevelSetup>();
-        //lighting.setupLighting(minX, maxX, minY + 2, maxY - 2,seed);
         lighting.setupLighting(locomotionGraph.GetPlatforms(), seed);
         while (!lighting.setupComplete)
         {
