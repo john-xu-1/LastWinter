@@ -64,7 +64,7 @@ public class SceneLoader : MonoBehaviour
             minY = 0;
 
             //set room chunk from pregenerated Terrain
-            SetOnLocomotionGraphComplete();
+            //SetOnLocomotionGraphComplete();
             locomotionGraph.SetRoomChunk(dungeonHandler.chunks, noiseMapGenerator.seed);
 
 
@@ -88,8 +88,8 @@ public class SceneLoader : MonoBehaviour
             }
 
             //set room chunk from noise terrain generator
-            SetOnLocomotionGraphComplete();
-            noiseMapGenerator.SetRoomChunk();
+            //SetOnLocomotionGraphComplete();
+            locomotionGraph.SetRoomChunk(noiseMapGenerator.GetRoomChunk(), noiseMapGenerator.seed);
 
 
             minX = noiseMapGenerator.minX;
@@ -130,20 +130,10 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(EnvironmentSetup());
     }
 
-    bool locomotionGraphSetupComplete = false;
-    private void SetOnLocomotionGraphComplete()
-    {
-        locomotionGraphSetupComplete = false;
-        locomotionGraph.onLocomotionGraphSetupComplete += OnLocomotionGraphSetupComplete;
-    }
-    public void OnLocomotionGraphSetupComplete()
-    {
-        locomotionGraphSetupComplete = true;
-        locomotionGraph.onLocomotionGraphSetupComplete -= OnLocomotionGraphSetupComplete;
-    }
+    
     IEnumerator EnvironmentSetup()
     {
-        while (!locomotionGraphSetupComplete) yield return null;
+        while (!locomotionGraph.locomotionGraphSetupComplete) yield return null;
         LightingLevelSetup lighting = FindObjectOfType<LightingLevelSetup>();
         lighting.setupLighting(locomotionGraph.GetPlatforms(), seed);
         while (!lighting.setupComplete)

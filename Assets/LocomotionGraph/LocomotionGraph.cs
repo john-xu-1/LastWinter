@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 
+/*
+ * 1. Generate Room Chunk -> SetRoomChunkThread()
+ * 2. Generate Locomotion graph -> GenerateLocomotionGraphThread()
+ */
+
 namespace LocomotionGraph
 {
     public class LocomotionGraph : MonoBehaviour
@@ -13,8 +18,8 @@ namespace LocomotionGraph
         public int jumpHeight = 6;
         protected int seed;
 
-        public delegate void OnPlatformSetupComplete();
-        public event OnPlatformSetupComplete onLocomotionGraphSetupComplete;
+        public delegate void OnLocomotionGraphSetupComplete();
+        public event OnLocomotionGraphSetupComplete onLocomotionGraphSetupComplete;
 
         protected bool[,] boolMapThread;
         protected Vector2Int minTileThread, maxTileThread;

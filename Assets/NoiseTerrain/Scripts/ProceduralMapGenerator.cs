@@ -451,7 +451,7 @@ namespace NoiseTerrain
         }
 
         public LocomotionChunkGraph locomotionGraph;
-        public void SetRoomChunk()
+        public List<Chunk> GetRoomChunk()
         {
             List<Chunk> roomChunks = new List<Chunk>();
             //roomSize should be double the tileRadius if all visible chunks should be in one room
@@ -462,7 +462,8 @@ namespace NoiseTerrain
                     roomChunks.Add(chunks.GetChunk(chunkID + new Vector2Int(x, y)));
                 }
             }
-            locomotionGraph.SetRoomChunk(roomChunks, seed);
+            //locomotionGraph.SetRoomChunk(roomChunks, seed);
+            return roomChunks;
         }
 
         private void HandleFixTileRulesThread()

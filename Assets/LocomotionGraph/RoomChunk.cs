@@ -27,7 +27,10 @@ namespace LocomotionGraph
             this.minTile = minTile;
             this.maxTile = maxTile;
 
+            PrintBoolMap();
+            //PrintFilledChunkIDs();
             SetFilledChunks(jumpHeight);
+            //PrintPlatformIDs();
         }
 
         //public RoomChunk(List<Chunk> roomChunks, int jumpHeight)
@@ -91,7 +94,7 @@ namespace LocomotionGraph
             {
                 for (int x = 0; x < width; x += 1)
                 {
-                    boolMap[x, y] = FilledTile(x, y);
+                    boolMap[x, y] = GetTile(x, y);
                 }
             }
             return boolMap;

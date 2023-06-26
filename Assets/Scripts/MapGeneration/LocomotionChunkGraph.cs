@@ -8,9 +8,11 @@ using System.Threading;
 public class LocomotionChunkGraph : LocomotionGraph.LocomotionGraph, IChunkable
 {
     List<Chunk> roomChunks;
+    public bool locomotionGraphSetupComplete = false;
 
     public void GenerateFromChunks(List<Chunk> chunks)
     {
+        roomChunks = chunks;
         int minYID = int.MaxValue;
         int minXID = int.MaxValue;
         int maxYID = int.MinValue;
@@ -33,29 +35,46 @@ public class LocomotionChunkGraph : LocomotionGraph.LocomotionGraph, IChunkable
         boolMapThread = new bool[width, height];
 
         Debug.Log($"minXID: {minXID} minYID: {minYID} maxXID: {maxXID} maxYID: {maxYID}");
-        foreach (Chunk chunk in roomChunks)
-        {
-            //use chunk data to populate the boolMapThread
-            
-        }
 
         //calc the min/max tiles maxY and min Y are flipped since positive y is down
         minTileThread = new Vector2Int(minXID * roomChunks[0].width, maxYID * roomChunks[0].height + roomChunks[0].height - 1);
         maxTileThread = new Vector2Int(maxXID * roomChunks[0].width + roomChunks[0].width - 1, minYID * roomChunks[0].height);
 
+        Debug.Log($"minTileThread: {minTileThread} maxTileThread: {maxTileThread}");
+        for (int x = minTileThread.x; x <= maxTileThread.x; x++)
+        {
+            for(int y = maxTileThread.y; y <= minTileThread.y; y++)
+            {
+                boolMapThread[x - minTileThread.x, y - maxTileThread.y] = roomChunks[0].GetTile(x, y);
+                //Debug.Log(boolMapThread[x - minTileThread.x, y - maxTileThread.y]);
+            }
+        }
 
+    }
+
+    //bool locomotionGraphSetupComplete = false;
+    private void SetOnLocomotionGraphComplete()
+    {
+        locomotionGraphSetupComplete = false;
+        onLocomotionGraphSetupComplete += LocomotionGraphSetupComplete;
+    }
+    public void LocomotionGraphSetupComplete()
+    {
+        locomotionGraphSetupComplete = true;
+        onLocomotionGraphSetupComplete -= LocomotionGraphSetupComplete;
     }
 
     public void SetRoomChunk(List<Chunk> roomChunks, int seed)
     {
-
+        SetOnLocomotionGraphComplete();
         this.seed = seed;
-        //platformSetupComplete = false;
 
-        //active = true;
-        this.roomChunks = roomChunks;
+        GenerateFromChunks(roomChunks);
+
         Thread thread = new Thread(SetRoomChunkThread);
         thread.Start();
+
+
     }
     
     

@@ -159,7 +159,7 @@ namespace LocomotionGraph
                 }
                 else if (Input.GetMouseButtonUp(0)) //check left side of wall
                 {
-                    Vector2Int clickTile = locomotionGraph.RoomChunk.GetWorldToGridPos(TilePosFromClick(Input.mousePosition));// new Vector2Int((int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).x), (int)Mathf.Floor(Camera.main.ScreenToWorldPoint(Input.mousePosition).y));
+                    Vector2Int clickTile = locomotionGraph.RoomChunk.GetWorldToGridPos(TilePosFromClick(Input.mousePosition));
                     if (locomotionGraph.RoomChunk.FilledTile(clickTile.x, clickTile.y))
                     {
                         Debug.Log($"isValidWall left empty: {WallChunk.IsValidWall(clickTile, locomotionGraph.jumpHeight, false, locomotionGraph.RoomChunk)}");
