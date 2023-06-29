@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ChunkHandler;
 using System.Threading;
 
 namespace LocomotionGraph
@@ -11,26 +10,15 @@ namespace LocomotionGraph
         RoomChunk roomChunk;
         public RoomChunk RoomChunk { get { return roomChunk; } }
         public int jumpHeight = 6;
-        public bool platformSetupComplete;
-        private int seed;
-        
-        public void SetRoomChunk(List<Chunk> roomChunks, int seed)
-        {
+        //public bool platformSetupComplete;
+        protected int seed;
 
-            this.seed = seed;
-            platformSetupComplete = false;
-            
-            //active = true;
-            this.roomChunks = roomChunks;
-            Thread thread = new Thread(SetRoomChunkThread);
-            thread.Start();
-        }
-        List<Chunk> roomChunks;
-        public void SetRoomChunkThread()
-        {
-            roomChunk = new RoomChunk(roomChunks, jumpHeight);
-            platformSetupComplete = true;
-        }
+        public delegate void OnPlatformSetupComplete();
+        public event OnPlatformSetupComplete onLocomotionGraphSetupComplete;
+
+        protected bool[,] boolMapThread;
+
+        protected Vector2Int minTileThread, maxTileThread;
 
         public List<PlatformChunk> GetPlatforms()
         {
@@ -85,6 +73,14 @@ namespace LocomotionGraph
             }
             roomChunk.SetPlatformEdges(platformIDs, jumpHeight, checkConnection);
             generateLocomotionGraphThreadCompleted = true;
+        }
+
+        
+        public void SetRoomChunkThread()
+        {
+            roomChunk = new RoomChunk(boolMapThread, jumpHeight, minTileThread, maxTileThread);
+            //platformSetupComplete = true;
+            onLocomotionGraphSetupComplete?.Invoke();
         }
 
         public bool checkConnection = false;

@@ -9,52 +9,66 @@ namespace LocomotionGraph
     {
         public int width, height;
         public Vector2Int minTile, maxTile;
-        Chunk[,] chunks;
+        //Chunk[,] chunks;
+
+        bool[,] boolMap;
 
         public List<FilledChunk> filledChunks = new List<FilledChunk>();
         public List<WaterChunk> waterChunks = new List<WaterChunk>();
         public int[,] filledChunkIDs;
         public int filledChunkCount;
 
-        public RoomChunk(List<Chunk> roomChunks, int jumpHeight)
+        public RoomChunk(bool[,] boolMap, int jumpHeight, Vector2Int minTile, Vector2Int maxTile)
         {
-            int minYID = int.MaxValue;
-            int minXID = int.MaxValue;
-            int maxYID = int.MinValue;
-            int maxXID = int.MinValue;
+            this.boolMap = boolMap;
+            width = boolMap.GetLength(0);
+            height = boolMap.GetLength(1);
 
-            Debug.Log($"roomChunks.Count: {roomChunks.Count}");
-            foreach (Chunk chunk in roomChunks)
-            {
-                minXID = Mathf.Min(chunk.chunkID.x, minXID);
-                minYID = Mathf.Min(chunk.chunkID.y, minYID);
-                maxXID = Mathf.Max(chunk.chunkID.x, maxXID);
-                maxYID = Mathf.Max(chunk.chunkID.y, maxYID);
-            }
+            this.minTile = minTile;
+            this.maxTile = maxTile;
 
-            Vector2Int roomChunkSize = new Vector2Int(maxXID - minXID + 1, maxYID - minYID + 1);
-            chunks = new Chunk[roomChunkSize.x, roomChunkSize.y];
-            width = roomChunkSize.x * roomChunks[0].width;
-            height = roomChunkSize.y * roomChunks[0].height;
-
-            Debug.Log($"minXID: {minXID} minYID: {minYID} maxXID: {maxXID} maxYID: {maxYID}");
-            foreach (Chunk chunk in roomChunks)
-            {
-                int x = chunk.chunkID.x - minXID;
-                int y = chunk.chunkID.y - minYID;
-                chunks[x, y] = chunk;
-            }
-
-            //calc the min/max tiles maxY and min Y are flipped since positive y is down
-            minTile = new Vector2Int(minXID * roomChunks[0].width, maxYID * roomChunks[0].height + roomChunks[0].height - 1);
-            maxTile = new Vector2Int(maxXID * roomChunks[0].width + roomChunks[0].width - 1, minYID * roomChunks[0].height);
-
-
-            //PrintBoolMap();
-            //PrintFilledChunkIDs();
             SetFilledChunks(jumpHeight);
-            //PrintPlatformIDs();
         }
+
+        //public RoomChunk(List<Chunk> roomChunks, int jumpHeight)
+        //{
+        //    int minYID = int.MaxValue;
+        //    int minXID = int.MaxValue;
+        //    int maxYID = int.MinValue;
+        //    int maxXID = int.MinValue;
+
+        //    Debug.Log($"roomChunks.Count: {roomChunks.Count}");
+        //    foreach (Chunk chunk in roomChunks)
+        //    {
+        //        minXID = Mathf.Min(chunk.chunkID.x, minXID);
+        //        minYID = Mathf.Min(chunk.chunkID.y, minYID);
+        //        maxXID = Mathf.Max(chunk.chunkID.x, maxXID);
+        //        maxYID = Mathf.Max(chunk.chunkID.y, maxYID);
+        //    }
+
+        //    Vector2Int roomChunkSize = new Vector2Int(maxXID - minXID + 1, maxYID - minYID + 1);
+        //    chunks = new Chunk[roomChunkSize.x, roomChunkSize.y];
+        //    width = roomChunkSize.x * roomChunks[0].width;
+        //    height = roomChunkSize.y * roomChunks[0].height;
+
+        //    Debug.Log($"minXID: {minXID} minYID: {minYID} maxXID: {maxXID} maxYID: {maxYID}");
+        //    foreach (Chunk chunk in roomChunks)
+        //    {
+        //        int x = chunk.chunkID.x - minXID;
+        //        int y = chunk.chunkID.y - minYID;
+        //        chunks[x, y] = chunk;
+        //    }
+
+        //    //calc the min/max tiles maxY and min Y are flipped since positive y is down
+        //    minTile = new Vector2Int(minXID * roomChunks[0].width, maxYID * roomChunks[0].height + roomChunks[0].height - 1);
+        //    maxTile = new Vector2Int(maxXID * roomChunks[0].width + roomChunks[0].width - 1, minYID * roomChunks[0].height);
+
+
+        //    //PrintBoolMap();
+        //    //PrintFilledChunkIDs();
+        //    SetFilledChunks(jumpHeight);
+        //    //PrintPlatformIDs();
+        //}
         public void PrintBoolMap()
         {
             bool[,] boolMap = GetBoolMap();
@@ -85,14 +99,21 @@ namespace LocomotionGraph
 
         public bool FilledTile(int x, int y)
         {
-            int width = chunks[0, 0].width;
-            int height = chunks[0, 0].height;
-            int xID = x / width;
-            int yID = y / height;
-            x = x % width;
-            y = y % height;
 
-            return chunks[xID, yID].GetTile(x, y);
+            return filledChunkIDs[x,y] > 0; 
+
+        }
+        public bool GetTile(int x, int y)
+        {
+            //int width = chunks[0, 0].width;
+            //int height = chunks[0, 0].height;
+            //int xID = x / width;
+            //int yID = y / height;
+            //x = x % width;
+            //y = y % height;
+
+            //return chunks[xID, yID].GetTile(x, y);
+            return boolMap[x, y];
 
         }
         public void SetFilledChunks(int jumpHeight)
@@ -140,7 +161,7 @@ namespace LocomotionGraph
             {
                 for (int y = 0; y < height; y += 1)
                 {
-                    if (FilledTile(x, y)) toVisit.Add(new Vector2Int(x, y));
+                    if (GetTile(x, y)) toVisit.Add(new Vector2Int(x, y));
                 }
             }
             Debug.Log($"SetFilledChunkIDs start {System.DateTime.Now}");
@@ -160,10 +181,10 @@ namespace LocomotionGraph
                     visited.Add(loc);
                     if (!toVisit.Remove(loc)) Debug.Log(loc + " removed");
                     int x = loc.x, y = loc.y;
-                    if (x > 0 && FilledTile(x - 1, y) && !visited.Contains(new Vector2Int(x - 1, y)) && !frontier.Contains(new Vector2Int(x - 1, y))) frontier.Add(new Vector2Int(x - 1, y));
-                    if (y > 0 && FilledTile(x, y - 1) && !visited.Contains(new Vector2Int(x, y - 1)) && !frontier.Contains(new Vector2Int(x, y - 1))) frontier.Add(new Vector2Int(x, y - 1));
-                    if (x < width - 1 && FilledTile(x + 1, y) && !visited.Contains(new Vector2Int(x + 1, y)) && !frontier.Contains(new Vector2Int(x + 1, y))) frontier.Add(new Vector2Int(x + 1, y));
-                    if (y < height - 1 && FilledTile(x, y + 1) && !visited.Contains(new Vector2Int(x, y + 1)) && !frontier.Contains(new Vector2Int(x, y + 1))) frontier.Add(new Vector2Int(x, y + 1));
+                    if (x > 0 && GetTile(x - 1, y) && !visited.Contains(new Vector2Int(x - 1, y)) && !frontier.Contains(new Vector2Int(x - 1, y))) frontier.Add(new Vector2Int(x - 1, y));
+                    if (y > 0 && GetTile(x, y - 1) && !visited.Contains(new Vector2Int(x, y - 1)) && !frontier.Contains(new Vector2Int(x, y - 1))) frontier.Add(new Vector2Int(x, y - 1));
+                    if (x < width - 1 && GetTile(x + 1, y) && !visited.Contains(new Vector2Int(x + 1, y)) && !frontier.Contains(new Vector2Int(x + 1, y))) frontier.Add(new Vector2Int(x + 1, y));
+                    if (y < height - 1 && GetTile(x, y + 1) && !visited.Contains(new Vector2Int(x, y + 1)) && !frontier.Contains(new Vector2Int(x, y + 1))) frontier.Add(new Vector2Int(x, y + 1));
                 }
             }
             Debug.Log($"SetFilledChunkIDs end {System.DateTime.Now} total time {System.DateTime.Now - starTime}");
