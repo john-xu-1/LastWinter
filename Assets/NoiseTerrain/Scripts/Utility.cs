@@ -73,6 +73,57 @@ namespace NoiseTerrain
 
         }
 
+        public static void PrintChunksToBoolMap(List<Chunk> roomChunks, string filename)
+        {
+            int minYID = int.MaxValue;
+            int minXID = int.MaxValue;
+            int maxYID = int.MinValue;
+            int maxXID = int.MinValue;
+
+            Debug.Log($"roomChunks.Count: {roomChunks.Count}");
+            foreach (Chunk chunk in roomChunks)
+            {
+                minXID = Mathf.Min(chunk.chunkID.x, minXID);
+                minYID = Mathf.Min(chunk.chunkID.y, minYID);
+                maxXID = Mathf.Max(chunk.chunkID.x, maxXID);
+                maxYID = Mathf.Max(chunk.chunkID.y, maxYID);
+            }
+
+            Vector2Int roomChunkSize = new Vector2Int(maxXID - minXID + 1, maxYID - minYID + 1);
+            //chunks = new Chunk[roomChunkSize.x, roomChunkSize.y];
+            int width = roomChunkSize.x * roomChunks[0].width;
+            int height = roomChunkSize.y * roomChunks[0].height;
+
+            bool[,] boolMap = new bool[width, height];
+
+            Debug.Log($"minXID: {minXID} minYID: {minYID} maxXID: {maxXID} maxYID: {maxYID}");
+
+            //calc the min/max tiles maxY and min Y are flipped since positive y is down
+            Vector2Int minTileThread = new Vector2Int(minXID * roomChunks[0].width, maxYID * roomChunks[0].height + roomChunks[0].height - 1);
+            Vector2Int maxTileThread = new Vector2Int(maxXID * roomChunks[0].width + roomChunks[0].width - 1, minYID * roomChunks[0].height);
+
+            Debug.Log($"minTileThread: {minTileThread} maxTileThread: {maxTileThread}");
+            for (int x = minTileThread.x; x <= maxTileThread.x; x++)
+            {
+                for (int y = maxTileThread.y; y <= minTileThread.y; y++)
+                {
+                    boolMap[x - minTileThread.x, y - maxTileThread.y] = roomChunks[0].GetTile(x, y);
+                }
+            }
+
+            string map0_1 = "";
+            for (int y = 0; y < height; y += 1)
+            {
+                for (int x = 0; x < width; x += 1)
+                {
+                    map0_1 += boolMap[x, y] ? "1" : "0";
+                }
+                map0_1 += "\n";
+            }
+            Debug.Log(map0_1);
+            Clingo_02.ClingoUtil.CreateFile(map0_1, $"{filename}.txt");
+        }
+
     }
 }
 

@@ -31,6 +31,11 @@ namespace NoiseTerrain
 
         public bool autoUpdate = false;
 
+        public string GetParameterFilename()
+        {
+            return $"{seed}_{noiseScale}_{octaves}_{persistance}_{lacunarity}";
+        }
+
         public virtual void ClearMap()
         {
             for (int y = 0; y < height; y += 1)

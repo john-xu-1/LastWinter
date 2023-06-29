@@ -5,6 +5,8 @@ using LocomotionGraph;
 using ChunkHandler;
 using System.Threading;
 
+using System.IO;
+
 public class LocomotionChunkGraph : LocomotionGraph.LocomotionGraph, IChunkable
 {
     List<Chunk> roomChunks;
@@ -46,13 +48,11 @@ public class LocomotionChunkGraph : LocomotionGraph.LocomotionGraph, IChunkable
             for(int y = maxTileThread.y; y <= minTileThread.y; y++)
             {
                 boolMapThread[x - minTileThread.x, y - maxTileThread.y] = roomChunks[0].GetTile(x, y);
-                //Debug.Log(boolMapThread[x - minTileThread.x, y - maxTileThread.y]);
             }
         }
 
     }
 
-    //bool locomotionGraphSetupComplete = false;
     private void SetOnLocomotionGraphComplete()
     {
         locomotionGraphSetupComplete = false;
@@ -73,11 +73,17 @@ public class LocomotionChunkGraph : LocomotionGraph.LocomotionGraph, IChunkable
 
         Thread thread = new Thread(SetRoomChunkThread);
         thread.Start();
-
-
     }
     
-    
+    public void SetRoomChunk(string bitmapFilename, int seed)
+    {
+        IEnumerable<string> file = File.ReadLines(bitmapFilename);
+        
+        foreach (string line in file)
+        {
+
+        }
+    }
 
     
 }

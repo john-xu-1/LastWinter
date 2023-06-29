@@ -87,9 +87,16 @@ public class SceneLoader : MonoBehaviour
                 yield return null;
             }
 
+            List<ChunkHandler.Chunk> roomChunks = noiseMapGenerator.GetRoomChunk();
+
+            //generate bitmap from roomChunks
+            NoiseTerrain.Utility.PrintChunksToBoolMap(roomChunks, "bitmap_" + noiseMapGenerator.GetParameterFilename());
+
+            //set room chunk from bitmap
+            locomotionGraph.SetRoomChunk("bitmap_" + noiseMapGenerator.GetParameterFilename() + ".txt", noiseMapGenerator.seed);
+
             //set room chunk from noise terrain generator
-            //SetOnLocomotionGraphComplete();
-            locomotionGraph.SetRoomChunk(noiseMapGenerator.GetRoomChunk(), noiseMapGenerator.seed);
+            //locomotionGraph.SetRoomChunk(roomChunks, noiseMapGenerator.seed);
 
 
             minX = noiseMapGenerator.minX;

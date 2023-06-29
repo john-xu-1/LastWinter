@@ -146,36 +146,24 @@ namespace NoiseTerrain
             height = chunkSize.y;
         }
 
-        //public override void GenerateMap()
-        //{
-
-        //}
-
         protected override int GetMinX()
         {
-
             return (chunkID.x - tileRadius.x) * width;
-
         }
 
         protected override int GetMinY()
         {
             return (chunkID.y - tileRadius.y) * height;
-
         }
 
         protected override int GetMaxX()
         {
             return (chunkID.x + tileRadius.x) * width + width - 1;
-
         }
 
         protected override int GetMaxY()
         {
             return (chunkID.y + tileRadius.y) * height + height - 1;
-
-
-
         }
         
 
