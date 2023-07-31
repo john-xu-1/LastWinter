@@ -80,24 +80,9 @@ public class LocomotionChunkGraph : LocomotionGraph.LocomotionGraph, IChunkable
     
     public void SetRoomChunk (string bitmapFilename, int seed)
     {
-        IEnumerable<string> file = File.ReadLines(bitmapFilename);
-        int height = 0;
-        List<List<bool>> listBoolMap = new List<List<bool>>();
-        foreach (string line in file)
-        {
-            height += 1;
-            List<bool> rowBoolMap = new List<bool>();
-            foreach (char bit in line)
-            {
-                if (bit == '0') rowBoolMap.Add(false);
-                else rowBoolMap.Add(true);
-            }
-            
-            listBoolMap.Add(rowBoolMap);
-
-        }
-
+        List<List<bool>> listBoolMap = LocomotionGraph.Utility.GetBoolMap(bitmapFilename);
         int width = listBoolMap[0].Count;
+        int height = listBoolMap.Count;
         bool[,] boolMap = new bool[width, height];
         for (int x = 0; x < width; x += 1)
         {
