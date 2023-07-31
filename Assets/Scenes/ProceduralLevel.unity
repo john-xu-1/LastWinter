@@ -757,6 +757,7 @@ MonoBehaviour:
   ls: {fileID: 2132609659}
   generatingLocomotionGraph: 0
   checkConnection: 0
+  locomotionGraphSetupComplete: 0
 --- !u!4 &503278597
 Transform:
   m_ObjectHideFlags: 0
@@ -3649,7 +3650,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   threadPriority: 32
   aspFilePath: DataFiles/ASPFiles/queens.txt
-  clingoExecutablePathMacOS: /usr/local/bin/clingo
+  clingoExecutablePathMacOS: /opt/homebrew/bin/clingo
   clingoExecutablePathWin: DataFiles/Clingo/clingo.exe
   AdditionalArguments: 
   maxDuration: 10

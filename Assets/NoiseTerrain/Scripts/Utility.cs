@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ChunkHandler;
+using System.IO;
 
 namespace NoiseTerrain
 {
@@ -124,7 +125,60 @@ namespace NoiseTerrain
                 map0_1 += "\n";
             }
             Debug.Log(map0_1);
-            Clingo_02.ClingoUtil.CreateFile(map0_1, $"{filename}.txt");
+            CreateFile(map0_1, $"{filename}.txt");
+        }
+
+        public static string DataFilePath = @"DataFiles/temp";
+
+
+        public static string CreateFile(string content, string filename)
+        {
+            string relativePath = GetPathToFile(filename);
+            //if (Application.isEditor)
+            //{
+            //    if (!Directory.Exists(Path.Combine("Assets", DataFilePath)))
+            //    {
+            //        Directory.CreateDirectory(Path.Combine("Assets", DataFilePath));
+            //    }
+            //    relativePath = Path.Combine("Assets", DataFilePath, filename);
+            //}
+            //else
+            //{
+            //    if (!Directory.Exists(DataFilePath))
+            //    {
+            //        Directory.CreateDirectory(DataFilePath);
+            //    }
+            //    relativePath = Path.Combine(DataFilePath, filename);
+            //}
+
+            using (StreamWriter streamWriter = File.CreateText(relativePath))
+            {
+                streamWriter.Write(content);
+            }
+            return relativePath;
+        }
+
+        public static string GetPathToFile(string filename)
+        {
+            string relativePath;
+            if (Application.isEditor)
+            {
+                if (!Directory.Exists(Path.Combine("Assets", DataFilePath)))
+                {
+                    Directory.CreateDirectory(Path.Combine("Assets", DataFilePath));
+                }
+                relativePath = Path.Combine("Assets", DataFilePath, filename);
+            }
+            else
+            {
+                if (!Directory.Exists(DataFilePath))
+                {
+                    Directory.CreateDirectory(DataFilePath);
+                }
+                relativePath = Path.Combine(DataFilePath, filename);
+            }
+
+            return relativePath;
         }
 
     }

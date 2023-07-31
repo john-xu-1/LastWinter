@@ -93,7 +93,8 @@ public class SceneLoader : MonoBehaviour
             NoiseTerrain.Utility.PrintChunksToBoolMap(roomChunk, "bitmap_" + noiseMapGenerator.GetParameterFilename());
 
             //set room chunk from the bitmap
-            locomotionGraph.SetRoomChunk("bitmap_" + noiseMapGenerator.GetParameterFilename() + ".txt", noiseMapGenerator.seed);
+            string filename = NoiseTerrain.Utility.GetPathToFile("bitmap_" + noiseMapGenerator.GetParameterFilename());
+            locomotionGraph.SetRoomChunk(filename + ".txt", noiseMapGenerator.seed);
 
             //set room chunk from noise terrain generator
             //SetOnLocomotionGraphComplete();
