@@ -111,7 +111,7 @@ namespace LocomotionGraph
                 }
             }
 
-            WallChunkDebugger.singleton.ClearWalls();
+            if(WallChunkDebugger.singleton) WallChunkDebugger.singleton.ClearWalls();
             //setup platform tiles
             for (int i = 0; i < filledChunkCount; i += 1)
             {
