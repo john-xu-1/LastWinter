@@ -44,7 +44,8 @@ namespace LocomotionGraph
 
         public LocomotionSolver ls;
         public bool generatingLocomotionGraph = false;
-        public IEnumerator GenerateLocomotionGraph()
+        // creates locomotion graph and solves it
+        public IEnumerator SolveLocomotionGraph()
         {
             generatingLocomotionGraph = true;
             generateLocomotionGraphThreadCompleted = false;

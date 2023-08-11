@@ -284,6 +284,7 @@ namespace LocomotionGraph
             Debug.Log(pathMap);
             Clingo_02.ClingoUtil.CreateFile(pathMap, "debugPath.txt");
         }
+
         public PlatformChunk GetPlatform(int platformID)
         {
             //Debug.Log(platformID);
@@ -293,10 +294,14 @@ namespace LocomotionGraph
             //Debug.Log($"filledChunks.Count: {filledChunks.Count}");
             return filledChunks[filledChunkID - 1].platforms[platformID - 1];
         }
+
+        // generate all platform edges in the RoomChunk
         public void SetPlatformEdges(List<int> platformIDs, int jumpHeight, bool checkConnection)
         {
             foreach (int platformID in platformIDs) GetPlatformEdges(platformID, jumpHeight, checkConnection);
         }
+        // returns the connected edges of a specific platform, 
+        // generating the list if it has not been created or the checkConnection parameter has changed
         public List<int> GetPlatformEdges(int platformID, int jumpHeight, bool checkConnection)
         {
             PlatformChunk platform = GetPlatform(platformID);
