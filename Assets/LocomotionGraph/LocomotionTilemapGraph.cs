@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 namespace LocomotionGraph
 {
-    public class LocmotionTilemapGraph : MonoBehaviour
+    public class LocomotionTilemapGraph : MonoBehaviour
     {
 
         public Tilemap tilemap;
@@ -16,6 +16,8 @@ namespace LocomotionGraph
         {
             string filename = NoiseTerrain.Utility.GetPathToFile(levelBitmap);
             BuildTilemap(filename);
+
+            FindObjectOfType<LocomotionChunkGraph>().SetRoomChunk(filename, 0);
         }
 
         public void BuildTilemap(string levelBitmap)

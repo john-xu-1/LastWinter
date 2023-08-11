@@ -62,7 +62,7 @@ namespace LocomotionGraph
                     }
                 }
             }
-            WallChunkDebugger.singleton.AddWalls(validWalls, validWallIDs, true);
+            if (WallChunkDebugger.singleton) WallChunkDebugger.singleton.AddWalls(validWalls, validWallIDs, true);
         }
         int wallID = 0;
         private void SetWallChunks(List<Vector2Int> wallSideTiles, int jumpHeight, bool rightSide)
