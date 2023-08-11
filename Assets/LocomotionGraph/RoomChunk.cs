@@ -293,10 +293,13 @@ namespace LocomotionGraph
             //Debug.Log($"filledChunks.Count: {filledChunks.Count}");
             return filledChunks[filledChunkID - 1].platforms[platformID - 1];
         }
+        // generate all platform edges
         public void SetPlatformEdges(List<int> platformIDs, int jumpHeight, bool checkConnection)
         {
             foreach (int platformID in platformIDs) GetPlatformEdges(platformID, jumpHeight, checkConnection);
         }
+        // return the connection edges of a specific platform
+        // generating the list if it has not been created or the check connection parameter has changed
         public List<int> GetPlatformEdges(int platformID, int jumpHeight, bool checkConnection)
         {
             PlatformChunk platform = GetPlatform(platformID);

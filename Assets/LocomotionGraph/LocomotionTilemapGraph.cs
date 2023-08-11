@@ -18,11 +18,12 @@ namespace LocomotionGraph
             BuildTilemap(filename);
 
             FindObjectOfType<LocomotionChunkGraph>().SetRoomChunk(filename, 0);
+            StartCoroutine(SolveLocomotionGraph());
         }
 
-        public void BuildTilemap(string levelBitmap)
+        public void BuildTilemap(string levelBitmapFilename)
         {
-            List<List<bool>> boolmap = Utility.GetBoolMap(levelBitmap);
+            List<List<bool>> boolmap = Utility.GetBoolMap(levelBitmapFilename);
 
             for (int y = 0; y < boolmap.Count; y++)
             {
@@ -31,6 +32,17 @@ namespace LocomotionGraph
                     if (boolmap[y][x]) tilemap.SetTile(new Vector3Int(x, -y, 0), tileBase);
                 }
             }
+        }
+
+        public IEnumerator SolveLocomotionGraph()
+        {
+            LocomotionGraph locomotionGraph = FindObjectOfType<LocomotionChunkGraph>();
+            StartCoroutine(locomotionGraph.SolveLocomotionGraph());
+            while (locomotionGraph.generatingLocomotionGraph)
+            {
+                yield return null;
+            }
+
         }
     }
 }

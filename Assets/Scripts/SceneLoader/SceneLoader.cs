@@ -156,7 +156,7 @@ public class SceneLoader : MonoBehaviour
     public Exit exitPrefab;
     IEnumerator ObstaclesSetup()
     {
-        StartCoroutine(locomotionGraph.GenerateLocomotionGraph());
+        StartCoroutine(locomotionGraph.SolveLocomotionGraph());
         while (locomotionGraph.generatingLocomotionGraph)
         {
             yield return null;
