@@ -26,7 +26,7 @@ public class SceneLoader : MonoBehaviour
 
     int maxX, minX, maxY, minY;
 
-
+    public bool generateBitmap = false;
 
     void Start()
     {
@@ -87,18 +87,26 @@ public class SceneLoader : MonoBehaviour
                 yield return null;
             }
 
-            List<ChunkHandler.Chunk> roomChunk = noiseMapGenerator.GetRoomChunk();
 
-            //generate bitmap from roomchunk
-            NoiseTerrain.Utility.PrintChunksToBoolMap(roomChunk, "bitmap_" + noiseMapGenerator.GetParameterFilename());
+            if (generateBitmap)
+            {
+                List<ChunkHandler.Chunk> roomChunk = noiseMapGenerator.GetRoomChunk();
 
-            //set room chunk from the bitmap
-            string filename = NoiseTerrain.Utility.GetPathToFile("bitmap_" + noiseMapGenerator.GetParameterFilename());
-            locomotionGraph.SetRoomChunk(filename + ".txt", noiseMapGenerator.seed);
+                //generate bitmap from roomchunk
+                NoiseTerrain.Utility.PrintChunksToBoolMap(roomChunk, "bitmap_" + noiseMapGenerator.GetParameterFilename());
 
-            //set room chunk from noise terrain generator
-            //SetOnLocomotionGraphComplete();
-            //locomotionGraph.SetRoomChunk(noiseMapGenerator.GetRoomChunk(), noiseMapGenerator.seed);
+                //set room chunk from the bitmap
+                string filename = NoiseTerrain.Utility.GetPathToFile("bitmap_" + noiseMapGenerator.GetParameterFilename());
+                locomotionGraph.SetRoomChunk(filename + ".txt", noiseMapGenerator.seed);
+            }
+            else
+            {
+                //set room chunk from noise terrain generator
+                locomotionGraph.SetRoomChunk(noiseMapGenerator.GetRoomChunk(), noiseMapGenerator.seed);
+            }
+
+
+
 
 
             minX = noiseMapGenerator.minX;
